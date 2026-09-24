@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>DJ Family Kost</title>
 
 <style>
@@ -257,7 +258,7 @@ button {
 }
 
 /* =========================
-   GENERAL SECTION
+   GENERAL
 ========================= */
 
 .section {
@@ -300,7 +301,7 @@ button {
 }
 
 /* =========================
-   ROOM SECTION
+   ROOMS
 ========================= */
 
 .rooms-section {
@@ -331,10 +332,6 @@ button {
     font-size: 13px;
 }
 
-/* =========================
-   FLOOR GRID
-========================= */
-
 .floor-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -361,8 +358,7 @@ button {
     align-items: center;
     justify-content: space-between;
     gap: 15px;
-    background:
-        linear-gradient(135deg, #ffffff, #f8fafc);
+    background: linear-gradient(135deg, #ffffff, #f8fafc);
 }
 
 .floor-info h3 {
@@ -408,6 +404,7 @@ button {
         opacity: 0;
         transform: translateY(-5px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -426,10 +423,7 @@ button {
     min-width: 520px;
 }
 
-.room-row.odd {
-    grid-template-columns: repeat(5, 1fr);
-}
-
+.room-row.odd,
 .room-row.even {
     grid-template-columns: repeat(5, 1fr);
 }
@@ -566,7 +560,7 @@ button {
 }
 
 /* =========================
-   FEATURE CARDS
+   FEATURES
 ========================= */
 
 .feature-section {
@@ -691,7 +685,7 @@ button {
 }
 
 /* =========================
-   MODAL
+   ROOM MODAL
 ========================= */
 
 .modal-overlay {
@@ -726,6 +720,7 @@ button {
         opacity: 0;
         transform: translateY(15px) scale(.98);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -799,7 +794,7 @@ button {
     list-style: none;
     display: grid;
     gap: 10px;
-    margin-bottom: 28px;
+    margin-bottom: 25px;
 }
 
 .modal-list li {
@@ -823,10 +818,16 @@ button {
     color: #92400e;
     border-radius: 11px;
     font-size: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
-.modal-action {
+.modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.modal-actions .btn {
     width: 100%;
 }
 
@@ -941,6 +942,10 @@ button {
         font-size: 29px;
     }
 
+    .modal-actions {
+        grid-template-columns: 1fr;
+    }
+
     .footer-inner {
         flex-direction: column;
         text-align: center;
@@ -994,6 +999,7 @@ button {
 ========================= -->
 
 <header class="navbar">
+
     <div class="nav-inner">
 
         <a href="#" class="logo">
@@ -1008,11 +1014,16 @@ button {
             <a href="#kontak">Kontak</a>
         </nav>
 
-        <button class="nav-menu-btn" id="navMenuBtn" aria-label="Menu">
+        <button
+            class="nav-menu-btn"
+            id="navMenuBtn"
+            aria-label="Menu"
+        >
             ☰
         </button>
 
     </div>
+
 </header>
 
 
@@ -1042,25 +1053,39 @@ button {
             </p>
 
             <div class="hero-buttons">
-                <a href="#kamar" class="btn btn-primary">
+
+                <a
+                    href="#kamar"
+                    class="btn btn-primary"
+                >
                     Lihat Kamar
                 </a>
 
-                <a href="#kontak" class="btn btn-outline">
+                <a
+                    href="#kontak"
+                    class="btn btn-outline"
+                >
                     Hubungi Kami
                 </a>
+
             </div>
 
         </div>
 
+
         <div class="hero-visual">
 
             <div class="hero-card">
-                <strong>39 Kamar Operasional</strong>
+
+                <strong>
+                    39 Kamar Operasional
+                </strong>
+
                 <span>
                     Pilih lantai dan lihat ketersediaan kamar
                     secara langsung.
                 </span>
+
             </div>
 
         </div>
@@ -1074,7 +1099,10 @@ button {
      ROOM SECTION
 ========================= -->
 
-<section class="section rooms-section" id="kamar">
+<section
+    class="section rooms-section"
+    id="kamar"
+>
 
     <div class="section-inner">
 
@@ -1116,13 +1144,13 @@ button {
         </div>
 
 
-        <!-- FLOOR GRID -->
-
         <div class="floor-grid">
 
-            <!-- FLOOR 1 -->
+            <!-- =====================
+                 FLOOR 1
+            ====================== -->
 
-            <article class="floor-card" data-floor="1">
+            <article class="floor-card">
 
                 <div class="floor-header">
 
@@ -1141,11 +1169,10 @@ button {
 
                 </div>
 
+
                 <div class="floor-content">
 
                     <div class="floor-map">
-
-                        <!-- ODD / TOP -->
 
                         <div class="room-row odd">
 
@@ -1155,16 +1182,24 @@ button {
                                 data-price="Rp1.600.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">101</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    101
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="103"
                             >
-                                <div class="room-number">103</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    103
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1173,8 +1208,12 @@ button {
                                 data-price="Rp1.600.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">105</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    105
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
@@ -1183,16 +1222,24 @@ button {
                                 data-price="Rp1.600.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">107</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    107
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="109"
                             >
-                                <div class="room-number">109</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    109
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                         </div>
@@ -1203,8 +1250,6 @@ button {
                         </div>
 
 
-                        <!-- EVEN / BOTTOM -->
-
                         <div class="room-row even">
 
                             <div
@@ -1213,16 +1258,24 @@ button {
                                 data-price="Rp1.600.000 / bulan"
                                 data-image="even"
                             >
-                                <div class="room-number">102</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    102
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="104"
                             >
-                                <div class="room-number">104</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    104
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1231,16 +1284,24 @@ button {
                                 data-price="Rp1.600.000 / bulan"
                                 data-image="even"
                             >
-                                <div class="room-number">106</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    106
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="108"
                             >
-                                <div class="room-number">108</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    108
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div class="room-slot empty"></div>
@@ -1277,9 +1338,11 @@ button {
             </article>
 
 
-            <!-- FLOOR 2 -->
+            <!-- =====================
+                 FLOOR 2
+            ====================== -->
 
-            <article class="floor-card" data-floor="2">
+            <article class="floor-card">
 
                 <div class="floor-header">
 
@@ -1298,6 +1361,7 @@ button {
 
                 </div>
 
+
                 <div class="floor-content">
 
                     <div class="floor-map">
@@ -1308,8 +1372,12 @@ button {
                                 class="room-card occupied"
                                 data-room="201"
                             >
-                                <div class="room-number">201</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    201
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1318,16 +1386,24 @@ button {
                                 data-price="Rp1.500.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">203</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    203
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="205"
                             >
-                                <div class="room-number">205</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    205
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1336,16 +1412,24 @@ button {
                                 data-price="Rp1.500.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">207</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    207
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="209"
                             >
-                                <div class="room-number">209</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    209
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                         </div>
@@ -1364,16 +1448,24 @@ button {
                                 data-price="Rp1.500.000 / bulan"
                                 data-image="even"
                             >
-                                <div class="room-number">202</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    202
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="204"
                             >
-                                <div class="room-number">204</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    204
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1382,16 +1474,24 @@ button {
                                 data-price="Rp1.500.000 / bulan"
                                 data-image="even"
                             >
-                                <div class="room-number">206</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    206
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="208"
                             >
-                                <div class="room-number">208</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    208
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1400,8 +1500,12 @@ button {
                                 data-price="Rp1.500.000 / bulan"
                                 data-image="even"
                             >
-                                <div class="room-number">210</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    210
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                         </div>
@@ -1436,9 +1540,11 @@ button {
             </article>
 
 
-            <!-- FLOOR 3 -->
+            <!-- =====================
+                 FLOOR 3
+            ====================== -->
 
-            <article class="floor-card" data-floor="3">
+            <article class="floor-card">
 
                 <div class="floor-header">
 
@@ -1457,6 +1563,7 @@ button {
 
                 </div>
 
+
                 <div class="floor-content">
 
                     <div class="floor-map">
@@ -1469,16 +1576,24 @@ button {
                                 data-price="Rp1.400.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">301</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    301
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="303"
                             >
-                                <div class="room-number">303</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    303
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1487,16 +1602,24 @@ button {
                                 data-price="Rp1.400.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">305</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    305
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="307"
                             >
-                                <div class="room-number">307</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    307
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1505,8 +1628,12 @@ button {
                                 data-price="Rp1.400.000 / bulan"
                                 data-image="odd"
                             >
-                                <div class="room-number">309</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    309
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                         </div>
@@ -1523,8 +1650,12 @@ button {
                                 class="room-card occupied"
                                 data-room="302"
                             >
-                                <div class="room-number">302</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    302
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1533,16 +1664,24 @@ button {
                                 data-price="Rp1.400.000 / bulan"
                                 data-image="even"
                             >
-                                <div class="room-number">304</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    304
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="306"
                             >
-                                <div class="room-number">306</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    306
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                             <div
@@ -1551,16 +1690,24 @@ button {
                                 data-price="Rp1.400.000 / bulan"
                                 data-image="even"
                             >
-                                <div class="room-number">308</div>
-                                <div class="room-status">TERSEDIA</div>
+                                <div class="room-number">
+                                    308
+                                </div>
+                                <div class="room-status">
+                                    TERSEDIA
+                                </div>
                             </div>
 
                             <div
                                 class="room-card occupied"
                                 data-room="310"
                             >
-                                <div class="room-number">310</div>
-                                <div class="room-status">TERISI</div>
+                                <div class="room-number">
+                                    310
+                                </div>
+                                <div class="room-status">
+                                    TERISI
+                                </div>
                             </div>
 
                         </div>
@@ -1595,9 +1742,11 @@ button {
             </article>
 
 
-            <!-- FLOOR 4 -->
+            <!-- =====================
+                 FLOOR 4
+            ====================== -->
 
-            <article class="floor-card" data-floor="4">
+            <article class="floor-card">
 
                 <div class="floor-header">
 
@@ -1616,6 +1765,7 @@ button {
 
                 </div>
 
+
                 <div class="floor-content">
 
                     <div class="floor-map">
@@ -1628,8 +1778,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="odd"
                             >
-                                <div class="room-number">401</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    401
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1638,8 +1792,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="odd"
                             >
-                                <div class="room-number">403</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    403
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1648,8 +1806,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="odd"
                             >
-                                <div class="room-number">405</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    405
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1658,8 +1820,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="odd"
                             >
-                                <div class="room-number">407</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    407
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1668,8 +1834,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="odd"
                             >
-                                <div class="room-number">409</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    409
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                         </div>
@@ -1688,8 +1858,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="even"
                             >
-                                <div class="room-number">402</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    402
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1698,8 +1872,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="even"
                             >
-                                <div class="room-number">404</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    404
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1708,8 +1886,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="even"
                             >
-                                <div class="room-number">406</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    406
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1718,8 +1900,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="even"
                             >
-                                <div class="room-number">408</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    408
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                             <div
@@ -1728,8 +1914,12 @@ button {
                                 data-price="Harga belum ditentukan"
                                 data-image="even"
                             >
-                                <div class="room-number">410</div>
-                                <div class="room-status">SEGERA</div>
+                                <div class="room-number">
+                                    410
+                                </div>
+                                <div class="room-status">
+                                    SEGERA
+                                </div>
                             </div>
 
                         </div>
@@ -1766,10 +1956,13 @@ button {
 
 
 <!-- =========================
-     FEATURE / QUICK MENU
+     QUICK SERVICES
 ========================= -->
 
-<section class="section feature-section" id="layanan">
+<section
+    class="section feature-section"
+    id="layanan"
+>
 
     <div class="section-inner">
 
@@ -1792,91 +1985,81 @@ button {
 
         <div class="feature-grid">
 
-            <a href="#kamar" class="feature-card">
-
+            <a
+                href="#kamar"
+                class="feature-card"
+            >
                 <div class="feature-icon">⌂</div>
 
                 <div>
                     <h3>Kamar</h3>
                     <p>Lihat ketersediaan kamar</p>
                 </div>
-
             </a>
 
 
             <a
-                href="javascript:void(0)"
+                href="kunjungan.html"
                 class="feature-card"
-                onclick="comingSoon('Kunjungan')"
             >
-
                 <div class="feature-icon">◷</div>
 
                 <div>
                     <h3>Kunjungan</h3>
                     <p>Jadwalkan kunjungan</p>
                 </div>
-
             </a>
 
 
             <a
-                href="javascript:void(0)"
+                href="pendaftaran.html"
                 class="feature-card"
-                onclick="comingSoon('Pendaftaran')"
             >
-
                 <div class="feature-icon">+</div>
 
                 <div>
                     <h3>Pendaftaran</h3>
                     <p>Daftar sebagai tenant</p>
                 </div>
-
             </a>
 
 
             <a
-                href="javascript:void(0)"
+                href="login.html?redirect=pembayaran.html"
                 class="feature-card"
-                onclick="comingSoon('Pembayaran')"
             >
-
                 <div class="feature-icon">Rp</div>
 
                 <div>
                     <h3>Pembayaran</h3>
-                    <p>Informasi pembayaran</p>
+                    <p>Area tenant</p>
                 </div>
-
             </a>
 
 
             <a
-                href="javascript:void(0)"
+                href="login.html?redirect=maintenance.html"
                 class="feature-card"
-                onclick="comingSoon('Maintenance')"
             >
-
                 <div class="feature-icon">⌘</div>
 
                 <div>
                     <h3>Maintenance</h3>
-                    <p>Laporkan masalah kamar</p>
+                    <p>Area tenant</p>
                 </div>
-
             </a>
 
 
-            <a href="#kontak" class="feature-card">
-
+            <a
+                href="#kontak"
+                class="feature-card"
+            >
                 <div class="feature-icon">☎</div>
 
                 <div>
                     <h3>Hubungi Kami</h3>
                     <p>Kontak DJ Family Kost</p>
                 </div>
-
             </a>
 
         </div>
@@ -1890,7 +2073,10 @@ button {
      CONTACT
 ========================= -->
 
-<section class="section contact-section" id="kontak">
+<section
+    class="section contact-section"
+    id="kontak"
+>
 
     <div class="contact-box">
 
@@ -1953,10 +2139,13 @@ button {
 
 
 <!-- =========================
-     ROOM MODAL
+     ROOM DETAIL MODAL
 ========================= -->
 
-<div class="modal-overlay" id="roomModal">
+<div
+    class="modal-overlay"
+    id="roomModal"
+>
 
     <div class="modal">
 
@@ -1964,11 +2153,15 @@ button {
             class="modal-close"
             type="button"
             onclick="closeRoomModal()"
+            aria-label="Tutup"
         >
             ×
         </button>
 
+
         <div class="modal-grid">
+
+            <!-- FOTO KAMAR -->
 
             <div class="modal-image">
 
@@ -1980,6 +2173,8 @@ button {
 
             </div>
 
+
+            <!-- DETAIL -->
 
             <div class="modal-content">
 
@@ -2005,6 +2200,7 @@ button {
                     Informasi kamar.
                 </p>
 
+
                 <ul class="modal-list">
 
                     <li>
@@ -2025,20 +2221,33 @@ button {
 
                 </ul>
 
+
                 <div
                     class="modal-warning"
                     id="modalWarning"
                     style="display:none;"
-                >
-                </div>
+                ></div>
 
-                <button
-                    class="btn btn-primary modal-action"
-                    id="modalAction"
-                    type="button"
-                >
-                    Pilih Kamar
-                </button>
+
+                <div class="modal-actions">
+
+                    <button
+                        class="btn btn-primary"
+                        id="modalChooseButton"
+                        type="button"
+                    >
+                        Pilih Kamar
+                    </button>
+
+                    <button
+                        class="btn btn-outline"
+                        id="modalVisitButton"
+                        type="button"
+                    >
+                        Jadwalkan Kunjungan
+                    </button>
+
+                </div>
 
             </div>
 
@@ -2053,7 +2262,10 @@ button {
      TOAST
 ========================= -->
 
-<div class="toast" id="toast"></div>
+<div
+    class="toast"
+    id="toast"
+></div>
 
 
 <script>
@@ -2062,21 +2274,30 @@ button {
    MOBILE MENU
 ========================= */
 
-const navMenuBtn = document.getElementById("navMenuBtn");
-const navLinks = document.getElementById("navLinks");
+const navMenuBtn =
+    document.getElementById("navMenuBtn");
+
+const navLinks =
+    document.getElementById("navLinks");
 
 navMenuBtn.addEventListener("click", () => {
+
     navLinks.classList.toggle("show");
+
 });
 
 
-document.querySelectorAll(".nav-links a").forEach(link => {
+document
+    .querySelectorAll(".nav-links a")
+    .forEach(link => {
 
-    link.addEventListener("click", () => {
-        navLinks.classList.remove("show");
+        link.addEventListener("click", () => {
+
+            navLinks.classList.remove("show");
+
+        });
+
     });
-
-});
 
 
 /* =========================
@@ -2085,13 +2306,16 @@ document.querySelectorAll(".nav-links a").forEach(link => {
 
 function toggleFloor(button) {
 
-    const floorCard = button.closest(".floor-card");
+    const floorCard =
+        button.closest(".floor-card");
 
-    const isOpen = floorCard.classList.contains("open");
+    const isOpen =
+        floorCard.classList.contains("open");
 
     floorCard.classList.toggle("open");
 
-    button.textContent = isOpen ? "Buka" : "Tutup";
+    button.textContent =
+        isOpen ? "Buka" : "Tutup";
 
 }
 
@@ -2100,7 +2324,8 @@ function toggleFloor(button) {
    ROOM MODAL
 ========================= */
 
-const roomModal = document.getElementById("roomModal");
+const roomModal =
+    document.getElementById("roomModal");
 
 const modalRoomNumber =
     document.getElementById("modalRoomNumber");
@@ -2117,42 +2342,76 @@ const modalRoomDescription =
 const modalWarning =
     document.getElementById("modalWarning");
 
-const modalAction =
-    document.getElementById("modalAction");
+const modalChooseButton =
+    document.getElementById("modalChooseButton");
+
+const modalVisitButton =
+    document.getElementById("modalVisitButton");
 
 
-document.querySelectorAll(".room-card").forEach(room => {
+let selectedRoom = "";
 
-    room.addEventListener("click", () => {
 
-        if (room.classList.contains("occupied")) {
-            showToast(
-                "Kamar " +
-                room.dataset.room +
-                " sedang terisi."
-            );
+/* =========================
+   ROOM CLICK
+========================= */
 
-            return;
-        }
+document
+    .querySelectorAll(".room-card")
+    .forEach(room => {
 
-        openRoomModal(room);
+        room.addEventListener("click", () => {
+
+            if (
+                room.classList.contains("occupied")
+            ) {
+
+                showToast(
+                    "Kamar " +
+                    room.dataset.room +
+                    " sedang terisi."
+                );
+
+                return;
+            }
+
+            openRoomModal(room);
+
+        });
 
     });
 
-});
 
+/* =========================
+   OPEN MODAL
+========================= */
 
 function openRoomModal(room) {
 
-    const roomNumber = room.dataset.room;
-    const price = room.dataset.price;
-    const imageType = room.dataset.image;
+    const roomNumber =
+        room.dataset.room;
+
+    const price =
+        room.dataset.price;
+
+    const imageType =
+        room.dataset.image;
+
+    selectedRoom =
+        roomNumber;
+
 
     modalRoomNumber.textContent =
         "Kamar " + roomNumber;
 
+
     modalRoomPrice.textContent =
         price || "Harga belum ditentukan";
+
+
+    /*
+     * FOTO GANJIL / GENAP
+     */
 
     if (imageType === "odd") {
 
@@ -2160,7 +2419,7 @@ function openRoomModal(room) {
             "images/kamar-ganjil.jpg";
 
         modalRoomImage.alt =
-            "Kamar tipe ganjil";
+            "Foto kamar tipe ganjil";
 
     } else {
 
@@ -2168,51 +2427,74 @@ function openRoomModal(room) {
             "images/kamar-genap.jpg";
 
         modalRoomImage.alt =
-            "Kamar tipe genap";
+            "Foto kamar tipe genap";
 
     }
 
 
-    modalRoomImage.onerror = function() {
+    /*
+     * FALLBACK JIKA FOTO BELUM ADA
+     */
 
-        this.onerror = null;
+    modalRoomImage.onerror =
+        function() {
 
-        this.src =
-            createRoomPlaceholder(
-                roomNumber
-            );
+            this.onerror = null;
 
-    };
-
-
-    if (room.classList.contains("unknown")) {
-
-        modalRoomDescription.textContent =
-            "Kamar ini berada di lantai 4. " +
-            "Bentuk dan tipe kamar dapat dilihat " +
-            "menggunakan foto referensi yang sama, " +
-            "namun harga belum ditentukan.";
-
-        modalWarning.style.display = "block";
-
-        modalWarning.textContent =
-            "Harga kamar lantai 4 belum ditentukan. " +
-            "Kamar dapat dipantau terlebih dahulu.";
-
-        modalAction.textContent =
-            "Tanyakan Kamar " + roomNumber;
-
-        modalAction.onclick = function() {
-
-            showToast(
-                "Informasi kamar " +
-                roomNumber +
-                " akan tersedia pada tahap berikutnya."
-            );
+            this.src =
+                createRoomPlaceholder(
+                    roomNumber
+                );
 
         };
 
-    } else {
+
+    /*
+     * KAMAR LANTAI 4
+     */
+
+    if (
+        room.classList.contains("unknown")
+    ) {
+
+        modalRoomDescription.textContent =
+            "Kamar " +
+            roomNumber +
+            " berada di lantai 4. " +
+            "Informasi harga kamar ini belum ditentukan.";
+
+
+        modalWarning.style.display =
+            "block";
+
+        modalWarning.textContent =
+            "Harga kamar lantai 4 belum ditentukan.";
+
+
+        modalChooseButton.textContent =
+            "Tanyakan Kamar " +
+            roomNumber;
+
+
+        modalChooseButton.onclick =
+            function() {
+
+                window.location.href =
+                    "kunjungan.html?kamar=" +
+                    encodeURIComponent(
+                        selectedRoom
+                    );
+
+            };
+
+    }
+
+
+    /*
+     * KAMAR NORMAL
+     */
+
+    else {
 
         modalRoomDescription.textContent =
             "Kamar " +
@@ -2220,72 +2502,116 @@ function openRoomModal(room) {
             " saat ini tercatat tersedia " +
             "dan dapat dipilih.";
 
-        modalWarning.style.display = "none";
 
-        modalAction.textContent =
-            "Pilih Kamar " + roomNumber;
+        modalWarning.style.display =
+            "none";
 
-        modalAction.onclick = function() {
 
-            showToast(
-                "Kamar " +
-                roomNumber +
-                " dipilih. " +
-                "Form pendaftaran akan tersedia pada tahap berikutnya."
-            );
+        modalChooseButton.textContent =
+            "Pilih Kamar " +
+            roomNumber;
 
-        };
+
+        modalChooseButton.onclick =
+            function() {
+
+                window.location.href =
+                    "pendaftaran.html?kamar=" +
+                    encodeURIComponent(
+                        selectedRoom
+                    );
+
+            };
 
     }
 
 
+    /*
+     * TOMBOL KUNJUNGAN
+     */
+
+    modalVisitButton.onclick =
+        function() {
+
+            window.location.href =
+                "kunjungan.html?kamar=" +
+                encodeURIComponent(
+                    selectedRoom
+                );
+
+        };
+
+
     roomModal.classList.add("show");
 
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow =
+        "hidden";
 
 }
 
+
+/* =========================
+   CLOSE MODAL
+========================= */
 
 function closeRoomModal() {
 
     roomModal.classList.remove("show");
 
-    document.body.style.overflow = "";
+    document.body.style.overflow =
+        "";
 
 }
 
 
-roomModal.addEventListener("click", function(event) {
+roomModal.addEventListener(
+    "click",
+    function(event) {
 
-    if (event.target === roomModal) {
-        closeRoomModal();
+        if (
+            event.target === roomModal
+        ) {
+
+            closeRoomModal();
+
+        }
+
     }
+);
 
-});
 
+document.addEventListener(
+    "keydown",
+    function(event) {
 
-document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
 
-    if (event.key === "Escape") {
-        closeRoomModal();
+            closeRoomModal();
+
+        }
+
     }
-
-});
+);
 
 
 /* =========================
-   PLACEHOLDER IMAGE
+   PLACEHOLDER
 ========================= */
 
-function createRoomPlaceholder(roomNumber) {
+function createRoomPlaceholder(
+    roomNumber
+) {
 
     const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="900"
-             height="650"
-             viewBox="0 0 900 650">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="900"
+            height="650"
+            viewBox="0 0 900 650"
+        >
 
             <defs>
+
                 <linearGradient
                     id="bg"
                     x1="0"
@@ -2293,19 +2619,28 @@ function createRoomPlaceholder(roomNumber) {
                     x2="1"
                     y2="1"
                 >
-                    <stop offset="0%"
-                          stop-color="#e2e8f0"/>
 
-                    <stop offset="100%"
-                          stop-color="#cbd5e1"/>
+                    <stop
+                        offset="0%"
+                        stop-color="#e2e8f0"
+                    />
+
+                    <stop
+                        offset="100%"
+                        stop-color="#cbd5e1"
+                    />
+
                 </linearGradient>
+
             </defs>
+
 
             <rect
                 width="900"
                 height="650"
                 fill="url(#bg)"
             />
+
 
             <rect
                 x="80"
@@ -2316,6 +2651,7 @@ function createRoomPlaceholder(roomNumber) {
                 fill="#ffffff"
                 opacity=".8"
             />
+
 
             <text
                 x="450"
@@ -2329,6 +2665,7 @@ function createRoomPlaceholder(roomNumber) {
                 KAMAR ${roomNumber}
             </text>
 
+
             <text
                 x="450"
                 y="350"
@@ -2339,6 +2676,7 @@ function createRoomPlaceholder(roomNumber) {
             >
                 DJ Family Kost
             </text>
+
 
             <text
                 x="450"
@@ -2354,21 +2692,9 @@ function createRoomPlaceholder(roomNumber) {
         </svg>
     `;
 
-    return "data:image/svg+xml;charset=UTF-8," +
-        encodeURIComponent(svg);
-
-}
-
-
-/* =========================
-   COMING SOON
-========================= */
-
-function comingSoon(feature) {
-
-    showToast(
-        feature +
-        " akan dibuka pada tahap berikutnya."
+    return (
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(svg)
     );
 
 }
@@ -2385,17 +2711,21 @@ function showToast(message) {
     const toast =
         document.getElementById("toast");
 
-    toast.textContent = message;
+    toast.textContent =
+        message;
 
     toast.classList.add("show");
 
     clearTimeout(toastTimer);
 
-    toastTimer = setTimeout(() => {
+    toastTimer =
+        setTimeout(() => {
 
-        toast.classList.remove("show");
+            toast.classList.remove(
+                "show"
+            );
 
-    }, 2800);
+        }, 2800);
 
 }
 
