@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kunjungan — DJ Family Kost</title>
+<title>Aturan Kost — DJ Family Kost</title>
 
 <style>
 :root{
@@ -94,21 +94,77 @@ textarea{min-height:120px;resize:vertical}
 <section class="section">
   <div class="container">
     <a class="back" href="index.html">← Kembali ke beranda</a>
-    <div class="eyebrow">CALON TENANT</div><h1 style="font-size:48px">Ajukan Kunjungan</h1>
-    <p class="lead" style="margin:0;max-width:760px">Gunakan halaman ini untuk mengajukan jadwal melihat kamar. Untuk sementara form belum dikirim ke database.</p>
-    <div class="card form-card">
-      <form onsubmit="event.preventDefault(); alert('Form kunjungan sudah siap. Koneksi ke sistem akan diaktifkan pada tahap berikutnya.');">
-        <div class="form-grid">
-          <div class="field"><label>Nama Lengkap</label><input required></div>
-          <div class="field"><label>No. WhatsApp</label><input type="tel" required></div>
-          <div class="field"><label>Email</label><input type="email"></div>
-          <div class="field"><label>Kamar yang Diminati</label><select required><option value="">Pilih kamar</option><option>101</option><option>102</option><option>103</option><option>104</option><option>105</option><option>106</option><option>107</option><option>108</option><option>109</option><option>201–210</option><option>301–310</option><option>401–410</option></select></div>
-          <div class="field"><label>Tanggal Kunjungan</label><input type="date" required></div>
-          <div class="field"><label>Waktu Kunjungan</label><input type="time" required></div>
-          <div class="field full"><label>Catatan</label><textarea placeholder="Keterangan tambahan bila ada"></textarea></div>
-        </div>
-        <button class="btn btn-primary" style="margin-top:18px;width:100%">Kirim Pengajuan</button>
-      </form>
+    <div class="eyebrow">DJ FAMILY KOST</div>
+    <h1 style="font-size:48px">Aturan Kost</h1>
+    <p class="lead" style="margin:0;max-width:760px">Tata tertib berikut ditampilkan untuk dibaca oleh calon dan penghuni kost. Ketentuan finansial/sanksi nominal mengikuti perjanjian sewa dan dokumen operasional yang berlaku.</p>
+
+    <div class="card" style="padding:28px;margin-top:28px">
+      <div class="rule"><h3>1. Kedisiplinan Pembayaran</h3><ul>
+        <li>Pembayaran sewa dilakukan sesuai jadwal dan ketentuan yang disepakati.</li>
+        <li>Keterlambatan dapat menerima pengingat dan tindak lanjut pengelola.</li>
+        <li>Masalah pembayaran yang berulang dapat menjadi bahan evaluasi hubungan sewa sesuai perjanjian.</li>
+      </ul></div>
+
+      <div class="rule"><h3>2. Kebersihan dan Ketertiban</h3><ul>
+        <li>Sampah wajib dibuang pada tempat yang telah disediakan.</li>
+        <li>Area bersama harus dijaga tetap bersih dan tertib.</li>
+        <li>Tenant wajib menjaga kebersihan area sekitar kamar.</li>
+        <li>Pelanggaran yang sama dan berulang dapat ditindaklanjuti pada tingkat yang lebih tinggi.</li>
+      </ul></div>
+
+      <div class="rule"><h3>3. Ketertiban di Lingkungan Kost</h3><ul>
+        <li>Tenant wajib menjaga suasana yang nyaman dan tidak mengganggu penghuni lain.</li>
+        <li>Merokok di dalam kamar tidak diperbolehkan.</li>
+        <li>Kebisingan yang mengganggu dapat dikenai teguran dan tindak lanjut sesuai ketentuan.</li>
+        <li>Penggunaan area bersama harus tetap tertib setelah mendapat teguran.</li>
+      </ul></div>
+
+      <div class="rule"><h3>4. Tamu Menginap</h3><ul>
+        <li>Tamu tidak diperbolehkan menginap di kamar.</li>
+        <li>Tenant bertanggung jawab atas perilaku tamunya selama berada di lingkungan kost.</li>
+        <li>Pelanggaran berulang dapat ditindaklanjuti sesuai perjanjian.</li>
+      </ul></div>
+
+      <div class="rule"><h3>5. Pelanggaran Berat</h3><ul>
+        <li>Menginapkan orang lain secara berulang tidak diperbolehkan.</li>
+        <li>Memberikan akses atau kunci kepada pihak lain tanpa izin tidak diperbolehkan.</li>
+        <li>Penyalahgunaan fasilitas kost tidak diperbolehkan.</li>
+        <li>Pelanggaran berat dapat disertai peringatan tertulis dan perjanjian untuk tidak mengulangi.</li>
+      </ul></div>
+
+      <div class="rule"><h3>6. Kerusakan dan Kehilangan</h3><ul>
+        <li>Tenant bertanggung jawab atas kerusakan atau kehilangan yang disebabkan kelalaian atau tindakannya.</li>
+        <li>Kunci, remote, furniture, fasilitas, inventaris, dinding, dan bagian kamar harus dijaga dengan baik.</li>
+        <li>Biaya perbaikan atau penggantian dapat dibebankan sesuai kerugian yang nyata dan dapat dibuktikan.</li>
+      </ul></div>
+
+      <div class="rule"><h3>7. Pelanggaran Sangat Berat</h3><ul>
+        <li>Kekerasan fisik atau ancaman serius.</li>
+        <li>Aktivitas yang melanggar hukum.</li>
+        <li>Perusakan properti secara sengaja dan serius.</li>
+        <li>Tindakan yang membahayakan keselamatan penghuni atau bangunan.</li>
+        <li>Penggunaan kamar untuk aktivitas ilegal.</li>
+      </ul><p class="note">Untuk pelanggaran sangat berat, pengelola dapat mengambil tindakan sesuai perjanjian sewa dan prosedur yang berlaku.</p></div>
+
+      <div class="rule"><h3>8. Urutan Penegakan Aturan</h3><ul>
+        <li><strong>Ringan:</strong> teguran.</li>
+        <li><strong>Sedang:</strong> teguran tertulis dan tindakan sesuai ketentuan.</li>
+        <li><strong>Berat:</strong> tindakan sesuai ketentuan, peringatan tertulis, dan perjanjian untuk tidak mengulangi.</li>
+        <li><strong>Sangat berat:</strong> pengakhiran sewa sesuai perjanjian dan prosedur yang berlaku.</li>
+      </ul></div>
+
+      <div class="rule"><h3>9. Administrasi Pengaduan dan Pelanggaran</h3><ul>
+        <li>Setiap laporan/pengaduan akan dikaitkan dengan identitas tenant yang telah login.</li>
+        <li>Data yang dapat dicatat meliputi tenant, nomor kamar, tanggal kejadian, jenis kejadian, bukti, dan tindak lanjut.</li>
+        <li>Tujuannya agar setiap laporan dapat ditelusuri dan ditangani secara tertib.</li>
+      </ul></div>
+
+      <div class="rule"><h3>10. Prinsip Penerapan</h3><ul>
+        <li>Aturan berlaku sama kepada seluruh tenant.</li>
+        <li>Setiap tindakan pengelola harus memiliki dasar aturan atau perjanjian yang telah diberitahukan.</li>
+        <li>Kerusakan atau kehilangan tetap menjadi tanggung jawab sesuai ketentuan yang berlaku.</li>
+        <li>Pelanggaran berulang dapat dinaikkan kategorinya.</li>
+      </ul></div>
     </div>
   </div>
 </section>

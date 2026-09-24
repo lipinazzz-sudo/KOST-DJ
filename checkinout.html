@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kunjungan — DJ Family Kost</title>
+<title>Check-in / Check-out — DJ Family Kost</title>
 
 <style>
 :root{
@@ -94,20 +94,25 @@ textarea{min-height:120px;resize:vertical}
 <section class="section">
   <div class="container">
     <a class="back" href="index.html">← Kembali ke beranda</a>
-    <div class="eyebrow">CALON TENANT</div><h1 style="font-size:48px">Ajukan Kunjungan</h1>
-    <p class="lead" style="margin:0;max-width:760px">Gunakan halaman ini untuk mengajukan jadwal melihat kamar. Untuk sementara form belum dikirim ke database.</p>
+    <div class="eyebrow">TENANT</div><h1 style="font-size:48px">Check-in / Check-out</h1>
+    <p class="lead" style="margin:0;max-width:800px">Form serah-terima kondisi kamar, fasilitas, kunci, dan meter listrik. Pada versi final data otomatis dikaitkan dengan tenant yang login.</p>
     <div class="card form-card">
-      <form onsubmit="event.preventDefault(); alert('Form kunjungan sudah siap. Koneksi ke sistem akan diaktifkan pada tahap berikutnya.');">
+      <form onsubmit="event.preventDefault(); alert('Form check-in/out sudah siap. Koneksi database akan diaktifkan pada tahap berikutnya.');">
         <div class="form-grid">
-          <div class="field"><label>Nama Lengkap</label><input required></div>
-          <div class="field"><label>No. WhatsApp</label><input type="tel" required></div>
-          <div class="field"><label>Email</label><input type="email"></div>
-          <div class="field"><label>Kamar yang Diminati</label><select required><option value="">Pilih kamar</option><option>101</option><option>102</option><option>103</option><option>104</option><option>105</option><option>106</option><option>107</option><option>108</option><option>109</option><option>201–210</option><option>301–310</option><option>401–410</option></select></div>
-          <div class="field"><label>Tanggal Kunjungan</label><input type="date" required></div>
-          <div class="field"><label>Waktu Kunjungan</label><input type="time" required></div>
-          <div class="field full"><label>Catatan</label><textarea placeholder="Keterangan tambahan bila ada"></textarea></div>
+          <div class="field"><label>Jenis Proses</label><select required><option value="">Pilih</option><option>Check-in</option><option>Check-out</option></select></div>
+          <div class="field"><label>No. Kamar</label><input required></div>
+          <div class="field"><label>Tanggal Proses</label><input type="date" required></div>
+          <div class="field"><label>Jumlah Kunci / Akses</label><input type="number" min="0"></div>
+          <div class="field full"><label>Kondisi Kamar</label><textarea required></textarea></div>
+          <div class="field full"><label>Catatan Kondisi</label><textarea></textarea></div>
+          <div class="field full"><label>Foto Kondisi Kamar</label><input type="file" accept="image/*" multiple></div>
+          <div class="field full"><label>Foto Meter Listrik</label><input type="file" accept="image/*"></div>
+          <div class="field"><label>Ada Kerusakan / Kehilangan?</label><select><option>Tidak</option><option>Ya</option></select></div>
+          <div class="field"><label>Kunci Dikembalikan?</label><select><option>Ya</option><option>Tidak</option></select></div>
+          <div class="field full"><label>Detail Kerusakan / Kehilangan</label><textarea></textarea></div>
+          <div class="field full"><label>Catatan Fasilitas</label><textarea></textarea></div>
         </div>
-        <button class="btn btn-primary" style="margin-top:18px;width:100%">Kirim Pengajuan</button>
+        <button class="btn btn-primary" style="margin-top:18px;width:100%">Kirim Check-in / Check-out</button>
       </form>
     </div>
   </div>
