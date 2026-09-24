@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kunjungan — DJ Family Kost</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+.card {
+    width: min(620px, 100%);
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(15,23,42,.08);
+}
+
+.label {
+    color: #c59d5f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin: 0 0 12px;
+    font-size: 38px;
+}
+
+p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.selected-room {
+    margin: 25px 0;
+    padding: 20px;
+    background: #f8f0e2;
+    border: 1px solid #ead8b7;
+    border-radius: 16px;
+}
+
+.selected-room span {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.selected-room strong {
+    font-size: 28px;
+    color: #8b6a36;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.primary {
+    background: #0f172a;
+    color: white;
+}
+
+.secondary {
+    background: white;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+}
+
+@media(max-width:600px) {
+
+    .card {
+        padding: 28px 22px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+    <section class="card">
+
+        <div class="label">
+            KUNJUNGAN
+        </div>
+
+        <h1>
+            Jadwalkan Kunjungan
+        </h1>
+
+        <p>
+            Halaman jadwal kunjungan akan kita lengkapi
+            pada tahap berikutnya.
+        </p>
+
+        <div class="selected-room">
+
+            <span>
+                KAMAR YANG DIMINATI
+            </span>
+
+            <strong id="roomNumber">
+                Belum dipilih
+            </strong>
+
+        </div>
+
+        <p>
+            Jika halaman ini dibuka dari detail kamar,
+            nomor kamar akan otomatis terbawa ke halaman
+            kunjungan.
+        </p>
+
+        <div class="actions">
+
+            <a
+                href="index.html#kamar"
+                class="btn primary"
+            >
+                ← Kembali ke Kamar
+            </a>
+
+            <a
+                href="pendaftaran.html"
+                class="btn secondary"
+                id="registrationLink"
+            >
+                Lanjut Pendaftaran
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const room =
+    params.get("kamar");
+
+
+const roomNumber =
+    document.getElementById(
+        "roomNumber"
+    );
+
+
+const registrationLink =
+    document.getElementById(
+        "registrationLink"
+    );
+
+
+if (room) {
+
+    roomNumber.textContent =
+        "Kamar " + room;
+
+    registrationLink.href =
+        "pendaftaran.html?kamar=" +
+        encodeURIComponent(room);
+
+}
+
+</script>
+
+</body>
+</html>
