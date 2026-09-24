@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DJ Family Kost | Hunian Nyaman & Modern</title>
+
+<meta
+    name="description"
+    content="DJ Family Kost — hunian nyaman, aman, dan praktis dengan pilihan kamar untuk kebutuhan Anda."
+>
+
+<style>
+/* =========================================================
+   DJ FAMILY KOST
+   WEB 1 — LANDING PAGE
+   ========================================================= */
+
+:root {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --surface-dark: #171717;
+    --text: #171717;
+    --text-soft: #666666;
+    --gold: #c9a45c;
+    --gold-dark: #a9823e;
+    --border: #e8e5df;
+    --radius: 18px;
+    --shadow: 0 15px 40px rgba(0,0,0,0.07);
+    --max-width: 1180px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.container {
+    width: min(var(--max-width), calc(100% - 40px));
+    margin: 0 auto;
+}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.navbar-inner {
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-weight: 800;
+    letter-spacing: -0.4px;
+}
+
+.logo-mark {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 12px;
+
+    background: var(--surface-dark);
+    color: var(--gold);
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.logo-title {
+    font-size: 16px;
+}
+
+.logo-subtitle {
+    margin-top: 4px;
+
+    color: var(--text-soft);
+
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-menu a {
+    color: #444;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+}
+
+.nav-menu a:hover {
+    color: var(--gold-dark);
+}
+
+.nav-cta {
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    background: var(--surface-dark);
+    color: white !important;
+}
+
+.nav-cta:hover {
+    background: #2b2b2b;
+}
+
+.mobile-menu-button {
+    display: none;
+
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: white;
+
+    cursor: pointer;
+}
+
+.mobile-menu-button span {
+    display: block;
+
+    width: 20px;
+    height: 2px;
+
+    margin: 4px auto;
+
+    background: #222;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    min-height: 760px;
+
+    padding-top: 76px;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(201,164,92,0.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f7f7f5 55%,
+            #efede8 100%
+        );
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 70px;
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 7px 12px;
+
+    border: 1px solid #ded8ca;
+    border-radius: 999px;
+
+    background: #fffdf8;
+
+    color: #80622e;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.eyebrow-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--gold);
+}
+
+.hero h1 {
+    margin-top: 24px;
+
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -2.8px;
+}
+
+.hero h1 span {
+    color: var(--gold-dark);
+}
+
+.hero-description {
+    max-width: 560px;
+
+    margin-top: 24px;
+
+    color: var(--text-soft);
+
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 32px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+
+    padding: 0 20px;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: var(--surface-dark);
+    color: white;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.14);
+}
+
+.btn-primary:hover {
+    background: #292929;
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--text);
+
+    border: 1px solid var(--border);
+}
+
+.hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+
+    margin-top: 44px;
+}
+
+.hero-stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-stat strong {
+    font-size: 24px;
+    letter-spacing: -0.5px;
+}
+
+.hero-stat span {
+    color: var(--text-soft);
+    font-size: 12px;
+}
+
+/* =========================================================
+   HERO VISUAL
+   ========================================================= */
+
+.hero-visual {
+    position: relative;
+}
+
+.hero-image {
+    position: relative;
+
+    min-height: 520px;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2c2c2c,
+            #111111
+        );
+
+    box-shadow: 0 30px 70px rgba(0,0,0,0.18);
+}
+
+.hero-image::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(201,164,92,0.45),
+            transparent 40%
+        );
+
+    pointer-events: none;
+}
+
+.hero-placeholder {
+    position: absolute;
+    inset: 30px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    padding: 30px;
+
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            160deg,
+            rgba(255,255,255,0.08),
+            rgba(255,255,255,0.02)
+        );
+
+    color: white;
+}
+
+.hero-placeholder-label {
+    margin-bottom: 10px;
+
+    color: var(--gold);
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.hero-placeholder h2 {
+    font-size: 30px;
+    line-height: 1.15;
+}
+
+.hero-placeholder p {
+    margin-top: 10px;
+
+    max-width: 390px;
+
+    color: rgba(255,255,255,0.68);
+
+    font-size: 13px;
+}
+
+.hero-floating-card {
+    position: absolute;
+
+    right: -25px;
+    bottom: 35px;
+
+    width: 190px;
+
+    padding: 18px;
+
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.96);
+
+    box-shadow: var(--shadow);
+}
+
+.hero-floating-card small {
+    color: var(--text-soft);
+    font-size: 11px;
+}
+
+.hero-floating-card strong {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 25px;
+}
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.section {
+    padding: 100px 0;
+}
+
+.section-header {
+    max-width: 650px;
+    margin-bottom: 50px;
+}
+
+.section-label {
+    color: var(--gold-dark);
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.section-title {
+    margin-top: 10px;
+
+    font-size: clamp(32px, 4vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+}
+
+.section-description {
+    margin-top: 15px;
+
+    color: var(--text-soft);
+
+    font-size: 15px;
+}
+
+/* =========================================================
+   ROOM TYPES
+   ========================================================= */
+
+.room-types {
+    background: #ffffff;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.room-card {
+    padding: 24px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    background: white;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+
+.room-number {
+    color: var(--gold-dark);
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.room-card h3 {
+    margin-top: 10px;
+
+    font-size: 23px;
+}
+
+.room-card p {
+    margin-top: 7px;
+
+    color: var(--text-soft);
+
+    font-size: 13px;
+}
+
+.room-price {
+    margin-top: 20px;
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.room-price span {
+    color: var(--text-soft);
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.room-status {
+    display: inline-flex;
+
+    margin-top: 18px;
+
+    padding: 6px 9px;
+
+    border-radius: 999px;
+
+    background: #f3f3f1;
+
+    color: #777;
+
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature {
+    padding: 28px;
+
+    border-radius: var(--radius);
+
+    background: white;
+
+    border: 1px solid var(--border);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 14px;
+
+    background: #f7f1e5;
+
+    color: var(--gold-dark);
+
+    font-size: 20px;
+}
+
+.feature h3 {
+    margin-top: 20px;
+
+    font-size: 18px;
+}
+
+.feature p {
+    margin-top: 8px;
+
+    color: var(--text-soft);
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
+.about {
+    background: var(--surface-dark);
+    color: white;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 70px;
+    align-items: center;
+}
+
+.about-visual {
+    min-height: 430px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #343434,
+            #191919
+        );
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    display: flex;
+    align-items: flex-end;
+
+    padding: 30px;
+}
+
+.about-visual-content {
+    color: white;
+}
+
+.about-visual-content small {
+    color: var(--gold);
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.about-visual-content h3 {
+    margin-top: 10px;
+
+    font-size: 30px;
+    line-height: 1.15;
+}
+
+.about-copy .section-label {
+    color: var(--gold);
+}
+
+.about-copy .section-title {
+    color: white;
+}
+
+.about-copy p {
+    margin-top: 20px;
+
+    color: rgba(255,255,255,0.68);
+
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.about-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+
+    margin-top: 28px;
+}
+
+.about-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: rgba(255,255,255,0.85);
+
+    font-size: 13px;
+}
+
+.about-check {
+    width: 24px;
+    height: 24px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: rgba(201,164,92,0.15);
+
+    color: var(--gold);
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.cta-section {
+    padding: 100px 0;
+}
+
+.cta {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 60px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #202020,
+            #111111
+        );
+
+    color: white;
+
+    text-align: center;
+}
+
+.cta::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    right: -120px;
+    top: -120px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(201,164,92,0.25);
+}
+
+.cta .section-label {
+    color: var(--gold);
+}
+
+.cta h2 {
+    position: relative;
+    z-index: 2;
+
+    margin-top: 10px;
+
+    font-size: clamp(30px, 4vw, 45px);
+    line-height: 1.1;
+}
+
+.cta p {
+    position: relative;
+    z-index: 2;
+
+    max-width: 600px;
+
+    margin: 16px auto 0;
+
+    color: rgba(255,255,255,0.65);
+
+    font-size: 14px;
+}
+
+.cta-buttons {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 28px;
+}
+
+.btn-gold {
+    background: var(--gold);
+    color: #161616;
+}
+
+.btn-gold:hover {
+    background: #d6b36c;
+}
+
+.btn-outline-white {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    padding: 45px 0;
+
+    border-top: 1px solid var(--border);
+
+    background: white;
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-brand {
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.footer-copy {
+    margin-top: 4px;
+
+    color: var(--text-soft);
+
+    font-size: 11px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+}
+
+.footer-links a:hover {
+    color: var(--text);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+    }
+
+    .hero {
+        padding-top: 120px;
+        padding-bottom: 70px;
+    }
+
+    .hero-content {
+        max-width: 760px;
+    }
+
+    .hero-image {
+        min-height: 420px;
+    }
+
+    .room-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+    }
+
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-floating-card {
+        right: 20px;
+    }
+}
+
+@media (max-width: 720px) {
+
+    .container {
+        width: min(var(--max-width), calc(100% - 28px));
+    }
+
+    .navbar-inner {
+        height: 68px;
+    }
+
+    .nav-menu {
+        display: none;
+
+        position: absolute;
+
+        left: 14px;
+        right: 14px;
+        top: 76px;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        padding: 10px;
+
+        border: 1px solid var(--border);
+        border-radius: 16px;
+
+        background: rgba(255,255,255,0.98);
+
+        box-shadow: var(--shadow);
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-menu a {
+        padding: 13px 12px;
+    }
+
+    .nav-cta {
+        text-align: center;
+    }
+
+    .mobile-menu-button {
+        display: block;
+    }
+
+    .hero {
+        min-height: auto;
+
+        padding-top: 105px;
+        padding-bottom: 65px;
+    }
+
+    .hero h1 {
+        letter-spacing: -1.8px;
+    }
+
+    .hero-description {
+        font-size: 15px;
+    }
+
+    .hero-stats {
+        gap: 20px;
+    }
+
+    .hero-image {
+        min-height: 360px;
+
+        border-radius: 22px;
+    }
+
+    .hero-placeholder {
+        inset: 18px;
+
+        padding: 22px;
+    }
+
+    .hero-placeholder h2 {
+        font-size: 25px;
+    }
+
+    .hero-floating-card {
+        width: 160px;
+
+        right: 12px;
+        bottom: 15px;
+
+        padding: 14px;
+    }
+
+    .section {
+        padding: 70px 0;
+    }
+
+    .section-header {
+        margin-bottom: 32px;
+    }
+
+    .room-grid,
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .about-list {
+        grid-template-columns: 1fr;
+    }
+
+    .about-visual {
+        min-height: 320px;
+    }
+
+    .cta {
+        padding: 40px 22px;
+        border-radius: 22px;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ======================================================
+     NAVBAR
+     ====================================================== -->
+
+<header class="navbar">
+
+    <div class="container navbar-inner">
+
+        <a href="#" class="logo">
+
+            <div class="logo-mark">
+                DJ
+            </div>
+
+            <div class="logo-text">
+                <div class="logo-title">
+                    DJ Family Kost
+                </div>
+
+                <div class="logo-subtitle">
+                    Comfortable Living
+                </div>
+            </div>
+
+        </a>
+
+        <nav class="nav-menu" id="navMenu">
+
+            <a href="#home">
+                Beranda
+            </a>
+
+            <a href="#kamar">
+                Kamar
+            </a>
+
+            <a href="#fasilitas">
+                Fasilitas
+            </a>
+
+            <a href="#tentang">
+                Tentang
+            </a>
+
+            <a href="#kontak" class="nav-cta">
+                Hubungi Kami
+            </a>
+
+        </nav>
+
+        <button
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            aria-label="Buka menu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ======================================================
+     HERO
+     ====================================================== -->
+
+<main id="home">
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                DJ Family Kost
+            </div>
+
+            <h1>
+                Tempat tinggal yang
+                <span>nyaman untuk Anda.</span>
+            </h1>
+
+            <p class="hero-description">
+                DJ Family Kost menghadirkan hunian yang nyaman,
+                praktis, dan tertata untuk membantu Anda mendapatkan
+                tempat tinggal yang sesuai dengan kebutuhan.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#kamar"
+                    class="btn btn-primary"
+                >
+                    Lihat Pilihan Kamar
+                </a>
+
+                <a
+                    href="#kontak"
+                    class="btn btn-secondary"
+                >
+                    Hubungi Kami
+                </a>
+
+            </div>
+
+            <div class="hero-stats">
+
+                <div class="hero-stat">
+                    <strong>39</strong>
+                    <span>Kamar Operasional</span>
+                </div>
+
+                <div class="hero-stat">
+                    <strong>4</strong>
+                    <span>Blok Kamar</span>
+                </div>
+
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Akses Informasi</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-visual">
+
+            <div class="hero-image">
+
+                <!--
+                    Nanti area ini akan diganti
+                    dengan foto asli DJ Family Kost.
+                -->
+
+                <div class="hero-placeholder">
+
+                    <div class="hero-placeholder-label">
+                        DJ Family Kost
+                    </div>
+
+                    <h2>
+                        Hunian nyaman,
+                        lingkungan tertata.
+                    </h2>
+
+                    <p>
+                        Foto utama properti akan ditempatkan
+                        di area ini pada tahap berikutnya.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="hero-floating-card">
+
+                <small>
+                    Total kamar
+                </small>
+
+                <strong>
+                    39 Kamar
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     ROOM TYPES
+     ====================================================== -->
+
+<section class="section room-types" id="kamar">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                Pilihan Kamar
+            </div>
+
+            <h2 class="section-title">
+                Pilih kamar sesuai kebutuhan Anda.
+            </h2>
+
+            <p class="section-description">
+                DJ Family Kost memiliki 39 kamar operasional
+                yang terbagi dalam beberapa kelompok tarif.
+                Status ketersediaan akan terhubung secara realtime
+                pada tahap berikutnya.
+            </p>
+
+        </div>
+
+
+        <div class="room-grid">
+
+            <article class="room-card">
+
+                <div class="room-number">
+                    Kamar 101–109
+                </div>
+
+                <h3>
+                    Blok 100
+                </h3>
+
+                <p>
+                    9 kamar operasional
+                </p>
+
+                <div class="room-price">
+                    Rp1.600.000
+                    <span>/ bulan</span>
+                </div>
+
+                <div class="room-status">
+                    Status realtime — WEB 2
+                </div>
+
+            </article>
+
+
+            <article class="room-card">
+
+                <div class="room-number">
+                    Kamar 201–210
+                </div>
+
+                <h3>
+                    Blok 200
+                </h3>
+
+                <p>
+                    10 kamar operasional
+                </p>
+
+                <div class="room-price">
+                    Rp1.500.000
+                    <span>/ bulan</span>
+                </div>
+
+                <div class="room-status">
+                    Status realtime — WEB 2
+                </div>
+
+            </article>
+
+
+            <article class="room-card">
+
+                <div class="room-number">
+                    Kamar 301–310
+                </div>
+
+                <h3>
+                    Blok 300
+                </h3>
+
+                <p>
+                    10 kamar operasional
+                </p>
+
+                <div class="room-price">
+                    Rp1.400.000
+                    <span>/ bulan</span>
+                </div>
+
+                <div class="room-status">
+                    Status realtime — WEB 2
+                </div>
+
+            </article>
+
+
+            <article class="room-card">
+
+                <div class="room-number">
+                    Kamar 401–410
+                </div>
+
+                <h3>
+                    Blok 400
+                </h3>
+
+                <p>
+                    10 kamar operasional
+                </p>
+
+                <div class="room-price">
+                    Segera Hadir
+                </div>
+
+                <div class="room-status">
+                    Informasi harga menyusul
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     FACILITIES
+     ====================================================== -->
+
+<section class="section" id="fasilitas">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                Fasilitas
+            </div>
+
+            <h2 class="section-title">
+                Dirancang untuk kebutuhan sehari-hari.
+            </h2>
+
+            <p class="section-description">
+                Informasi fasilitas detail akan kita sesuaikan
+                dengan kondisi nyata DJ Family Kost sebelum website
+                dipublikasikan secara umum.
+            </p>
+
+        </div>
+
+
+        <div class="features">
+
+            <article class="feature">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Lingkungan Tertata
+                </h3>
+
+                <p>
+                    Sistem pengelolaan kamar dan penghuni
+                    dirancang agar operasional kost tetap
+                    teratur.
+                </p>
+
+            </article>
+
+
+            <article class="feature">
+
+                <div class="feature-icon">
+                    ◇
+                </div>
+
+                <h3>
+                    Informasi Transparan
+                </h3>
+
+                <p>
+                    Penghuni nantinya dapat melihat informasi
+                    kamar, pembayaran, maintenance, dan
+                    kebutuhan lainnya melalui website.
+                </p>
+
+            </article>
+
+
+            <article class="feature">
+
+                <div class="feature-icon">
+                    +
+                </div>
+
+                <h3>
+                    Layanan Digital
+                </h3>
+
+                <p>
+                    Pengajuan pembayaran, maintenance,
+                    check-in dan check-out akan dilakukan
+                    melalui sistem website.
+                </p>
+
+            </article>
+
+
+            <article class="feature">
+
+                <div class="feature-icon">
+                    39
+                </div>
+
+                <h3>
+                    39 Kamar
+                </h3>
+
+                <p>
+                    Sistem saat ini dibangun berdasarkan
+                    39 kamar operasional DJ Family Kost.
+                </p>
+
+            </article>
+
+
+            <article class="feature">
+
+                <div class="feature-icon">
+                    →
+                </div>
+
+                <h3>
+                    Mudah Diakses
+                </h3>
+
+                <p>
+                    Website dirancang agar nyaman digunakan
+                    melalui smartphone maupun komputer.
+                </p>
+
+            </article>
+
+
+            <article class="feature">
+
+                <div class="feature-icon">
+                    ⌂
+                </div>
+
+                <h3>
+                    Satu Portal
+                </h3>
+
+                <p>
+                    Informasi publik dan layanan penghuni
+                    akan disatukan dalam satu sistem.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     ABOUT
+     ====================================================== -->
+
+<section class="section about" id="tentang">
+
+    <div class="container about-grid">
+
+        <div class="about-visual">
+
+            <div class="about-visual-content">
+
+                <small>
+                    DJ Family Kost
+                </small>
+
+                <h3>
+                    Bukan sekadar
+                    tempat untuk tinggal.
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="about-copy">
+
+            <div class="section-label">
+                Tentang DJ Family Kost
+            </div>
+
+            <h2 class="section-title">
+                Pengelolaan yang lebih modern dan terstruktur.
+            </h2>
+
+            <p>
+                Website DJ Family Kost nantinya tidak hanya
+                digunakan sebagai halaman informasi. Website
+                ini akan menjadi pintu utama untuk layanan
+                penghuni dan pengelolaan operasional kost.
+            </p>
+
+            <p>
+                Sistem yang sudah dibangun di sisi backend
+                akan menjadi dasar pengelolaan data, sedangkan
+                website menjadi antarmuka yang digunakan
+                penghuni dan calon penghuni.
+            </p>
+
+
+            <div class="about-list">
+
+                <div class="about-list-item">
+
+                    <span class="about-check">
+                        ✓
+                    </span>
+
+                    Informasi kamar
+                </div>
+
+                <div class="about-list-item">
+
+                    <span class="about-check">
+                        ✓
+                    </span>
+
+                    Pembayaran
+                </div>
+
+                <div class="about-list-item">
+
+                    <span class="about-check">
+                        ✓
+                    </span>
+
+                    Maintenance
+                </div>
+
+                <div class="about-list-item">
+
+                    <span class="about-check">
+                        ✓
+                    </span>
+
+                    Check-in / Check-out
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     CTA
+     ====================================================== -->
+
+<section class="cta-section" id="kontak">
+
+    <div class="container">
+
+        <div class="cta">
+
+            <div class="section-label">
+                Tertarik dengan DJ Family Kost?
+            </div>
+
+            <h2>
+                Temukan kamar yang sesuai untuk Anda.
+            </h2>
+
+            <p>
+                Sistem pemesanan, kunjungan, dan pendaftaran
+                penghuni akan tersedia melalui website
+                pada tahap pengembangan berikutnya.
+            </p>
+
+            <div class="cta-buttons">
+
+                <a
+                    href="#kamar"
+                    class="btn btn-gold"
+                >
+                    Lihat Kamar
+                </a>
+
+                <a
+                    href="#"
+                    class="btn btn-outline-white"
+                    onclick="showComingSoon(event)"
+                >
+                    Jadwalkan Kunjungan
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ======================================================
+     FOOTER
+     ====================================================== -->
+
+<footer class="footer">
+
+    <div class="container footer-inner">
+
+        <div>
+
+            <div class="footer-brand">
+                DJ Family Kost
+            </div>
+
+            <div class="footer-copy">
+                © <span id="currentYear"></span>
+                DJ Family Kost. All rights reserved.
+            </div>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="#home">
+                Beranda
+            </a>
+
+            <a href="#kamar">
+                Kamar
+            </a>
+
+            <a href="#fasilitas">
+                Fasilitas
+            </a>
+
+            <a href="#tentang">
+                Tentang
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
+
+const navMenu =
+    document.getElementById("navMenu");
+
+
+mobileMenuButton.addEventListener("click", function () {
+
+    navMenu.classList.toggle("active");
+
+});
+
+
+/* Tutup menu setelah memilih link */
+
+document.querySelectorAll(".nav-menu a").forEach(function(link) {
+
+    link.addEventListener("click", function() {
+
+        navMenu.classList.remove("active");
+
+    });
+
+});
+
+
+/* =========================================================
+   CURRENT YEAR
+   ========================================================= */
+
+document.getElementById("currentYear").textContent =
+    new Date().getFullYear();
+
+
+/* =========================================================
+   COMING SOON
+   ========================================================= */
+
+function showComingSoon(event) {
+
+    event.preventDefault();
+
+    alert(
+        "Fitur jadwal kunjungan akan kita aktifkan pada tahap berikutnya."
+    );
+
+}
+</script>
+
+</body>
+</html>
