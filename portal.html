@@ -1,445 +1,863 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
+<meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  >
+>
 
-  <title>Portal Tenant — DJ Family Kost</title>
+<title>Portal Tenant — DJ Family Kost</title>
 
-  <link
+<link
     rel="stylesheet"
-    href="app.css"
-  >
+    href="app.css?v=20260925-tenant-portal-01"
+>
+
+<style>
+
+.portal-wrap{
+    padding:55px 0;
+}
+
+.portal-header{
+    display:flex;
+    justify-content:space-between;
+    gap:24px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+}
+
+.portal-welcome{
+    margin-top:8px;
+    color:#667085;
+}
+
+.portal-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+    margin-top:30px;
+}
+
+.portal-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+    padding:22px;
+}
+
+.portal-card h3{
+    margin-top:0;
+    margin-bottom:8px;
+}
+
+.portal-card p{
+    color:#667085;
+    line-height:1.6;
+}
+
+.portal-value{
+    font-size:28px;
+    font-weight:800;
+    margin-top:10px;
+}
+
+.status-pill{
+    display:inline-flex;
+    padding:7px 11px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:800;
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.portal-error{
+    margin-top:25px;
+    padding:15px;
+    background:#fff1f2;
+    border:1px solid #fecdd3;
+    color:#b42318;
+    border-radius:14px;
+    display:none;
+}
+
+.portal-loading{
+    padding:50px 0;
+    text-align:center;
+    color:#667085;
+}
+
+.logout-button{
+    cursor:pointer;
+}
+
+@media(max-width:900px){
+
+    .portal-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
 
 </head>
 
-
-<body data-page="portal">
+<body>
 
 <header class="nav">
 
-  <div class="container nav-inner">
+    <div class="nav-inner">
 
-    <a
-      class="brand"
-      href="portal.html"
-    >
-
-      <span class="brand-mark"></span>
-
-      DJ FAMILY KOST · TENANT
-
-    </a>
+        <a
+            class="brand"
+            href="portal.html"
+        >
+            <span class="brand-mark"></span>
+            DJ FAMILY KOST · TENANT
+        </a>
 
 
-    <nav class="nav-links">
+        <nav class="nav-links">
 
-      <a href="portal.html">
-        Dashboard
-      </a>
+            <a href="portal.html">
+                Dashboard
+            </a>
 
-      <a href="pembayaran.html">
-        Pembayaran
-      </a>
+            <a href="pembayaran.html">
+                Pembayaran
+            </a>
 
-      <a href="maintenance.html">
-        Maintenance
-      </a>
+            <a href="maintenance.html">
+                Maintenance
+            </a>
 
-      <a href="checkinout.html">
-        Check-in/out
-      </a>
+            <a href="checkinout.html">
+                Check-in/out
+            </a>
 
-      <a href="cafe.html">
-        Cafe
-      </a>
+            <a href="cafe.html">
+                Cafe
+            </a>
 
-      <a href="laundry.html">
-        Laundry
-      </a>
+            <a href="laundry.html">
+                Laundry
+            </a>
 
-      <a
-        href="#"
-        id="logoutTop"
-        class="login-top"
-      >
-        Keluar
-      </a>
+            <a
+                href="#"
+                id="logoutButton"
+                class="login-top"
+            >
+                Keluar
+            </a>
 
-    </nav>
+        </nav>
 
-  </div>
+    </div>
 
 </header>
 
 
-<section class="section">
+<main>
 
-  <div class="container">
+<section class="section portal-wrap">
 
-    <div
-      id="portalMessage"
-      class="message"
-    ></div>
-
-
-    <div class="dashboard-top">
-
-      <div class="card profile-card">
-
-        <div class="eyebrow">
-          TENANT PORTAL
-        </div>
-
-
-        <h1
-          style="font-size:46px"
-          id="tenantName"
-        >
-          Memuat...
-        </h1>
-
-
-        <p
-          class="lead"
-          style="margin:0;max-width:none"
-          id="welcome"
-        >
-          Memuat akun...
-        </p>
+    <div class="container">
 
 
         <div
-          class="grid grid-3"
-          style="margin-top:24px"
+            id="loading"
+            class="portal-loading"
         >
-
-          <div class="card kpi-card">
-
-            <div class="kpi-label">
-              TENANT ID
-            </div>
-
-            <div
-              class="kpi-value"
-              id="tenantId"
-            >
-              -
-            </div>
-
-          </div>
-
-
-          <div class="card kpi-card">
-
-            <div class="kpi-label">
-              NOMOR KAMAR
-            </div>
-
-            <div
-              class="kpi-value"
-              id="tenantRoom"
-            >
-              -
-            </div>
-
-          </div>
-
-
-          <div class="card kpi-card">
-
-            <div class="kpi-label">
-              TAGIHAN
-            </div>
-
-            <div
-              id="currentBill"
-              style="margin-top:8px"
-            >
-              Memuat...
-            </div>
-
-          </div>
-
+            Memuat portal tenant...
         </div>
 
-      </div>
+
+        <div
+            id="errorBox"
+            class="portal-error"
+        ></div>
 
 
-      <div class="grid">
-
-        <a
-          class="card action-card"
-          href="pembayaran.html"
+        <div
+            id="portalContent"
+            style="display:none;"
         >
 
-          <div class="action-icon">
-            Rp
-          </div>
+            <div class="portal-header">
 
-          <h3>
-            Pembayaran
-          </h3>
+                <div>
 
-          <p>
-            Lihat tagihan dan
-            kirim bukti pembayaran.
-          </p>
+                    <div class="eyebrow">
+                        TENANT PORTAL
+                    </div>
 
-          <span class="btn btn-light">
-            Buka
-          </span>
+                    <h1>
+                        <span id="tenantName">
+                            —
+                        </span>
+                    </h1>
 
-        </a>
+                    <div
+                        class="portal-welcome"
+                        id="tenantMeta"
+                    >
+                        —
+                    </div>
+
+                </div>
 
 
-        <a
-          class="card action-card"
-          href="maintenance.html"
-        >
+                <div>
 
-          <div class="action-icon">
-            M
-          </div>
+                    <span
+                        class="status-pill"
+                        id="tenantStatus"
+                    >
+                        AKTIF
+                    </span>
 
-          <h3>
-            Maintenance
-          </h3>
+                </div>
 
-          <p>
-            Laporkan kerusakan
-            fasilitas kamar.
-          </p>
+            </div>
 
-          <span class="btn btn-light">
-            Buka
-          </span>
 
-        </a>
+            <div class="portal-grid">
 
-      </div>
+
+                <div class="portal-card">
+
+                    <h3>
+                        Tenant ID
+                    </h3>
+
+                    <div
+                        class="portal-value"
+                        id="tenantId"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="portal-card">
+
+                    <h3>
+                        Kamar
+                    </h3>
+
+                    <div
+                        class="portal-value"
+                        id="tenantRoom"
+                    >
+                        —
+                    </div>
+
+                    <p id="roomStatus">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="portal-card">
+
+                    <h3>
+                        Harga Sewa
+                    </h3>
+
+                    <div
+                        class="portal-value"
+                        id="rentAmount"
+                    >
+                        —
+                    </div>
+
+                    <p>
+                        per bulan
+                    </p>
+
+                </div>
+
+
+                <div class="portal-card">
+
+                    <h3>
+                        Periode Tagihan
+                    </h3>
+
+                    <div
+                        class="portal-value"
+                        id="billingPeriod"
+                    >
+                        —
+                    </div>
+
+                    <p>
+                        Jatuh tempo:
+                        <strong id="billingDue">
+                            —
+                        </strong>
+                    </p>
+
+                </div>
+
+
+                <div class="portal-card">
+
+                    <h3>
+                        Status Pembayaran
+                    </h3>
+
+                    <div
+                        class="portal-value"
+                        id="billingStatus"
+                    >
+                        —
+                    </div>
+
+                    <p>
+                        Total tagihan:
+                        <strong id="billingTotal">
+                            —
+                        </strong>
+                    </p>
+
+                </div>
+
+
+                <div class="portal-card">
+
+                    <h3>
+                        Deposit
+                    </h3>
+
+                    <div
+                        class="portal-value"
+                        id="depositAmount"
+                    >
+                        —
+                    </div>
+
+                    <p>
+                        Deposit jaminan
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                class="card"
+                style="margin-top:30px;padding:24px;"
+            >
+
+                <h3>
+                    Layanan Tenant
+                </h3>
+
+                <p>
+                    Gunakan menu di atas untuk pembayaran,
+                    maintenance, dan check-in/check-out.
+                </p>
+
+                <div
+                    style="
+                        display:flex;
+                        flex-wrap:wrap;
+                        gap:10px;
+                        margin-top:18px;
+                    "
+                >
+
+                    <a
+                        class="btn btn-primary"
+                        href="pembayaran.html"
+                    >
+                        Pembayaran
+                    </a>
+
+                    <a
+                        class="btn btn-outline"
+                        href="maintenance.html"
+                    >
+                        Ajukan Maintenance
+                    </a>
+
+                    <a
+                        class="btn btn-outline"
+                        href="checkinout.html"
+                    >
+                        Check-in / Check-out
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
-
-
-    <div
-      class="grid grid-3"
-      style="margin-top:24px"
-    >
-
-      <a
-        class="card action-card"
-        href="checkinout.html"
-      >
-
-        <div class="action-icon">
-          ↔
-        </div>
-
-        <h3>
-          Check-in / Check-out
-        </h3>
-
-        <p>
-          Serah-terima kondisi kamar,
-          fasilitas, dan akses.
-        </p>
-
-        <span class="btn btn-light">
-          Buka
-        </span>
-
-      </a>
-
-
-      <a
-        class="card action-card"
-        href="cafe.html"
-      >
-
-        <div class="action-icon">
-          C
-        </div>
-
-        <h3>
-          Cafe
-        </h3>
-
-        <p>
-          Layanan cafe tenant.
-        </p>
-
-        <span class="btn btn-light">
-          Coming Soon
-        </span>
-
-      </a>
-
-
-      <a
-        class="card action-card"
-        href="laundry.html"
-      >
-
-        <div class="action-icon">
-          L
-        </div>
-
-        <h3>
-          Laundry
-        </h3>
-
-        <p>
-          Layanan laundry tenant.
-        </p>
-
-        <span class="btn btn-light">
-          Coming Soon
-        </span>
-
-      </a>
-
-    </div>
-
-
-    <section
-      class="section"
-      style="padding-bottom:0"
-    >
-
-      <div class="eyebrow">
-        PEMBAYARAN
-      </div>
-
-      <h2>
-        Riwayat Pembayaran
-      </h2>
-
-
-      <div class="card"
-           style="padding:18px;overflow:auto">
-
-        <table class="history">
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Periode
-              </th>
-
-              <th>
-                Dibayar
-              </th>
-
-              <th>
-                Denda
-              </th>
-
-              <th>
-                Total
-              </th>
-
-              <th>
-                Status
-              </th>
-
-              <th>
-                Verifikasi
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody id="paymentHistory">
-
-            <tr>
-
-              <td colspan="6">
-                Memuat...
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-
-    <section
-      class="section"
-      style="padding-bottom:0"
-    >
-
-      <div class="eyebrow">
-        MAINTENANCE
-      </div>
-
-      <h2>
-        Laporan Aktif
-      </h2>
-
-
-      <div
-        id="maintenanceList"
-        class="grid grid-3"
-      >
-
-        <div class="note">
-          Memuat...
-        </div>
-
-      </div>
-
-    </section>
-
-  </div>
 
 </section>
+
+</main>
 
 
 <footer class="footer">
 
-  <div class="container footer-inner">
+    <div class="container footer-inner">
 
-    <div>
+        <div>
+            <strong>
+                DJ FAMILY KOST
+            </strong>
+            <br>
+            <small>
+                Hunian yang tertib, nyaman, dan terkelola.
+            </small>
+        </div>
 
-      <strong>
-        DJ FAMILY KOST
-      </strong>
-
-      <br>
-
-      <small>
-        Portal tenant.
-      </small>
+        <small>
+            © 2026 DJ Family Kost
+        </small>
 
     </div>
-
-
-    <small>
-      © 2026 DJ Family Kost
-    </small>
-
-  </div>
 
 </footer>
 
 
-<script src="dj-kost.js"></script>
+<script>
+
+const TENANT_API_URL =
+    "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+
+const errorBox =
+    document.getElementById(
+        "errorBox"
+    );
+
+
+const portalContent =
+    document.getElementById(
+        "portalContent"
+    );
+
+
+function money(
+    value
+){
+
+    return (
+        "Rp" +
+        Number(
+            value || 0
+        ).toLocaleString(
+            "id-ID"
+        )
+    );
+
+}
+
+
+function showPortalError(
+    message
+){
+
+    loading.style.display =
+        "none";
+
+    portalContent.style.display =
+        "none";
+
+    errorBox.style.display =
+        "block";
+
+    errorBox.textContent =
+        message;
+
+}
+
+
+function getSession(){
+
+    const raw =
+        sessionStorage.getItem(
+            "djTenantSession"
+        );
+
+
+    if(!raw){
+        return null;
+    }
+
+
+    try{
+
+        return JSON.parse(
+            raw
+        );
+
+    }catch(error){
+
+        sessionStorage.removeItem(
+            "djTenantSession"
+        );
+
+        return null;
+
+    }
+
+}
+
+
+async function loadPortal(){
+
+    const session =
+        getSession();
+
+
+    if(!session){
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                TENANT_API_URL,
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "tenantDashboard",
+
+                            tenantId:
+                                session.tenantId,
+
+                            sessionToken:
+                                session.sessionToken
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(
+            !result ||
+            result.ok !== true ||
+            !result.data
+        ){
+
+            if(
+                result &&
+                result.error &&
+                /session/i.test(
+                    result.error
+                )
+            ){
+
+                sessionStorage.removeItem(
+                    "djTenantSession"
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            throw new Error(
+                result &&
+                result.error
+                    ? result.error
+                    : "Portal gagal dimuat."
+            );
+
+        }
+
+
+        const data =
+            result.data;
+
+
+        /*
+         * TENANT
+         */
+
+        document
+            .getElementById(
+                "tenantName"
+            )
+            .textContent =
+                data.tenant.name ||
+                "Tenant";
+
+
+        document
+            .getElementById(
+                "tenantId"
+            )
+            .textContent =
+                data.tenant.tenantId ||
+                "—";
+
+
+        document
+            .getElementById(
+                "tenantRoom"
+            )
+            .textContent =
+                data.tenant.room ||
+                "—";
+
+
+        document
+            .getElementById(
+                "tenantStatus"
+            )
+            .textContent =
+                data.tenant.status ||
+                "AKTIF";
+
+
+        document
+            .getElementById(
+                "tenantMeta"
+            )
+            .textContent =
+                "Tenant ID " +
+                (
+                    data.tenant.tenantId ||
+                    "—"
+                ) +
+                " · Kamar " +
+                (
+                    data.tenant.room ||
+                    "—"
+                );
+
+
+        /*
+         * ROOM
+         */
+
+        document
+            .getElementById(
+                "roomStatus"
+            )
+            .textContent =
+                "Status kamar: " +
+                (
+                    data.room.status ||
+                    "—"
+                );
+
+
+        document
+            .getElementById(
+                "rentAmount"
+            )
+            .textContent =
+                money(
+                    data.room.price
+                );
+
+
+        /*
+         * CONTRACT
+         */
+
+        document
+            .getElementById(
+                "depositAmount"
+            )
+            .textContent =
+                money(
+                    data.contract.deposit
+                );
+
+
+        /*
+         * BILLING
+         */
+
+        document
+            .getElementById(
+                "billingPeriod"
+            )
+            .textContent =
+                data.billing.period ||
+                "—";
+
+
+        document
+            .getElementById(
+                "billingDue"
+            )
+            .textContent =
+                data.billing.dueDate ||
+                "—";
+
+
+        document
+            .getElementById(
+                "billingStatus"
+            )
+            .textContent =
+                data.billing.status ||
+                "BELUM BAYAR";
+
+
+        document
+            .getElementById(
+                "billingTotal"
+            )
+            .textContent =
+                money(
+                    data.billing.total
+                );
+
+
+        loading.style.display =
+            "none";
+
+        errorBox.style.display =
+            "none";
+
+        portalContent.style.display =
+            "block";
+
+
+    }catch(error){
+
+        console.error(
+            "Portal error:",
+            error
+        );
+
+
+        showPortalError(
+            error.message ||
+            "Portal tidak dapat dimuat."
+        );
+
+    }
+
+}
+
+
+document
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        async function(event){
+
+            event.preventDefault();
+
+
+            const session =
+                getSession();
+
+
+            if(session){
+
+                try{
+
+                    await fetch(
+                        TENANT_API_URL,
+                        {
+
+                            method:"POST",
+
+                            headers:{
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    action:
+                                        "logout",
+
+                                    tenantId:
+                                        session.tenantId,
+
+                                    sessionToken:
+                                        session.sessionToken
+
+                                })
+
+                        }
+                    );
+
+                }catch(error){
+
+                    console.warn(
+                        "Logout API gagal:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            sessionStorage.removeItem(
+                "djTenantSession"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+    );
+
+
+loadPortal();
+
+</script>
 
 </body>
 </html>
