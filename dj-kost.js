@@ -1,185 +1,181 @@
-/* ============================================================
-   DJ FAMILY KOST — FRONTEND ENGINE
-   ============================================================
-
-   Satu file untuk seluruh frontend:
-
-   index.html
-   login.html
-   portal.html
-   pembayaran.html
-   maintenance.html
-   checkinout.html
-   pendaftaran.html
-   kunjungan.html
-   cafe.html
-   laundry.html
-
-   API:
-   Cloudflare Worker
-   ↓
-   Google Apps Script V2
-   ↓
-   Google Sheets
-
-   ============================================================ */
-
-
 const DJ_KOST_API =
   'https://dj-family-kost.mahjongjong.workers.dev';
 
 
-const DJ_SESSION_KEY =
-  'djTenantSession';
-
-
-const DJ_TENANT_KEY =
-  'djTenantData';
-
-
 console.log(
-  '[DJ KOST] Frontend engine loaded.'
+  '[DJ KOST] JS AKTIF'
 );
 
 
 /* ============================================================
-   BASIC HELPERS
-   ============================================================ */
+   API GET
+============================================================ */
 
-
-function getSessionToken() {
-
-  return (
-    sessionStorage.getItem(
-      DJ_SESSION_KEY
-    ) || ''
-  );
-
-}
-
-
-function getTenantData() {
-
-  try {
-
-    return JSON.parse(
-      sessionStorage.getItem(
-        DJ_TENANT_KEY
-      ) || 'null'
-    );
-
-  } catch (_) {
-
-    return null;
-
-  }
-
-}
-
-
-function saveLoginSession(
-  result
+async function djGet(
+  action
 ) {
 
+  const url =
+    DJ_KOST_API +
+    '?action=' +
+    encodeURIComponent(
+      action
+    );
+
+
+  console.log(
+    '[DJ KOST] GET:',
+    url
+  );
+
+
+  const response =
+    await fetch(
+      url,
+      {
+        cache:
+          'no-store'
+      }
+    );
+
+
+  const text =
+    await response.text();
+
+
+  console.log(
+    '[DJ KOST] RESPONSE:',
+    text
+  );
+
+
   if (
-    !result ||
-    !result.token ||
-    !result.data
+    !response.ok
   ) {
 
     throw new Error(
-      'Respons login tidak lengkap.'
+      'HTTP ' +
+      response.status
     );
 
   }
 
 
-  sessionStorage.setItem(
-    DJ_SESSION_KEY,
-    result.token
-  );
+  let result;
 
 
-  sessionStorage.setItem(
-    DJ_TENANT_KEY,
-    JSON.stringify(
-      result.data
-    )
-  );
+  try {
 
-}
+    result =
+      JSON.parse(
+        text
+      );
 
+  } catch (_) {
 
-function clearLoginSession() {
+    throw new Error(
+      'API tidak mengembalikan JSON.'
+    );
 
-  sessionStorage.removeItem(
-    DJ_SESSION_KEY
-  );
+  }
 
-
-  sessionStorage.removeItem(
-    DJ_TENANT_KEY
-  );
-
-}
-
-
-function requestId() {
 
   if (
-    window.crypto &&
-    typeof window.crypto.randomUUID ===
-      'function'
+    !result.ok
   ) {
 
-    return window.crypto.randomUUID();
+    throw new Error(
+      result.error ||
+      'API error.'
+    );
 
   }
 
 
-  return (
-    Date.now() +
-    '-' +
-    Math.random()
-      .toString(16)
-      .slice(2)
-  );
+  return result;
 
 }
 
 
-function today() {
+/* ============================================================
+   API POST
+============================================================ */
 
-  return new Date()
-    .toISOString()
-    .slice(
-      0,
-      10
+async function djPost(
+  data
+) {
+
+  const response =
+    await fetch(
+      DJ_KOST_API,
+      {
+        method:
+          'POST',
+
+        headers: {
+          'Content-Type':
+            'text/plain;charset=utf-8'
+        },
+
+        body:
+          JSON.stringify(
+            data
+          )
+      }
     );
 
-}
+
+  const text =
+    await response.text();
 
 
-function currentMonth() {
+  let result;
 
-  return new Date()
-    .toISOString()
-    .slice(
-      0,
-      7
+
+  try {
+
+    result =
+      JSON.parse(
+        text
+      );
+
+  } catch (_) {
+
+    throw new Error(
+      'API tidak mengembalikan JSON.'
     );
 
+  }
+
+
+  if (
+    !result.ok
+  ) {
+
+    throw new Error(
+      result.error ||
+      'API error.'
+    );
+
+  }
+
+
+  return result;
+
 }
 
 
-function rupiah(
+/* ============================================================
+   FORMAT
+============================================================ */
+
+function djRupiah(
   value
 ) {
 
   return new Intl.NumberFormat(
     'id-ID',
     {
-
       style:
         'currency',
 
@@ -188,19 +184,19 @@ function rupiah(
 
       maximumFractionDigits:
         0
-
     }
   )
   .format(
     Number(
-      value || 0
+      value ||
+      0
     )
   );
 
 }
 
 
-function escapeHtml(
+function djEscape(
   value
 ) {
 
@@ -213,651 +209,23 @@ function escapeHtml(
     /[&<>"']/g,
     function(char) {
 
-      const map = {
-
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-
-      };
-
-
-      return map[char];
+      return {
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[char];
 
     }
   );
-
-}
-
-
-function showMessage(
-  id,
-  message,
-  type = 'ok'
-) {
-
-  const element =
-    document.getElementById(
-      id
-    );
-
-
-  if (
-    !element
-  ) {
-
-    return;
-
-  }
-
-
-  element.textContent =
-    message;
-
-
-  element.className =
-    'message show ' +
-    (
-      type === 'error'
-        ? 'error'
-        : 'ok'
-    );
-
-}
-
-
-function setBusy(
-  button,
-  busy,
-  text
-) {
-
-  if (
-    !button
-  ) {
-
-    return;
-
-  }
-
-
-  if (
-    busy
-  ) {
-
-    if (
-      !button.dataset.oldText
-    ) {
-
-      button.dataset.oldText =
-        button.textContent;
-
-    }
-
-
-    button.disabled =
-      true;
-
-
-    button.textContent =
-      text ||
-      'Memproses...';
-
-  } else {
-
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      button.dataset.oldText ||
-      button.textContent;
-
-  }
-
-}
-
-
-/* ============================================================
-   API
-   ============================================================ */
-
-
-async function apiGet(
-  action,
-  params = {}
-) {
-
-  const query =
-    new URLSearchParams();
-
-
-  query.set(
-    'action',
-    action
-  );
-
-
-  Object.keys(
-    params
-  ).forEach(
-    function(key) {
-
-      if (
-        params[key] !==
-        undefined &&
-        params[key] !==
-        null
-      ) {
-
-        query.set(
-          key,
-          String(
-            params[key]
-          )
-        );
-
-      }
-
-    }
-  );
-
-
-  const url =
-    DJ_KOST_API +
-    '?' +
-    query.toString();
-
-
-  console.log(
-    '[DJ KOST] GET',
-    url
-  );
-
-
-  const response =
-    await fetch(
-      url,
-      {
-
-        method:
-          'GET',
-
-        cache:
-          'no-store'
-
-      }
-    );
-
-
-  const text =
-    await response.text();
-
-
-  console.log(
-    '[DJ KOST] RESPONSE',
-    text
-  );
-
-
-  let result;
-
-
-  try {
-
-    result =
-      JSON.parse(
-        text
-      );
-
-  } catch (_) {
-
-    throw new Error(
-      'Respons API bukan JSON.'
-    );
-
-  }
-
-
-  if (
-    !result.ok
-  ) {
-
-    throw new Error(
-      result.error ||
-      'Permintaan API gagal.'
-    );
-
-  }
-
-
-  return result;
-
-}
-
-
-async function apiPost(
-  action,
-  data = {}
-) {
-
-  const body = {
-
-    action,
-
-    ...data
-
-  };
-
-
-  console.log(
-    '[DJ KOST] POST',
-    action,
-    body
-  );
-
-
-  const response =
-    await fetch(
-      DJ_KOST_API,
-      {
-
-        method:
-          'POST',
-
-        headers: {
-
-          'Content-Type':
-            'text/plain;charset=utf-8'
-
-        },
-
-        body:
-          JSON.stringify(
-            body
-          )
-
-      }
-    );
-
-
-  const text =
-    await response.text();
-
-
-  console.log(
-    '[DJ KOST] POST RESPONSE',
-    text
-  );
-
-
-  let result;
-
-
-  try {
-
-    result =
-      JSON.parse(
-        text
-      );
-
-  } catch (_) {
-
-    throw new Error(
-      'Respons API bukan JSON.'
-    );
-
-  }
-
-
-  if (
-    !result.ok
-  ) {
-
-    throw new Error(
-      result.error ||
-      'Permintaan API gagal.'
-    );
-
-  }
-
-
-  return result;
-
-}
-
-
-/* ============================================================
-   AUTH
-   ============================================================ */
-
-
-function redirectLogin() {
-
-  const current =
-    location.pathname
-      .split('/')
-      .pop();
-
-
-  const redirect =
-    current &&
-    current !==
-      'login.html'
-
-      ? encodeURIComponent(
-          current +
-          location.search
-        )
-
-      : '';
-
-
-  location.href =
-    './login.html' +
-    (
-      redirect
-        ? '?redirect=' +
-          redirect
-        : ''
-    );
-
-}
-
-
-function requireLogin() {
-
-  if (
-    !getSessionToken()
-  ) {
-
-    redirectLogin();
-
-    return false;
-
-  }
-
-
-  return true;
-
-}
-
-
-function logout() {
-
-  clearLoginSession();
-
-  location.href =
-    './login.html';
-
-}
-
-
-function bindLogout() {
-
-  const button =
-    document.getElementById(
-      'logoutTop'
-    );
-
-
-  if (
-    button
-  ) {
-
-    button.addEventListener(
-      'click',
-      function(event) {
-
-        event.preventDefault();
-
-        logout();
-
-      }
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   ROOMS
-   ============================================================ */
-
-
-async function loadRooms() {
-
-  const result =
-    await apiGet(
-      'rooms'
-    );
-
-
-  return result.data ||
-    [];
-
-}
-
-
-function roomStatusClass(
-  status
-) {
-
-  if (
-    status ===
-    'TERISI'
-  ) {
-
-    return 'status-terisi';
-
-  }
-
-
-  if (
-    status ===
-    'SEGERA'
-  ) {
-
-    return 'status-segera';
-
-  }
-
-
-  return 'status-kosong';
-
-}
-
-
-function roomOptionLabel(
-  room
-) {
-
-  let label =
-    String(
-      room.no_kamar
-    ) +
-    ' — ' +
-    String(
-      room.status
-    );
-
-
-  if (
-    Number(
-      room.harga_bulan
-    ) > 0
-  ) {
-
-    label +=
-      ' — ' +
-      rupiah(
-        room.harga_bulan
-      ) +
-      '/bulan';
-
-  } else {
-
-    label +=
-      ' — Belum dibuka';
-
-  }
-
-
-  return label;
-
-}
-
-
-/* ============================================================
-   FILL ROOM SELECT
-   ============================================================ */
-
-
-async function fillRoomSelect(
-  selectId,
-  mode = 'available'
-) {
-
-  const select =
-    document.getElementById(
-      selectId
-    );
-
-
-  if (
-    !select
-  ) {
-
-    console.warn(
-      '[DJ KOST] Select tidak ditemukan:',
-      selectId
-    );
-
-    return;
-
-  }
-
-
-  select.innerHTML =
-    '<option value="">Memuat kamar...</option>';
-
-
-  try {
-
-    const rooms =
-      await loadRooms();
-
-
-    select.innerHTML =
-      '<option value="">Pilih kamar</option>';
-
-
-    rooms.forEach(
-      function(room) {
-
-        /*
-         * Mode available:
-         * hanya kamar KOSONG.
-         */
-
-        if (
-          mode ===
-            'available' &&
-          room.status !==
-            'KOSONG'
-        ) {
-
-          return;
-
-        }
-
-
-        const option =
-          document.createElement(
-            'option'
-          );
-
-
-        option.value =
-          String(
-            room.no_kamar
-          );
-
-
-        option.textContent =
-          roomOptionLabel(
-            room
-          );
-
-
-        /*
-         * Mode all:
-         * kamar tetap ditampilkan,
-         * tapi kamar non-kosong
-         * tidak bisa dipilih.
-         */
-
-        if (
-          mode !==
-            'available' &&
-          room.status !==
-            'KOSONG'
-        ) {
-
-          option.disabled =
-            true;
-
-        }
-
-
-        select.appendChild(
-          option
-        );
-
-      }
-    );
-
-
-    if (
-      !select.options.length
-    ) {
-
-      select.innerHTML =
-        '<option value="">Tidak ada kamar tersedia</option>';
-
-    }
-
-
-    console.log(
-      '[DJ KOST] Room select ready:',
-      selectId,
-      rooms.length
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      '[DJ KOST] Room select error:',
-      error
-    );
-
-
-    select.innerHTML =
-      '<option value="">Gagal memuat kamar</option>';
-
-  }
 
 }
 
 
 /* ============================================================
    INDEX
-   ============================================================ */
-
+============================================================ */
 
 async function initIndex() {
 
@@ -866,23 +234,25 @@ async function initIndex() {
       'totalRooms'
     );
 
-
   const empty =
     document.getElementById(
       'emptyRooms'
     );
-
 
   const occupied =
     document.getElementById(
       'occupiedRooms'
     );
 
-
   const catalog =
     document.getElementById(
       'roomCatalog'
     );
+
+
+  console.log(
+    '[DJ KOST] INDEX INIT'
+  );
 
 
   if (
@@ -892,10 +262,9 @@ async function initIndex() {
     !catalog
   ) {
 
-    console.warn(
-      '[DJ KOST] Index elements tidak lengkap.'
+    console.error(
+      '[DJ KOST] Elemen index tidak lengkap.'
     );
-
 
     return;
 
@@ -904,8 +273,18 @@ async function initIndex() {
 
   try {
 
+    const result =
+      await djGet(
+        'rooms'
+      );
+
+
     const rooms =
-      await loadRooms();
+      Array.isArray(
+        result.data
+      )
+        ? result.data
+        : [];
 
 
     total.textContent =
@@ -990,10 +369,6 @@ async function initIndex() {
     .forEach(
       function(floor) {
 
-        const roomsInFloor =
-          floors[floor];
-
-
         const card =
           document.createElement(
             'div'
@@ -1019,8 +394,7 @@ async function initIndex() {
                 </h3>
 
                 <div class="floor-meta">
-                  ${roomsInFloor.length}
-                  kamar
+                  ${floors[floor].length} kamar
                 </div>
 
               </div>
@@ -1031,38 +405,23 @@ async function initIndex() {
           `;
 
 
-        const roomContainer =
+        const roomArea =
           card.querySelector(
             '.floor-rooms'
           );
 
 
-        roomsInFloor.forEach(
+        floors[floor].forEach(
           function(room) {
 
-            const link =
+            const item =
               document.createElement(
                 'a'
               );
 
 
-            const statusClass =
-              roomStatusClass(
-                room.status
-              );
-
-
-            link.className =
-              'room-card ' +
-              (
-                room.status ===
-                  'KOSONG'
-                  ? 'is-kosong'
-                  : room.status ===
-                      'TERISI'
-                    ? 'is-terisi'
-                    : 'is-segera'
-              );
+            let className =
+              'room-card ';
 
 
             if (
@@ -1070,52 +429,87 @@ async function initIndex() {
               'KOSONG'
             ) {
 
-              link.href =
+              className +=
+                'is-kosong';
+
+              item.href =
                 './pendaftaran.html?room=' +
                 encodeURIComponent(
                   room.no_kamar
                 );
 
-            } else {
+            }
 
-              link.href =
+            else if (
+              room.status ===
+              'TERISI'
+            ) {
+
+              className +=
+                'is-terisi';
+
+              item.href =
+                'javascript:void(0)';
+
+            }
+
+            else {
+
+              className +=
+                'is-segera';
+
+              item.href =
                 'javascript:void(0)';
 
             }
 
 
-            link.innerHTML =
+            item.className =
+              className;
+
+
+            item.innerHTML =
               `
                 <div class="room-number">
-                  ${escapeHtml(
+                  ${djEscape(
                     room.no_kamar
                   )}
                 </div>
 
-                <span class="status ${statusClass}">
-                  ${escapeHtml(
+                <span class="status ${
+                  room.status === 'TERISI'
+                    ? 'status-terisi'
+                    : room.status === 'SEGERA'
+                      ? 'status-segera'
+                      : 'status-kosong'
+                }">
+
+                  ${djEscape(
                     room.status
                   )}
+
                 </span>
 
                 <div class="room-price">
+
                   ${
                     Number(
                       room.harga_bulan
                     ) > 0
 
-                      ? rupiah(
+                      ? djRupiah(
                           room.harga_bulan
                         )
 
                       : 'Belum dibuka'
                   }
+
                 </div>
               `;
 
 
-            roomContainer.appendChild(
-              link
+            roomArea.appendChild(
+              item
             );
 
           }
@@ -1130,18 +524,31 @@ async function initIndex() {
     );
 
 
+    console.log(
+      '[DJ KOST] INDEX OK —',
+      rooms.length,
+      'rooms'
+    );
+
+
   } catch (error) {
+
+    console.error(
+      '[DJ KOST] INDEX ERROR',
+      error
+    );
+
 
     catalog.innerHTML =
       `
         <div class="card note">
 
           <strong>
-            Koneksi API gagal
+            Gagal memuat data kamar.
           </strong>
 
           <div style="margin-top:8px">
-            ${escapeHtml(
+            ${djEscape(
               error.message
             )}
           </div>
@@ -1149,10 +556,190 @@ async function initIndex() {
         </div>
       `;
 
+  }
+
+}
+
+
+/* ============================================================
+   ROOM SELECT
+============================================================ */
+
+async function fillRoomSelect(
+  id
+) {
+
+  const select =
+    document.getElementById(
+      id
+    );
+
+
+  if (
+    !select
+  ) {
+
+    console.warn(
+      '[DJ KOST] Select tidak ditemukan:',
+      id
+    );
+
+    return;
+
+  }
+
+
+  select.innerHTML =
+    `
+      <option value="">
+        Memuat kamar...
+      </option>
+    `;
+
+
+  try {
+
+    const result =
+      await djGet(
+        'rooms'
+      );
+
+
+    const rooms =
+      Array.isArray(
+        result.data
+      )
+        ? result.data
+        : [];
+
+
+    select.innerHTML =
+      `
+        <option value="">
+          Pilih kamar
+        </option>
+      `;
+
+
+    let count =
+      0;
+
+
+    rooms.forEach(
+      function(room) {
+
+        /*
+         * Hanya kamar KOSONG
+         * yang bisa dipilih.
+         */
+
+        if (
+          room.status !==
+          'KOSONG'
+        ) {
+
+          return;
+
+        }
+
+
+        const option =
+          document.createElement(
+            'option'
+          );
+
+
+        option.value =
+          String(
+            room.no_kamar
+          );
+
+
+        option.textContent =
+          String(
+            room.no_kamar
+          ) +
+          ' — ' +
+          djRupiah(
+            room.harga_bulan
+          ) +
+          '/bulan';
+
+
+        select.appendChild(
+          option
+        );
+
+
+        count++;
+
+      }
+    );
+
+
+    if (
+      count ===
+      0
+    ) {
+
+      select.innerHTML =
+        `
+          <option value="">
+            Tidak ada kamar tersedia
+          </option>
+        `;
+
+    }
+
+
+    /*
+     * Jika URL punya ?room=101,
+     * otomatis pilih kamar tersebut.
+     */
+
+    const params =
+      new URLSearchParams(
+        location.search
+      );
+
+
+    const roomFromUrl =
+      params.get(
+        'room'
+      );
+
+
+    if (
+      roomFromUrl
+    ) {
+
+      select.value =
+        roomFromUrl;
+
+    }
+
+
+    console.log(
+      '[DJ KOST] ROOM SELECT OK:',
+      id,
+      count
+    );
+
+
+  } catch (error) {
+
     console.error(
-      '[DJ KOST] Index error:',
+      '[DJ KOST] ROOM SELECT ERROR:',
       error
     );
+
+
+    select.innerHTML =
+      `
+        <option value="">
+          Gagal memuat kamar
+        </option>
+      `;
 
   }
 
@@ -1161,8 +748,7 @@ async function initIndex() {
 
 /* ============================================================
    LOGIN
-   ============================================================ */
-
+============================================================ */
 
 function initLogin() {
 
@@ -1194,43 +780,59 @@ function initLogin() {
         );
 
 
-      setBusy(
-        button,
-        true,
-        'Memeriksa akun...'
-      );
+      const message =
+        document.getElementById(
+          'loginMessage'
+        );
 
 
-      showMessage(
-        'loginMessage',
-        'Menghubungkan ke sistem...',
-        'ok'
-      );
+      button.disabled =
+        true;
+
+
+      if (
+        message
+      ) {
+
+        message.textContent =
+          'Memeriksa akun...';
+
+        message.className =
+          'message show';
+
+      }
 
 
       try {
 
         const result =
-          await apiPost(
-            'login',
-            {
+          await djPost({
+            action:
+              'login',
 
-              tenantId:
-                document.getElementById(
-                  'tenantId'
-                ).value.trim(),
+            tenantId:
+              document.getElementById(
+                'tenantId'
+              ).value.trim(),
 
-              password:
-                document.getElementById(
-                  'password'
-                ).value
-
-            }
-          );
+            password:
+              document.getElementById(
+                'password'
+              ).value
+          });
 
 
-        saveLoginSession(
-          result
+        sessionStorage.setItem(
+          'djTenantSession',
+          result.token
+        );
+
+
+        sessionStorage.setItem(
+          'djTenantData',
+          JSON.stringify(
+            result.data
+          )
         );
 
 
@@ -1240,31 +842,31 @@ function initLogin() {
           );
 
 
-        const redirect =
+        location.href =
           params.get(
             'redirect'
-          );
-
-
-        location.href =
-          redirect ||
+          ) ||
           './portal.html';
 
 
       } catch (error) {
 
-        showMessage(
-          'loginMessage',
-          error.message,
-          'error'
-        );
+        if (
+          message
+        ) {
+
+          message.textContent =
+            error.message;
+
+          message.className =
+            'message show error';
+
+        }
 
       } finally {
 
-        setBusy(
-          button,
-          false
-        );
+        button.disabled =
+          false;
 
       }
 
@@ -1275,13 +877,115 @@ function initLogin() {
 
 
 /* ============================================================
-   TENANT DATA
-   ============================================================ */
+   AUTH
+============================================================ */
+
+function requireLogin() {
+
+  const token =
+    sessionStorage.getItem(
+      'djTenantSession'
+    );
 
 
-function renderTenantIdentity(
-  tenant
-) {
+  if (
+    !token
+  ) {
+
+    const page =
+      location.pathname
+        .split('/')
+        .pop();
+
+
+    location.href =
+      './login.html?redirect=' +
+      encodeURIComponent(
+        page
+      );
+
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+function logout() {
+
+  sessionStorage.removeItem(
+    'djTenantSession'
+  );
+
+
+  sessionStorage.removeItem(
+    'djTenantData'
+  );
+
+
+  location.href =
+    './login.html';
+
+}
+
+
+function bindLogout() {
+
+  const button =
+    document.getElementById(
+      'logoutTop'
+    );
+
+
+  if (
+    button
+  ) {
+
+    button.addEventListener(
+      'click',
+      function(event) {
+
+        event.preventDefault();
+
+        logout();
+
+      }
+    );
+
+  }
+
+}
+
+
+function tenantData() {
+
+  try {
+
+    return JSON.parse(
+      sessionStorage.getItem(
+        'djTenantData'
+      ) ||
+      'null'
+    );
+
+  } catch (_) {
+
+    return null;
+
+  }
+
+}
+
+
+function renderTenantData() {
+
+  const tenant =
+    tenantData();
+
 
   if (
     !tenant
@@ -1292,7 +996,7 @@ function renderTenantIdentity(
   }
 
 
-  const textFields = {
+  const mapping = {
 
     tenantName:
       tenant.nama_lengkap,
@@ -1301,37 +1005,7 @@ function renderTenantIdentity(
       tenant.tenant_id,
 
     tenantRoom:
-      tenant.no_kamar
-
-  };
-
-
-  Object.keys(
-    textFields
-  ).forEach(
-    function(id) {
-
-      const element =
-        document.getElementById(
-          id
-        );
-
-
-      if (
-        element
-      ) {
-
-        element.textContent =
-          textFields[id] ||
-          '-';
-
-      }
-
-    }
-  );
-
-
-  const valueFields = {
+      tenant.no_kamar,
 
     paymentTenant:
       tenant.nama_lengkap,
@@ -1355,7 +1029,7 @@ function renderTenantIdentity(
 
 
   Object.keys(
-    valueFields
+    mapping
   ).forEach(
     function(id) {
 
@@ -1369,451 +1043,39 @@ function renderTenantIdentity(
         element
       ) {
 
-        element.value =
-          valueFields[id] ||
-          '';
+        element.textContent =
+          mapping[id] ||
+          '-';
+
+
+        if (
+          'value' in
+          element
+        ) {
+
+          element.value =
+            mapping[id] ||
+            '';
+
+        }
 
       }
 
     }
   );
-
-}
-
-
-/* ============================================================
-   PORTAL
-   ============================================================ */
-
-
-async function initPortal() {
-
-  if (
-    !requireLogin()
-  ) {
-
-    return;
-
-  }
-
-
-  bindLogout();
-
-
-  try {
-
-    const result =
-      await apiGet(
-        'tenantDashboard',
-        {
-
-          token:
-            getSessionToken()
-
-        }
-      );
-
-
-    const data =
-      result.data ||
-      {};
-
-
-    const tenant =
-      data.tenant;
-
-
-    renderTenantIdentity(
-      tenant
-    );
-
-
-    const welcome =
-      document.getElementById(
-        'welcome'
-      );
-
-
-    if (
-      welcome &&
-      tenant
-    ) {
-
-      welcome.innerHTML =
-        `
-          Selamat datang,
-          <strong>
-            ${escapeHtml(
-              tenant.nama_lengkap
-            )}
-          </strong>.
-
-          Tenant ID:
-          <strong>
-            ${escapeHtml(
-              tenant.tenant_id
-            )}
-          </strong>
-
-          · Kamar:
-          <strong>
-            ${escapeHtml(
-              tenant.no_kamar
-            )}
-          </strong>.
-        `;
-
-    }
-
-
-    const currentBill =
-      document.getElementById(
-        'currentBill'
-      );
-
-
-    const payment =
-      data.payment;
-
-
-    if (
-      currentBill
-    ) {
-
-      if (
-        payment
-      ) {
-
-        currentBill.innerHTML =
-          `
-            <div class="kpi-label">
-              ${escapeHtml(
-                payment.Periode_Pembayaran ||
-                ''
-              )}
-            </div>
-
-            <div class="kpi-value">
-              ${rupiah(
-                payment.Total_Tagihan
-              )}
-            </div>
-
-            <span class="status ${
-              payment.Status_Pembayaran ===
-              'LUNAS'
-                ? 'status-kosong'
-                : 'status-segera'
-            }">
-              ${escapeHtml(
-                payment.Status_Pembayaran ||
-                ''
-              )}
-            </span>
-          `;
-
-      } else {
-
-        currentBill.innerHTML =
-          `
-            <div class="kpi-label">
-              Tagihan saat ini
-            </div>
-
-            <div class="kpi-value">
-              Belum tersedia
-            </div>
-          `;
-
-      }
-
-    }
-
-
-    const history =
-      document.getElementById(
-        'paymentHistory'
-      );
-
-
-    if (
-      history
-    ) {
-
-      const rows =
-        data.payments ||
-        [];
-
-
-      if (
-        !rows.length
-      ) {
-
-        history.innerHTML =
-          `
-            <tr>
-
-              <td colspan="6">
-                Belum ada riwayat pembayaran.
-              </td>
-
-            </tr>
-          `;
-
-      } else {
-
-        history.innerHTML =
-          rows
-            .map(
-              function(item) {
-
-                return `
-                  <tr>
-
-                    <td>
-                      ${escapeHtml(
-                        item.period
-                      )}
-                    </td>
-
-                    <td>
-                      ${rupiah(
-                        item.nominal
-                      )}
-                    </td>
-
-                    <td>
-                      ${rupiah(
-                        item.denda
-                      )}
-                    </td>
-
-                    <td>
-                      ${rupiah(
-                        item.total
-                      )}
-                    </td>
-
-                    <td>
-                      ${escapeHtml(
-                        item.status ||
-                        ''
-                      )}
-                    </td>
-
-                    <td>
-                      ${escapeHtml(
-                        item.verifikasi ||
-                        ''
-                      )}
-                    </td>
-
-                  </tr>
-                `;
-
-              }
-            )
-            .join('');
-
-      }
-
-    }
-
-
-    const maintenanceList =
-      document.getElementById(
-        'maintenanceList'
-      );
-
-
-    if (
-      maintenanceList
-    ) {
-
-      const rows =
-        data.maintenance ||
-        [];
-
-
-      maintenanceList.innerHTML =
-        rows.length
-
-          ? rows
-              .map(
-                function(item) {
-
-                  return `
-                    <div class="card"
-                         style="padding:18px">
-
-                      <strong>
-                        ${escapeHtml(
-                          item.jenis ||
-                          'Maintenance'
-                        )}
-                      </strong>
-
-                      <div
-                        style="margin-top:5px"
-                      >
-                        ${escapeHtml(
-                          item.lokasi ||
-                          '-'
-                        )}
-                      </div>
-
-                      <div
-                        style="
-                          margin-top:7px;
-                          color:#667085
-                        "
-                      >
-                        ${escapeHtml(
-                          item.deskripsi ||
-                          ''
-                        )}
-                      </div>
-
-                      <div
-                        style="margin-top:10px"
-                      >
-
-                        <span
-                          class="status status-segera"
-                        >
-                          ${escapeHtml(
-                            item.status ||
-                            ''
-                          )}
-                        </span>
-
-                      </div>
-
-                    </div>
-                  `;
-
-                }
-              )
-              .join('')
-
-          : `
-              <div class="note">
-                Tidak ada laporan maintenance aktif.
-              </div>
-            `;
-
-
-  } catch (error) {
-
-    console.error(
-      '[DJ KOST] Portal error:',
-      error
-    );
-
-
-    if (
-      error.message
-        .toLowerCase()
-        .includes(
-          'sesi'
-        )
-    ) {
-
-      clearLoginSession();
-
-      redirectLogin();
-
-      return;
-
-    }
-
-
-    showMessage(
-      'portalMessage',
-      error.message,
-      'error'
-    );
-
-  }
 
 }
 
 
 /* ============================================================
    PENDAFTARAN
-   ============================================================ */
-
+============================================================ */
 
 async function initRegistration() {
 
-  /*
-   * INI YANG MEMPERBAIKI DROPDOWN KAMAR.
-   */
-
   await fillRoomSelect(
-    'regRoom',
-    'available'
+    'regRoom'
   );
-
-
-  const params =
-    new URLSearchParams(
-      location.search
-    );
-
-
-  const roomFromUrl =
-    params.get(
-      'room'
-    );
-
-
-  if (
-    roomFromUrl
-  ) {
-
-    const select =
-      document.getElementById(
-        'regRoom'
-      );
-
-
-    if (
-      select
-    ) {
-
-      const option =
-        Array.from(
-          select.options
-        )
-        .find(
-          function(item) {
-
-            return (
-              item.value ===
-              String(
-                roomFromUrl
-              )
-            );
-
-          }
-        );
-
-
-      if (
-        option
-      ) {
-
-        select.value =
-          String(
-            roomFromUrl
-          );
-
-      }
-
-    }
-
-  }
 
 
   const form =
@@ -1825,11 +1087,6 @@ async function initRegistration() {
   if (
     !form
   ) {
-
-    console.error(
-      '[DJ KOST] registrationForm tidak ditemukan.'
-    );
-
 
     return;
 
@@ -1849,96 +1106,100 @@ async function initRegistration() {
       event.preventDefault();
 
 
-      setBusy(
-        button,
-        true,
-        'Mengirim pendaftaran...'
-      );
+      button.disabled =
+        true;
 
 
       try {
 
         const result =
-          await apiPost(
-            'registration',
-            {
+          await djPost({
 
-              requestId:
-                requestId(),
+            action:
+              'registration',
 
-              name:
-                document.getElementById(
-                  'regName'
-                ).value.trim(),
+            requestId:
+              (
+                window.crypto &&
+                window.crypto.randomUUID
+              )
+                ? window.crypto.randomUUID()
+                : String(
+                    Date.now()
+                  ),
 
-              nickname:
-                document.getElementById(
-                  'regNickname'
-                ).value.trim(),
+            name:
+              document.getElementById(
+                'regName'
+              ).value.trim(),
 
-              phone:
-                document.getElementById(
-                  'regPhone'
-                ).value.trim(),
+            nickname:
+              document.getElementById(
+                'regNickname'
+              ).value.trim(),
 
-              email:
-                document.getElementById(
-                  'regEmail'
-                ).value.trim(),
+            phone:
+              document.getElementById(
+                'regPhone'
+              ).value.trim(),
 
-              nik:
-                document.getElementById(
-                  'regNik'
-                ).value.trim(),
+            email:
+              document.getElementById(
+                'regEmail'
+              ).value.trim(),
 
-              job:
-                document.getElementById(
-                  'regJob'
-                ).value.trim(),
+            nik:
+              document.getElementById(
+                'regNik'
+              ).value.trim(),
 
-              company:
-                document.getElementById(
-                  'regCompany'
-                ).value.trim(),
+            job:
+              document.getElementById(
+                'regJob'
+              ).value.trim(),
 
-              gender:
-                document.getElementById(
-                  'regGender'
-                ).value,
+            company:
+              document.getElementById(
+                'regCompany'
+              ).value.trim(),
 
-              address:
-                document.getElementById(
-                  'regAddress'
-                ).value.trim(),
+            gender:
+              document.getElementById(
+                'regGender'
+              ).value,
 
-              room:
-                document.getElementById(
-                  'regRoom'
-                ).value,
+            address:
+              document.getElementById(
+                'regAddress'
+              ).value.trim(),
 
-              startDate:
-                document.getElementById(
-                  'regStartDate'
-                ).value,
+            room:
+              document.getElementById(
+                'regRoom'
+              ).value,
 
-              note:
-                document.getElementById(
-                  'regNote'
-                ).value.trim()
+            startDate:
+              document.getElementById(
+                'regStartDate'
+              ).value,
 
-            }
-          );
+            note:
+              document.getElementById(
+                'regNote'
+              ).value.trim()
+
+          });
 
 
         showMessage(
           'registrationMessage',
           (
             result.message ||
-            'Pendaftaran berhasil dikirim.'
+            'Pendaftaran berhasil.'
           ) +
           (
             result.pendaftaran_id
-              ? ' Pendaftaran ID: ' +
+              ? ' ID: ' +
                 result.pendaftaran_id
               : ''
           ),
@@ -1947,6 +1208,11 @@ async function initRegistration() {
 
 
         form.reset();
+
+
+        await fillRoomSelect(
+          'regRoom'
+        );
 
 
       } catch (error) {
@@ -1959,10 +1225,8 @@ async function initRegistration() {
 
       } finally {
 
-        setBusy(
-          button,
-          false
-        );
+        button.disabled =
+          false;
 
       }
 
@@ -1974,14 +1238,12 @@ async function initRegistration() {
 
 /* ============================================================
    KUNJUNGAN
-   ============================================================ */
-
+============================================================ */
 
 async function initVisit() {
 
   await fillRoomSelect(
-    'visitRoom',
-    'all'
+    'visitRoom'
   );
 
 
@@ -2013,71 +1275,74 @@ async function initVisit() {
       event.preventDefault();
 
 
-      setBusy(
-        button,
-        true,
-        'Mengirim pengajuan...'
-      );
+      button.disabled =
+        true;
 
 
       try {
 
         const result =
-          await apiPost(
-            'visit',
-            {
+          await djPost({
 
-              requestId:
-                requestId(),
+            action:
+              'visit',
 
-              name:
-                document.getElementById(
-                  'visitName'
-                ).value.trim(),
+            requestId:
+              String(
+                Date.now()
+              ) +
+              '-' +
+              Math.random()
+                .toString(16)
+                .slice(2),
 
-              phone:
-                document.getElementById(
-                  'visitPhone'
-                ).value.trim(),
+            name:
+              document.getElementById(
+                'visitName'
+              ).value.trim(),
 
-              email:
-                document.getElementById(
-                  'visitEmail'
-                ).value.trim(),
+            phone:
+              document.getElementById(
+                'visitPhone'
+              ).value.trim(),
 
-              room:
-                document.getElementById(
-                  'visitRoom'
-                ).value,
+            email:
+              document.getElementById(
+                'visitEmail'
+              ).value.trim(),
 
-              date:
-                document.getElementById(
-                  'visitDate'
-                ).value,
+            room:
+              document.getElementById(
+                'visitRoom'
+              ).value,
 
-              time:
-                document.getElementById(
-                  'visitTime'
-                ).value,
+            date:
+              document.getElementById(
+                'visitDate'
+              ).value,
 
-              note:
-                document.getElementById(
-                  'visitNote'
-                ).value.trim()
+            time:
+              document.getElementById(
+                'visitTime'
+              ).value,
 
-            }
-          );
+            note:
+              document.getElementById(
+                'visitNote'
+              ).value.trim()
+
+          });
 
 
         showMessage(
           'visitMessage',
           (
             result.message ||
-            'Pengajuan kunjungan berhasil.'
+            'Pengajuan berhasil.'
           ) +
           (
             result.kunjungan_id
-              ? ' Kunjungan ID: ' +
+              ? ' ID: ' +
                 result.kunjungan_id
               : ''
           ),
@@ -2086,6 +1351,11 @@ async function initVisit() {
 
 
         form.reset();
+
+
+        await fillRoomSelect(
+          'visitRoom'
+        );
 
 
       } catch (error) {
@@ -2098,10 +1368,8 @@ async function initVisit() {
 
       } finally {
 
-        setBusy(
-          button,
-          false
-        );
+        button.disabled =
+          false;
 
       }
 
@@ -2113,8 +1381,7 @@ async function initVisit() {
 
 /* ============================================================
    PAYMENT
-   ============================================================ */
-
+============================================================ */
 
 async function initPayment() {
 
@@ -2129,327 +1396,150 @@ async function initPayment() {
 
   bindLogout();
 
-
-  try {
-
-    const tenant =
-      getTenantData();
+  renderTenantData();
 
 
-    renderTenantIdentity(
-      tenant
+  const period =
+    document.getElementById(
+      'paymentPeriod'
     );
 
 
-    const period =
-      document.getElementById(
-        'paymentPeriod'
-      );
+  const date =
+    document.getElementById(
+      'paymentDate'
+    );
 
 
-    const date =
-      document.getElementById(
-        'paymentDate'
-      );
+  if (
+    period
+  ) {
+
+    period.value =
+      new Date()
+        .toISOString()
+        .slice(
+          0,
+          7
+        );
+
+  }
 
 
-    if (
-      period
-    ) {
+  if (
+    date
+  ) {
 
-      period.value =
-        currentMonth();
+    date.value =
+      today();
 
-    }
-
-
-    if (
-      date
-    ) {
-
-      date.value =
-        today();
-
-    }
+  }
 
 
-    const result =
-      await apiGet(
-        'tenantDashboard',
-        {
-
-          token:
-            getSessionToken()
-
-        }
-      );
+  const form =
+    document.getElementById(
+      'paymentForm'
+    );
 
 
-    const payment =
-      result.data &&
-      result.data.payment;
+  if (
+    !form
+  ) {
+
+    return;
+
+  }
 
 
-    const summary =
-      document.getElementById(
-        'paymentSummary'
-      );
+  const button =
+    document.getElementById(
+      'paymentButton'
+    );
 
 
-    if (
-      summary
-    ) {
+  form.addEventListener(
+    'submit',
+    async function(event) {
 
-      summary.innerHTML =
-        payment
-
-          ? `
-              <div class="kpi-label">
-                Tagihan
-                ${escapeHtml(
-                  payment.Periode_Pembayaran ||
-                  ''
-                )}
-              </div>
-
-              <div class="kpi-value">
-                ${rupiah(
-                  payment.Total_Tagihan
-                )}
-              </div>
-
-              <div style="margin-top:8px">
-                Status:
-                <strong>
-                  ${escapeHtml(
-                    payment.Status_Pembayaran ||
-                    ''
-                  )}
-                </strong>
-              </div>
-            `
-
-          : `
-              <div class="note">
-                Tagihan bulan berjalan
-                belum tersedia.
-              </div>
-            `;
-
-    }
+      event.preventDefault();
 
 
-    const form =
-      document.getElementById(
-        'paymentForm'
-      );
+      button.disabled =
+        true;
 
 
-    if (
-      !form
-    ) {
+      try {
 
-      return;
+        const result =
+          await djPost({
 
-    }
+            action:
+              'payment',
+
+            token:
+              getSessionToken(),
+
+            period:
+              period.value,
+
+            paymentDate:
+              date.value,
+
+            amount:
+              document.getElementById(
+                'paymentAmount'
+              ).value,
+
+            method:
+              document.getElementById(
+                'paymentMethod'
+              ).value,
+
+            proofUrl:
+              document.getElementById(
+                'paymentProof'
+              ).value.trim(),
+
+            note:
+              document.getElementById(
+                'paymentNote'
+              ).value.trim()
+
+          });
 
 
-    const button =
-      document.getElementById(
-        'paymentButton'
-      );
-
-
-    form.addEventListener(
-      'submit',
-      async function(event) {
-
-        event.preventDefault();
-
-
-        setBusy(
-          button,
-          true,
-          'Menyimpan pembayaran...'
+        showMessage(
+          'paymentMessage',
+          result.message ||
+          'Pembayaran berhasil dicatat.',
+          'ok'
         );
 
 
-        try {
+      } catch (error) {
 
-          const result =
-            await apiPost(
-              'payment',
-              {
+        showMessage(
+          'paymentMessage',
+          error.message,
+          'error'
+        );
 
-                token:
-                  getSessionToken(),
+      } finally {
 
-                period:
-                  document.getElementById(
-                    'paymentPeriod'
-                  ).value,
-
-                paymentDate:
-                  document.getElementById(
-                    'paymentDate'
-                  ).value,
-
-                amount:
-                  document.getElementById(
-                    'paymentAmount'
-                  ).value,
-
-                method:
-                  document.getElementById(
-                    'paymentMethod'
-                  ).value,
-
-                proofUrl:
-                  document.getElementById(
-                    'paymentProof'
-                  ).value.trim(),
-
-                note:
-                  document.getElementById(
-                    'paymentNote'
-                  ).value.trim()
-
-              }
-            );
-
-
-          showMessage(
-            'paymentMessage',
-            result.message ||
-            'Pembayaran berhasil dicatat.',
-            'ok'
-          );
-
-
-        } catch (error) {
-
-          showMessage(
-            'paymentMessage',
-            error.message,
-            'error'
-          );
-
-        } finally {
-
-          setBusy(
-            button,
-            false
-          );
-
-        }
+        button.disabled =
+          false;
 
       }
-    );
 
-
-  } catch (error) {
-
-    console.error(
-      '[DJ KOST] Payment init error:',
-      error
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   FILE HELPERS
-   ============================================================ */
-
-
-async function collectImages(
-  input,
-  maximum = 4
-) {
-
-  const files =
-    Array.from(
-      input &&
-      input.files ||
-      []
-    )
-    .slice(
-      0,
-      maximum
-    );
-
-
-  const result =
-    [];
-
-
-  for (
-    const file of files
-  ) {
-
-    const dataUrl =
-      await new Promise(
-        function(resolve,reject) {
-
-          const reader =
-            new FileReader();
-
-
-          reader.onload =
-            function() {
-
-              resolve(
-                reader.result
-              );
-
-            };
-
-
-          reader.onerror =
-            function() {
-
-              reject(
-                new Error(
-                  'Gagal membaca file ' +
-                  file.name
-                )
-              );
-
-            };
-
-
-          reader.readAsDataURL(
-            file
-          );
-
-        }
-      );
-
-
-    result.push({
-
-      name:
-        file.name,
-
-      dataUrl:
-        dataUrl
-
-    });
-
-  }
-
-
-  return result;
+    }
+  );
 
 }
 
 
 /* ============================================================
    MAINTENANCE
-   ============================================================ */
-
+============================================================ */
 
 async function initMaintenance() {
 
@@ -2464,10 +1554,7 @@ async function initMaintenance() {
 
   bindLogout();
 
-
-  renderTenantIdentity(
-    getTenantData()
-  );
+  renderTenantData();
 
 
   const form =
@@ -2498,11 +1585,8 @@ async function initMaintenance() {
       event.preventDefault();
 
 
-      setBusy(
-        button,
-        true,
-        'Mengirim laporan...'
-      );
+      button.disabled =
+        true;
 
 
       try {
@@ -2511,63 +1595,68 @@ async function initMaintenance() {
           await collectImages(
             document.getElementById(
               'maintenanceFiles'
-            ),
-            4
+            )
           );
 
 
         const result =
-          await apiPost(
-            'maintenance',
-            {
+          await djPost({
 
-              token:
-                getSessionToken(),
+            action:
+              'maintenance',
 
-              requestId:
-                requestId(),
+            token:
+              getSessionToken(),
 
-              location:
-                document.getElementById(
-                  'maintenanceLocation'
-                ).value.trim(),
+            requestId:
+              String(
+                Date.now()
+              ) +
+              '-' +
+              Math.random()
+                .toString(16)
+                .slice(2),
 
-              type:
-                document.getElementById(
-                  'maintenanceType'
-                ).value,
+            location:
+              document.getElementById(
+                'maintenanceLocation'
+              ).value.trim(),
 
-              urgency:
-                document.getElementById(
-                  'maintenanceUrgency'
-                ).value,
+            type:
+              document.getElementById(
+                'maintenanceType'
+              ).value,
 
-              access:
-                document.getElementById(
-                  'maintenanceAccess'
-                ).value,
+            urgency:
+              document.getElementById(
+                'maintenanceUrgency'
+              ).value,
 
-              preferredTime:
-                document.getElementById(
-                  'maintenanceTime'
-                ).value,
+            access:
+              document.getElementById(
+                'maintenanceAccess'
+              ).value,
 
-              description:
-                document.getElementById(
-                  'maintenanceDescription'
-                ).value.trim(),
+            preferredTime:
+              document.getElementById(
+                'maintenanceTime'
+              ).value,
 
-              files:
-                files
+            description:
+              document.getElementById(
+                'maintenanceDescription'
+              ).value.trim(),
 
-            }
-          );
+            files:
+              files
+
+          });
 
 
         showMessage(
           'maintenanceMessage',
           result.message ||
-          'Laporan maintenance berhasil dikirim.',
+          'Laporan berhasil dikirim.',
           'ok'
         );
 
@@ -2575,9 +1664,7 @@ async function initMaintenance() {
         form.reset();
 
 
-        renderTenantIdentity(
-          getTenantData()
-        );
+        renderTenantData();
 
 
       } catch (error) {
@@ -2590,10 +1677,8 @@ async function initMaintenance() {
 
       } finally {
 
-        setBusy(
-          button,
-          false
-        );
+        button.disabled =
+          false;
 
       }
 
@@ -2604,9 +1689,8 @@ async function initMaintenance() {
 
 
 /* ============================================================
-   CHECK IN / CHECK OUT
-   ============================================================ */
-
+   CHECK-IN / CHECK-OUT
+============================================================ */
 
 async function initCheckInOut() {
 
@@ -2621,10 +1705,7 @@ async function initCheckInOut() {
 
   bindLogout();
 
-
-  renderTenantIdentity(
-    getTenantData()
-  );
+  renderTenantData();
 
 
   const date =
@@ -2671,11 +1752,8 @@ async function initCheckInOut() {
       event.preventDefault();
 
 
-      setBusy(
-        button,
-        true,
-        'Menyimpan data...'
-      );
+      button.disabled =
+        true;
 
 
       try {
@@ -2684,8 +1762,7 @@ async function initCheckInOut() {
           await collectImages(
             document.getElementById(
               'cioFiles'
-            ),
-            4
+            )
           );
 
 
@@ -2705,77 +1782,81 @@ async function initCheckInOut() {
 
 
         const result =
-          await apiPost(
-            'checkinout',
-            {
+          await djPost({
 
-              token:
-                getSessionToken(),
+            action:
+              'checkinout',
 
-              requestId:
-                requestId(),
+            token:
+              getSessionToken(),
 
-              process:
-                process,
+            requestId:
+              String(
+                Date.now()
+              ) +
+              '-' +
+              Math.random()
+                .toString(16)
+                .slice(2),
 
-              date:
-                date
-                  ? date.value
-                  : today(),
+            process:
+              process,
 
-              keys:
-                document.getElementById(
-                  'cioKeys'
-                ).value,
+            date:
+              date.value,
 
-              keysReturned:
-                document.getElementById(
-                  'cioKeysReturned'
-                ).value,
+            keys:
+              document.getElementById(
+                'cioKeys'
+              ).value,
 
-              roomCondition:
-                document.getElementById(
-                  'cioRoomCondition'
-                ).value.trim(),
+            keysReturned:
+              document.getElementById(
+                'cioKeysReturned'
+              ).value,
 
-              note:
-                document.getElementById(
-                  'cioNote'
-                ).value.trim(),
+            roomCondition:
+              document.getElementById(
+                'cioRoomCondition'
+              ).value.trim(),
 
-              files:
-                files,
+            note:
+              document.getElementById(
+                'cioNote'
+              ).value.trim(),
 
-              meterFiles:
-                meterFiles,
+            files:
+              files,
 
-              damage:
-                document.getElementById(
-                  'cioDamage'
-                ).value,
+            meterFiles:
+              meterFiles,
 
-              damageDetail:
-                document.getElementById(
-                  'cioDamageDetail'
-                ).value.trim(),
+            damage:
+              document.getElementById(
+                'cioDamage'
+              ).value,
 
-              facility:
-                document.getElementById(
-                  'cioFacility'
-                ).value.trim(),
+            damageDetail:
+              document.getElementById(
+                'cioDamageDetail'
+              ).value.trim(),
 
-              depositReduction:
-                document.getElementById(
-                  'cioDepositReduction'
-                ).value,
+            facility:
+              document.getElementById(
+                'cioFacility'
+              ).value.trim(),
 
-              statement:
-                document.getElementById(
-                  'cioStatement'
-                ).value.trim()
+            depositReduction:
+              document.getElementById(
+                'cioDepositReduction'
+              ).value,
 
-            }
-          );
+            statement:
+              document.getElementById(
+                'cioStatement'
+              ).value.trim()
+
+          });
 
 
         showMessage(
@@ -2786,23 +1867,14 @@ async function initCheckInOut() {
         );
 
 
-        /*
-         * Setelah CHECK-OUT,
-         * session tenant diakhiri.
-         */
-
         if (
           process ===
           'CHECK-OUT'
         ) {
 
           setTimeout(
-            function() {
-
-              logout();
-
-            },
-            1400
+            logout,
+            1500
           );
 
         }
@@ -2818,10 +1890,8 @@ async function initCheckInOut() {
 
       } finally {
 
-        setBusy(
-          button,
-          false
-        );
+        button.disabled =
+          false;
 
       }
 
@@ -2832,21 +1902,178 @@ async function initCheckInOut() {
 
 
 /* ============================================================
-   PAGE INITIALIZER
-   ============================================================ */
+   UTIL FILE
+============================================================ */
 
+async function collectImages(
+  input,
+  maxFiles = 4
+) {
+
+  const files =
+    Array.from(
+      input &&
+      input.files ||
+      []
+    )
+    .slice(
+      0,
+      maxFiles
+    );
+
+
+  const result =
+    [];
+
+
+  for (
+    const file of files
+  ) {
+
+    const dataUrl =
+      await new Promise(
+        function(resolve,reject) {
+
+          const reader =
+            new FileReader();
+
+
+          reader.onload =
+            function() {
+
+              resolve(
+                reader.result
+              );
+
+            };
+
+
+          reader.onerror =
+            function() {
+
+              reject(
+                new Error(
+                  'Gagal membaca ' +
+                  file.name
+                )
+              );
+
+            };
+
+
+          reader.readAsDataURL(
+            file
+          );
+
+        }
+      );
+
+
+    result.push({
+
+      name:
+        file.name,
+
+      dataUrl:
+        dataUrl
+
+    });
+
+  }
+
+
+  return result;
+
+}
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+function showMessage(
+  id,
+  message,
+  type
+) {
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+
+  if (
+    !element
+  ) {
+
+    return;
+
+  }
+
+
+  element.textContent =
+    message;
+
+
+  element.className =
+    'message show ' +
+    (
+      type === 'error'
+        ? 'error'
+        : 'ok'
+    );
+
+}
+
+
+/* ============================================================
+   TOKEN HELPER
+============================================================ */
+
+function getSessionToken() {
+
+  return (
+    sessionStorage.getItem(
+      'djTenantSession'
+    ) ||
+    ''
+  );
+
+}
+
+
+/* ============================================================
+   TODAY
+============================================================ */
+
+function today() {
+
+  return new Date()
+    .toISOString()
+    .slice(
+      0,
+      10
+    );
+
+}
+
+
+/* ============================================================
+   PAGE ROUTER
+============================================================ */
 
 document.addEventListener(
   'DOMContentLoaded',
   async function() {
 
     console.log(
-      '[DJ KOST] DOM ready:',
+      '[DJ KOST] DOM READY:',
       location.pathname
     );
 
 
-    const path =
+    const page =
       location.pathname
         .split('/')
         .pop()
@@ -2856,9 +2083,9 @@ document.addEventListener(
     try {
 
       if (
-        path ===
+        page ===
         'index.html' ||
-        path ===
+        page ===
         ''
       ) {
 
@@ -2870,31 +2097,7 @@ document.addEventListener(
 
 
       if (
-        path ===
-        'login.html'
-      ) {
-
-        initLogin();
-
-        return;
-
-      }
-
-
-      if (
-        path ===
-        'portal.html'
-      ) {
-
-        await initPortal();
-
-        return;
-
-      }
-
-
-      if (
-        path ===
+        page ===
         'pendaftaran.html'
       ) {
 
@@ -2906,7 +2109,7 @@ document.addEventListener(
 
 
       if (
-        path ===
+        page ===
         'kunjungan.html'
       ) {
 
@@ -2918,7 +2121,31 @@ document.addEventListener(
 
 
       if (
-        path ===
+        page ===
+        'login.html'
+      ) {
+
+        initLogin();
+
+        return;
+
+      }
+
+
+      if (
+        page ===
+        'portal.html'
+      ) {
+
+        await initPortal();
+
+        return;
+
+      }
+
+
+      if (
+        page ===
         'pembayaran.html'
       ) {
 
@@ -2930,7 +2157,7 @@ document.addEventListener(
 
 
       if (
-        path ===
+        page ===
         'maintenance.html'
       ) {
 
@@ -2942,7 +2169,7 @@ document.addEventListener(
 
 
       if (
-        path ===
+        page ===
         'checkinout.html'
       ) {
 
@@ -2954,9 +2181,9 @@ document.addEventListener(
 
 
       if (
-        path ===
+        page ===
         'cafe.html' ||
-        path ===
+        page ===
         'laundry.html'
       ) {
 
@@ -2966,9 +2193,7 @@ document.addEventListener(
 
           bindLogout();
 
-          renderTenantIdentity(
-            getTenantData()
-          );
+          renderTenantData();
 
         }
 
@@ -2976,16 +2201,10 @@ document.addEventListener(
 
       }
 
-
-      /*
-       * aturan.html / hubungi.html
-       * tidak memerlukan JS khusus.
-       */
-
     } catch (error) {
 
       console.error(
-        '[DJ KOST] Fatal frontend error:',
+        '[DJ KOST] FATAL:',
         error
       );
 
@@ -2993,3 +2212,218 @@ document.addEventListener(
 
   }
 );
+
+
+/* ============================================================
+   PORTAL
+============================================================ */
+
+async function initPortal() {
+
+  if (
+    !requireLogin()
+  ) {
+
+    return;
+
+  }
+
+
+  bindLogout();
+
+
+  try {
+
+    const result =
+      await djGet(
+        'tenantDashboard'
+      );
+
+
+    /*
+     * Endpoint tenant membutuhkan token.
+     * Untuk itu panggil ulang dengan query.
+     */
+
+    const token =
+      getSessionToken();
+
+
+    const response =
+      await fetch(
+        DJ_KOST_API +
+        '?action=tenantDashboard&token=' +
+        encodeURIComponent(
+          token
+        ),
+        {
+          cache:
+            'no-store'
+        }
+      );
+
+
+    const text =
+      await response.text();
+
+
+    const data =
+      JSON.parse(
+        text
+      );
+
+
+    if (
+      !data.ok
+    ) {
+
+      throw new Error(
+        data.error ||
+        'Gagal memuat portal.'
+      );
+
+    }
+
+
+    const portal =
+      data.data ||
+      {};
+
+
+    if (
+      portal.tenant
+    ) {
+
+      renderTenantData(
+        portal.tenant
+      );
+
+    }
+
+
+    const welcome =
+      document.getElementById(
+        'welcome'
+      );
+
+
+    const tenant =
+      portal.tenant;
+
+
+    if (
+      welcome &&
+      tenant
+    ) {
+
+      welcome.innerHTML =
+        `
+          Selamat datang,
+          <strong>
+            ${djEscape(
+              tenant.nama_lengkap
+            )}
+          </strong>.
+          Tenant ID:
+          <strong>
+            ${djEscape(
+              tenant.tenant_id
+            )}
+          </strong>
+          · Kamar:
+          <strong>
+            ${djEscape(
+              tenant.no_kamar
+            )}
+          </strong>.
+        `;
+
+    }
+
+
+    const payment =
+      portal.payment;
+
+
+    const bill =
+      document.getElementById(
+        'currentBill'
+      );
+
+
+    if (
+      bill
+    ) {
+
+      bill.innerHTML =
+        payment
+
+          ? `
+              <div class="kpi-label">
+                ${djEscape(
+                  payment.Periode_Pembayaran ||
+                  ''
+                )}
+              </div>
+
+              <div class="kpi-value">
+                ${djRupiah(
+                  payment.Total_Tagihan
+                )}
+              </div>
+
+              <span class="status status-segera">
+                ${djEscape(
+                  payment.Status_Pembayaran ||
+                  ''
+                )}
+              </span>
+            `
+
+          : `
+              <div class="kpi-label">
+                Tagihan saat ini
+              </div>
+
+              <div class="kpi-value">
+                Belum tersedia
+              </div>
+            `;
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      '[DJ KOST] PORTAL ERROR:',
+      error
+    );
+
+
+    if (
+      String(
+        error.message
+      )
+      .toLowerCase()
+      .includes(
+        'sesi'
+      )
+    ) {
+
+      logout();
+
+      return;
+
+    }
+
+
+    showMessage(
+      'portalMessage',
+      error.message,
+      'error'
+    );
+
+  }
+
+}
