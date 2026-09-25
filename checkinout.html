@@ -1,403 +1,385 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Check-in / Check-out — DJ Family Kost</title>
-
-  <link
-    rel="stylesheet"
-    href="app.css"
-  >
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in / Check-out — DJ Family Kost</title>
+<style>
+:root{--navy:#10182d;--gold:#c9974a;--green:#168548;--red:#b42318;--bg:#f6f7fb;--text:#17213b;--muted:#667085;--line:#e5e8ef;--white:#fff;--shadow:0 18px 50px rgba(16,24,45,.10);--radius:22px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}a{text-decoration:none;color:inherit}.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}.nav-inner{max-width:1180px;margin:auto;padding:16px 22px;display:flex;justify-content:space-between;gap:18px;align-items:center}.brand{font-weight:900;display:flex;align-items:center;gap:10px}.brand-mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#fff 45%,#ccebd7 45%);border:1px solid #dce2ea;box-shadow:inset 0 0 0 4px #fff}.nav-links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.nav-links a{font-size:13px;font-weight:800;color:#59657c}.section{padding:58px 0}.container{max-width:1180px;margin:auto;padding:0 22px}.eyebrow{font-size:12px;letter-spacing:.13em;font-weight:900;color:var(--gold);text-transform:uppercase}.back{display:inline-flex;margin-bottom:18px;font-size:13px;font-weight:800;color:var(--muted)}h1{font-size:clamp(38px,6vw,64px);line-height:1.04;letter-spacing:-.045em;margin:0 0 12px}.lead{max-width:800px;color:var(--muted);font-size:16px;margin:0}.grid{display:grid;gap:18px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.card-pad{padding:24px}.profile{margin-top:25px}.profile-item span{display:block;color:var(--muted);font-size:12px}.profile-item strong{display:block;margin-top:3px;font-size:17px}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:25px 0 16px}.tab{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:11px 16px;font-weight:900;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.form-section{display:none}.form-section.active{display:block}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:13px;font-weight:850}.field input,.field select,.field textarea{width:100%;font:inherit;padding:12px 13px;border:1px solid #dfe4ec;border-radius:12px;background:#fff;color:var(--text);outline:none}.field textarea{min-height:130px;resize:vertical}.field input[readonly]{background:#f2f4f7;color:#475467}.field input[type=file]{padding:10px;background:#fff}.field input:focus,.field select:focus,.field textarea:focus{border-color:#9aa7bc;box-shadow:0 0 0 3px rgba(23,33,59,.07)}.full{grid-column:1/-1}.note{padding:13px 14px;border:1px solid #e4e8ee;border-radius:12px;background:#f8fafc;color:#5f6b80;font-size:13px}.warn{background:#fff7ed;border-color:#fed7aa;color:#9a3412}.success{background:#ecfdf3;border-color:#abefc6;color:#067647}.danger{background:#fff1f2;border-color:#fecdd3;color:#b42318}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:13px;padding:12px 18px;font-weight:900;cursor:pointer}.btn-primary{background:var(--navy);color:#fff}.btn-secondary{background:#eef2f6;color:#344054}.btn:disabled{opacity:.6;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap}.status{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900;background:#eef2f6;color:#475467}.status-checkin{background:#ecfdf3;color:#027a48}.status-checkout{background:#eff6ff;color:#175cd3}.history{margin-top:25px}.history-card{padding:18px}.history-card h4{margin:0 0 7px;font-size:16px}.history-card p{margin:5px 0;color:var(--muted);font-size:13px}.preview{width:100%;max-height:260px;object-fit:contain;border-radius:12px;border:1px solid var(--line);background:#f8fafc}.result{display:none;margin-top:16px}.result.show{display:block}.footer{margin-top:30px;background:var(--navy);color:#fff;padding:28px 0}.footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.footer small{color:#aeb7ca}.hidden{display:none!important}@media(max-width:850px){.grid-2,.grid-3{grid-template-columns:1fr}.nav-links{display:none}.section{padding:42px 0}.card-pad{padding:19px}}
+</style>
 </head>
-
-
-<body data-page="checkinout">
-
-<header class="nav">
-
-  <div class="container nav-inner">
-
-    <a
-      class="brand"
-      href="portal.html"
-    >
-
-      <span class="brand-mark"></span>
-
-      DJ FAMILY KOST · TENANT
-
-    </a>
-
-
-    <nav class="nav-links">
-
-      <a href="portal.html">Dashboard</a>
-
-      <a href="pembayaran.html">Pembayaran</a>
-
-      <a href="maintenance.html">Maintenance</a>
-
-      <a href="checkinout.html">Check-in/out</a>
-
-      <a href="cafe.html">Cafe</a>
-
-      <a href="laundry.html">Laundry</a>
-
-      <a
-        href="#"
-        id="logoutTop"
-        class="login-top"
-      >
-        Keluar
-      </a>
-
-    </nav>
-
-  </div>
-
-</header>
-
+<body>
+<header class="nav"><div class="nav-inner"><a class="brand" href="portal.html"><span class="brand-mark"></span>DJ FAMILY KOST · TENANT</a><nav class="nav-links"><a href="portal.html">Dashboard</a><a href="pembayaran.html">Pembayaran</a><a href="maintenance.html">Maintenance</a><a href="checkinout.html">Check-in/out</a><a href="cafe.html">Cafe</a><a href="laundry.html">Laundry</a><a href="#" id="logoutTop">Keluar</a></nav></div></header>
 
 <section class="section">
-
-  <div class="container">
-
-    <a
-      class="back"
-      href="portal.html"
-    >
-      ← Kembali ke portal
-    </a>
-
-
-    <div class="eyebrow">
-      TENANT
-    </div>
-
-
-    <h1>
-      Check-in / Check-out
-    </h1>
-
-
-    <p class="lead"
-       style="margin:0;max-width:800px">
-
-      Data serah-terima otomatis
-      menggunakan identitas tenant
-      yang sedang login.
-
-    </p>
-
-
-    <div class="card form-card">
-
-      <form id="checkinoutForm">
-
-        <div class="form-grid">
-
-          <div class="field">
-
-            <label>
-              Tenant
-            </label>
-
-            <input
-              id="cioTenant"
-              readonly
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              No. Kamar
-            </label>
-
-            <input
-              id="cioRoom"
-              readonly
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Jenis Proses
-            </label>
-
-            <select
-              id="cioProcess"
-              required
-            >
-
-              <option value="">
-                Pilih
-              </option>
-
-              <option value="CHECK-IN">
-                Check-in
-              </option>
-
-              <option value="CHECK-OUT">
-                Check-out
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Tanggal Proses
-            </label>
-
-            <input
-              id="cioDate"
-              type="date"
-              required
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Jumlah Kunci / Akses
-            </label>
-
-            <input
-              id="cioKeys"
-              type="number"
-              min="0"
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Kunci Dikembalikan?
-            </label>
-
-            <select
-              id="cioKeysReturned"
-            >
-
-              <option>
-                Ya
-              </option>
-
-              <option>
-                Tidak
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              Kondisi Kamar
-            </label>
-
-            <textarea
-              id="cioRoomCondition"
-              required
-            ></textarea>
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              Catatan Kondisi
-            </label>
-
-            <textarea
-              id="cioNote"
-            ></textarea>
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              Foto Kondisi Kamar
-            </label>
-
-            <input
-              id="cioFiles"
-              type="file"
-              accept="image/*"
-              multiple
-            >
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              Foto Meter Listrik
-            </label>
-
-            <input
-              id="cioMeterFiles"
-              type="file"
-              accept="image/*"
-              multiple
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Ada Kerusakan / Kehilangan?
-            </label>
-
-            <select
-              id="cioDamage"
-            >
-
-              <option>
-                Tidak
-              </option>
-
-              <option>
-                Ya
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Perkiraan Pengurangan Deposit
-            </label>
-
-            <input
-              id="cioDepositReduction"
-              type="number"
-              min="0"
-              value="0"
-            >
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              Detail Kerusakan / Kehilangan
-            </label>
-
-            <textarea
-              id="cioDamageDetail"
-            ></textarea>
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              Catatan Fasilitas
-            </label>
-
-            <textarea
-              id="cioFacility"
-            ></textarea>
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              Pernyataan Tenant
-            </label>
-
-            <textarea
-              id="cioStatement"
-            ></textarea>
-
-          </div>
-
-        </div>
-
-
-        <div
-          id="cioMessage"
-          class="message"
-        ></div>
-
-
-        <button
-          id="cioButton"
-          class="btn btn-primary"
-          style="margin-top:18px;width:100%"
-        >
-
-          Kirim Check-in / Check-out
-
-        </button>
-
-      </form>
-
-    </div>
-
+<div class="container">
+<a class="back" href="portal.html">← Kembali ke Portal</a>
+<div class="eyebrow">TENANT PORTAL</div>
+<h1>Check-in / Check-out</h1>
+<p class="lead">Serah-terima kamar dilakukan dengan dua formulir yang berbeda. Identitas tenant dan nomor kamar diambil otomatis dari akun yang sedang login.</p>
+
+<div class="card card-pad profile">
+  <div class="grid grid-3">
+    <div class="profile-item"><span>Tenant</span><strong id="tenantName">Memuat...</strong></div>
+    <div class="profile-item"><span>Tenant ID</span><strong id="tenantId">Memuat...</strong></div>
+    <div class="profile-item"><span>No. Kamar</span><strong id="tenantRoom">Memuat...</strong></div>
   </div>
+</div>
 
+<div class="tabs">
+  <button class="tab active" data-mode="CHECK-IN">CHECK-IN</button>
+  <button class="tab" data-mode="CHECK-OUT">CHECK-OUT</button>
+</div>
+
+<div id="modeInfo" class="note">Check-in mencatat kondisi awal kamar dan serah-terima fasilitas. Kunci belum perlu dinyatakan dikembalikan.</div>
+
+<section id="checkinSection" class="form-section active">
+  <form id="checkinForm" class="card card-pad" style="margin-top:16px">
+    <div class="grid grid-2">
+      <div class="field"><label>Tanggal Check-in</label><input id="checkinDate" type="date" required></div>
+      <div class="field"><label>Jumlah Kunci / Akses</label><input id="checkinKeyCount" type="number" min="0" value="1" required></div>
+      <div class="field full"><label>Kondisi Kamar Saat Masuk</label><textarea id="checkinCondition" required placeholder="Contoh: kamar bersih, dinding baik, AC normal, kamar mandi bersih..."></textarea></div>
+      <div class="field full"><label>Catatan Kondisi</label><textarea id="checkinNote" placeholder="Catatan tambahan kondisi awal kamar."></textarea></div>
+      <div class="field"><label>Foto Kondisi Kamar</label><input id="checkinConditionPhoto" type="file" accept="image/*" required></div>
+      <div class="field"><label>Foto Meter Listrik</label><input id="checkinMeterPhoto" type="file" accept="image/*"></div>
+      <div class="field full"><label>Kondisi Fasilitas</label><textarea id="checkinFacilities" placeholder="AC, kasur, lemari, WiFi, air, kunci, dan fasilitas lainnya."></textarea></div>
+      <div class="field full"><label>Persetujuan</label><label style="display:flex;gap:8px;align-items:flex-start;font-weight:600"><input id="checkinAgreement" type="checkbox" style="width:auto;margin-top:3px" required> Saya menyatakan kondisi awal kamar yang saya laporkan sesuai dengan kondisi saat serah-terima.</label></div>
+    </div>
+    <button id="checkinSubmit" class="btn btn-primary" type="submit" style="width:100%;margin-top:18px">Kirim Check-in</button>
+    <div id="checkinResult" class="result"></div>
+  </form>
 </section>
 
-
-<footer class="footer">
-
-  <div class="container footer-inner">
-
-    <div>
-      <strong>
-        DJ FAMILY KOST
-      </strong>
+<section id="checkoutSection" class="form-section">
+  <form id="checkoutForm" class="card card-pad" style="margin-top:16px">
+    <div class="note warn" style="margin-bottom:16px">Check-out digunakan saat masa tinggal berakhir. Sistem akan memeriksa bahwa tenant sudah memiliki Check-in.</div>
+    <div class="grid grid-2">
+      <div class="field"><label>Tanggal Check-out</label><input id="checkoutDate" type="date" required></div>
+      <div class="field"><label>Jumlah Kunci / Akses</label><input id="checkoutKeyCount" type="number" min="0" value="1" required></div>
+      <div class="field full"><label>Kondisi Kamar Saat Keluar</label><textarea id="checkoutCondition" required placeholder="Catat kondisi akhir kamar sebelum meninggalkan kamar."></textarea></div>
+      <div class="field full"><label>Catatan Kondisi Akhir</label><textarea id="checkoutNote" placeholder="Catatan tambahan kondisi akhir."></textarea></div>
+      <div class="field"><label>Foto Kondisi Kamar</label><input id="checkoutConditionPhoto" type="file" accept="image/*" required></div>
+      <div class="field"><label>Foto Meter Listrik</label><input id="checkoutMeterPhoto" type="file" accept="image/*"></div>
+      <div class="field full"><label>Kondisi Fasilitas</label><textarea id="checkoutFacilities" placeholder="Kondisi fasilitas saat dikembalikan."></textarea></div>
+      <div class="field"><label>Kunci / Akses Dikembalikan?</label><select id="checkoutKeyReturned" required><option value="">Pilih</option><option value="YA">Ya</option><option value="TIDAK">Tidak</option></select></div>
+      <div class="field"><label>Ada Kerusakan / Kehilangan?</label><select id="checkoutDamage" required><option value="TIDAK">Tidak</option><option value="YA">Ya</option></select></div>
+      <div class="field full hidden" id="damageDetailField"><label>Detail Kerusakan / Kehilangan</label><textarea id="checkoutDamageDetail" placeholder="Jelaskan kerusakan atau barang yang hilang."></textarea></div>
+      <div class="field"><label>Perkiraan Pengurangan Deposit</label><input id="checkoutDeduction" type="number" min="0" max="300000" value="0" required></div>
+      <div class="field"><label>Deposit</label><input value="Rp300.000" readonly></div>
+      <div class="field full"><label>Persetujuan</label><label style="display:flex;gap:8px;align-items:flex-start;font-weight:600"><input id="checkoutAgreement" type="checkbox" style="width:auto;margin-top:3px" required> Saya menyatakan kondisi akhir kamar dan pengembalian akses sesuai dengan keadaan sebenarnya.</label></div>
     </div>
+    <button id="checkoutSubmit" class="btn btn-primary" type="submit" style="width:100%;margin-top:18px">Kirim Check-out</button>
+    <div id="checkoutResult" class="result"></div>
+  </form>
+</section>
 
-    <small>
-      © 2026 DJ Family Kost
-    </small>
+<div class="history">
+  <h2 style="margin:0 0 8px">Riwayat Serah-terima</h2>
+  <p style="color:var(--muted);margin-top:0">Semua catatan check-in dan check-out tenant ini tetap tersimpan.</p>
+  <div id="historyBox" class="grid grid-2"><div class="card card-pad" style="color:var(--muted)">Memuat riwayat...</div></div>
+</div>
 
-  </div>
+</div>
+</section>
 
-</footer>
+<footer class="footer"><div class="container footer-inner"><div><strong>DJ FAMILY KOST</strong><br><small>Hunian yang tertib, nyaman, dan terkelola.</small></div><small>© 2026 DJ Family Kost</small></div></footer>
 
+<script>
+const API_URL = "https://dj-family-kost.mahjongjong.workers.dev";
 
-<script src="dj-kost.js"></script>
+let tenantSession = null;
+let currentMode = "CHECK-IN";
 
+function e(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function dateToday(){
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function readSession(){
+  const keys = ["djTenantSession","djTenantAuth"];
+  for(const key of keys){
+    const raw = sessionStorage.getItem(key);
+    if(!raw) continue;
+    try{
+      const data = JSON.parse(raw);
+      if(data && (data.tenantId || data.sessionToken)) return data;
+    }catch(_){ }
+  }
+
+  const tenantId = sessionStorage.getItem("djTenantId") || "";
+  const sessionToken = sessionStorage.getItem("djTenantSessionToken") || sessionStorage.getItem("djTenantToken") || "";
+  const nama = sessionStorage.getItem("djTenantName") || "";
+  const kamar = sessionStorage.getItem("djTenantRoom") || "";
+
+  if(tenantId && sessionToken){
+    return {tenantId,sessionToken,nama,kamar,name:nama,room:kamar};
+  }
+  return null;
+}
+
+async function api(action, extra={}){
+  if(!tenantSession) throw new Error("Sesi tenant tidak tersedia. Silakan login kembali.");
+
+  let response;
+  try{
+    response = await fetch(API_URL, {
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({
+        action,
+        tenantId:tenantSession.tenantId,
+        sessionToken:tenantSession.sessionToken,
+        ...extra
+      })
+    });
+  }catch(err){
+    throw new Error("Tidak dapat terhubung ke server DJ Family Kost.");
+  }
+
+  let result;
+  try{
+    result = await response.json();
+  }catch(err){
+    throw new Error("Server mengembalikan respons yang tidak valid.");
+  }
+
+  if(!result || result.ok !== true){
+    throw new Error(result && result.error ? result.error : "Permintaan gagal.");
+  }
+  return result.data;
+}
+
+async function fileToPayload(file){
+  if(!file) return null;
+  const processed = await compressImage(file);
+  const base64 = await fileToBase64(processed);
+  return {
+    base64,
+    mimeType:"image/jpeg",
+    originalName:processed.name
+  };
+}
+
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const value = String(reader.result || "");
+      const comma = value.indexOf(",");
+      resolve(comma >= 0 ? value.slice(comma+1) : value);
+    };
+    reader.onerror = ()=>reject(new Error("Foto tidak dapat dibaca."));
+    reader.readAsDataURL(file);
+  });
+}
+
+function compressImage(file,maxWidth=1600,quality=.82){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w = img.width;
+        let h = img.height;
+        if(w > maxWidth){
+          const r = maxWidth / w;
+          w = maxWidth;
+          h = Math.round(h*r);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d").drawImage(img,0,0,w,h);
+        canvas.toBlob(blob=>{
+          if(!blob){ reject(new Error("Foto gagal diproses.")); return; }
+          resolve(new File([blob], `cio-${Date.now()}.jpg`, {type:"image/jpeg"}));
+        },"image/jpeg",quality);
+      };
+      img.onerror = ()=>reject(new Error("Foto gagal diproses."));
+      img.src = reader.result;
+    };
+    reader.onerror = ()=>reject(new Error("Foto tidak dapat dibaca."));
+    reader.readAsDataURL(file);
+  });
+}
+
+function showResult(id,kind,message){
+  const box = document.getElementById(id);
+  box.className = `result show note ${kind || ""}`;
+  box.innerHTML = e(message).replace(/\n/g,"<br>");
+}
+
+function setMode(mode){
+  currentMode = mode;
+  document.querySelectorAll(".tab").forEach(btn=>btn.classList.toggle("active",btn.dataset.mode===mode));
+  document.getElementById("checkinSection").classList.toggle("active",mode==="CHECK-IN");
+  document.getElementById("checkoutSection").classList.toggle("active",mode==="CHECK-OUT");
+  document.getElementById("modeInfo").className = `note ${mode==="CHECK-OUT" ? "warn" : ""}`;
+  document.getElementById("modeInfo").textContent = mode==="CHECK-IN"
+    ? "Check-in mencatat kondisi awal kamar dan serah-terima fasilitas. Kunci belum perlu dinyatakan dikembalikan."
+    : "Check-out mencatat kondisi akhir kamar, pengembalian akses, kemungkinan kerusakan, dan pengurangan deposit.";
+}
+
+async function submitCheckIn(event){
+  event.preventDefault();
+  const button = document.getElementById("checkinSubmit");
+  button.disabled = true;
+  button.textContent = "Mengirim...";
+
+  try{
+    const conditionPhoto = await fileToPayload(document.getElementById("checkinConditionPhoto").files[0]);
+    const meterFile = document.getElementById("checkinMeterPhoto").files[0];
+    const meterPhoto = meterFile ? await fileToPayload(meterFile) : null;
+
+    const result = await api("checkinout",{
+      process:"CHECK-IN",
+      processDate:document.getElementById("checkinDate").value,
+      condition:document.getElementById("checkinCondition").value.trim(),
+      conditionNote:document.getElementById("checkinNote").value.trim(),
+      conditionPhotoBase64:conditionPhoto.base64,
+      conditionPhotoMimeType:conditionPhoto.mimeType,
+      conditionPhotoOriginalName:conditionPhoto.originalName,
+      meterPhotoBase64:meterPhoto ? meterPhoto.base64 : "",
+      meterPhotoMimeType:meterPhoto ? meterPhoto.mimeType : "",
+      meterPhotoOriginalName:meterPhoto ? meterPhoto.originalName : "",
+      facilities:document.getElementById("checkinFacilities").value.trim(),
+      keyCount:Number(document.getElementById("checkinKeyCount").value || 0),
+      keyReturned:"",
+      hasDamage:"TIDAK",
+      damageDetail:"",
+      depositDeduction:0,
+      agreement:"YA"
+    });
+
+    showResult("checkinResult","success",result.message || `Check-in berhasil. ID: ${result.checkInOutId || "—"}`);
+    document.getElementById("checkinForm").reset();
+    document.getElementById("checkinDate").value = dateToday();
+    document.getElementById("checkinKeyCount").value = "1";
+    await loadHistory();
+  }catch(err){
+    showResult("checkinResult","danger",err.message);
+  }finally{
+    button.disabled = false;
+    button.textContent = "Kirim Check-in";
+  }
+}
+
+async function submitCheckOut(event){
+  event.preventDefault();
+  const button = document.getElementById("checkoutSubmit");
+  button.disabled = true;
+  button.textContent = "Mengirim...";
+
+  try{
+    const conditionPhoto = await fileToPayload(document.getElementById("checkoutConditionPhoto").files[0]);
+    const meterFile = document.getElementById("checkoutMeterPhoto").files[0];
+    const meterPhoto = meterFile ? await fileToPayload(meterFile) : null;
+
+    const result = await api("checkinout",{
+      process:"CHECK-OUT",
+      processDate:document.getElementById("checkoutDate").value,
+      condition:document.getElementById("checkoutCondition").value.trim(),
+      conditionNote:document.getElementById("checkoutNote").value.trim(),
+      conditionPhotoBase64:conditionPhoto.base64,
+      conditionPhotoMimeType:conditionPhoto.mimeType,
+      conditionPhotoOriginalName:conditionPhoto.originalName,
+      meterPhotoBase64:meterPhoto ? meterPhoto.base64 : "",
+      meterPhotoMimeType:meterPhoto ? meterPhoto.mimeType : "",
+      meterPhotoOriginalName:meterPhoto ? meterPhoto.originalName : "",
+      facilities:document.getElementById("checkoutFacilities").value.trim(),
+      keyCount:Number(document.getElementById("checkoutKeyCount").value || 0),
+      keyReturned:document.getElementById("checkoutKeyReturned").value,
+      hasDamage:document.getElementById("checkoutDamage").value,
+      damageDetail:document.getElementById("checkoutDamageDetail").value.trim(),
+      depositDeduction:Number(document.getElementById("checkoutDeduction").value || 0),
+      agreement:"YA"
+    });
+
+    showResult("checkoutResult","success",`${result.message || "Check-out berhasil."}\nPengembalian deposit: Rp${Number(result.refund || 0).toLocaleString("id-ID")}\nID: ${result.checkInOutId || "—"}`);
+    document.getElementById("checkoutForm").reset();
+    document.getElementById("checkoutDate").value = dateToday();
+    document.getElementById("checkoutKeyCount").value = "1";
+    document.getElementById("checkoutDeduction").value = "0";
+    document.getElementById("damageDetailField").classList.add("hidden");
+    await loadHistory();
+  }catch(err){
+    showResult("checkoutResult","danger",err.message);
+  }finally{
+    button.disabled = false;
+    button.textContent = "Kirim Check-out";
+  }
+}
+
+async function loadHistory(){
+  const box = document.getElementById("historyBox");
+  box.innerHTML = '<div class="card card-pad" style="color:#667085">Memuat riwayat...</div>';
+  try{
+    const data = await api("checkinouthistory");
+    const items = Array.isArray(data && data.items) ? data.items : [];
+    if(!items.length){
+      box.innerHTML = '<div class="card card-pad" style="color:#667085">Belum ada riwayat serah-terima.</div>';
+      return;
+    }
+    box.innerHTML = items.map(item=>{
+      const process = item.process || "—";
+      const cls = process === "CHECK-OUT" ? "status-checkout" : "status-checkin";
+      const photos = [];
+      if(item.conditionPhotoUrl) photos.push(`<a class="btn btn-secondary" href="${e(item.conditionPhotoUrl)}" target="_blank" rel="noopener">Foto Kondisi</a>`);
+      if(item.meterPhotoUrl) photos.push(`<a class="btn btn-secondary" href="${e(item.meterPhotoUrl)}" target="_blank" rel="noopener">Foto Meter</a>`);
+      return `<div class="card history-card"><h4>${e(item.id || "Record")}</h4><div class="actions"><span class="status ${cls}">${e(process)}</span></div><p>Tanggal: ${e(item.date || "—")}</p><p>Kamar: ${e(item.room || tenantSession.room || tenantSession.kamar || "—")}</p><p>Kondisi: ${e(item.condition || "—")}</p><p>Kunci: ${e(item.keyCount || "0")} ${item.keyReturned ? `· Dikembalikan: ${e(item.keyReturned)}` : ""}</p><p>Kerusakan: ${e(item.damage || "TIDAK")}${item.damageDetail ? ` · ${e(item.damageDetail)}` : ""}</p><p>Pengurangan deposit: Rp${Number(item.depositDeduction || 0).toLocaleString("id-ID")}</p><div class="actions">${photos.join("")}</div></div>`;
+    }).join("");
+  }catch(err){
+    box.innerHTML = `<div class="card card-pad note danger">${e(err.message)}</div>`;
+  }
+}
+
+function init(){
+  tenantSession = readSession();
+  if(!tenantSession){
+    location.href = "login.html";
+    return;
+  }
+
+  const tenantName = tenantSession.nama || tenantSession.name || "Tenant";
+  const tenantId = tenantSession.tenantId || "—";
+  const room = tenantSession.kamar || tenantSession.room || "—";
+
+  document.getElementById("tenantName").textContent = tenantName;
+  document.getElementById("tenantId").textContent = tenantId;
+  document.getElementById("tenantRoom").textContent = room;
+
+  document.getElementById("checkinDate").value = dateToday();
+  document.getElementById("checkoutDate").value = dateToday();
+
+  document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>setMode(btn.dataset.mode)));
+  document.getElementById("checkinForm").addEventListener("submit",submitCheckIn);
+  document.getElementById("checkoutForm").addEventListener("submit",submitCheckOut);
+  document.getElementById("checkoutDamage").addEventListener("change",event=>{
+    document.getElementById("damageDetailField").classList.toggle("hidden",event.target.value!=="YA");
+  });
+  document.getElementById("logoutTop").addEventListener("click",event=>{
+    event.preventDefault();
+    sessionStorage.clear();
+    location.href="login.html";
+  });
+
+  loadHistory();
+}
+
+init();
+</script>
 </body>
 </html>
