@@ -13,7 +13,7 @@
 
 <link
     rel="stylesheet"
-    href="app.css?v=20260925-tenant-portal-01"
+    href="app.css?v=20260925-tenant-portal-02"
 >
 
 <style>
@@ -75,6 +75,59 @@
     color:#027a48;
 }
 
+.security-card{
+    margin-top:30px;
+}
+
+.security-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+    margin-top:18px;
+}
+
+.security-field label{
+    display:block;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.security-field input{
+    width:100%;
+    box-sizing:border-box;
+    padding:13px 14px;
+    border:1px solid #dfe3eb;
+    border-radius:12px;
+    background:#fff;
+    font:inherit;
+    outline:none;
+}
+
+.security-field input:focus{
+    border-color:#8a96a8;
+    box-shadow:0 0 0 3px rgba(23,33,59,.06);
+}
+
+.security-message{
+    display:none;
+    margin-top:16px;
+    padding:13px 14px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+.security-message.success{
+    display:block;
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.security-message.error{
+    display:block;
+    background:#fff1f2;
+    color:#b42318;
+}
+
 .portal-error{
     margin-top:25px;
     padding:15px;
@@ -98,6 +151,10 @@
 @media(max-width:900px){
 
     .portal-grid{
+        grid-template-columns:1fr;
+    }
+
+    .security-grid{
         grid-template-columns:1fr;
     }
 
@@ -188,6 +245,7 @@
             id="portalContent"
             style="display:none;"
         >
+
 
             <div class="portal-header">
 
@@ -355,6 +413,10 @@
             </div>
 
 
+            <!-- =================================================
+                 LAYANAN
+                 ================================================= -->
+
             <div
                 class="card"
                 style="margin-top:30px;padding:24px;"
@@ -403,6 +465,103 @@
 
             </div>
 
+
+            <!-- =================================================
+                 KEAMANAN AKUN
+                 ================================================= -->
+
+            <div
+                class="card security-card"
+                style="padding:24px;"
+            >
+
+                <h3>
+                    Keamanan Akun
+                </h3>
+
+                <p>
+                    Anda dapat mengganti password kapan saja.
+                    Password lama harus diketahui untuk melakukan
+                    pergantian.
+                </p>
+
+
+                <form id="changePasswordForm">
+
+                    <div class="security-grid">
+
+                        <div class="security-field">
+
+                            <label for="currentPassword">
+                                Password Saat Ini
+                            </label>
+
+                            <input
+                                id="currentPassword"
+                                type="password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="security-field">
+
+                            <label for="newPassword">
+                                Password Baru
+                            </label>
+
+                            <input
+                                id="newPassword"
+                                type="password"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="security-field">
+
+                            <label for="confirmPassword">
+                                Ulangi Password Baru
+                            </label>
+
+                            <input
+                                id="confirmPassword"
+                                type="password"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="changePasswordButton"
+                        style="margin-top:18px;"
+                    >
+                        Ganti Password
+                    </button>
+
+
+                    <div
+                        id="securityMessage"
+                        class="security-message"
+                    ></div>
+
+                </form>
+
+            </div>
+
+
         </div>
 
     </div>
@@ -417,13 +576,17 @@
     <div class="container footer-inner">
 
         <div>
+
             <strong>
                 DJ FAMILY KOST
             </strong>
+
             <br>
+
             <small>
                 Hunian yang tertib, nyaman, dan terkelola.
             </small>
+
         </div>
 
         <small>
@@ -436,6 +599,7 @@
 
 
 <script>
+
 
 const TENANT_API_URL =
     "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
@@ -463,11 +627,15 @@ function money(
     value
 ){
 
-    return (
-        "Rp" +
+    const amount =
         Number(
             value || 0
-        ).toLocaleString(
+        );
+
+
+    return (
+        "Rp" +
+        amount.toLocaleString(
             "id-ID"
         )
     );
@@ -503,7 +671,9 @@ function getSession(){
 
 
     if(!raw){
+
         return null;
+
     }
 
 
@@ -526,6 +696,11 @@ function getSession(){
 }
 
 
+/**
+ * ============================================================
+ * LOAD PORTAL
+ * ============================================================
+ */
 async function loadPortal(){
 
     const session =
@@ -784,6 +959,279 @@ async function loadPortal(){
 }
 
 
+/**
+ * ============================================================
+ * CHANGE PASSWORD
+ * ============================================================
+ */
+document
+    .getElementById(
+        "changePasswordForm"
+    )
+    .addEventListener(
+        "submit",
+        async function(event){
+
+            event.preventDefault();
+
+
+            const session =
+                getSession();
+
+
+            if(!session){
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const currentPassword =
+                document
+                    .getElementById(
+                        "currentPassword"
+                    )
+                    .value;
+
+
+            const newPassword =
+                document
+                    .getElementById(
+                        "newPassword"
+                    )
+                    .value;
+
+
+            const confirmPassword =
+                document
+                    .getElementById(
+                        "confirmPassword"
+                    )
+                    .value;
+
+
+            const button =
+                document
+                    .getElementById(
+                        "changePasswordButton"
+                    );
+
+
+            const message =
+                document
+                    .getElementById(
+                        "securityMessage"
+                    );
+
+
+            message.className =
+                "security-message";
+
+            message.textContent =
+                "";
+
+
+            if(
+                newPassword !==
+                confirmPassword
+            ){
+
+                message.className =
+                    "security-message error";
+
+                message.textContent =
+                    "Konfirmasi password baru tidak sama.";
+
+                return;
+
+            }
+
+
+            if(
+                newPassword.length < 8
+            ){
+
+                message.className =
+                    "security-message error";
+
+                message.textContent =
+                    "Password baru minimal 8 karakter.";
+
+                return;
+
+            }
+
+
+            if(
+                !/[A-Za-z]/.test(
+                    newPassword
+                ) ||
+                !/[0-9]/.test(
+                    newPassword
+                )
+            ){
+
+                message.className =
+                    "security-message error";
+
+                message.textContent =
+                    "Password baru harus mengandung huruf dan angka.";
+
+                return;
+
+            }
+
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Mengubah...";
+
+
+            try{
+
+                const response =
+                    await fetch(
+                        TENANT_API_URL,
+                        {
+
+                            method:"POST",
+
+                            headers:{
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    action:
+                                        "changePassword",
+
+                                    tenantId:
+                                        session.tenantId,
+
+                                    sessionToken:
+                                        session.sessionToken,
+
+                                    currentPassword:
+                                        currentPassword,
+
+                                    newPassword:
+                                        newPassword
+
+                                })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if(
+                    !result ||
+                    result.ok !== true ||
+                    !result.data
+                ){
+
+                    throw new Error(
+                        result &&
+                        result.error
+                            ? result.error
+                            : "Password gagal diubah."
+                    );
+
+                }
+
+
+                /*
+                 * Session baru setelah ganti password.
+                 */
+
+                session.sessionToken =
+                    result.data.sessionToken;
+
+
+                session.sessionExpires =
+                    result.data.sessionExpires;
+
+
+                sessionStorage.setItem(
+                    "djTenantSession",
+                    JSON.stringify(
+                        session
+                    )
+                );
+
+
+                document
+                    .getElementById(
+                        "currentPassword"
+                    )
+                    .value = "";
+
+
+                document
+                    .getElementById(
+                        "newPassword"
+                    )
+                    .value = "";
+
+
+                document
+                    .getElementById(
+                        "confirmPassword"
+                    )
+                    .value = "";
+
+
+                message.className =
+                    "security-message success";
+
+                message.textContent =
+                    "Password berhasil diubah. Session baru sudah aktif.";
+
+            
+            }catch(error){
+
+                console.error(
+                    "Change password error:",
+                    error
+                );
+
+
+                message.className =
+                    "security-message error";
+
+                message.textContent =
+                    error.message ||
+                    "Password gagal diubah.";
+
+            }finally{
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Ganti Password";
+
+            }
+
+        }
+    );
+
+
+/**
+ * ============================================================
+ * LOGOUT
+ * ============================================================
+ */
 document
     .getElementById(
         "logoutButton"
