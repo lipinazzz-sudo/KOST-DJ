@@ -14,7 +14,7 @@
 
 <link
     rel="stylesheet"
-    href="app.css?v=20260925-master-entry-01"
+    href="app.css?v=20260925-master-entry-02"
 >
 
 <style>
@@ -129,7 +129,10 @@
 </p>
 
 
-<form id="loginForm">
+<form
+    id="loginForm"
+    novalidate
+>
 
 
 <div class="field">
@@ -143,8 +146,8 @@
     type="text"
     autocomplete="username"
     placeholder="Contoh: TEN-001"
-    required
 >
+
 
 </div>
 
@@ -159,8 +162,8 @@
     id="password"
     type="password"
     autocomplete="current-password"
-    required
 >
+
 
 </div>
 
@@ -204,9 +207,9 @@ const API_URL =
 
 
 /*
- * Kode pintu masuk Master.
+ * Kode khusus untuk membuka pintu Master.
  *
- * Kode ini TIDAK merupakan password Master.
+ * Ini BUKAN password Master.
  */
 const MASTER_ENTRY_CODE =
     "999999";
@@ -218,13 +221,13 @@ const form =
     );
 
 
-const tenantId =
+const tenantIdInput =
     document.getElementById(
         "tenantId"
     );
 
 
-const password =
+const passwordInput =
     document.getElementById(
         "password"
     );
@@ -250,6 +253,7 @@ function showMessage(
     message.textContent =
         text;
 
+
     message.className =
         "login-message " +
         type;
@@ -265,29 +269,75 @@ form.addEventListener(
 
 
         const id =
-            tenantId.value
+            tenantIdInput.value
                 .trim()
                 .toUpperCase();
 
 
-        const pass =
-            password.value;
+        const password =
+            passwordInput.value;
 
 
         /*
-         * ----------------------------------------------------
+         * ====================================================
          * MASTER ENTRY
-         * ----------------------------------------------------
+         * ====================================================
          *
-         * Tidak memanggil API tenant.
+         * Password TIDAK diperlukan di sini.
+         *
+         * 999999 hanya membuka halaman Master.
          */
-        if (
+
+        if(
             id ===
             MASTER_ENTRY_CODE
-        ) {
+        ){
+
+            passwordInput.value =
+                "";
+
 
             window.location.href =
                 "master.html";
+
+
+            return;
+
+        }
+
+
+        /*
+         * ====================================================
+         * VALIDASI TENANT
+         * ====================================================
+         */
+
+        if(
+            !id
+        ){
+
+            showMessage(
+                "Tenant ID wajib diisi.",
+                "error"
+            );
+
+            tenantIdInput.focus();
+
+            return;
+
+        }
+
+
+        if(
+            !password
+        ){
+
+            showMessage(
+                "Password wajib diisi.",
+                "error"
+            );
+
+            passwordInput.focus();
 
             return;
 
@@ -333,7 +383,7 @@ form.addEventListener(
                                     id,
 
                                 password:
-                                    pass
+                                    password
 
                             })
 
@@ -361,6 +411,10 @@ form.addEventListener(
             }
 
 
+            /*
+             * Simpan session tenant.
+             */
+
             sessionStorage.setItem(
                 "djTenantSession",
                 JSON.stringify(
@@ -369,8 +423,24 @@ form.addEventListener(
             );
 
 
+            /*
+             * Bersihkan session demo lama.
+             */
+
             sessionStorage.removeItem(
                 "djTenantDemo"
+            );
+
+            sessionStorage.removeItem(
+                "djTenantName"
+            );
+
+            sessionStorage.removeItem(
+                "djTenantId"
+            );
+
+            sessionStorage.removeItem(
+                "djTenantRoom"
             );
 
 
@@ -393,6 +463,12 @@ form.addEventListener(
 
         }catch(error){
 
+            console.error(
+                "Tenant login error:",
+                error
+            );
+
+
             showMessage(
                 error.message ||
                 "Login gagal.",
@@ -400,7 +476,7 @@ form.addEventListener(
             );
 
 
-            password.value =
+            passwordInput.value =
                 "";
 
 
@@ -408,6 +484,7 @@ form.addEventListener(
 
             loginButton.disabled =
                 false;
+
 
             loginButton.textContent =
                 "Masuk";
