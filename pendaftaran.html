@@ -278,6 +278,10 @@ textarea{
   color:var(--red);
 }
 
+.loading{
+  color:var(--muted);
+}
+
 .footer{
   margin-top:50px;
   background:var(--navy);
@@ -296,8 +300,15 @@ textarea{
   color:#aeb7ca;
 }
 
-@media(max-width:800px){
+.center{
+  text-align:center;
+}
 
+.hidden{
+  display:none !important;
+}
+
+@media(max-width:800px){
   .nav-inner{
     align-items:flex-start;
   }
@@ -321,7 +332,6 @@ textarea{
   .form-card{
     padding:22px;
   }
-
 }
 </style>
 
@@ -401,13 +411,11 @@ textarea{
 
 
     <p class="lead">
-
       Isi data dasar pendaftaran terlebih dahulu.
       Kamar yang dipilih pada tahap ini merupakan
       <strong>kamar yang diminati</strong>. Keputusan
       kamar final tetap dilakukan oleh Master saat
       pendaftaran disetujui.
-
     </p>
 
 
@@ -415,9 +423,12 @@ textarea{
 
       <form id="registrationForm">
 
-
         <div class="form-grid">
 
+
+          <!-- =============================================
+               DATA DASAR
+               ============================================= -->
 
           <div class="field">
 
@@ -573,6 +584,10 @@ textarea{
           </div>
 
 
+          <!-- =============================================
+               KAMAR
+               ============================================= -->
+
           <div class="field">
 
             <label for="kamar">
@@ -600,14 +615,13 @@ textarea{
               Memuat daftar kamar...
             </div>
 
-
-            <div class="note room-note">
-
+            <div
+              class="note room-note"
+            >
               Kamar pada formulir ini adalah
               <strong>pilihan awal</strong>.
               Master tetap menentukan kamar final
               saat persetujuan.
-
             </div>
 
           </div>
@@ -646,6 +660,10 @@ textarea{
         </div>
 
 
+        <!-- =============================================
+             INFORMASI PROSES
+             ============================================= -->
+
         <div
           class="note"
           style="margin-top:20px;"
@@ -682,7 +700,9 @@ textarea{
         </div>
 
 
-        <div class="form-actions">
+        <div
+          class="form-actions"
+        >
 
           <button
             id="submitButton"
@@ -745,9 +765,17 @@ textarea{
 
 <script>
 
+/* ============================================================
+   CONFIG
+   ============================================================ */
+
 const API_URL =
   "https://dj-family-kost.mahjongjong.workers.dev";
 
+
+/* ============================================================
+   DOM
+   ============================================================ */
 
 const form =
   document.getElementById(
@@ -774,6 +802,10 @@ const submitMessage =
     "submitMessage"
   );
 
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
 
 function escapeHtml(
   value
@@ -881,7 +913,9 @@ function normalizeRoom(
     return {
 
       number:
-        String(item),
+        String(
+          item
+        ),
 
       status:
         "KOSONG",
@@ -898,6 +932,7 @@ function normalizeRoom(
     String(
       item.number ??
       item.No_Kamar ??
+      item.no_kamar ??
       item.noKamar ??
       item.kamar ??
       item.room ??
@@ -921,6 +956,7 @@ function normalizeRoom(
       item.status ??
       item.Status ??
       item.Status_Kamar ??
+      item.status_kamar ??
       "KOSONG"
     )
     .trim()
@@ -930,6 +966,7 @@ function normalizeRoom(
   const rawPrice =
     item.price ??
     item.Harga_Bulan ??
+    item.harga_bulan ??
     item.harga ??
     item.hargaBulan ??
     0;
@@ -970,6 +1007,10 @@ function normalizeRoom(
 
 }
 
+
+/* ============================================================
+   EXTRACT ROOM LIST
+   ============================================================ */
 
 function extractRooms(
   payload
@@ -1020,6 +1061,17 @@ function extractRooms(
 
   }else if(
     payload &&
+    payload.data &&
+    Array.isArray(
+      payload.data.data
+    )
+  ){
+
+    raw =
+      payload.data.data;
+
+  }else if(
+    payload &&
     Array.isArray(
       payload.result
     )
@@ -1052,6 +1104,10 @@ function extractRooms(
 
 }
 
+
+/* ============================================================
+   LOAD ROOMS
+   ============================================================ */
 
 async function loadRooms(){
 
@@ -1134,6 +1190,16 @@ async function loadRooms(){
     }
 
 
+    /*
+     * Hanya tampilkan kamar yang:
+     *
+     * - KOSONG
+     * - harga > 0
+     *
+     * Kamar TERISI tidak bisa dipilih.
+     * Kamar dengan harga 0 / SEGERA juga tidak bisa dipilih.
+     */
+
     const availableRooms =
       rooms
         .filter(
@@ -1209,14 +1275,17 @@ async function loadRooms(){
 
         option.textContent =
           room.number +
-          " — Rp" +
-          Number(
-            room.price
-          )
-          .toLocaleString(
-            "id-ID"
-          ) +
-          "/bulan";
+          " — " +
+          (
+            "Rp" +
+            Number(
+              room.price
+            )
+            .toLocaleString(
+              "id-ID"
+            ) +
+            "/bulan"
+          );
 
 
         option.dataset.price =
@@ -1249,16 +1318,24 @@ async function loadRooms(){
 
     roomStatus.textContent =
       availableRooms.length +
+
       " kamar tersedia untuk dipilih. " +
+
       "Kamar final tetap ditentukan Master.";
 
+
+    /*
+     * Bila halaman dibuka dengan ?kamar=102,
+     * pilih otomatis bila kamar tersebut tersedia.
+     */
 
     const preferredRoom =
       getPreferredRoom();
 
 
     if(
-      preferredRoom &&
+      preferredRoom
+      &&
       availableRooms.some(
         function(room){
 
@@ -1284,16 +1361,23 @@ async function loadRooms(){
   }catch(error){
 
     roomSelect.innerHTML =
-      '<option value="">Gagal memuat kamar</option>';
+
+      '<option value="">' +
+      'Gagal memuat kamar' +
+      '</option>';
+
 
     roomSelect.disabled =
       true;
 
+
     submitButton.disabled =
       true;
 
+
     submitButton.textContent =
       "Kamar Belum Tersedia";
+
 
     roomStatus.textContent =
       error.message;
@@ -1301,7 +1385,6 @@ async function loadRooms(){
 
     setMessage(
       "error",
-
       "<strong>Daftar kamar belum dapat dimuat.</strong><br>" +
       escapeHtml(
         error.message
@@ -1313,6 +1396,10 @@ async function loadRooms(){
 
 }
 
+
+/* ============================================================
+   SUBMIT REGISTRATION
+   ============================================================ */
 
 form.addEventListener(
   "submit",
@@ -1512,7 +1599,9 @@ form.addEventListener(
         throw new Error(
           result &&
           result.error
+
             ? result.error
+
             : "Pendaftaran gagal dikirim."
         );
 
@@ -1589,13 +1678,10 @@ form.addEventListener(
 
       setMessage(
         "error",
-
         "<strong>Pendaftaran gagal.</strong><br>" +
-
         escapeHtml(
           error.message
         )
-
       );
 
 
@@ -1610,6 +1696,10 @@ form.addEventListener(
   }
 );
 
+
+/* ============================================================
+   INITIALIZATION
+   ============================================================ */
 
 loadRooms();
 
