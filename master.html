@@ -101,6 +101,17 @@ button{
     color:#fff;
 }
 
+.muted-text{
+    color:#667085;
+    font-size:12px;
+}
+
+.badge-warn{
+    background:#fff4e5;
+    color:#b54708;
+}
+
+
 .btn-light{
     background:#fff;
     color:#344054;
@@ -1088,12 +1099,6 @@ button{
                 </button>
 
                 <button
-                    data-panel="checkinout"
-                >
-                    Check-in / Check-out
-                </button>
-
-                <button
                     data-panel="media"
                 >
                     Pusat Media
@@ -1409,31 +1414,6 @@ button{
 
 
                 <!-- ==========================================
-                     CHECK IN / OUT
-                     ========================================== -->
-
-                <section
-                    id="panel-checkinout"
-                    class="panel"
-                >
-
-                    <h2 class="section-title">
-                        Check-in / Check-out
-                    </h2>
-
-                    <p class="section-subtitle">
-                        Riwayat serah-terima kamar seluruh tenant.
-                    </p>
-
-                    <div
-                        id="checkinoutBox"
-                        class="card table-wrap"
-                    ></div>
-
-                </section>
-
-
-                <!-- ==========================================
                      MEDIA
                      ========================================== -->
 
@@ -1710,7 +1690,7 @@ var tenantItems = Array.isArray(window.tenantItems) ? window.tenantItems : [];
 
 var registrationItems = Array.isArray(window.registrationItems) ? window.registrationItems : [];
 
-var checkInOutItems = Array.isArray(window.checkInOutItems) ? window.checkInOutItems : [];
+var registrationAvailableRooms = Array.isArray(window.registrationAvailableRooms) ? window.registrationAvailableRooms : [];
 
 var announcementItems = Array.isArray(window.announcementItems) ? window.announcementItems : [];
 
@@ -1726,7 +1706,7 @@ window.maintenanceItems = maintenanceItems;
 window.mediaItems = mediaItems;
 window.tenantItems = tenantItems;
 window.registrationItems = registrationItems;
-window.checkInOutItems = checkInOutItems;
+window.registrationAvailableRooms = registrationAvailableRooms;
 window.announcementItems = announcementItems;
 window.paymentFilter = paymentFilter;
 window.mediaFilter = mediaFilter;
@@ -2477,13 +2457,6 @@ async function loadPanel(
 
     }else if(
         panelName ===
-        "checkinout"
-    ){
-
-        await loadCheckInOut();
-
-    }else if(
-        panelName ===
         "media"
     ){
 
@@ -2568,6 +2541,11 @@ function renderSummary(){
         [
             "Kamar",
             summary.totalRooms || 0
+        ],
+
+        [
+            "Dipesan",
+            summary.reserved || 0
         ],
 
         [
@@ -3041,89 +3019,115 @@ async function loadRegistrations(){
             : [];
 
 
+    registrationAvailableRooms =
+        Array.isArray(
+            data &&
+            data.availableRooms
+        )
+            ? data.availableRooms
+            : [];
+
+
     window.registrationItems =
         registrationItems;
 
 
-    registrationItems =
+    window.registrationAvailableRooms =
+        registrationAvailableRooms;
+
+
+    const visibleItems =
         registrationItems.filter(
             function(item){
 
-                return (
+                const status =
                     String(
                         item.status ||
                         ""
                     )
-                    .toUpperCase()
-                    ===
-                    "MENUNGGU VERIFIKASI"
+                    .trim()
+                    .toUpperCase();
+
+
+                return (
+                    status ===
+                        "MENUNGGU VERIFIKASI"
+                    ||
+                    status ===
+                        "MENUNGGU AKTIVASI AKUN"
                 );
 
             }
         );
 
 
-    document
-        .getElementById(
+    const box =
+        document.getElementById(
             "registrationsBox"
-        )
-        .innerHTML =
+        );
 
-        registrationItems.length
 
-            ? (
+    if(
+        !visibleItems.length
+    ){
 
-                '<table class="data-table">' +
+        box.innerHTML =
+            '<div class="empty">Tidak ada pendaftaran yang perlu diproses.</div>';
 
-                '<thead>' +
+        return;
 
-                '<tr>' +
+    }
 
-                '<th>ID</th>' +
-                '<th>Nama</th>' +
-                '<th>Kamar</th>' +
-                '<th>WhatsApp</th>' +
-                '<th>Aksi</th>' +
 
-                '</tr>' +
+    box.innerHTML =
 
-                '</thead>' +
+        '<table class="data-table">' +
 
-                '<tbody>' +
+        '<thead>' +
 
-                registrationItems
-                    .map(
-                        function(item){
+        '<tr>' +
 
-                            return (
+        '<th>ID</th>' +
+        '<th>Nama</th>' +
+        '<th>Kamar Diminati</th>' +
+        '<th>Kamar Final</th>' +
+        '<th>Status</th>' +
+        '<th>Aksi</th>' +
 
-                                '<tr>' +
+        '</tr>' +
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.id
-                                ) +
-                                '</td>' +
+        '</thead>' +
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.name
-                                ) +
-                                '</td>' +
+        '<tbody>' +
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.room
-                                ) +
-                                '</td>' +
+        visibleItems
+            .map(
+                function(item){
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.phone
-                                ) +
-                                '</td>' +
+                    const status =
+                        String(
+                            item.status ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase();
 
-                                '<td class="actions">' +
+
+                    const isPending =
+                        status ===
+                        "MENUNGGU VERIFIKASI";
+
+
+                    const statusBadge =
+                        isPending
+                            ? '<span class="badge badge-warn">MENUNGGU VERIFIKASI</span>'
+                            : '<span class="badge badge-ok">MENUNGGU AKTIVASI AKUN</span>';
+
+
+                    const actionHtml =
+                        isPending
+
+                            ? (
 
                                 '<button class="btn btn-success" onclick="approveRegistration(\'' +
 
@@ -3133,41 +3137,78 @@ async function loadRegistrations(){
 
                                 '\')">' +
 
-                                'Setujui' +
+                                'Setujui & Tetapkan Kamar' +
 
-                                '</button>' +
+                                '</button>'
 
-                                '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
+                              )
 
-                                encodeURIComponent(
-                                    item.id
-                                ) +
+                            : (
 
-                                '\')">' +
+                                '<span class="muted-text">Menunggu tenant</span>'
 
-                                'Tolak' +
+                              );
 
-                                '</button>' +
 
-                                '</td>' +
+                    return (
 
-                                '</tr>'
+                        '<tr>' +
 
-                            );
+                        '<td><strong>' +
+                        escapeHtml(
+                            item.id
+                        ) +
+                        '</strong></td>' +
 
-                        }
-                    )
-                    .join("")
+                        '<td>' +
+                        escapeHtml(
+                            item.name
+                        ) +
+                        '<div class="muted-text">' +
+                        escapeHtml(
+                            item.phone
+                        ) +
+                        '</div></td>' +
 
-                +
+                        '<td>' +
+                        escapeHtml(
+                            item.requestedRoom ||
+                            item.room ||
+                            "—"
+                        ) +
+                        '</td>' +
 
-                '</tbody>' +
+                        '<td>' +
+                        escapeHtml(
+                            item.finalRoom ||
+                            "—"
+                        ) +
+                        '</td>' +
 
-                '</table>'
+                        '<td>' +
+                        statusBadge +
+                        '</td>' +
 
+                        '<td class="actions">' +
+                        actionHtml +
+                        (
+                            isPending
+                                ? '<button class="btn btn-danger" onclick="rejectRegistration(\'' + encodeURIComponent(item.id) + '\')">Tolak</button>'
+                                : ''
+                        ) +
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
             )
+            .join("") +
 
-            : '<div class="empty">Tidak ada pendaftaran pending.</div>';
+        '</tbody>' +
+
+        '</table>';
 
 }
 
@@ -3182,11 +3223,204 @@ async function approveRegistration(
         );
 
 
+    const item =
+        registrationItems.find(
+            function(row){
+                return String(row.id) === String(id);
+            }
+        );
+
+
+    if(
+        !item
+    ){
+
+        alert(
+            "Pendaftaran tidak ditemukan di halaman."
+        );
+
+        return;
+
+    }
+
+
+    const available =
+        registrationAvailableRooms
+            .filter(
+                function(room){
+
+                    return (
+                        String(
+                            room.status ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase() ===
+                        "KOSONG"
+                        &&
+                        Number(
+                            room.price ||
+                            0
+                        ) > 0
+                    );
+
+                }
+            );
+
+
+    const requestedRoom =
+        String(
+            item.requestedRoom ||
+            item.room ||
+            ""
+        );
+
+
+    let options =
+        '<option value="">Pilih kamar final</option>';
+
+
+    available.forEach(
+        function(room){
+
+            const selected =
+                String(
+                    room.number
+                ) ===
+                requestedRoom
+                    ? ' selected'
+                    : '';
+
+
+            options +=
+                '<option value="' +
+                escapeHtml(
+                    room.number
+                ) +
+                '"' +
+                selected +
+                '>' +
+                escapeHtml(
+                    room.number
+                ) +
+                ' — ' +
+                money(
+                    room.price
+                ) +
+                ' / bulan</option>';
+
+        }
+    );
+
+
+    const body =
+
+        '<div class="detail-box">' +
+
+        '<strong>Calon Tenant</strong>' +
+        escapeHtml(
+            item.name ||
+            "—"
+        ) +
+
+        '<br><span class="muted-text">WhatsApp: ' +
+        escapeHtml(
+            item.phone ||
+            "—"
+        ) +
+        '</span>' +
+
+        '</div>' +
+
+        '<div class="detail-box">' +
+
+        '<strong>Kamar yang Diminati</strong>' +
+        escapeHtml(
+            requestedRoom ||
+            "—"
+        ) +
+
+        '<br><span class="muted-text">Kamar final dapat Anda ubah di bawah.</span>' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="finalRoomSelect">Kamar Final</label>' +
+
+        '<select id="finalRoomSelect">' +
+        options +
+        '</select>' +
+
+        '</div>' +
+
+        '<div class="note">' +
+
+        '<strong>Perhatikan:</strong> setelah disetujui, kamar akan dikunci sebagai <strong>DIPESAN</strong>. Tenant belum menjadi aktif dan belum mendapat Tenant ID atau password sampai proses aktivasi akun selesai.' +
+
+        '</div>' +
+
+        '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap">' +
+
+        '<button class="btn btn-light" onclick="closeModal()">Batal</button>' +
+
+        '<button class="btn btn-success" onclick="confirmApproval(\'' +
+        encodeURIComponent(
+            id
+        ) +
+        '\')">Setujui & Tetapkan</button>' +
+
+        '</div>';
+
+
+    openModal(
+        "Setujui Pendaftaran",
+        body
+    );
+
+}
+
+
+async function confirmApproval(
+    encoded
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+
+    const select =
+        document.getElementById(
+            "finalRoomSelect"
+        );
+
+
+    const finalRoom =
+        select
+            ? select.value.trim()
+            : "";
+
+
+    if(
+        !finalRoom
+    ){
+
+        alert(
+            "Silakan pilih kamar final terlebih dahulu."
+        );
+
+        return;
+
+    }
+
+
     if(
         !confirm(
-            "Setujui pendaftaran " +
-            id +
-            "?"
+            "Tetapkan kamar " +
+            finalRoom +
+            " sebagai kamar final?"
         )
     ){
 
@@ -3203,41 +3437,33 @@ async function approveRegistration(
                 {
 
                     registrationId:
-                        id
+                        id,
+
+                    finalRoom:
+                        finalRoom
 
                 }
             );
 
 
+        closeModal();
+
+
         alert(
-
-            "Pendaftaran berhasil disetujui.\n\n" +
-
-            "Tenant ID: " +
-            (
-                result.tenantId ||
-                "—"
-            ) +
-
-            "\nKontrak ID: " +
-            (
-                result.kontrakId ||
-                "—"
-            ) +
-
-            "\nKamar: " +
-            (
-                result.room ||
-                "—"
-            )
-
+            "Pendaftaran disetujui.\n\n" +
+            "Nama: " +
+            (result.nama || "—") +
+            "\nKamar final: " +
+            (result.finalRoom || "—") +
+            "\nHarga: " +
+            money(result.price || 0) +
+            " / bulan\n\nStatus: MENUNGGU AKTIVASI AKUN"
         );
 
 
         await loadRegistrations();
 
         await loadDashboard();
-
 
     }catch(error){
 
@@ -5119,181 +5345,6 @@ async function saveMaintenance(
         alert(
             error.message
         );
-
-    }
-
-}
-
-
-/* ============================================================
-   CHECK IN / OUT
-   ============================================================ */
-
-async function loadCheckInOut(){
-
-    const box =
-        document.getElementById(
-            "checkinoutBox"
-        );
-
-    box.innerHTML =
-        '<div class="loading">Memuat check-in / check-out...</div>';
-
-    const data =
-        await api(
-            "masterCheckInOut"
-        );
-
-    checkInOutItems =
-        Array.isArray(
-            data &&
-            data.items
-        )
-            ? data.items
-            : [];
-
-    window.checkInOutItems =
-        checkInOutItems;
-
-    renderCheckInOut();
-
-}
-
-
-function renderCheckInOut(){
-
-    const box =
-        document.getElementById(
-            "checkinoutBox"
-        );
-
-    if (!checkInOutItems.length) {
-
-        box.innerHTML =
-            '<div class="empty">Belum ada riwayat check-in / check-out.</div>';
-
-        return;
-
-    }
-
-    box.innerHTML =
-        '<table class="data-table">' +
-        '<thead><tr>' +
-        '<th>ID</th>' +
-        '<th>Proses</th>' +
-        '<th>Tenant</th>' +
-        '<th>Kamar</th>' +
-        '<th>Tanggal</th>' +
-        '<th>Kondisi</th>' +
-        '<th>Aksi</th>' +
-        '</tr></thead>' +
-        '<tbody>' +
-        checkInOutItems.map(function(item){
-
-            const process =
-                String(
-                    item.process || ''
-                ).toUpperCase();
-
-            const badge =
-                process === 'CHECK-OUT'
-                    ? 'badge-info'
-                    : 'badge-ok';
-
-            const photoButtons = [];
-
-            if(item.conditionPhotoUrl){
-
-                const conditionUrl =
-                    encodeURIComponent(item.conditionPhotoUrl);
-
-                photoButtons.push(
-                    `<button class="btn btn-secondary" onclick="openCioMedia('${conditionUrl}')">Foto Kondisi</button>`
-                );
-
-            }
-
-            if(item.meterPhotoUrl){
-
-                const meterUrl =
-                    encodeURIComponent(item.meterPhotoUrl);
-
-                photoButtons.push(
-                    `<button class="btn btn-secondary" onclick="openCioMedia('${meterUrl}')">Foto Meter</button>`
-                );
-
-            }
-
-            return (
-                '<tr>' +
-                '<td><strong>' +
-                escapeHtml(item.id || '—') +
-                '</strong></td>' +
-                '<td><span class="badge ' +
-                badge +
-                '">' +
-                escapeHtml(process || '—') +
-                '</span></td>' +
-                '<td>' +
-                escapeHtml(item.name || '—') +
-                '<br><span class="small">' +
-                escapeHtml(item.phone || '') +
-                '</span></td>' +
-                '<td>' +
-                escapeHtml(item.room || '—') +
-                '</td>' +
-                '<td>' +
-                escapeHtml(item.date || '—') +
-                '</td>' +
-                '<td>' +
-                escapeHtml(item.condition || '—') +
-                '</td>' +
-                '<td><div class="actions">' +
-                photoButtons.join('') +
-                '</div></td>' +
-                '</tr>'
-            );
-
-        }).join('') +
-        '</tbody></table>';
-
-}
-
-
-async function openCioMedia(
-    encodedUrl
-){
-
-    const url =
-        decodeURIComponent(encodedUrl);
-
-    openModal(
-        "Media Check-in / Check-out",
-        '<div class="loading">Memuat foto...</div>'
-    );
-
-    try{
-
-        const result =
-            await api(
-                "masterMediaOpen",
-                {
-                    url: url,
-                    fileId: ""
-                }
-            );
-
-        renderOpenedMedia(
-            result,
-            "Media Check-in / Check-out"
-        );
-
-    }catch(error){
-
-        modalBody.innerHTML =
-            '<div class="empty" style="color:#b42318;">' +
-            escapeHtml(error.message) +
-            '</div>';
 
     }
 
