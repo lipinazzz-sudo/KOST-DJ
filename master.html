@@ -1088,6 +1088,12 @@ button{
                 </button>
 
                 <button
+                    data-panel="checkinout"
+                >
+                    Check-in / Check-out
+                </button>
+
+                <button
                     data-panel="media"
                 >
                     Pusat Media
@@ -1403,6 +1409,31 @@ button{
 
 
                 <!-- ==========================================
+                     CHECK IN / OUT
+                     ========================================== -->
+
+                <section
+                    id="panel-checkinout"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Check-in / Check-out
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Riwayat serah-terima kamar seluruh tenant.
+                    </p>
+
+                    <div
+                        id="checkinoutBox"
+                        class="card table-wrap"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
                      MEDIA
                      ========================================== -->
 
@@ -1658,7 +1689,8 @@ button{
    ============================================================ */
 
 const API_URL =
-    "https://dj-family-kost.mahjongjong.workers.dev";
+    "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
 
 /* ============================================================
    GLOBAL STATE
@@ -1678,6 +1710,8 @@ var tenantItems = Array.isArray(window.tenantItems) ? window.tenantItems : [];
 
 var registrationItems = Array.isArray(window.registrationItems) ? window.registrationItems : [];
 
+var checkInOutItems = Array.isArray(window.checkInOutItems) ? window.checkInOutItems : [];
+
 var announcementItems = Array.isArray(window.announcementItems) ? window.announcementItems : [];
 
 var paymentFilter = window.paymentFilter || "ALL";
@@ -1692,6 +1726,7 @@ window.maintenanceItems = maintenanceItems;
 window.mediaItems = mediaItems;
 window.tenantItems = tenantItems;
 window.registrationItems = registrationItems;
+window.checkInOutItems = checkInOutItems;
 window.announcementItems = announcementItems;
 window.paymentFilter = paymentFilter;
 window.mediaFilter = mediaFilter;
@@ -2439,6 +2474,13 @@ async function loadPanel(
             );
 
         }
+
+    }else if(
+        panelName ===
+        "checkinout"
+    ){
+
+        await loadCheckInOut();
 
     }else if(
         panelName ===
@@ -5077,6 +5119,181 @@ async function saveMaintenance(
         alert(
             error.message
         );
+
+    }
+
+}
+
+
+/* ============================================================
+   CHECK IN / OUT
+   ============================================================ */
+
+async function loadCheckInOut(){
+
+    const box =
+        document.getElementById(
+            "checkinoutBox"
+        );
+
+    box.innerHTML =
+        '<div class="loading">Memuat check-in / check-out...</div>';
+
+    const data =
+        await api(
+            "masterCheckInOut"
+        );
+
+    checkInOutItems =
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items
+            : [];
+
+    window.checkInOutItems =
+        checkInOutItems;
+
+    renderCheckInOut();
+
+}
+
+
+function renderCheckInOut(){
+
+    const box =
+        document.getElementById(
+            "checkinoutBox"
+        );
+
+    if (!checkInOutItems.length) {
+
+        box.innerHTML =
+            '<div class="empty">Belum ada riwayat check-in / check-out.</div>';
+
+        return;
+
+    }
+
+    box.innerHTML =
+        '<table class="data-table">' +
+        '<thead><tr>' +
+        '<th>ID</th>' +
+        '<th>Proses</th>' +
+        '<th>Tenant</th>' +
+        '<th>Kamar</th>' +
+        '<th>Tanggal</th>' +
+        '<th>Kondisi</th>' +
+        '<th>Aksi</th>' +
+        '</tr></thead>' +
+        '<tbody>' +
+        checkInOutItems.map(function(item){
+
+            const process =
+                String(
+                    item.process || ''
+                ).toUpperCase();
+
+            const badge =
+                process === 'CHECK-OUT'
+                    ? 'badge-info'
+                    : 'badge-ok';
+
+            const photoButtons = [];
+
+            if(item.conditionPhotoUrl){
+
+                const conditionUrl =
+                    encodeURIComponent(item.conditionPhotoUrl);
+
+                photoButtons.push(
+                    `<button class="btn btn-secondary" onclick="openCioMedia('${conditionUrl}')">Foto Kondisi</button>`
+                );
+
+            }
+
+            if(item.meterPhotoUrl){
+
+                const meterUrl =
+                    encodeURIComponent(item.meterPhotoUrl);
+
+                photoButtons.push(
+                    `<button class="btn btn-secondary" onclick="openCioMedia('${meterUrl}')">Foto Meter</button>`
+                );
+
+            }
+
+            return (
+                '<tr>' +
+                '<td><strong>' +
+                escapeHtml(item.id || '—') +
+                '</strong></td>' +
+                '<td><span class="badge ' +
+                badge +
+                '">' +
+                escapeHtml(process || '—') +
+                '</span></td>' +
+                '<td>' +
+                escapeHtml(item.name || '—') +
+                '<br><span class="small">' +
+                escapeHtml(item.phone || '') +
+                '</span></td>' +
+                '<td>' +
+                escapeHtml(item.room || '—') +
+                '</td>' +
+                '<td>' +
+                escapeHtml(item.date || '—') +
+                '</td>' +
+                '<td>' +
+                escapeHtml(item.condition || '—') +
+                '</td>' +
+                '<td><div class="actions">' +
+                photoButtons.join('') +
+                '</div></td>' +
+                '</tr>'
+            );
+
+        }).join('') +
+        '</tbody></table>';
+
+}
+
+
+async function openCioMedia(
+    encodedUrl
+){
+
+    const url =
+        decodeURIComponent(encodedUrl);
+
+    openModal(
+        "Media Check-in / Check-out",
+        '<div class="loading">Memuat foto...</div>'
+    );
+
+    try{
+
+        const result =
+            await api(
+                "masterMediaOpen",
+                {
+                    url: url,
+                    fileId: ""
+                }
+            );
+
+        renderOpenedMedia(
+            result,
+            "Media Check-in / Check-out"
+        );
+
+    }catch(error){
+
+        modalBody.innerHTML =
+            '<div class="empty" style="color:#b42318;">' +
+            escapeHtml(error.message) +
+            '</div>';
 
     }
 
