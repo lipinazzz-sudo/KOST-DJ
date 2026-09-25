@@ -14,7 +14,7 @@
 
 <link
     rel="stylesheet"
-    href="app.css?v=20260925-payment-01"
+    href="app.css?v=20260925-payment-photo-01"
 >
 
 <style>
@@ -132,12 +132,54 @@
     background:#f6f8fb;
 }
 
+.photo-box{
+    border:1.5px dashed #c8ced9;
+    border-radius:16px;
+    padding:20px;
+    background:#fafbfc;
+}
+
+.photo-input{
+    display:block;
+    width:100%;
+}
+
+.photo-help{
+    margin-top:9px;
+    font-size:13px;
+    line-height:1.6;
+    color:#667085;
+}
+
+.preview-wrap{
+    display:none;
+    margin-top:16px;
+}
+
+.preview-wrap img{
+    display:block;
+    width:100%;
+    max-width:460px;
+    max-height:360px;
+    object-fit:contain;
+    border-radius:14px;
+    border:1px solid #e5e7eb;
+    background:#fff;
+}
+
+.preview-name{
+    margin-top:8px;
+    font-size:13px;
+    color:#667085;
+}
+
 .payment-message{
     display:none;
     margin-top:18px;
     padding:14px;
     border-radius:12px;
     font-size:14px;
+    line-height:1.6;
 }
 
 .payment-message.success{
@@ -160,6 +202,12 @@
     color:#667085;
     font-size:13px;
     line-height:1.6;
+}
+
+.loading-box{
+    padding:55px 0;
+    text-align:center;
+    color:#667085;
 }
 
 @media(max-width:900px){
@@ -247,11 +295,7 @@
 
 <div
     id="loading"
-    style="
-        text-align:center;
-        padding:50px 0;
-        color:#667085;
-    "
+    class="loading-box"
 >
     Memuat data pembayaran...
 </div>
@@ -275,9 +319,11 @@
     TENANT
 </div>
 
+
 <h1>
     Pembayaran
 </h1>
+
 
 <p
     class="lead"
@@ -290,7 +336,7 @@
 
 
 <!-- =========================================================
-     SUMMARY
+     TENANT SUMMARY
      ========================================================= -->
 
 <div class="payment-summary">
@@ -299,7 +345,7 @@
 <div class="summary-card">
 
 <span>
-    Tenant
+    Nama Tenant
 </span>
 
 <strong
@@ -454,7 +500,7 @@
 
 
 <!-- =========================================================
-     PAYMENT FORM
+     FORM
      ========================================================= -->
 
 <div class="payment-form-card">
@@ -463,14 +509,14 @@
     Kirim Pembayaran
 </h3>
 
+
 <p
     style="
         color:#667085;
         line-height:1.6;
     "
 >
-    Data tenant dan kamar sudah diambil otomatis
-    dari akun Anda.
+    Data tenant dan kamar sudah diambil otomatis dari akun Anda.
 </p>
 
 
@@ -484,7 +530,7 @@
 
 <div class="field">
 
-<label>
+<label for="period">
     Periode Pembayaran
 </label>
 
@@ -499,7 +545,7 @@
 
 <div class="field">
 
-<label>
+<label for="paymentDate">
     Tanggal Pembayaran
 </label>
 
@@ -514,7 +560,7 @@
 
 <div class="field">
 
-<label>
+<label for="amount">
     Nominal Dibayar
 </label>
 
@@ -530,7 +576,7 @@
 
 <div class="field">
 
-<label>
+<label for="method">
     Metode Pembayaran
 </label>
 
@@ -560,24 +606,70 @@
 </div>
 
 
+<!-- =======================================================
+     FOTO
+     ======================================================= -->
+
 <div class="field full">
 
 <label>
-    Link Bukti Transfer
+    Foto Bukti Pembayaran
 </label>
 
+
+<div class="photo-box">
+
 <input
-    id="proofUrl"
-    type="url"
-    placeholder="https://drive.google.com/..."
+    id="proofFile"
+    class="photo-input"
+    type="file"
+    accept="image/jpeg,image/png,image/webp"
+    capture="environment"
+    required
 >
+
+
+<div class="photo-help">
+
+Ambil foto bukti pembayaran atau pilih foto
+dari perangkat Anda. Foto akan diperkecil
+secara otomatis sebelum dikirim.
+
+<br>
+
+<strong>
+Tidak perlu upload ke Google Drive.
+</strong>
+
+</div>
+
+
+<div
+    id="previewWrap"
+    class="preview-wrap"
+>
+
+<img
+    id="proofPreview"
+    alt="Preview bukti pembayaran"
+>
+
+
+<div
+    id="previewName"
+    class="preview-name"
+></div>
+
+</div>
+
+</div>
 
 </div>
 
 
 <div class="field full">
 
-<label>
+<label for="note">
     Keterangan
 </label>
 
@@ -598,11 +690,10 @@
     Catatan:
 </strong>
 
-Denda dihitung otomatis oleh server berdasarkan
-tanggal pembayaran dan tanggal jatuh tempo.
-Setelah dikirim, pembayaran akan berstatus
-<strong>MENUNGGU VERIFIKASI</strong> sampai diperiksa
-oleh pengelola.
+Denda dihitung otomatis oleh server.
+Setelah pembayaran dikirim, status menjadi
+<strong>MENUNGGU VERIFIKASI</strong> sampai pengelola
+melakukan pemeriksaan.
 
 </div>
 
@@ -711,10 +802,43 @@ const submitButton =
     );
 
 
+const proofFile =
+    document.getElementById(
+        "proofFile"
+    );
+
+
+const previewWrap =
+    document.getElementById(
+        "previewWrap"
+    );
+
+
+const proofPreview =
+    document.getElementById(
+        "proofPreview"
+    );
+
+
+const previewName =
+    document.getElementById(
+        "previewName"
+    );
+
+
 let currentBilling =
     null;
 
 
+let selectedProofData =
+    null;
+
+
+/**
+ * ============================================================
+ * SESSION
+ * ============================================================
+ */
 function getSession(){
 
     const raw =
@@ -749,6 +873,11 @@ function getSession(){
 }
 
 
+/**
+ * ============================================================
+ * MONEY
+ * ============================================================
+ */
 function money(
     value
 ){
@@ -765,45 +894,45 @@ function money(
 }
 
 
+/**
+ * ============================================================
+ * CURRENT DATE
+ * ============================================================
+ */
 function todayISO(){
 
     const d =
         new Date();
 
 
-    const year =
-        d.getFullYear();
+    return (
 
-
-    const month =
+        d.getFullYear() +
+        "-" +
         String(
             d.getMonth() + 1
         ).padStart(
             2,
             "0"
-        );
-
-
-    const day =
+        ) +
+        "-" +
         String(
             d.getDate()
         ).padStart(
             2,
             "0"
-        );
+        )
 
-
-    return (
-        year +
-        "-" +
-        month +
-        "-" +
-        day
     );
 
 }
 
 
+/**
+ * ============================================================
+ * CURRENT MONTH
+ * ============================================================
+ */
 function currentMonthISO(){
 
     const d =
@@ -826,149 +955,345 @@ function currentMonthISO(){
 }
 
 
-function calculateEstimatedFine(){
+/**
+ * ============================================================
+ * COMPRESS PHOTO
+ * ============================================================
+ *
+ * Foto dikurangi menjadi maksimal 1600px.
+ *
+ * Output:
+ * JPEG quality 0.82
+ *
+ * Agar upload lebih ringan dari HP.
+ * ============================================================
+ */
+async function compressImage(
+    file
+){
 
-    if(!currentBilling){
+    const imageUrl =
+        URL.createObjectURL(
+            file
+        );
 
-        return 0;
+
+    try{
+
+        const image =
+            await new Promise(
+                function(
+                    resolve,
+                    reject
+                ){
+
+                    const img =
+                        new Image();
+
+
+                    img.onload =
+                        function(){
+
+                            resolve(
+                                img
+                            );
+
+                        };
+
+
+                    img.onerror =
+                        function(){
+
+                            reject(
+                                new Error(
+                                    "Foto tidak dapat dibaca."
+                                )
+                            );
+
+                        };
+
+
+                    img.src =
+                        imageUrl;
+
+                }
+            );
+
+
+        const maxSize =
+            1600;
+
+
+        let width =
+            image.naturalWidth;
+
+
+        let height =
+            image.naturalHeight;
+
+
+        if(
+            width >
+            maxSize ||
+            height >
+            maxSize
+        ){
+
+            const scale =
+                Math.min(
+                    maxSize / width,
+                    maxSize / height
+                );
+
+
+            width =
+                Math.round(
+                    width * scale
+                );
+
+
+            height =
+                Math.round(
+                    height * scale
+                );
+
+        }
+
+
+        const canvas =
+            document.createElement(
+                "canvas"
+            );
+
+
+        canvas.width =
+            width;
+
+
+        canvas.height =
+            height;
+
+
+        const ctx =
+            canvas.getContext(
+                "2d"
+            );
+
+
+        ctx.drawImage(
+            image,
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        const dataUrl =
+            canvas.toDataURL(
+                "image/jpeg",
+                0.82
+            );
+
+
+        /*
+         * Pastikan base64 tidak berlebihan.
+         */
+
+        const approxBytes =
+            Math.floor(
+                (
+                    dataUrl.length -
+                    dataUrl.indexOf(
+                        ","
+                    ) -
+                    1
+                ) *
+                0.75
+            );
+
+
+        if(
+            approxBytes >
+            2200000
+        ){
+
+            return canvas.toDataURL(
+                "image/jpeg",
+                0.68
+            );
+
+        }
+
+
+        return dataUrl;
+
+
+    }finally{
+
+        URL.revokeObjectURL(
+            imageUrl
+        );
 
     }
 
+}
 
-    const value =
-        document
-            .getElementById(
-                "paymentDate"
+
+/**
+ * ============================================================
+ * FOTO CHANGE
+ * ============================================================
+ */
+proofFile.addEventListener(
+    "change",
+    async function(){
+
+        const file =
+            this.files &&
+            this.files[0];
+
+
+        selectedProofData =
+            null;
+
+
+        previewWrap.style.display =
+            "none";
+
+
+        proofPreview.removeAttribute(
+            "src"
+        );
+
+
+        previewName.textContent =
+            "";
+
+
+        if(!file){
+
+            return;
+
+        }
+
+
+        if(
+            !file.type.startsWith(
+                "image/"
             )
-            .value;
+        ){
+
+            this.value =
+                "";
 
 
-    if(!value){
-
-        return 0;
-
-    }
-
-
-    const paymentDate =
-        new Date(
-            value +
-            "T00:00:00"
-        );
-
-
-    const dueText =
-        currentBilling.dueDate;
-
-
-    /*
-     * dueDate dari API berbentuk dd/MM/yyyy.
-     */
-
-    const parts =
-        String(
-            dueText || ''
-        ).split('/');
-
-
-    if(
-        parts.length !== 3
-    ){
-
-        return 0;
-
-    }
-
-
-    const dueDate =
-        new Date(
-            Number(parts[2]),
-            Number(parts[1]) - 1,
-            Number(parts[0])
-        );
-
-
-    paymentDate.setHours(
-        0,0,0,0
-    );
-
-
-    dueDate.setHours(
-        0,0,0,0
-    );
-
-
-    const daysLate =
-        Math.floor(
-            (
-                paymentDate.getTime() -
-                dueDate.getTime()
-            ) /
-            86400000
-        );
-
-
-    if(daysLate <= 1){
-
-        return 0;
-
-    }
-
-
-    if(daysLate <= 4){
-
-        return 25000;
-
-    }
-
-
-    return 50000;
-
-}
-
-
-function refreshEstimatedTotal(){
-
-    if(!currentBilling){
-
-        return;
-
-    }
-
-
-    const fine =
-        calculateEstimatedFine();
-
-
-    const rent =
-        Number(
-            currentBilling.amount || 0
-        );
-
-
-    document
-        .getElementById(
-            "billingFine"
-        )
-        .textContent =
-            money(
-                fine
+            alert(
+                "Bukti pembayaran harus berupa foto."
             );
 
 
-    document
-        .getElementById(
-            "billingTotal"
-        )
-        .textContent =
-            money(
-                rent + fine
+            return;
+
+        }
+
+
+        try{
+
+            submitButton.disabled =
+                true;
+
+
+            submitButton.textContent =
+                "Memproses foto...";
+
+
+            const compressed =
+                await compressImage(
+                    file
+                );
+
+
+            const parts =
+                compressed.split(
+                    "base64,"
+                );
+
+
+            if(
+                parts.length !==
+                2
+            ){
+
+                throw new Error(
+                    "Foto gagal diproses."
+                );
+
+            }
+
+
+            selectedProofData = {
+
+                base64:
+                    parts[1],
+
+                mimeType:
+                    "image/jpeg",
+
+                originalName:
+                    file.name
+
+            };
+
+
+            proofPreview.src =
+                compressed;
+
+
+            previewName.textContent =
+                file.name +
+                " · Foto siap dikirim";
+
+
+            previewWrap.style.display =
+                "block";
+
+
+        }catch(error){
+
+            selectedProofData =
+                null;
+
+
+            this.value =
+                "";
+
+
+            alert(
+                error.message ||
+                "Foto gagal diproses."
             );
 
+        }finally{
 
-}
+            submitButton.disabled =
+                false;
 
 
+            submitButton.textContent =
+                "Kirim Pembayaran";
+
+        }
+
+    }
+);
+
+
+/**
+ * ============================================================
+ * LOAD BILLING
+ * ============================================================
+ */
 async function loadPaymentPage(){
 
     const session =
@@ -992,7 +1317,8 @@ async function loadPaymentPage(){
                 TENANT_API_URL,
                 {
 
-                    method:"POST",
+                    method:
+                        "POST",
 
                     headers:{
                         "Content-Type":
@@ -1027,6 +1353,28 @@ async function loadPaymentPage(){
             !result.data
         ){
 
+            if(
+                result &&
+                result.error &&
+                /session/i.test(
+                    result.error
+                )
+            ){
+
+                sessionStorage.removeItem(
+                    "djTenantSession"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+
+                return;
+
+            }
+
+
             throw new Error(
                 result &&
                 result.error
@@ -1050,7 +1398,8 @@ async function loadPaymentPage(){
                 "tenantName"
             )
             .textContent =
-                data.tenant.name;
+                data.tenant.name ||
+                "Tenant";
 
 
         document
@@ -1058,7 +1407,8 @@ async function loadPaymentPage(){
                 "tenantId"
             )
             .textContent =
-                data.tenant.tenantId;
+                data.tenant.tenantId ||
+                "—";
 
 
         document
@@ -1066,7 +1416,8 @@ async function loadPaymentPage(){
                 "tenantRoom"
             )
             .textContent =
-                data.tenant.room;
+                data.tenant.room ||
+                "—";
 
 
         document
@@ -1074,7 +1425,9 @@ async function loadPaymentPage(){
                 "tenantIntro"
             )
             .textContent =
-                "Pembayaran untuk " +
+                "Pembayaran " +
+                data.billing.period +
+                " untuk " +
                 data.tenant.name +
                 " · Kamar " +
                 data.tenant.room;
@@ -1159,16 +1512,8 @@ async function loadPaymentPage(){
 
 
         /*
-         * Estimasi denda berdasarkan
-         * tanggal pembayaran sekarang.
-         */
-
-        refreshEstimatedTotal();
-
-
-        /*
-         * Kalau sudah ada pembayaran menunggu
-         * verifikasi, cegah submit duplikat.
+         * Jika sudah mengirim pembayaran
+         * untuk periode tersebut, cegah duplikat.
          */
 
         if(
@@ -1186,11 +1531,14 @@ async function loadPaymentPage(){
             submitButton.disabled =
                 true;
 
+
             submitButton.textContent =
                 "Menunggu Verifikasi";
 
+
             paymentMessage.className =
                 "payment-message success";
+
 
             paymentMessage.textContent =
                 "Pembayaran periode ini sudah dikirim dan sedang menunggu verifikasi pengelola.";
@@ -1227,53 +1575,18 @@ async function loadPaymentPage(){
 
         errorBox.textContent =
             error.message ||
-            "Pembayaran gagal dimuat.";
+            "Data pembayaran tidak dapat dimuat.";
 
     }
 
 }
 
 
-document
-    .getElementById(
-        "paymentDate"
-    )
-    .addEventListener(
-        "change",
-        refreshEstimatedTotal
-    );
-
-
-document
-    .getElementById(
-        "period"
-    )
-    .addEventListener(
-        "change",
-        function(){
-
-            /*
-             * Untuk periode berbeda,
-             * server tetap menjadi sumber
-             * perhitungan final.
-             */
-
-            if(currentBilling){
-
-                document
-                    .getElementById(
-                        "amount"
-                    )
-                    .value =
-                        currentBilling.amount ||
-                        0;
-
-            }
-
-        }
-    );
-
-
+/**
+ * ============================================================
+ * SUBMIT
+ * ============================================================
+ */
 paymentForm.addEventListener(
     "submit",
     async function(event){
@@ -1329,15 +1642,6 @@ paymentForm.addEventListener(
                 .value;
 
 
-        const proofUrl =
-            document
-                .getElementById(
-                    "proofUrl"
-                )
-                .value
-                .trim();
-
-
         const note =
             document
                 .getElementById(
@@ -1345,6 +1649,99 @@ paymentForm.addEventListener(
                 )
                 .value
                 .trim();
+
+
+        if(
+            !selectedProofData
+        ){
+
+            paymentMessage.className =
+                "payment-message error";
+
+
+            paymentMessage.textContent =
+                "Silakan pilih dan tunggu sampai foto bukti siap diupload.";
+
+
+            return;
+
+        }
+
+
+        if(
+            !period
+        ){
+
+            paymentMessage.className =
+                "payment-message error";
+
+
+            paymentMessage.textContent =
+                "Periode pembayaran wajib diisi.";
+
+
+            return;
+
+        }
+
+
+        if(
+            !paymentDate
+        ){
+
+            paymentMessage.className =
+                "payment-message error";
+
+
+            paymentMessage.textContent =
+                "Tanggal pembayaran wajib diisi.";
+
+
+            return;
+
+        }
+
+
+        if(
+            amount <= 0
+        ){
+
+            paymentMessage.className =
+                "payment-message error";
+
+
+            paymentMessage.textContent =
+                "Nominal pembayaran tidak valid.";
+
+
+            return;
+
+        }
+
+
+        if(
+            !method
+        ){
+
+            paymentMessage.className =
+                "payment-message error";
+
+
+            paymentMessage.textContent =
+                "Pilih metode pembayaran.";
+
+
+            return;
+
+        }
+
+
+        submitButton.disabled =
+            true;
+
+
+        submitButton.textContent =
+            "Mengirim...";
 
 
         paymentMessage.className =
@@ -1355,68 +1752,6 @@ paymentForm.addEventListener(
             "";
 
 
-        if(!period){
-
-            paymentMessage.className =
-                "payment-message error";
-
-            paymentMessage.textContent =
-                "Periode pembayaran wajib diisi.";
-
-            return;
-
-        }
-
-
-        if(!paymentDate){
-
-            paymentMessage.className =
-                "payment-message error";
-
-            paymentMessage.textContent =
-                "Tanggal pembayaran wajib diisi.";
-
-            return;
-
-        }
-
-
-        if(
-            !amount ||
-            amount <= 0
-        ){
-
-            paymentMessage.className =
-                "payment-message error";
-
-            paymentMessage.textContent =
-                "Nominal pembayaran tidak valid.";
-
-            return;
-
-        }
-
-
-        if(!method){
-
-            paymentMessage.className =
-                "payment-message error";
-
-            paymentMessage.textContent =
-                "Pilih metode pembayaran.";
-
-            return;
-
-        }
-
-
-        submitButton.disabled =
-            true;
-
-        submitButton.textContent =
-            "Menyimpan...";
-
-
         try{
 
             const response =
@@ -1424,7 +1759,8 @@ paymentForm.addEventListener(
                     TENANT_API_URL,
                     {
 
-                        method:"POST",
+                        method:
+                            "POST",
 
                         headers:{
                             "Content-Type":
@@ -1455,8 +1791,14 @@ paymentForm.addEventListener(
                                 method:
                                     method,
 
-                                proofUrl:
-                                    proofUrl,
+                                proofBase64:
+                                    selectedProofData.base64,
+
+                                proofMimeType:
+                                    selectedProofData.mimeType,
+
+                                proofOriginalName:
+                                    selectedProofData.originalName,
 
                                 note:
                                     note
@@ -1501,7 +1843,23 @@ paymentForm.addEventListener(
 
 
             /*
-             * Refresh data billing.
+             * Reset file setelah berhasil.
+             */
+
+            proofFile.value =
+                "";
+
+
+            selectedProofData =
+                null;
+
+
+            previewWrap.style.display =
+                "none";
+
+
+            /*
+             * Ambil data terbaru.
              */
 
             setTimeout(
@@ -1539,7 +1897,8 @@ paymentForm.addEventListener(
 );
 
 
-/* ============================================================
+/**
+ * ============================================================
  * LOGOUT
  * ============================================================
  */
@@ -1566,7 +1925,8 @@ document
                         TENANT_API_URL,
                         {
 
-                            method:"POST",
+                            method:
+                                "POST",
 
                             headers:{
                                 "Content-Type":
@@ -1612,4 +1972,5 @@ loadPaymentPage();
 </script>
 
 </body>
+
 </html>
