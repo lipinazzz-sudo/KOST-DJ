@@ -82,11 +82,54 @@ textarea{min-height:120px;resize:vertical}
     <a class="back" href="index.html">← Kembali ke beranda</a>
     <div class="center"><div class="eyebrow">TENANT PORTAL</div><h1 style="font-size:48px">Login Tenant</h1><p class="lead">Tenant ID dibuat oleh pengelola. Password nantinya dibuat oleh tenant dan dapat di-reset oleh pengelola jika lupa.</p></div>
     <div class="card form-card" style="max-width:520px">
-      <form onsubmit="event.preventDefault(); alert('Login belum terhubung ke database. Halaman portal akan diaktifkan setelah API dan sistem akun selesai.');">
-        <div class="field"><label>Tenant ID</label><input autocomplete="username" required></div>
-        <div class="field" style="margin-top:16px"><label>Password</label><input type="password" autocomplete="current-password" required></div>
-        <button class="btn btn-primary" style="margin-top:18px;width:100%">Masuk</button>
-      </form>
+   <form id="loginForm">
+
+  <div class="field">
+
+    <label>Tenant ID</label>
+
+    <input
+      id="tenantId"
+      autocomplete="username"
+      required
+    >
+
+  </div>
+
+
+  <div
+    class="field"
+    style="margin-top:16px"
+  >
+
+    <label>Password</label>
+
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      required
+    >
+
+  </div>
+
+
+  <div
+    id="loginMessage"
+    class="note"
+    style="margin-top:16px;display:none"
+  ></div>
+
+
+  <button
+    id="loginButton"
+    class="btn btn-primary"
+    style="margin-top:18px;width:100%"
+  >
+    Masuk
+  </button>
+
+</form>
       <div class="note" style="margin-top:18px">Akun tenant akan menjadi pintu masuk untuk layanan privat seperti maintenance, pembayaran, pengaduan, dan check-in/out.</div>
     </div>
   </div>
