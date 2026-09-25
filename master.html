@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-master-build="2026-09-25-FINAL-01">
 
 <head>
 
@@ -10,7 +10,11 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Master — DJ Family Kost</title>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>Master — DJ Family Kost · FINAL-01</title>
 
 <style>
 
@@ -1661,25 +1665,37 @@ const API_URL =
    GLOBAL STATE
    ============================================================ */
 
-let masterSession = null;
+var masterSession = window.masterSession || null;
 
-let dashboardData = null;
+var dashboardData = window.dashboardData || null;
 
-let paymentItems = [];
+var paymentItems = Array.isArray(window.paymentItems) ? window.paymentItems : [];
 
-let maintenanceItems = [];
+var maintenanceItems = Array.isArray(window.maintenanceItems) ? window.maintenanceItems : [];
 
-let mediaItems = [];
+var mediaItems = Array.isArray(window.mediaItems) ? window.mediaItems : [];
 
-let tenantItems = [];
+var tenantItems = Array.isArray(window.tenantItems) ? window.tenantItems : [];
 
-let registrationItems = [];
+var registrationItems = Array.isArray(window.registrationItems) ? window.registrationItems : [];
 
-let announcementItems = [];
+var announcementItems = Array.isArray(window.announcementItems) ? window.announcementItems : [];
 
-let paymentFilter = "ALL";
+var paymentFilter = window.paymentFilter || "ALL";
 
-let mediaFilter = "ALL";
+var mediaFilter = window.mediaFilter || "ALL";
+
+/* Compatibility aliases for older cached inline handlers. */
+window.masterSession = masterSession;
+window.dashboardData = dashboardData;
+window.paymentItems = paymentItems;
+window.maintenanceItems = maintenanceItems;
+window.mediaItems = mediaItems;
+window.tenantItems = tenantItems;
+window.registrationItems = registrationItems;
+window.announcementItems = announcementItems;
+window.paymentFilter = paymentFilter;
+window.mediaFilter = mediaFilter;
 
 
 /* ============================================================
@@ -1918,6 +1934,9 @@ function saveMasterSession(
 
     masterSession =
         session;
+
+    window.masterSession =
+        masterSession;
 
 
     sessionStorage.setItem(
@@ -2460,6 +2479,10 @@ async function loadDashboard(){
         );
 
 
+    window.dashboardData =
+        dashboardData;
+
+
     mediaItems =
         dashboardData &&
         dashboardData.media &&
@@ -2470,6 +2493,10 @@ async function loadDashboard(){
             ? dashboardData.media.data
 
             : [];
+
+
+    window.mediaItems =
+        mediaItems;
 
 
     renderSummary();
@@ -2973,6 +3000,10 @@ async function loadRegistrations(){
             : [];
 
 
+    window.registrationItems =
+        registrationItems;
+
+
     registrationItems =
         registrationItems.filter(
             function(item){
@@ -3269,6 +3300,10 @@ async function loadTenants(){
         )
             ? data.items
             : [];
+
+
+    window.tenantItems =
+        tenantItems;
 
 
     document
@@ -3686,6 +3721,10 @@ async function loadPayments(){
             : [];
 
 
+    window.paymentItems =
+        paymentItems;
+
+
     renderPaymentFilters();
 
     renderPayments();
@@ -3772,6 +3811,10 @@ function setPaymentFilter(
         decodeURIComponent(
             encoded
         );
+
+
+    window.paymentFilter =
+        paymentFilter;
 
 
     renderPaymentFilters();
@@ -4276,6 +4319,10 @@ async function loadMaintenance(){
               )
 
             : [];
+
+
+    window.maintenanceItems =
+        maintenanceItems;
 
 
     maintenanceItems.sort(
@@ -5058,6 +5105,10 @@ async function loadMedia(){
             : [];
 
 
+    window.mediaItems =
+        mediaItems;
+
+
     renderMediaFilters();
 
     renderMediaGrid();
@@ -5154,6 +5205,10 @@ function setMediaFilter(
         decodeURIComponent(
             encoded
         );
+
+
+    window.mediaFilter =
+        mediaFilter;
 
 
     renderMediaFilters();
@@ -5882,6 +5937,10 @@ async function loadAnnouncements(){
             : [];
 
 
+    window.announcementItems =
+        announcementItems;
+
+
     document
         .getElementById(
             "announcementsBox"
@@ -6491,6 +6550,22 @@ function compressImage(
     );
 
 }
+
+
+/* ============================================================
+   LEGACY COMPATIBILITY GUARD
+   ============================================================
+   Some browsers may retain an older page instance or inline
+   handler briefly. Keep all state variables available on window
+   so an old handler cannot fail with "... is not defined".
+   ============================================================ */
+
+window.maintenanceItems = maintenanceItems;
+window.paymentItems = paymentItems;
+window.mediaItems = mediaItems;
+window.tenantItems = tenantItems;
+window.registrationItems = registrationItems;
+window.announcementItems = announcementItems;
 
 
 /* ============================================================
