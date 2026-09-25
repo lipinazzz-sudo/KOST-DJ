@@ -1,5 +1,5 @@
 const DJ_KOST_API =
-  'https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec';
+  'https://dj-family-kost.mahjongjong.workers.dev';
 
 const DJ_SESSION_KEY =
   'djTenantSession';
