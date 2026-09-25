@@ -142,6 +142,100 @@ textarea{min-height:120px;resize:vertical}
     <div><small>© 2026 DJ Family Kost</small></div>
   </div>
 </footer>
+<script src="dj-kost-api.js"></script>
 
+<script>
+
+const loginForm =
+  document.getElementById(
+    'loginForm'
+  );
+
+const loginButton =
+  document.getElementById(
+    'loginButton'
+  );
+
+const loginMessage =
+  document.getElementById(
+    'loginMessage'
+  );
+
+
+loginForm.addEventListener(
+  'submit',
+  async function(event) {
+
+    event.preventDefault();
+
+
+    loginButton.disabled =
+      true;
+
+    loginMessage.style.display =
+      'block';
+
+    loginMessage.textContent =
+      'Memeriksa akun...';
+
+
+    try {
+
+      const result =
+        await djApiPost(
+          'login',
+          {
+
+            tenantId:
+              document.getElementById(
+                'tenantId'
+              ).value.trim(),
+
+            password:
+              document.getElementById(
+                'password'
+              ).value
+
+          }
+        );
+
+
+      djSetSession(
+        result
+      );
+
+
+      const params =
+        new URLSearchParams(
+          location.search
+        );
+
+
+      const redirect =
+        params.get(
+          'redirect'
+        ) ||
+        'portal.html';
+
+
+      location.href =
+        redirect;
+
+    } catch (error) {
+
+      loginMessage.textContent =
+        error.message;
+
+    } finally {
+
+      loginButton.disabled =
+        false;
+
+    }
+
+  }
+);
+
+</script>
 </body>
 </html>
