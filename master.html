@@ -1,0 +1,3987 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Master Dashboard — DJ Family Kost</title>
+
+<link
+    rel="stylesheet"
+    href="app.css?v=20260925-master-01"
+>
+
+<style>
+
+body{
+    background:#f5f7fb;
+}
+
+.master-shell{
+    min-height:100vh;
+}
+
+.master-layout{
+    display:grid;
+    grid-template-columns:250px 1fr;
+    min-height:100vh;
+}
+
+.master-sidebar{
+    background:#111b33;
+    color:#fff;
+    padding:24px 16px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    box-sizing:border-box;
+}
+
+.master-brand{
+    font-weight:900;
+    letter-spacing:.05em;
+    font-size:15px;
+    padding:5px 10px 25px;
+}
+
+.master-user{
+    padding:14px 10px;
+    border-top:1px solid rgba(255,255,255,.10);
+    border-bottom:1px solid rgba(255,255,255,.10);
+    margin-bottom:16px;
+}
+
+.master-user small{
+    display:block;
+    color:#9eabc3;
+    margin-bottom:5px;
+}
+
+.master-nav{
+    display:grid;
+    gap:6px;
+}
+
+.master-nav button{
+    border:0;
+    background:transparent;
+    color:#cbd4e5;
+    padding:11px 12px;
+    border-radius:10px;
+    text-align:left;
+    cursor:pointer;
+    font:inherit;
+}
+
+.master-nav button:hover,
+.master-nav button.active{
+    background:#223154;
+    color:#fff;
+}
+
+.master-nav .logout{
+    margin-top:15px;
+    color:#fda4af;
+}
+
+.master-main{
+    min-width:0;
+}
+
+.master-topbar{
+    background:#fff;
+    border-bottom:1px solid #e5e7eb;
+    padding:16px 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.master-topbar h1{
+    margin:0;
+    font-size:22px;
+}
+
+.master-content{
+    padding:28px;
+}
+
+.panel{
+    display:none;
+}
+
+.panel.active{
+    display:block;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+    gap:16px;
+}
+
+.summary-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:20px;
+}
+
+.summary-card span{
+    color:#667085;
+    font-size:13px;
+}
+
+.summary-card strong{
+    display:block;
+    margin-top:8px;
+    font-size:29px;
+}
+
+.card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+}
+
+.table-card{
+    margin-top:20px;
+    overflow:auto;
+}
+
+.data-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+}
+
+.data-table th{
+    text-align:left;
+    background:#f7f8fa;
+    color:#475467;
+    font-size:12px;
+    padding:12px 14px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.data-table td{
+    padding:13px 14px;
+    border-bottom:1px solid #eef0f3;
+    font-size:14px;
+    vertical-align:top;
+}
+
+.badge{
+    display:inline-flex;
+    padding:5px 9px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:800;
+    background:#eef2f7;
+}
+
+.badge.ok{
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.badge.warn{
+    background:#fff7ed;
+    color:#b54708;
+}
+
+.badge.danger{
+    background:#fff1f2;
+    color:#b42318;
+}
+
+.btn-small{
+    border:0;
+    border-radius:9px;
+    padding:8px 11px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:12px;
+}
+
+.btn-small.primary{
+    background:#111b33;
+    color:#fff;
+}
+
+.btn-small.success{
+    background:#027a48;
+    color:#fff;
+}
+
+.btn-small.danger{
+    background:#b42318;
+    color:#fff;
+}
+
+.btn-small.light{
+    background:#eef2f7;
+    color:#344054;
+}
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+}
+
+.notice-form{
+    padding:22px;
+    margin-top:18px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+    box-sizing:border-box;
+    border:1px solid #dfe3eb;
+    border-radius:11px;
+    padding:12px 13px;
+    font:inherit;
+}
+
+.field textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.field.full{
+    grid-column:1 / -1;
+}
+
+.section-title{
+    margin-bottom:4px;
+}
+
+.muted{
+    color:#667085;
+}
+
+.loading{
+    padding:35px 0;
+    color:#667085;
+}
+
+.empty{
+    padding:35px;
+    text-align:center;
+    color:#667085;
+}
+
+.room-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(5,minmax(0,1fr));
+    gap:10px;
+    margin-top:18px;
+}
+
+.room{
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:13px;
+    background:#fff;
+}
+
+.room strong{
+    display:block;
+    font-size:17px;
+}
+
+.room small{
+    display:block;
+    color:#667085;
+    margin-top:4px;
+}
+
+.room.occupied{
+    border-color:#b7e1c4;
+    background:#f2fcf5;
+}
+
+.room.soon{
+    background:#fff9f0;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:50;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-card{
+    background:#fff;
+    width:min(100%,720px);
+    max-height:90vh;
+    overflow:auto;
+    border-radius:18px;
+    padding:25px;
+}
+
+.modal img{
+    max-width:100%;
+    max-height:65vh;
+    object-fit:contain;
+    border-radius:12px;
+}
+
+@media(max-width:1100px){
+
+    .summary-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .room-grid{
+        grid-template-columns:
+            repeat(4,minmax(0,1fr));
+    }
+
+}
+
+@media(max-width:800px){
+
+    .master-layout{
+        grid-template-columns:1fr;
+    }
+
+    .master-sidebar{
+        position:static;
+        height:auto;
+    }
+
+    .master-nav{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .master-nav button{
+        font-size:12px;
+    }
+
+    .master-content{
+        padding:18px;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .room-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="master-shell">
+
+
+<div
+    id="loginView"
+    style="display:none;"
+>
+
+<div class="login-page">
+
+<div class="login-card">
+
+<div class="eyebrow">
+    DJ FAMILY KOST
+</div>
+
+<h1>
+    Master Login
+</h1>
+
+<p>
+    Akses pengelolaan operasional DJ Family Kost.
+</p>
+
+
+<form id="masterLoginForm">
+
+
+<div class="field">
+
+<label>
+    Master ID
+</label>
+
+<input
+    id="masterIdInput"
+    type="text"
+    placeholder="Contoh: MASTER-001"
+    autocomplete="username"
+    required
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+    Password
+</label>
+
+<input
+    id="masterPasswordInput"
+    type="password"
+    autocomplete="current-password"
+    required
+>
+
+</div>
+
+
+<button
+    id="masterLoginButton"
+    class="btn btn-primary"
+    type="submit"
+    style="width:100%;margin-top:20px;"
+>
+    Masuk sebagai Master
+</button>
+
+
+<div
+    id="masterLoginMessage"
+    class="login-message"
+></div>
+
+
+</form>
+
+
+<div class="login-footer">
+
+<a href="login.html">
+    ← Kembali ke Login Tenant
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div
+    id="appView"
+    style="display:none;"
+>
+
+<div class="master-layout">
+
+
+<aside class="master-sidebar">
+
+<div class="master-brand">
+    DJ FAMILY KOST
+    <br>
+    MASTER
+</div>
+
+
+<div class="master-user">
+
+<small>
+    Login sebagai
+</small>
+
+<strong id="masterName">
+    —
+</strong>
+
+<br>
+
+<small id="masterIdLabel">
+    —
+</small>
+
+</div>
+
+
+<nav class="master-nav">
+
+
+<button
+    class="active"
+    data-panel="dashboard"
+>
+    Dashboard
+</button>
+
+
+<button
+    data-panel="registrations"
+>
+    Pendaftaran
+</button>
+
+
+<button
+    data-panel="tenants"
+>
+    Tenant
+</button>
+
+
+<button
+    data-panel="payments"
+>
+    Pembayaran
+</button>
+
+
+<button
+    data-panel="maintenance"
+>
+    Maintenance
+</button>
+
+
+<button
+    data-panel="rooms"
+>
+    Kamar
+</button>
+
+
+<button
+    data-panel="whatsapp"
+>
+    WhatsApp
+</button>
+
+
+<button
+    data-panel="announcements"
+>
+    Pengumuman
+</button>
+
+
+<button
+    data-panel="automation"
+>
+    Otomasi
+</button>
+
+
+<button
+    class="logout"
+    id="masterLogout"
+>
+    Keluar
+</button>
+
+
+</nav>
+
+</aside>
+
+
+<main class="master-main">
+
+
+<header class="master-topbar">
+
+<h1 id="pageTitle">
+    Dashboard
+</h1>
+
+
+<div class="actions">
+
+<button
+    class="btn-small light"
+    id="refreshButton"
+>
+    Refresh
+</button>
+
+</div>
+
+</header>
+
+
+<div class="master-content">
+
+
+<!-- ========================================================
+     DASHBOARD
+     ======================================================== -->
+
+<section
+    id="panel-dashboard"
+    class="panel active"
+>
+
+<h2 class="section-title">
+    Ringkasan Operasional
+</h2>
+
+<p class="muted">
+    Semua data diambil langsung dari database DJ Family Kost.
+</p>
+
+
+<div
+    id="summaryGrid"
+    class="summary-grid"
+>
+</div>
+
+
+<div class="card table-card">
+
+<div style="padding:20px 20px 0;">
+
+<h3>
+    Perlu Perhatian
+</h3>
+
+</div>
+
+
+<div id="attentionTable">
+    <div class="loading">
+        Memuat...
+    </div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     PENDAFTARAN
+     ======================================================== -->
+
+<section
+    id="panel-registrations"
+    class="panel"
+>
+
+<h2 class="section-title">
+    Pendaftaran Tenant
+</h2>
+
+<p class="muted">
+    Verifikasi atau tolak pendaftaran langsung dari sini.
+</p>
+
+
+<div
+    id="registrationsTable"
+    class="card table-card"
+>
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     TENANT
+     ======================================================== -->
+
+<section
+    id="panel-tenants"
+    class="panel"
+>
+
+<h2>
+    Data Tenant
+</h2>
+
+<p class="muted">
+    Data tenant aktif dan riwayat akun.
+</p>
+
+
+<div
+    id="tenantsTable"
+    class="card table-card"
+>
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     PEMBAYARAN
+     ======================================================== -->
+
+<section
+    id="panel-payments"
+    class="panel"
+>
+
+<h2>
+    Pembayaran
+</h2>
+
+<p class="muted">
+    Verifikasi bukti pembayaran dari website Master.
+</p>
+
+
+<div
+    id="paymentsTable"
+    class="card table-card"
+>
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     MAINTENANCE
+     ======================================================== -->
+
+<section
+    id="panel-maintenance"
+    class="panel"
+>
+
+<h2>
+    Maintenance
+</h2>
+
+<p class="muted">
+    Pantau laporan dan ubah status pekerjaan.
+</p>
+
+
+<div
+    id="maintenanceTable"
+    class="card table-card"
+>
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     KAMAR
+     ======================================================== -->
+
+<section
+    id="panel-rooms"
+    class="panel"
+>
+
+<h2>
+    Master Kamar
+</h2>
+
+<p class="muted">
+    Status seluruh kamar.
+</p>
+
+
+<div
+    id="roomsGrid"
+    class="room-grid"
+>
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     WHATSAPP
+     ======================================================== -->
+
+<section
+    id="panel-whatsapp"
+    class="panel"
+>
+
+<h2>
+    Peringatan Pembayaran
+</h2>
+
+<p class="muted">
+    Daftar tenant yang belum lunas. Tombol WhatsApp
+    akan membuka pesan yang sudah disiapkan otomatis.
+</p>
+
+
+<div
+    id="whatsappTable"
+    class="card table-card"
+>
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     PENGUMUMAN
+     ======================================================== -->
+
+<section
+    id="panel-announcements"
+    class="panel"
+>
+
+<h2>
+    Pengumuman Penting
+</h2>
+
+<p class="muted">
+    Buat pengumuman yang akan tersedia untuk sistem.
+</p>
+
+
+<div class="card notice-form">
+
+<form id="announcementForm">
+
+
+<div class="form-grid">
+
+
+<div class="field">
+
+<label>
+    Judul
+</label>
+
+<input
+    id="announcementTitle"
+    required
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+    Prioritas
+</label>
+
+<select
+    id="announcementPriority"
+>
+
+<option value="NORMAL">
+    Normal
+</option>
+
+<option value="PENTING">
+    Penting
+</option>
+
+<option value="DARURAT">
+    Darurat
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field full">
+
+<label>
+    Isi Pengumuman
+</label>
+
+<textarea
+    id="announcementMessage"
+    required
+></textarea>
+
+</div>
+
+
+</div>
+
+
+<button
+    class="btn btn-primary"
+    type="submit"
+    style="margin-top:18px;"
+>
+    Terbitkan Pengumuman
+</button>
+
+
+</form>
+
+</div>
+
+
+<div
+    id="announcementsTable"
+    class="card table-card"
+>
+</div>
+
+</section>
+
+
+<!-- ========================================================
+     AUTOMATION
+     ======================================================== -->
+
+<section
+    id="panel-automation"
+    class="panel"
+>
+
+<h2>
+    Otomasi Sistem
+</h2>
+
+<p class="muted">
+    Pengelola dapat menjalankan proses sinkronisasi dan
+    pembaruan sistem tanpa membuka Apps Script.
+</p>
+
+
+<div class="card notice-form">
+
+<h3>
+    Jalankan Sinkronisasi / Otomasi
+</h3>
+
+<p class="muted">
+    Sistem akan menjalankan engine otomatis yang tersedia:
+    pembaruan hubungan database, tagihan, dashboard,
+    dan proses periodik.
+</p>
+
+
+<button
+    class="btn btn-primary"
+    id="runAutomationButton"
+>
+    Jalankan Otomasi Sekarang
+</button>
+
+
+<div
+    id="automationMessage"
+    class="login-message"
+></div>
+
+</div>
+
+</section>
+
+
+</div>
+
+</main>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ==========================================================
+     MODAL
+     ========================================================== -->
+
+<div
+    id="modal"
+    class="modal"
+>
+
+<div class="modal-card">
+
+<div
+    style="
+        display:flex;
+        justify-content:space-between;
+        gap:15px;
+        align-items:center;
+    "
+>
+
+<h3
+    id="modalTitle"
+>
+    Detail
+</h3>
+
+
+<button
+    id="modalClose"
+    class="btn-small light"
+>
+    Tutup
+</button>
+
+</div>
+
+
+<div id="modalBody"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
+
+const loginView =
+    document.getElementById(
+        "loginView"
+    );
+
+
+const appView =
+    document.getElementById(
+        "appView"
+    );
+
+
+const modal =
+    document.getElementById(
+        "modal"
+    );
+
+
+const modalTitle =
+    document.getElementById(
+        "modalTitle"
+    );
+
+
+const modalBody =
+    document.getElementById(
+        "modalBody"
+    );
+
+
+let masterSession =
+    null;
+
+
+let dashboardData =
+    null;
+
+
+function escapeHtml(
+    value
+){
+
+    return String(
+        value == null
+            ? ""
+            : value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+function money(
+    value
+){
+
+    return (
+        "Rp" +
+        Number(
+            value || 0
+        ).toLocaleString(
+            "id-ID"
+        )
+    );
+
+}
+
+
+function getMasterSession(){
+
+    const raw =
+        sessionStorage.getItem(
+            "djMasterSession"
+        );
+
+
+    if(!raw){
+
+        return null;
+
+    }
+
+
+    try{
+
+        return JSON.parse(
+            raw
+        );
+
+    }catch(error){
+
+        sessionStorage.removeItem(
+            "djMasterSession"
+        );
+
+        return null;
+
+    }
+
+}
+
+
+function saveMasterSession(
+    session
+){
+
+    masterSession =
+        session;
+
+
+    sessionStorage.setItem(
+        "djMasterSession",
+        JSON.stringify(
+            session
+        )
+    );
+
+}
+
+
+function showLogin(){
+
+    loginView.style.display =
+        "block";
+
+    appView.style.display =
+        "none";
+
+}
+
+
+function showApp(){
+
+    loginView.style.display =
+        "none";
+
+    appView.style.display =
+        "block";
+
+
+    document
+        .getElementById(
+            "masterName"
+        )
+        .textContent =
+            masterSession.nama ||
+            "Master";
+
+
+    document
+        .getElementById(
+            "masterIdLabel"
+        )
+        .textContent =
+            masterSession.masterId ||
+            "";
+
+}
+
+
+/**
+ * ==========================================================
+ * REQUEST
+ * ==========================================================
+ */
+async function masterRequest(
+    action,
+    extra={}
+){
+
+    if(!masterSession){
+
+        throw new Error(
+            "Session Master tidak tersedia."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            API_URL,
+            {
+
+                method:
+                    "POST",
+
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:
+                    JSON.stringify({
+
+                        action:
+                            action,
+
+                        masterId:
+                            masterSession.masterId,
+
+                        sessionToken:
+                            masterSession.sessionToken,
+
+                        ...extra
+
+                    })
+
+            }
+        );
+
+
+    const result =
+        await response.json();
+
+
+    if(
+        !result ||
+        result.ok !== true
+    ){
+
+        if(
+            result &&
+            result.error &&
+            /session master/i.test(
+                result.error
+            )
+        ){
+
+            sessionStorage.removeItem(
+                "djMasterSession"
+            );
+
+            masterSession =
+                null;
+
+            showLogin();
+
+        }
+
+
+        throw new Error(
+            result &&
+            result.error
+                ? result.error
+                : "Permintaan gagal."
+        );
+
+    }
+
+
+    return result.data;
+
+}
+
+
+/**
+ * ==========================================================
+ * MASTER LOGIN
+ * ==========================================================
+ */
+document
+    .getElementById(
+        "masterLoginForm"
+    )
+    .addEventListener(
+        "submit",
+        async function(event){
+
+            event.preventDefault();
+
+
+            const masterId =
+                document
+                    .getElementById(
+                        "masterIdInput"
+                    )
+                    .value
+                    .trim()
+                    .toUpperCase();
+
+
+            const password =
+                document
+                    .getElementById(
+                        "masterPasswordInput"
+                    )
+                    .value;
+
+
+            const button =
+                document
+                    .getElementById(
+                        "masterLoginButton"
+                    );
+
+
+            const message =
+                document
+                    .getElementById(
+                        "masterLoginMessage"
+                    );
+
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Memeriksa...";
+
+
+            message.className =
+                "login-message";
+
+
+            message.textContent =
+                "";
+
+
+            try{
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+
+                            method:
+                                "POST",
+
+                            headers:{
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    action:
+                                        "masterLogin",
+
+                                    masterId:
+                                        masterId,
+
+                                    password:
+                                        password
+
+                                })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if(
+                    !result ||
+                    result.ok !== true ||
+                    !result.data
+                ){
+
+                    throw new Error(
+                        result &&
+                        result.error
+                            ? result.error
+                            : "Login Master gagal."
+                    );
+
+                }
+
+
+                saveMasterSession(
+                    result.data
+                );
+
+
+                showApp();
+
+
+                await loadDashboard();
+
+
+            }catch(error){
+
+                message.className =
+                    "login-message error";
+
+                message.textContent =
+                    error.message ||
+                    "Login Master gagal.";
+
+
+            }finally{
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Masuk sebagai Master";
+
+            }
+
+        }
+    );
+
+
+/**
+ * ==========================================================
+ * NAVIGATION
+ * ==========================================================
+ */
+document
+    .querySelectorAll(
+        ".master-nav button[data-panel]"
+    )
+    .forEach(
+        function(button){
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    document
+                        .querySelectorAll(
+                            ".master-nav button"
+                        )
+                        .forEach(
+                            function(item){
+
+                                item.classList
+                                    .remove(
+                                        "active"
+                                    );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    const panel =
+                        button.dataset.panel;
+
+
+                    document
+                        .querySelectorAll(
+                            ".panel"
+                        )
+                        .forEach(
+                            function(section){
+
+                                section.classList
+                                    .remove(
+                                        "active"
+                                    );
+
+                            }
+                        );
+
+
+                    document
+                        .getElementById(
+                            "panel-" +
+                            panel
+                        )
+                        .classList.add(
+                            "active"
+                        );
+
+
+                    document
+                        .getElementById(
+                            "pageTitle"
+                        )
+                        .textContent =
+                            button.textContent.trim();
+
+
+                    loadPanel(
+                        panel
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/**
+ * ==========================================================
+ * LOAD DASHBOARD
+ * ==========================================================
+ */
+async function loadDashboard(){
+
+    try{
+
+        dashboardData =
+            await masterRequest(
+                "masterDashboard"
+            );
+
+
+        renderSummary();
+
+
+        renderAttention();
+
+
+        renderRooms();
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            true
+        );
+
+    }
+
+}
+
+
+function renderSummary(){
+
+    const s =
+        dashboardData.summary;
+
+
+    const items = [
+
+        [
+            "Kamar",
+            s.totalRooms
+        ],
+
+        [
+            "Terisi",
+            s.occupied
+        ],
+
+        [
+            "Kosong",
+            s.vacant
+        ],
+
+        [
+            "Tenant Aktif",
+            s.activeTenants
+        ],
+
+        [
+            "Pendaftaran Pending",
+            s.pendingRegistrations
+        ],
+
+        [
+            "Pembayaran Pending",
+            s.pendingPayment
+        ],
+
+        [
+            "Belum Lunas",
+            s.unpaid
+        ],
+
+        [
+            "Maintenance",
+            s.openMaintenance
+        ]
+
+    ];
+
+
+    document
+        .getElementById(
+            "summaryGrid"
+        )
+        .innerHTML =
+            items
+                .map(
+                    function(item){
+
+                        return (
+
+                            '<div class="summary-card">' +
+
+                            '<span>' +
+                            escapeHtml(
+                                item[0]
+                            ) +
+                            '</span>' +
+
+                            '<strong>' +
+                            escapeHtml(
+                                item[1]
+                            ) +
+                            '</strong>' +
+
+                            '</div>'
+
+                        );
+
+                    }
+                )
+                .join("");
+
+}
+
+
+function renderAttention(){
+
+    const data =
+        dashboardData;
+
+
+    let html =
+        "";
+
+
+    data.registrations
+        .forEach(
+            function(item){
+
+                html +=
+
+                    '<tr>' +
+
+                    '<td>PENDAFTARAN</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        item.name
+                    ) +
+                    '</td>' +
+
+                    '<td>Kamar ' +
+                    escapeHtml(
+                        item.room
+                    ) +
+                    '</td>' +
+
+                    '<td><span class="badge warn">PENDING</span></td>' +
+
+                    '<td>' +
+
+                    '<button class="btn-small primary" ' +
+                    'onclick="openRegistration(\'' +
+                    encodeURIComponent(
+                        item.id
+                    ) +
+                    '\')">' +
+                    'Buka' +
+                    '</button>' +
+
+                    '</td>' +
+
+                    '</tr>';
+
+            }
+        );
+
+
+    data.payments
+        .forEach(
+            function(item){
+
+                html +=
+
+                    '<tr>' +
+
+                    '<td>PEMBAYARAN</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        item.name ||
+                        item.tenantId
+                    ) +
+                    '</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        item.period
+                    ) +
+                    '</td>' +
+
+                    '<td><span class="badge warn">VERIFIKASI</span></td>' +
+
+                    '<td>' +
+
+                    '<button class="btn-small primary" ' +
+                    'onclick="openPayment(\'' +
+                    encodeURIComponent(
+                        item.id
+                    ) +
+                    '\')">' +
+                    'Buka' +
+                    '</button>' +
+
+                    '</td>' +
+
+                    '</tr>';
+
+            }
+        );
+
+
+    data.maintenance
+        .forEach(
+            function(item){
+
+                html +=
+
+                    '<tr>' +
+
+                    '<td>MAINTENANCE</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        item.problem
+                    ) +
+                    '</td>' +
+
+                    '<td>Kamar ' +
+                    escapeHtml(
+                        item.room
+                    ) +
+                    '</td>' +
+
+                    '<td><span class="badge warn">' +
+                    escapeHtml(
+                        item.status
+                    ) +
+                    '</span></td>' +
+
+                    '<td>' +
+
+                    '<button class="btn-small primary" ' +
+                    'onclick="openMaintenance(\'' +
+                    encodeURIComponent(
+                        item.id
+                    ) +
+                    '\')">' +
+                    'Buka' +
+                    '</button>' +
+
+                    '</td>' +
+
+                    '</tr>';
+
+            }
+        );
+
+
+    if(!html){
+
+        document
+            .getElementById(
+                "attentionTable"
+            )
+            .innerHTML =
+                '<div class="empty">Tidak ada pekerjaan pending.</div>';
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "attentionTable"
+        )
+        .innerHTML =
+
+            '<table class="data-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+
+            '<th>Jenis</th>' +
+            '<th>Subjek</th>' +
+            '<th>Detail</th>' +
+            '<th>Status</th>' +
+            '<th></th>' +
+
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+
+            html +
+
+            '</tbody>' +
+
+            '</table>';
+
+}
+
+
+/**
+ * ==========================================================
+ * LOAD PANELS
+ * ==========================================================
+ */
+async function loadPanel(
+    panel
+){
+
+    try{
+
+        if(
+            panel ===
+            "dashboard"
+        ){
+
+            await loadDashboard();
+
+        }
+
+
+        if(
+            panel ===
+            "registrations"
+        ){
+
+            await loadRegistrations();
+
+        }
+
+
+        if(
+            panel ===
+            "tenants"
+        ){
+
+            await loadTenants();
+
+        }
+
+
+        if(
+            panel ===
+            "payments"
+        ){
+
+            await loadPayments();
+
+        }
+
+
+        if(
+            panel ===
+            "maintenance"
+        ){
+
+            await loadMaintenance();
+
+        }
+
+
+        if(
+            panel ===
+            "rooms"
+        ){
+
+            await loadDashboard();
+
+        }
+
+
+        if(
+            panel ===
+            "whatsapp"
+        ){
+
+            await loadWhatsApp();
+
+        }
+
+
+        if(
+            panel ===
+            "announcements"
+        ){
+
+            await loadAnnouncements();
+
+        }
+
+
+        if(
+            panel ===
+            "automation"
+        ){
+
+            document
+                .getElementById(
+                    "automationMessage"
+                )
+                .textContent =
+                    "";
+
+        }
+
+
+    }catch(error){
+
+        showToast(
+            error.message,
+            true
+        );
+
+    }
+
+}
+
+
+/**
+ * ==========================================================
+ * REGISTRATIONS
+ * ==========================================================
+ */
+async function loadRegistrations(){
+
+    const data =
+        await masterRequest(
+            "masterRegistrations"
+        );
+
+
+    const items =
+        data.items || [];
+
+
+    if(!items.length){
+
+        document
+            .getElementById(
+                "registrationsTable"
+            )
+            .innerHTML =
+                '<div class="empty">Belum ada pendaftaran pending.</div>';
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "registrationsTable"
+        )
+        .innerHTML =
+
+        '<table class="data-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+
+        '<th>Pendaftaran</th>' +
+        '<th>Nama</th>' +
+        '<th>Kamar</th>' +
+        '<th>WhatsApp</th>' +
+        '<th>Status</th>' +
+        '<th>Aksi</th>' +
+
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        items
+            .map(
+                function(item){
+
+                    return (
+
+                        '<tr>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            item.id
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            item.name
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            item.room
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            item.phone
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        '<span class="badge warn">' +
+                        escapeHtml(
+                            item.status
+                        ) +
+                        '</span>' +
+                        '</td>' +
+
+                        '<td>' +
+
+                        '<div class="actions">' +
+
+                        '<button class="btn-small success" onclick="approveRegistration(\'' +
+                        encodeURIComponent(
+                            item.id
+                        ) +
+                        '\')">' +
+                        'Setujui' +
+                        '</button>' +
+
+                        '<button class="btn-small danger" onclick="rejectRegistration(\'' +
+                        encodeURIComponent(
+                            item.id
+                        ) +
+                        '\')">' +
+                        'Tolak' +
+                        '</button>' +
+
+                        '</div>' +
+
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</tbody>' +
+
+        '</table>';
+
+}
+
+
+async function approveRegistration(
+    encodedId
+){
+
+    const id =
+        decodeURIComponent(
+            encodedId
+        );
+
+
+    if(
+        !confirm(
+            "Setujui pendaftaran " +
+            id +
+            "?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const result =
+            await masterRequest(
+                "masterApproveRegistration",
+                {
+                    registrationId:
+                        id
+                }
+            );
+
+
+        alert(
+            "Berhasil.\n\n" +
+            "Tenant ID: " +
+            result.tenantId +
+            "\nKontrak ID: " +
+            result.kontrakId +
+            "\nKamar: " +
+            result.room
+        );
+
+
+        await loadRegistrations();
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+async function rejectRegistration(
+    encodedId
+){
+
+    const id =
+        decodeURIComponent(
+            encodedId
+        );
+
+
+    const reason =
+        prompt(
+            "Alasan penolakan:",
+            ""
+        );
+
+
+    if(
+        reason ===
+        null
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        await masterRequest(
+            "masterRejectRegistration",
+            {
+                registrationId:
+                    id,
+
+                reason:
+                    reason
+            }
+        );
+
+
+        await loadRegistrations();
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+function openRegistration(
+    encodedId
+){
+
+    document
+        .querySelector(
+            '[data-panel="registrations"]'
+        )
+        .click();
+
+
+    setTimeout(
+        function(){
+
+            const id =
+                decodeURIComponent(
+                    encodedId
+                );
+
+
+            const item =
+                (
+                    dashboardData
+                        .registrations ||
+                    []
+                )
+                .find(
+                    function(row){
+
+                        return (
+                            row.id ===
+                            id
+                        );
+
+                    }
+                );
+
+
+            if(item){
+
+                showModal(
+                    "Pendaftaran " +
+                    item.id,
+
+                    '<p><strong>Nama:</strong> ' +
+                    escapeHtml(
+                        item.name
+                    ) +
+                    '</p>' +
+
+                    '<p><strong>Kamar:</strong> ' +
+                    escapeHtml(
+                        item.room
+                    ) +
+                    '</p>' +
+
+                    '<p><strong>WhatsApp:</strong> ' +
+                    escapeHtml(
+                        item.phone
+                    ) +
+                    '</p>' +
+
+                    '<div class="actions">' +
+
+                    '<button class="btn-small success" onclick="approveRegistration(\'' +
+                    encodeURIComponent(
+                        item.id
+                    ) +
+                    '\')">Setujui</button>' +
+
+                    '<button class="btn-small danger" onclick="rejectRegistration(\'' +
+                    encodeURIComponent(
+                        item.id
+                    ) +
+                    '\')">Tolak</button>' +
+
+                    '</div>'
+                );
+
+            }
+
+        },
+        300
+    );
+
+}
+
+
+/**
+ * ==========================================================
+ * TENANTS
+ * ==========================================================
+ */
+async function loadTenants(){
+
+    const data =
+        await masterRequest(
+            "masterTenants"
+        );
+
+
+    const items =
+        data.items || [];
+
+
+    document
+        .getElementById(
+            "tenantsTable"
+        )
+        .innerHTML =
+
+        items.length
+
+        ? (
+
+            '<table class="data-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+
+            '<th>ID</th>' +
+            '<th>Nama</th>' +
+            '<th>Kamar</th>' +
+            '<th>WhatsApp</th>' +
+            '<th>Status</th>' +
+            '<th>Aksi</th>' +
+
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+
+            items
+                .map(
+                    function(item){
+
+                        return (
+
+                            '<tr>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.tenantId
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.name
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.room
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.phone
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            '<span class="badge ' +
+                            (
+                                String(
+                                    item.status
+                                )
+                                .toUpperCase()
+                                ===
+                                "AKTIF"
+                                    ? "ok"
+                                    : ""
+                            ) +
+                            '">' +
+                            escapeHtml(
+                                item.status
+                            ) +
+                            '</span>' +
+                            '</td>' +
+
+                            '<td>' +
+
+                            '<button class="btn-small light" onclick="resetPassword(\'' +
+                            encodeURIComponent(
+                                item.tenantId
+                            ) +
+                            '\')">' +
+                            'Reset Password' +
+                            '</button>' +
+
+                            '</td>' +
+
+                            '</tr>'
+
+                        );
+
+                    }
+                )
+                .join("") +
+
+            '</tbody>' +
+
+            '</table>'
+
+        )
+
+        : '<div class="empty">Belum ada tenant.</div>';
+
+}
+
+
+async function resetPassword(
+    encodedTenantId
+){
+
+    const tenantId =
+        decodeURIComponent(
+            encodedTenantId
+        );
+
+
+    if(
+        !confirm(
+            "Reset password " +
+            tenantId +
+            "?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const result =
+            await masterRequest(
+                "masterResetPassword",
+                {
+                    tenantId:
+                        tenantId
+                }
+            );
+
+
+        alert(
+
+            "RESET PASSWORD BERHASIL\n\n" +
+
+            "Tenant ID: " +
+            result.tenantId +
+
+            "\nPassword sementara:\n" +
+            result.temporaryPassword +
+
+            "\n\nSampaikan password ini kepada tenant."
+
+        );
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/**
+ * ==========================================================
+ * PAYMENTS
+ * ==========================================================
+ */
+async function loadPayments(){
+
+    const data =
+        await masterRequest(
+            "masterPayments"
+        );
+
+
+    const items =
+        data.items || [];
+
+
+    const pending =
+        items.filter(
+            function(item){
+
+                return (
+                    item.verification ===
+                    "MENUNGGU VERIFIKASI"
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "paymentsTable"
+        )
+        .innerHTML =
+
+        pending.length
+
+        ? (
+
+            '<table class="data-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+
+            '<th>Payment</th>' +
+            '<th>Tenant</th>' +
+            '<th>Kamar</th>' +
+            '<th>Periode</th>' +
+            '<th>Nominal</th>' +
+            '<th>Aksi</th>' +
+
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+
+            pending
+                .map(
+                    function(item){
+
+                        return (
+
+                            '<tr>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.id
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.name ||
+                                item.tenantId
+                            ) +
+                            '<br>' +
+                            '<small>' +
+                            escapeHtml(
+                                item.tenantId
+                            ) +
+                            '</small>' +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.room
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.period
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            money(
+                                item.paid
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+
+                            '<div class="actions">' +
+
+                            '<button class="btn-small light" onclick="viewPaymentProof(\'' +
+                            encodeURIComponent(
+                                item.id
+                            ) +
+                            '\')">' +
+                            'Lihat Bukti' +
+                            '</button>' +
+
+                            '<button class="btn-small success" onclick="verifyPayment(\'' +
+                            encodeURIComponent(
+                                item.id
+                            ) +
+                            '\',\'approve\')">' +
+                            'Setujui' +
+                            '</button>' +
+
+                            '<button class="btn-small danger" onclick="verifyPayment(\'' +
+                            encodeURIComponent(
+                                item.id
+                            ) +
+                            '\',\'reject\')">' +
+                            'Tolak' +
+                            '</button>' +
+
+                            '</div>' +
+
+                            '</td>' +
+
+                            '</tr>'
+
+                        );
+
+                    }
+                )
+                .join("") +
+
+            '</tbody>' +
+
+            '</table>'
+
+        )
+
+        : '<div class="empty">Tidak ada pembayaran yang menunggu verifikasi.</div>';
+
+}
+
+
+async function viewPaymentProof(
+    encodedPaymentId
+){
+
+    const paymentId =
+        decodeURIComponent(
+            encodedPaymentId
+        );
+
+
+    showModal(
+        "Bukti Pembayaran",
+        '<div class="loading">Memuat foto...</div>'
+    );
+
+
+    try{
+
+        const result =
+            await masterRequest(
+                "masterPaymentProof",
+                {
+                    paymentId:
+                        paymentId
+                }
+            );
+
+
+        if(
+            result.dataUrl
+        ){
+
+            modalBody.innerHTML =
+
+                '<p><strong>' +
+                escapeHtml(
+                    result.fileName
+                ) +
+                '</strong></p>' +
+
+                '<img src="' +
+                result.dataUrl +
+                '" alt="Bukti pembayaran">';
+
+        }else{
+
+            modalBody.innerHTML =
+
+                '<p>Bukti tidak dapat ditampilkan langsung.</p>' +
+
+                '<a href="' +
+                result.url +
+                '" target="_blank">' +
+                'Buka file bukti pembayaran' +
+                '</a>';
+
+        }
+
+    }catch(error){
+
+        modalBody.innerHTML =
+            '<p class="muted">' +
+            escapeHtml(
+                error.message
+            ) +
+            '</p>';
+
+    }
+
+}
+
+
+async function verifyPayment(
+    encodedPaymentId,
+    decision
+){
+
+    const paymentId =
+        decodeURIComponent(
+            encodedPaymentId
+        );
+
+
+    const approved =
+        decision ===
+        "approve";
+
+
+    const reason =
+        prompt(
+            approved
+                ? "Catatan verifikasi (opsional):"
+                : "Alasan penolakan:",
+            ""
+        );
+
+
+    if(
+        reason ===
+        null
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !approved &&
+        !reason.trim()
+    ){
+
+        alert(
+            "Alasan penolakan wajib diisi."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const result =
+            await masterRequest(
+                "masterVerifyPayment",
+                {
+
+                    paymentId:
+                        paymentId,
+
+                    decision:
+                        decision,
+
+                    reason:
+                        reason
+
+                }
+            );
+
+
+        alert(
+            result.message
+        );
+
+
+        await loadPayments();
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+function openPayment(
+    encodedId
+){
+
+    document
+        .querySelector(
+            '[data-panel="payments"]'
+        )
+        .click();
+
+
+    setTimeout(
+        function(){
+
+            viewPaymentProof(
+                encodedId
+            );
+
+        },
+        300
+    );
+
+}
+
+
+/**
+ * ==========================================================
+ * MAINTENANCE
+ * ==========================================================
+ */
+async function loadMaintenance(){
+
+    const data =
+        await masterRequest(
+            "masterMaintenance"
+        );
+
+
+    const items =
+        data.items || [];
+
+
+    const active =
+        items.filter(
+            function(item){
+
+                return (
+                    item.status ===
+                    "OPEN" ||
+
+                    item.status ===
+                    "PROSES"
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "maintenanceTable"
+        )
+        .innerHTML =
+
+        active.length
+
+        ? (
+
+            '<table class="data-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+
+            '<th>ID</th>' +
+            '<th>Tenant</th>' +
+            '<th>Kamar</th>' +
+            '<th>Masalah</th>' +
+            '<th>Status</th>' +
+            '<th>PIC</th>' +
+            '<th>Aksi</th>' +
+
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+
+            active
+                .map(
+                    function(item){
+
+                        return (
+
+                            '<tr>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.id
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.name ||
+                                item.tenantId
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.room
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+
+                            '<strong>' +
+                            escapeHtml(
+                                item.problem
+                            ) +
+                            '</strong>' +
+
+                            '<br>' +
+
+                            '<small>' +
+                            escapeHtml(
+                                item.description
+                            ) +
+                            '</small>' +
+
+                            '</td>' +
+
+                            '<td>' +
+                            '<span class="badge warn">' +
+                            escapeHtml(
+                                item.status
+                            ) +
+                            '</span>' +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.pic
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+
+                            '<button class="btn-small primary" onclick="editMaintenance(\'' +
+                            encodeURIComponent(
+                                item.id
+                            ) +
+                            '\')">' +
+                            'Kelola' +
+                            '</button>' +
+
+                            '</td>' +
+
+                            '</tr>'
+
+                        );
+
+                    }
+                )
+                .join("") +
+
+            '</tbody>' +
+
+            '</table>'
+
+        )
+
+        : '<div class="empty">Tidak ada maintenance aktif.</div>';
+
+}
+
+
+function openMaintenance(
+    encodedId
+){
+
+    document
+        .querySelector(
+            '[data-panel="maintenance"]'
+        )
+        .click();
+
+
+    setTimeout(
+        function(){
+
+            editMaintenance(
+                encodedId
+            );
+
+        },
+        300
+    );
+
+}
+
+
+async function editMaintenance(
+    encodedId
+){
+
+    const id =
+        decodeURIComponent(
+            encodedId
+        );
+
+
+    const data =
+        await masterRequest(
+            "masterMaintenance"
+        );
+
+
+    const item =
+        (
+            data.items ||
+            []
+        )
+        .find(
+            function(row){
+
+                return (
+                    row.id ===
+                    id
+                );
+
+            }
+        );
+
+
+    if(!item){
+
+        alert(
+            "Data maintenance tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+
+    showModal(
+
+        "Maintenance " +
+        id,
+
+        '<div class="form-grid">' +
+
+        '<div class="field">' +
+
+        '<label>Status</label>' +
+
+        '<select id="maintStatus">' +
+
+        '<option value="OPEN"' +
+        (
+            item.status ===
+            "OPEN"
+                ? " selected"
+                : ""
+        ) +
+        '>OPEN</option>' +
+
+        '<option value="PROSES"' +
+        (
+            item.status ===
+            "PROSES"
+                ? " selected"
+                : ""
+        ) +
+        '>PROSES</option>' +
+
+        '<option value="SELESAI"' +
+        (
+            item.status ===
+            "SELESAI"
+                ? " selected"
+                : ""
+        ) +
+        '>SELESAI</option>' +
+
+        '<option value="BATAL"' +
+        (
+            item.status ===
+            "BATAL"
+                ? " selected"
+                : ""
+        ) +
+        '>BATAL</option>' +
+
+        '</select>' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label>PIC</label>' +
+
+        '<input id="maintPIC" value="' +
+        escapeHtml(
+            item.pic
+        ) +
+        '">' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label>Biaya</label>' +
+
+        '<input id="maintCost" type="number" value="' +
+        Number(
+            item.cost || 0
+        ) +
+        '">' +
+
+        '</div>' +
+
+        '<div class="field full">' +
+
+        '<label>Catatan</label>' +
+
+        '<textarea id="maintNote">' +
+        escapeHtml(
+            item.note
+        ) +
+        '</textarea>' +
+
+        '</div>' +
+
+        '</div>' +
+
+        '<button class="btn btn-primary" style="margin-top:18px" onclick="saveMaintenance(\'' +
+        encodeURIComponent(
+            id
+        ) +
+        '\')">' +
+
+        'Simpan Perubahan' +
+
+        '</button>'
+
+    );
+
+}
+
+
+async function saveMaintenance(
+    encodedId
+){
+
+    const id =
+        decodeURIComponent(
+            encodedId
+        );
+
+
+    try{
+
+        await masterRequest(
+            "masterUpdateMaintenance",
+            {
+
+                maintenanceId:
+                    id,
+
+                status:
+                    document
+                        .getElementById(
+                            "maintStatus"
+                        )
+                        .value,
+
+                pic:
+                    document
+                        .getElementById(
+                            "maintPIC"
+                        )
+                        .value,
+
+                cost:
+                    Number(
+                        document
+                            .getElementById(
+                                "maintCost"
+                            )
+                            .value
+                    ),
+
+                note:
+                    document
+                        .getElementById(
+                            "maintNote"
+                        )
+                        .value
+
+            }
+        );
+
+
+        closeModal();
+
+
+        await loadMaintenance();
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/**
+ * ==========================================================
+ * ROOMS
+ * ==========================================================
+ */
+function renderRooms(){
+
+    if(
+        !dashboardData ||
+        !dashboardData.rooms
+    ){
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "roomsGrid"
+        )
+        .innerHTML =
+
+        dashboardData.rooms
+            .map(
+                function(room){
+
+                    const status =
+                        String(
+                            room.status ||
+                            ''
+                        )
+                        .toUpperCase();
+
+
+                    const price =
+                        Number(
+                            room.price || 0
+                        );
+
+
+                    const className =
+                        status ===
+                        "TERISI"
+
+                            ? "occupied"
+
+                            : (
+                                price <= 0
+                                    ? "soon"
+                                    : ""
+                            );
+
+
+                    return (
+
+                        '<div class="room ' +
+                        className +
+                        '">' +
+
+                        '<strong>' +
+                        escapeHtml(
+                            room.number
+                        ) +
+                        '</strong>' +
+
+                        '<small>' +
+                        escapeHtml(
+                            room.status
+                        ) +
+                        '</small>' +
+
+                        '<small>' +
+                        (
+                            price > 0
+                                ? money(
+                                    price
+                                  )
+                                : "Belum tersedia"
+                        ) +
+                        '</small>' +
+
+                        '</div>'
+
+                    );
+
+                }
+            )
+            .join("");
+
+}
+
+
+/**
+ * ==========================================================
+ * WHATSAPP
+ * ==========================================================
+ */
+async function loadWhatsApp(){
+
+    const data =
+        await masterRequest(
+            "masterWhatsApp"
+        );
+
+
+    const items =
+        data.items || [];
+
+
+    document
+        .getElementById(
+            "whatsappTable"
+        )
+        .innerHTML =
+
+        items.length
+
+        ? (
+
+            '<table class="data-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+
+            '<th>Tenant</th>' +
+            '<th>Kamar</th>' +
+            '<th>Periode</th>' +
+            '<th>Tagihan</th>' +
+            '<th>Aksi</th>' +
+
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+
+            items
+                .map(
+                    function(item){
+
+                        return (
+
+                            '<tr>' +
+
+                            '<td>' +
+
+                            '<strong>' +
+                            escapeHtml(
+                                item.name
+                            ) +
+                            '</strong>' +
+
+                            '<br>' +
+
+                            '<small>' +
+                            escapeHtml(
+                                item.phone
+                            ) +
+                            '</small>' +
+
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.room
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.period
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            money(
+                                item.amount
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+
+                            '<a class="btn-small success" href="' +
+                            item.waLink +
+                            '" target="_blank">' +
+
+                            'Buka WhatsApp' +
+
+                            '</a>' +
+
+                            '</td>' +
+
+                            '</tr>'
+
+                        );
+
+                    }
+                )
+                .join("") +
+
+            '</tbody>' +
+
+            '</table>'
+
+        )
+
+        : '<div class="empty">Tidak ada tenant yang perlu dikirimi pengingat.</div>';
+
+}
+
+
+/**
+ * ==========================================================
+ * ANNOUNCEMENTS
+ * ==========================================================
+ */
+async function loadAnnouncements(){
+
+    const data =
+        await masterRequest(
+            "masterAnnouncements"
+        );
+
+
+    const items =
+        data.items || [];
+
+
+    document
+        .getElementById(
+            "announcementsTable"
+        )
+        .innerHTML =
+
+        items.length
+
+        ? (
+
+            '<table class="data-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+
+            '<th>Judul</th>' +
+            '<th>Prioritas</th>' +
+            '<th>Isi</th>' +
+            '<th>Status</th>' +
+
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+
+            items
+                .map(
+                    function(item){
+
+                        return (
+
+                            '<tr>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.title
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            '<span class="badge ' +
+                            (
+                                item.priority ===
+                                "DARURAT"
+
+                                    ? "danger"
+
+                                    : (
+                                        item.priority ===
+                                        "PENTING"
+                                            ? "warn"
+                                            : ""
+                                    )
+                            ) +
+                            '">' +
+
+                            escapeHtml(
+                                item.priority
+                            ) +
+
+                            '</span>' +
+
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.message
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.status
+                            ) +
+                            '</td>' +
+
+                            '</tr>'
+
+                        );
+
+                    }
+                )
+                .join("") +
+
+            '</tbody>' +
+
+            '</table>'
+
+        )
+
+        : '<div class="empty">Belum ada pengumuman.</div>';
+
+}
+
+
+document
+    .getElementById(
+        "announcementForm"
+    )
+    .addEventListener(
+        "submit",
+        async function(event){
+
+            event.preventDefault();
+
+
+            try{
+
+                await masterRequest(
+                    "masterSaveAnnouncement",
+                    {
+
+                        title:
+                            document
+                                .getElementById(
+                                    "announcementTitle"
+                                )
+                                .value,
+
+                        message:
+                            document
+                                .getElementById(
+                                    "announcementMessage"
+                                )
+                                .value,
+
+                        priority:
+                            document
+                                .getElementById(
+                                    "announcementPriority"
+                                )
+                                .value
+
+                    }
+                );
+
+
+                this.reset();
+
+
+                await loadAnnouncements();
+
+
+                alert(
+                    "Pengumuman berhasil diterbitkan."
+                );
+
+
+            }catch(error){
+
+                alert(
+                    error.message
+                );
+
+            }
+
+        }
+    );
+
+
+/**
+ * ==========================================================
+ * AUTOMATION
+ * ==========================================================
+ */
+document
+    .getElementById(
+        "runAutomationButton"
+    )
+    .addEventListener(
+        "click",
+        async function(){
+
+            const button =
+                this;
+
+
+            const message =
+                document
+                    .getElementById(
+                        "automationMessage"
+                    );
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Menjalankan...";
+
+
+            try{
+
+                const result =
+                    await masterRequest(
+                        "masterRunAutomation"
+                    );
+
+
+                message.className =
+                    "login-message success";
+
+
+                message.textContent =
+                    result.message +
+                    " Proses: " +
+                    (
+                        result.executed || []
+                    )
+                    .join(
+                        ", "
+                    );
+
+
+                await loadDashboard();
+
+
+            }catch(error){
+
+                message.className =
+                    "login-message error";
+
+
+                message.textContent =
+                    error.message;
+
+
+            }finally{
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    "Jalankan Otomasi Sekarang";
+
+            }
+
+        }
+    );
+
+
+/**
+ * ==========================================================
+ * MODAL
+ * ==========================================================
+ */
+function showModal(
+    title,
+    body
+){
+
+    modalTitle.textContent =
+        title;
+
+
+    modalBody.innerHTML =
+        body;
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+function closeModal(){
+
+    modal.classList.remove(
+        "show"
+    );
+
+}
+
+
+document
+    .getElementById(
+        "modalClose"
+    )
+    .addEventListener(
+        "click",
+        closeModal
+    );
+
+
+modal.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target ===
+            modal
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+/**
+ * ==========================================================
+ * REFRESH
+ * ==========================================================
+ */
+document
+    .getElementById(
+        "refreshButton"
+    )
+    .addEventListener(
+        "click",
+        async function(){
+
+            const active =
+                document
+                    .querySelector(
+                        ".panel.active"
+                    );
+
+
+            await loadDashboard();
+
+
+            if(active){
+
+                const panel =
+                    active.id.replace(
+                        "panel-",
+                        ""
+                    );
+
+
+                await loadPanel(
+                    panel
+                );
+
+            }
+
+        }
+    );
+
+
+/**
+ * ==========================================================
+ * LOGOUT
+ * ==========================================================
+ */
+document
+    .getElementById(
+        "masterLogout"
+    )
+    .addEventListener(
+        "click",
+        async function(){
+
+            try{
+
+                if(
+                    masterSession
+                ){
+
+                    await masterRequest(
+                        "masterLogout"
+                    );
+
+                }
+
+            }catch(error){}
+
+
+            sessionStorage.removeItem(
+                "djMasterSession"
+            );
+
+
+            masterSession =
+                null;
+
+
+            showLogin();
+
+        }
+    );
+
+
+function showToast(
+    text,
+    error=false
+){
+
+    alert(
+        text
+    );
+
+}
+
+
+/**
+ * ==========================================================
+ * INIT
+ * ==========================================================
+ */
+masterSession =
+    getMasterSession();
+
+
+if(
+    masterSession
+){
+
+    showApp();
+
+    loadDashboard();
+
+}else{
+
+    showLogin();
+
+}
+
+</script>
+
+</body>
+
+</html>
