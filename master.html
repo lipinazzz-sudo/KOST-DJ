@@ -12,111 +12,268 @@
 
 <title>Master — DJ Family Kost</title>
 
-<link
-    rel="stylesheet"
-    href="app.css?v=20260925-master-final-v5"
->
-
-
 <style>
 
-/* ============================================================
-   BASE
-   ============================================================ */
+/* =========================================================
+   RESET
+   ========================================================= */
 
+*{
+    box-sizing:border-box;
+}
+
+html,
 body{
     margin:0;
-    background:#f5f7fb;
+    padding:0;
+    min-height:100%;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 }
 
-.master-layout{
-    display:grid;
-    grid-template-columns:250px minmax(0,1fr);
+body{
+    background:#f4f6fa;
+    color:#17213a;
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+#loginView{
     min-height:100vh;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:#f4f6fa;
 }
 
-.master-sidebar{
-    background:#111b33;
-    color:#fff;
-    padding:22px 15px;
-    min-height:100vh;
-    box-sizing:border-box;
-    position:sticky;
-    top:0;
-    height:100vh;
+.login-card{
+    width:min(100%,500px);
+    background:#fff;
+    border:1px solid #e1e5ec;
+    border-radius:24px;
+    padding:34px;
+    box-shadow:
+        0 20px 50px rgba(15,23,42,.08);
 }
 
-.master-brand{
+.login-brand{
+    color:#c99535;
+    font-size:13px;
     font-weight:900;
-    line-height:1.5;
-    padding:6px 10px 22px;
+    letter-spacing:.18em;
+    margin-bottom:12px;
 }
 
-.master-user{
-    border-top:1px solid rgba(255,255,255,.1);
-    border-bottom:1px solid rgba(255,255,255,.1);
-    padding:15px 10px;
-    margin-bottom:15px;
+.login-card h1{
+    margin:0 0 10px;
+    font-size:44px;
+    line-height:1.05;
 }
 
-.master-user small{
+.login-card p{
+    margin:0 0 25px;
+    color:#667085;
+    line-height:1.6;
+}
+
+.field{
+    margin-bottom:17px;
+}
+
+.field label{
     display:block;
-    color:#aeb8cc;
+    font-size:13px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    border:1px solid #d8dee8;
+    border-radius:11px;
+    padding:12px 13px;
+    font:inherit;
+    outline:none;
+    background:#fff;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-color:#53678f;
+    box-shadow:0 0 0 3px rgba(83,103,143,.10);
+}
+
+.field textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.primary-btn{
+    border:0;
+    border-radius:11px;
+    padding:13px 16px;
+    background:#111a31;
+    color:#fff;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.primary-btn:hover{
+    opacity:.93;
+}
+
+.primary-btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+.login-message{
+    margin-top:15px;
+    min-height:22px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.login-message.error{
+    color:#b42318;
+}
+
+.login-message.success{
+    color:#027a48;
+}
+
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+#appView{
+    display:none;
+    min-height:100vh;
+}
+
+.app-layout{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:255px minmax(0,1fr);
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar{
+    background:#111a31;
+    color:#fff;
+    min-height:100vh;
+    padding:24px 15px;
+}
+
+.sidebar-brand{
+    padding:4px 12px 22px;
+    font-size:18px;
+    font-weight:900;
+    line-height:1.35;
+}
+
+.sidebar-user{
+    border-top:1px solid rgba(255,255,255,.10);
+    border-bottom:1px solid rgba(255,255,255,.10);
+    padding:16px 12px;
+    margin-bottom:16px;
+}
+
+.sidebar-user small{
+    display:block;
+    color:#aeb8ca;
     margin-bottom:5px;
 }
 
-.master-nav{
+.sidebar-user strong{
+    display:block;
+    font-size:16px;
+    margin-bottom:4px;
+}
+
+.sidebar-nav{
     display:grid;
     gap:5px;
 }
 
-.master-nav button{
-    border:0;
+.sidebar-nav button{
     width:100%;
-    padding:11px 12px;
-    border-radius:10px;
+    border:0;
     background:transparent;
-    color:#cbd4e4;
-    cursor:pointer;
+    color:#cbd3e2;
+    border-radius:10px;
+    padding:11px 12px;
     text-align:left;
     font:inherit;
+    cursor:pointer;
 }
 
-.master-nav button:hover,
-.master-nav button.active{
-    background:#243456;
+.sidebar-nav button:hover{
+    background:#1c2a49;
     color:#fff;
 }
 
-.master-nav .logout{
-    margin-top:12px;
-    color:#fda4af;
+.sidebar-nav button.active{
+    background:#25385f;
+    color:#fff;
 }
 
-.master-main{
+.sidebar-nav button.logout{
+    margin-top:12px;
+    color:#ffb3bb;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main{
     min-width:0;
 }
 
-.master-topbar{
+.topbar{
     position:sticky;
     top:0;
     z-index:20;
     background:#fff;
     border-bottom:1px solid #e5e7eb;
-    padding:16px 26px;
+    padding:16px 25px;
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
     gap:12px;
 }
 
-.master-topbar h1{
+.topbar h1{
     margin:0;
     font-size:22px;
 }
 
-.master-content{
-    padding:26px;
+.topbar-right{
+    display:flex;
+    gap:8px;
+}
+
+.content{
+    padding:25px;
 }
 
 .panel{
@@ -128,451 +285,34 @@ body{
 }
 
 
-/* ============================================================
-   DASHBOARD TWO COLUMNS
-   ============================================================ */
+/* =========================================================
+   COMMON
+   ========================================================= */
 
-.dashboard-columns{
-    display:grid;
-    grid-template-columns:
-        minmax(0,1fr)
-        310px;
-    gap:18px;
-    align-items:start;
+.section-title{
+    margin:0;
+    font-size:30px;
+    line-height:1.15;
 }
 
-.dashboard-main{
-    min-width:0;
-}
-
-.dashboard-side{
-    min-width:0;
-}
-
-
-/* ============================================================
-   SUMMARY
-   ============================================================ */
-
-.summary-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(4,minmax(0,1fr));
-    gap:15px;
-}
-
-.summary-card{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:16px;
-    padding:18px;
-}
-
-.summary-card span{
+.section-subtitle{
+    margin:8px 0 20px;
     color:#667085;
-    font-size:12px;
+    line-height:1.6;
 }
-
-.summary-card strong{
-    display:block;
-    margin-top:8px;
-    font-size:27px;
-}
-
-
-/* ============================================================
-   CARDS / TABLE
-   ============================================================ */
 
 .card{
     background:#fff;
-    border:1px solid #e5e7eb;
+    border:1px solid #e2e6ee;
     border-radius:18px;
 }
 
-.table-card{
-    overflow:auto;
-    margin-top:20px;
-}
-
-.data-table{
-    width:100%;
-    min-width:760px;
-    border-collapse:collapse;
-}
-
-.data-table th{
-    background:#f7f8fa;
-    padding:12px 14px;
-    border-bottom:1px solid #e5e7eb;
-    text-align:left;
-    font-size:12px;
-    color:#475467;
-}
-
-.data-table td{
-    padding:13px 14px;
-    border-bottom:1px solid #eef0f3;
-    vertical-align:top;
-    font-size:14px;
-}
-
-.data-table tr:last-child td{
-    border-bottom:0;
-}
-
-
-/* ============================================================
-   BADGES
-   ============================================================ */
-
-.badge{
-    display:inline-flex;
-    padding:5px 9px;
-    border-radius:999px;
-    background:#eef2f7;
-    font-size:11px;
-    font-weight:800;
-}
-
-.badge.ok{
-    background:#ecfdf3;
-    color:#027a48;
-}
-
-.badge.warn{
-    background:#fff7ed;
-    color:#b54708;
-}
-
-.badge.danger{
-    background:#fff1f2;
-    color:#b42318;
-}
-
-
-/* ============================================================
-   BUTTONS
-   ============================================================ */
-
-.actions{
-    display:flex;
-    gap:6px;
-    flex-wrap:wrap;
-}
-
-.btn-small{
-    border:0;
-    border-radius:9px;
-    padding:8px 11px;
-    cursor:pointer;
-    font-size:12px;
-    font-weight:700;
-}
-
-.btn-small.primary{
-    background:#111b33;
-    color:#fff;
-}
-
-.btn-small.success{
-    background:#027a48;
-    color:#fff;
-}
-
-.btn-small.danger{
-    background:#b42318;
-    color:#fff;
-}
-
-.btn-small.light{
-    background:#eef2f7;
-    color:#344054;
-}
-
-
-/* ============================================================
-   ROOM FIX
-   ============================================================ */
-
-.room-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(5,minmax(0,1fr));
-    gap:12px;
-
-    /*
-     * Sangat penting:
-     * satu kartu tidak ikut diregangkan
-     * mengikuti kartu lain.
-     */
-
-    grid-auto-rows:max-content;
-
-    align-items:start;
-}
-
-.room{
-    width:100%;
-    min-height:0 !important;
-    height:auto !important;
-    align-self:start;
-
-    box-sizing:border-box;
-
-    display:block !important;
-
-    background:#fff;
-    border:1px solid #e1e5ea;
-    border-radius:14px;
-    padding:15px;
-
-    justify-content:initial !important;
-    align-items:initial !important;
-}
-
-.room strong{
-    display:block;
-    font-size:20px;
-    margin-bottom:7px;
-}
-
-.room small{
-    display:block;
-    margin-top:5px;
-    color:#667085;
-    line-height:1.4;
-}
-
-.room.occupied{
-    background:#f1fbf5;
-    border-color:#b8dfc4;
-}
-
-.room.soon{
-    background:#fff9f0;
-    border-color:#f1dcc0;
-}
-
-
-/* ============================================================
-   MEDIA CENTER
-   ============================================================ */
-
-.media-side{
-    padding:18px;
-}
-
-.media-side h3{
-    margin:0 0 5px;
-}
-
-.media-side .sub{
-    color:#667085;
-    font-size:12px;
-    line-height:1.5;
-}
-
-.media-count{
-    display:grid;
-    gap:8px;
-    margin-top:15px;
-}
-
-.media-count button{
-    border:1px solid #e5e7eb;
-    background:#fff;
-    padding:12px;
-    border-radius:12px;
-    text-align:left;
-    cursor:pointer;
-}
-
-.media-count button:hover{
-    background:#f7f8fa;
-}
-
-.media-count strong{
-    display:block;
-}
-
-.media-count span{
-    font-size:12px;
-    color:#667085;
-}
-
-
-/* ============================================================
-   MEDIA PAGE
-   ============================================================ */
-
-.media-toolbar{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:18px;
-}
-
-.media-filter{
-    border:1px solid #dfe3eb;
-    background:#fff;
-    border-radius:10px;
-    padding:9px 12px;
-    cursor:pointer;
-}
-
-.media-filter.active{
-    background:#111b33;
-    color:#fff;
-}
-
-.media-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(3,minmax(0,1fr));
-    gap:14px;
-    margin-top:18px;
-}
-
-.media-card{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:16px;
-    padding:15px;
-}
-
-.media-icon{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    display:grid;
-    place-items:center;
-    background:#eef2f7;
-    margin-bottom:12px;
-    font-size:20px;
-}
-
-.media-card h4{
-    margin:0 0 6px;
-}
-
-.media-card p{
-    margin:4px 0;
-    color:#667085;
-    font-size:12px;
-    line-height:1.5;
-}
-
-
-/* ============================================================
-   PAYMENT FILTER
-   ============================================================ */
-
-.payment-filters{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:18px;
-}
-
-.payment-filter{
-    border:1px solid #dfe3eb;
-    background:#fff;
-    border-radius:10px;
-    padding:9px 12px;
-    cursor:pointer;
-}
-
-.payment-filter.active{
-    background:#111b33;
-    color:#fff;
-}
-
-
-/* ============================================================
-   FORM
-   ============================================================ */
-
-.form-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-    gap:16px;
-}
-
-.field.full{
-    grid-column:1 / -1;
-}
-
-.field label{
-    display:block;
-    font-size:13px;
-    font-weight:700;
-    margin-bottom:7px;
-}
-
-.field input,
-.field textarea,
-.field select{
-    width:100%;
-    box-sizing:border-box;
-    border:1px solid #dfe3eb;
-    border-radius:11px;
-    padding:12px 13px;
-    font:inherit;
-}
-
-.field textarea{
-    min-height:110px;
-}
-
-
-/* ============================================================
-   MODAL
-   ============================================================ */
-
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:100;
-    background:rgba(15,23,42,.62);
+.card-padding{
     padding:20px;
-    align-items:center;
-    justify-content:center;
 }
-
-.modal.show{
-    display:flex;
-}
-
-.modal-card{
-    width:min(100%,820px);
-    max-height:90vh;
-    overflow:auto;
-    box-sizing:border-box;
-    background:#fff;
-    border-radius:18px;
-    padding:24px;
-}
-
-.modal-image{
-    display:block;
-    width:100%;
-    max-height:68vh;
-    object-fit:contain;
-    border-radius:14px;
-    border:1px solid #e5e7eb;
-    background:#f8fafc;
-}
-
-
-/* ============================================================
-   EMPTY
-   ============================================================ */
 
 .empty{
-    padding:34px;
+    padding:32px;
     text-align:center;
     color:#667085;
 }
@@ -583,20 +323,452 @@ body{
     color:#667085;
 }
 
+.small-text{
+    font-size:12px;
+    color:#667085;
+}
 
-/* ============================================================
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn{
+    border:0;
+    border-radius:10px;
+    padding:9px 12px;
+    font:inherit;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.btn-primary{
+    background:#111a31;
+    color:#fff;
+}
+
+.btn-secondary{
+    background:#edf1f6;
+    color:#344054;
+}
+
+.btn-success{
+    background:#027a48;
+    color:#fff;
+}
+
+.btn-danger{
+    background:#b42318;
+    color:#fff;
+}
+
+.btn-warning{
+    background:#b54708;
+    color:#fff;
+}
+
+.btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+    gap:14px;
+    margin-top:20px;
+}
+
+.summary-card{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    padding:17px;
+}
+
+.summary-card span{
+    display:block;
+    color:#667085;
+    font-size:12px;
+}
+
+.summary-card strong{
+    display:block;
+    margin-top:7px;
+    font-size:28px;
+}
+
+
+/* =========================================================
+   DASHBOARD LAYOUT
+   ========================================================= */
+
+.dashboard-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 310px;
+    gap:18px;
+    align-items:start;
+}
+
+.dashboard-side{
+    min-width:0;
+}
+
+
+/* =========================================================
+   MEDIA SIDE
+   ========================================================= */
+
+.media-side-card{
+    padding:18px;
+}
+
+.media-side-card h3{
+    margin:0;
+    font-size:18px;
+}
+
+.media-side-card p{
+    color:#667085;
+    font-size:12px;
+    line-height:1.55;
+}
+
+.media-counts{
+    display:grid;
+    gap:8px;
+    margin-top:14px;
+}
+
+.media-counts button{
+    border:1px solid #e3e7ef;
+    background:#fff;
+    border-radius:11px;
+    padding:11px;
+    text-align:left;
+    cursor:pointer;
+}
+
+.media-counts button:hover{
+    background:#f7f8fa;
+}
+
+.media-counts strong{
+    display:block;
+    color:#17213a;
+}
+
+.media-counts span{
+    font-size:12px;
+    color:#667085;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrap{
+    overflow:auto;
+}
+
+.data-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+}
+
+.data-table th{
+    text-align:left;
+    background:#f7f8fa;
+    border-bottom:1px solid #e4e7ec;
+    padding:12px 14px;
+    color:#475467;
+    font-size:12px;
+}
+
+.data-table td{
+    padding:13px 14px;
+    border-bottom:1px solid #eef1f4;
+    vertical-align:top;
+    font-size:14px;
+}
+
+.data-table tr:last-child td{
+    border-bottom:0;
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 9px;
+    border-radius:999px;
+    background:#eef2f6;
+    color:#475467;
+    font-size:11px;
+    font-weight:900;
+}
+
+.badge-ok{
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.badge-warn{
+    background:#fff7ed;
+    color:#b54708;
+}
+
+.badge-danger{
+    background:#fff1f2;
+    color:#b42318;
+}
+
+.badge-info{
+    background:#eff6ff;
+    color:#175cd3;
+}
+
+
+/* =========================================================
+   ROOMS
+   ========================================================= */
+
+.room-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(5,minmax(0,1fr));
+    gap:12px;
+}
+
+.room-card{
+    background:#fff;
+    border:1px solid #e0e4eb;
+    border-radius:14px;
+    padding:15px;
+}
+
+.room-card.occupied{
+    background:#f1fbf5;
+}
+
+.room-card.soon{
+    background:#fff9f0;
+}
+
+.room-number{
+    font-size:21px;
+    font-weight:900;
+}
+
+.room-line{
+    margin-top:6px;
+    color:#667085;
+    font-size:12px;
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+.filter-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:18px 0;
+}
+
+.filter-btn{
+    border:1px solid #dfe4ec;
+    background:#fff;
+    border-radius:10px;
+    padding:9px 12px;
+    cursor:pointer;
+}
+
+.filter-btn.active{
+    background:#111a31;
+    color:#fff;
+}
+
+
+/* =========================================================
+   MEDIA GRID
+   ========================================================= */
+
+.media-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+    gap:14px;
+}
+
+.media-card{
+    padding:16px;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    background:#fff;
+}
+
+.media-card .icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:#eef2f6;
+    display:grid;
+    place-items:center;
+    font-size:20px;
+    margin-bottom:11px;
+}
+
+.media-card h4{
+    margin:0 0 6px;
+}
+
+.media-card p{
+    margin:4px 0;
+    font-size:12px;
+    color:#667085;
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+    gap:15px;
+}
+
+.full{
+    grid-column:1 / -1;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:rgba(15,23,42,.66);
+    padding:20px;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    background:#fff;
+    width:min(100%,900px);
+    max-height:92vh;
+    overflow:auto;
+    border-radius:20px;
+    padding:22px;
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.modal-head h3{
+    margin:0;
+    font-size:21px;
+}
+
+.modal-image{
+    display:block;
+    width:100%;
+    max-height:70vh;
+    object-fit:contain;
+    border-radius:14px;
+    border:1px solid #e2e6ee;
+    background:#f8fafc;
+}
+
+
+/* =========================================================
+   ERROR SCREEN
+   ========================================================= */
+
+#bootError{
+    display:none;
+    min-height:100vh;
+    padding:30px;
+    align-items:center;
+    justify-content:center;
+}
+
+.boot-error-card{
+    width:min(100%,700px);
+    background:#fff;
+    border:1px solid #fecaca;
+    border-radius:18px;
+    padding:25px;
+}
+
+.boot-error-card h2{
+    margin-top:0;
+    color:#b42318;
+}
+
+
+/* =========================================================
    RESPONSIVE
-   ============================================================ */
+   ========================================================= */
 
-@media(max-width:1200px){
+@media(max-width:1250px){
 
-    .dashboard-columns{
+    .dashboard-layout{
         grid-template-columns:1fr;
     }
 
     .summary-grid{
         grid-template-columns:
             repeat(3,minmax(0,1fr));
+    }
+
+}
+
+@media(max-width:1050px){
+
+    .room-grid{
+        grid-template-columns:
+            repeat(4,minmax(0,1fr));
     }
 
     .media-grid{
@@ -606,34 +778,19 @@ body{
 
 }
 
-@media(max-width:1000px){
+@media(max-width:850px){
 
-    .room-grid{
-        grid-template-columns:
-            repeat(4,minmax(0,1fr));
-    }
-
-}
-
-@media(max-width:800px){
-
-    .master-layout{
+    .app-layout{
         grid-template-columns:1fr;
     }
 
-    .master-sidebar{
-        position:static;
-        height:auto;
+    .sidebar{
         min-height:auto;
     }
 
-    .master-nav{
+    .sidebar-nav{
         grid-template-columns:
             repeat(2,minmax(0,1fr));
-    }
-
-    .master-content{
-        padding:18px;
     }
 
     .summary-grid{
@@ -650,12 +807,44 @@ body{
         grid-template-columns:1fr;
     }
 
-    .field.full{
+    .full{
         grid-column:auto;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .content{
+        padding:16px;
+    }
+
+    .topbar{
+        padding:13px 16px;
+    }
+
+    .sidebar-nav{
+        grid-template-columns:1fr;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .room-grid{
+        grid-template-columns:1fr;
     }
 
     .media-grid{
         grid-template-columns:1fr;
+    }
+
+    .login-card{
+        padding:25px;
+    }
+
+    .login-card h1{
+        font-size:36px;
     }
 
 }
@@ -668,813 +857,792 @@ body{
 <body>
 
 
-<!-- ==========================================================
-     MASTER LOGIN
-     ========================================================== -->
+<!-- =========================================================
+     LOGIN VIEW
+     ========================================================= -->
 
-<div
-    id="loginView"
-    style="display:none;"
->
+<div id="loginView">
 
-<div class="login-page">
+    <div class="login-card">
 
-<div class="login-card">
+        <div class="login-brand">
+            DJ FAMILY KOST
+        </div>
 
-<div class="eyebrow">
-    DJ FAMILY KOST
-</div>
+        <h1>
+            Master Login
+        </h1>
 
-<h1>
-    Master Login
-</h1>
-
-<p>
-    Akses pengelolaan operasional DJ Family Kost.
-</p>
+        <p>
+            Akses pengelolaan operasional DJ Family Kost.
+        </p>
 
 
-<form id="masterLoginForm">
+        <form id="masterLoginForm">
+
+            <div class="field">
+
+                <label for="masterIdInput">
+                    Master ID
+                </label>
+
+                <input
+                    id="masterIdInput"
+                    type="text"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
 
 
-<div class="field">
+            <div class="field">
 
-<label>
-    Master ID
-</label>
+                <label for="masterPasswordInput">
+                    Password
+                </label>
 
-<input
-    id="masterIdInput"
-    type="text"
-    required
->
+                <input
+                    id="masterPasswordInput"
+                    type="password"
+                    autocomplete="current-password"
+                    required
+                >
 
-</div>
-
-
-<div class="field">
-
-<label>
-    Password
-</label>
-
-<input
-    id="masterPasswordInput"
-    type="password"
-    required
->
-
-</div>
+            </div>
 
 
-<button
-    id="masterLoginButton"
-    class="btn btn-primary"
-    type="submit"
-    style="
-        width:100%;
-        margin-top:18px;
-    "
->
-    Masuk sebagai Master
-</button>
+            <button
+                id="masterLoginButton"
+                class="primary-btn"
+                type="submit"
+                style="width:100%;"
+            >
+                Masuk sebagai Master
+            </button>
 
 
-<div
-    id="masterLoginMessage"
-    class="login-message"
-></div>
+            <div
+                id="masterLoginMessage"
+                class="login-message"
+            ></div>
+
+        </form>
 
 
-</form>
+        <div
+            style="
+                margin-top:20px;
+                text-align:center;
+                font-size:13px;
+            "
+        >
 
+            <a
+                href="login.html"
+                style="
+                    color:#344054;
+                    text-decoration:none;
+                "
+            >
+                ← Kembali ke Login Tenant
+            </a>
 
-<div class="login-footer">
+        </div>
 
-<a href="login.html">
-    ← Kembali ke Login Tenant
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ==========================================================
-     MASTER APP
-     ========================================================== -->
-
-<div
-    id="appView"
-    style="display:none;"
->
-
-
-<div class="master-layout">
-
-
-<!-- ========================================================
-     SIDEBAR
-     ======================================================== -->
-
-<aside class="master-sidebar">
-
-
-<div class="master-brand">
-
-DJ FAMILY KOST
-<br>
-MASTER
+    </div>
 
 </div>
 
 
-<div class="master-user">
+<!-- =========================================================
+     BOOT ERROR
+     ========================================================= -->
 
-<small>
-    Login sebagai
-</small>
+<div id="bootError">
 
-<strong id="masterName">
-    —
-</strong>
+    <div class="boot-error-card">
 
-<small id="masterIdLabel">
-    —
-</small>
+        <h2>
+            Master tidak dapat dimuat
+        </h2>
 
-</div>
+        <p id="bootErrorMessage">
+            Terjadi kesalahan saat menjalankan halaman.
+        </p>
 
+        <button
+            class="btn btn-primary"
+            onclick="location.reload()"
+        >
+            Muat Ulang
+        </button>
 
-<nav class="master-nav">
-
-
-<button
-    class="active"
-    data-panel="dashboard"
->
-    Dashboard
-</button>
-
-
-<button
-    data-panel="registrations"
->
-    Pendaftaran
-</button>
-
-
-<button
-    data-panel="tenants"
->
-    Tenant
-</button>
-
-
-<button
-    data-panel="payments"
->
-    Pembayaran
-</button>
-
-
-<button
-    data-panel="maintenance"
->
-    Maintenance
-</button>
-
-
-<button
-    data-panel="rooms"
->
-    Kamar
-</button>
-
-
-<button
-    data-panel="media"
->
-    Pusat Media
-</button>
-
-
-<button
-    data-panel="whatsapp"
->
-    WhatsApp
-</button>
-
-
-<button
-    data-panel="announcements"
->
-    Pengumuman
-</button>
-
-
-<button
-    data-panel="automation"
->
-    Otomasi
-</button>
-
-
-<button
-    id="masterLogout"
-    class="logout"
->
-    Keluar
-</button>
-
-
-</nav>
-
-</aside>
-
-
-<!-- ========================================================
-     MAIN
-     ======================================================== -->
-
-<main class="master-main">
-
-
-<header class="master-topbar">
-
-<h1 id="pageTitle">
-    Dashboard
-</h1>
-
-
-<button
-    id="refreshButton"
-    class="btn-small light"
->
-    Refresh
-</button>
-
-</header>
-
-
-<div class="master-content">
-
-
-<!-- ======================================================
-     DASHBOARD
-     ====================================================== -->
-
-<section
-    id="panel-dashboard"
-    class="panel active"
->
-
-
-<div class="dashboard-columns">
-
-
-<div class="dashboard-main">
-
-
-<h2>
-    Ringkasan Operasional
-</h2>
-
-
-<p
-    style="
-        color:#667085;
-        line-height:1.6;
-    "
->
-    Semua aktivitas pengelolaan dapat dilakukan
-    dari website Master.
-</p>
-
-
-<div
-    id="summaryGrid"
-    class="summary-grid"
->
-</div>
-
-
-<div class="card table-card">
-
-
-<div
-    style="
-        padding:20px 20px 0;
-    "
->
-
-<h3>
-    Perlu Perhatian
-</h3>
+    </div>
 
 </div>
 
 
-<div id="attentionTable">
+<!-- =========================================================
+     APP VIEW
+     ========================================================= -->
 
-<div class="loading">
-    Memuat...
+<div id="appView">
+
+    <div class="app-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                DJ FAMILY KOST
+                <br>
+                MASTER
+            </div>
+
+
+            <div class="sidebar-user">
+
+                <small>
+                    Login sebagai
+                </small>
+
+                <strong id="masterDisplayName">
+                    —
+                </strong>
+
+                <small id="masterDisplayId">
+                    —
+                </small>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <button
+                    class="active"
+                    data-panel="dashboard"
+                >
+                    Dashboard
+                </button>
+
+                <button
+                    data-panel="registrations"
+                >
+                    Pendaftaran
+                </button>
+
+                <button
+                    data-panel="tenants"
+                >
+                    Tenant
+                </button>
+
+                <button
+                    data-panel="payments"
+                >
+                    Pembayaran
+                </button>
+
+                <button
+                    data-panel="maintenance"
+                >
+                    Maintenance
+                </button>
+
+                <button
+                    data-panel="rooms"
+                >
+                    Kamar
+                </button>
+
+                <button
+                    data-panel="media"
+                >
+                    Pusat Media
+                </button>
+
+                <button
+                    data-panel="whatsapp"
+                >
+                    WhatsApp
+                </button>
+
+                <button
+                    data-panel="announcements"
+                >
+                    Pengumuman
+                </button>
+
+                <button
+                    data-panel="automation"
+                >
+                    Otomasi
+                </button>
+
+                <button
+                    id="logoutButton"
+                    class="logout"
+                >
+                    Keluar
+                </button>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN
+             ================================================= -->
+
+        <main class="main">
+
+
+            <header class="topbar">
+
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
+
+
+                <div class="topbar-right">
+
+                    <button
+                        id="refreshButton"
+                        class="btn btn-secondary"
+                    >
+                        Refresh
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <div class="content">
+
+
+                <!-- ==========================================
+                     DASHBOARD
+                     ========================================== -->
+
+                <section
+                    id="panel-dashboard"
+                    class="panel active"
+                >
+
+                    <div class="dashboard-layout">
+
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Ringkasan Operasional
+                            </h2>
+
+                            <p class="section-subtitle">
+                                Semua aktivitas operasional
+                                DJ Family Kost.
+                            </p>
+
+
+                            <div
+                                id="summaryGrid"
+                                class="summary-grid"
+                            ></div>
+
+
+                            <div
+                                class="card"
+                                style="margin-top:18px;"
+                            >
+
+                                <div
+                                    class="card-padding"
+                                >
+
+                                    <h3
+                                        style="margin:0;"
+                                    >
+                                        Perlu Perhatian
+                                    </h3>
+
+                                </div>
+
+
+                                <div
+                                    id="attentionTable"
+                                    class="table-wrap"
+                                >
+
+                                    <div class="loading">
+                                        Memuat...
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <aside>
+
+                            <div class="card media-side-card">
+
+                                <h3>
+                                    Pusat Media
+                                </h3>
+
+                                <p>
+                                    Semua dokumentasi tenant
+                                    dan operasional tersedia
+                                    di satu tempat.
+                                </p>
+
+
+                                <div
+                                    id="mediaCounts"
+                                    class="media-counts"
+                                >
+
+                                    <div class="loading">
+                                        Memuat...
+                                    </div>
+
+                                </div>
+
+
+                                <button
+                                    class="btn btn-primary"
+                                    style="
+                                        width:100%;
+                                        margin-top:12px;
+                                    "
+                                    onclick="openPanel('media')"
+                                >
+                                    Buka Semua Media
+                                </button>
+
+                            </div>
+
+                        </aside>
+
+
+                    </div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     REGISTRATIONS
+                     ========================================== -->
+
+                <section
+                    id="panel-registrations"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Pendaftaran Tenant
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Verifikasi pendaftaran langsung
+                        dari website Master.
+                    </p>
+
+
+                    <div
+                        id="registrationsTable"
+                        class="card table-wrap"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     TENANTS
+                     ========================================== -->
+
+                <section
+                    id="panel-tenants"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Data Tenant
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Daftar tenant aktif dan riwayat akun.
+                    </p>
+
+
+                    <div
+                        id="tenantsTable"
+                        class="card table-wrap"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     PAYMENTS
+                     ========================================== -->
+
+                <section
+                    id="panel-payments"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Pembayaran
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Riwayat pembayaran termasuk
+                        pembayaran yang sudah LUNAS.
+                    </p>
+
+
+                    <div
+                        id="paymentFilters"
+                        class="filter-row"
+                    ></div>
+
+
+                    <div
+                        id="paymentsTable"
+                        class="card table-wrap"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     MAINTENANCE
+                     ========================================== -->
+
+                <section
+                    id="panel-maintenance"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Maintenance
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Kelola laporan kerusakan tenant.
+                    </p>
+
+
+                    <div
+                        id="maintenanceTable"
+                        class="card table-wrap"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     ROOMS
+                     ========================================== -->
+
+                <section
+                    id="panel-rooms"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Master Kamar
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Status seluruh kamar dan harga sewa.
+                    </p>
+
+
+                    <div
+                        id="roomsGrid"
+                        class="room-grid"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     MEDIA
+                     ========================================== -->
+
+                <section
+                    id="panel-media"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Pusat Media
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Arsip foto dan dokumen operasional.
+                    </p>
+
+
+                    <div
+                        id="mediaFilters"
+                        class="filter-row"
+                    ></div>
+
+
+                    <div
+                        id="mediaGrid"
+                        class="media-grid"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     WHATSAPP
+                     ========================================== -->
+
+                <section
+                    id="panel-whatsapp"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        WhatsApp
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Daftar tenant yang perlu diingatkan
+                        mengenai pembayaran.
+                    </p>
+
+
+                    <div
+                        id="whatsappTable"
+                        class="card table-wrap"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     ANNOUNCEMENTS
+                     ========================================== -->
+
+                <section
+                    id="panel-announcements"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Pengumuman
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Buat pengumuman operasional
+                        untuk tenant.
+                    </p>
+
+
+                    <div
+                        class="card card-padding"
+                    >
+
+                        <form
+                            id="announcementForm"
+                        >
+
+                            <div class="form-grid">
+
+
+                                <div class="field">
+
+                                    <label>
+                                        Judul
+                                    </label>
+
+                                    <input
+                                        id="announcementTitle"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="field">
+
+                                    <label>
+                                        Prioritas
+                                    </label>
+
+                                    <select
+                                        id="announcementPriority"
+                                    >
+
+                                        <option value="NORMAL">
+                                            Normal
+                                        </option>
+
+                                        <option value="PENTING">
+                                            Penting
+                                        </option>
+
+                                        <option value="DARURAT">
+                                            Darurat
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="field full">
+
+                                    <label>
+                                        Isi Pengumuman
+                                    </label>
+
+                                    <textarea
+                                        id="announcementMessage"
+                                        required
+                                    ></textarea>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <button
+                                class="btn btn-primary"
+                                type="submit"
+                            >
+                                Terbitkan Pengumuman
+                            </button>
+
+
+                        </form>
+
+                    </div>
+
+
+                    <div
+                        id="announcementsTable"
+                        class="card table-wrap"
+                        style="margin-top:18px;"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     AUTOMATION
+                     ========================================== -->
+
+                <section
+                    id="panel-automation"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Otomasi
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Jalankan proses sinkronisasi sistem
+                        dari Master.
+                    </p>
+
+
+                    <div class="card card-padding">
+
+                        <button
+                            id="automationButton"
+                            class="btn btn-primary"
+                        >
+                            Jalankan Otomasi
+                        </button>
+
+
+                        <div
+                            id="automationMessage"
+                            class="login-message"
+                        ></div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+
+    </div>
+
 </div>
 
-</div>
 
-</div>
-
-
-</div>
-
-
-<!-- ====================================================
-     SIDE MEDIA
-     ==================================================== -->
-
-<aside
-    class="card media-side"
->
-
-<h3>
-    Pusat Media
-</h3>
-
-
-<div class="sub">
-    Dokumentasi tenant dan operasional
-    tersimpan di satu tempat.
-</div>
-
-
-<div
-    id="mediaSideCount"
-    class="media-count"
->
-</div>
-
-
-<button
-    class="btn-small primary"
-    style="
-        width:100%;
-        margin-top:12px;
-    "
-    onclick="openMediaPage()"
->
-    Buka Semua Media
-</button>
-
-</aside>
-
-
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     PENDAFTARAN
-     ====================================================== -->
-
-<section
-    id="panel-registrations"
-    class="panel"
->
-
-<h2>
-    Pendaftaran Tenant
-</h2>
-
-
-<p
-    style="color:#667085;"
->
-    Verifikasi pendaftaran langsung dari website.
-</p>
-
-
-<div
-    id="registrationsTable"
-    class="card table-card"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     TENANTS
-     ====================================================== -->
-
-<section
-    id="panel-tenants"
-    class="panel"
->
-
-<h2>
-    Data Tenant
-</h2>
-
-
-<div
-    id="tenantsTable"
-    class="card table-card"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     PAYMENTS
-     ====================================================== -->
-
-<section
-    id="panel-payments"
-    class="panel"
->
-
-<h2>
-    Pembayaran
-</h2>
-
-
-<p
-    style="color:#667085;"
->
-    Riwayat pembayaran tetap tersedia setelah diverifikasi.
-</p>
-
-
-<div
-    id="paymentFilters"
-    class="payment-filters"
->
-</div>
-
-
-<div
-    id="paymentsTable"
-    class="card table-card"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     MAINTENANCE
-     ====================================================== -->
-
-<section
-    id="panel-maintenance"
-    class="panel"
->
-
-<h2>
-    Maintenance
-</h2>
-
-
-<p
-    style="color:#667085;"
->
-    Kelola laporan maintenance tenant.
-</p>
-
-
-<div
-    id="maintenanceTable"
-    class="card table-card"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     ROOMS
-     ====================================================== -->
-
-<section
-    id="panel-rooms"
-    class="panel"
->
-
-<h2>
-    Master Kamar
-</h2>
-
-
-<p
-    style="color:#667085;"
->
-    Status kamar dan harga.
-</p>
-
-
-<div
-    id="roomsGrid"
-    class="room-grid"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     MEDIA
-     ====================================================== -->
-
-<section
-    id="panel-media"
-    class="panel"
->
-
-<h2>
-    Pusat Media
-</h2>
-
-
-<p
-    style="color:#667085;line-height:1.6;"
->
-    Arsip dokumentasi tenant dan operasional.
-    Media tidak dihapus ketika pembayaran
-    atau maintenance selesai.
-</p>
-
-
-<div
-    id="mediaToolbar"
-    class="media-toolbar"
->
-</div>
-
-
-<div
-    id="mediaGrid"
-    class="media-grid"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     WHATSAPP
-     ====================================================== -->
-
-<section
-    id="panel-whatsapp"
-    class="panel"
->
-
-<h2>
-    Peringatan Pembayaran
-</h2>
-
-
-<p
-    style="color:#667085;"
->
-    Pesan dibuat otomatis dari data pembayaran.
-</p>
-
-
-<div
-    id="whatsappTable"
-    class="card table-card"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     ANNOUNCEMENT
-     ====================================================== -->
-
-<section
-    id="panel-announcements"
-    class="panel"
->
-
-<h2>
-    Pengumuman
-</h2>
-
-
-<div
-    class="card"
-    style="
-        padding:22px;
-        margin-top:18px;
-    "
->
-
-<form id="announcementForm">
-
-
-<div class="form-grid">
-
-
-<div class="field">
-
-<label>
-    Judul
-</label>
-
-<input
-    id="announcementTitle"
-    required
->
-
-</div>
-
-
-<div class="field">
-
-<label>
-    Prioritas
-</label>
-
-<select
-    id="announcementPriority"
->
-
-<option value="NORMAL">
-    Normal
-</option>
-
-<option value="PENTING">
-    Penting
-</option>
-
-<option value="DARURAT">
-    Darurat
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-    Isi
-</label>
-
-<textarea
-    id="announcementMessage"
-    required
-></textarea>
-
-</div>
-
-
-</div>
-
-
-<button
-    class="btn btn-primary"
-    type="submit"
-    style="margin-top:16px;"
->
-    Terbitkan
-</button>
-
-
-</form>
-
-</div>
-
-
-<div
-    id="announcementsTable"
-    class="card table-card"
->
-</div>
-
-</section>
-
-
-<!-- ======================================================
-     AUTOMATION
-     ====================================================== -->
-
-<section
-    id="panel-automation"
-    class="panel"
->
-
-<h2>
-    Otomasi Sistem
-</h2>
-
-
-<div
-    class="card"
-    style="
-        padding:22px;
-        margin-top:18px;
-    "
->
-
-<p
-    style="color:#667085;line-height:1.6;"
->
-    Jalankan sinkronisasi dan proses periodik
-    tanpa membuka Apps Script.
-</p>
-
-
-<button
-    id="runAutomationButton"
-    class="btn btn-primary"
->
-    Jalankan Otomasi
-</button>
-
-
-<div
-    id="automationMessage"
-    class="login-message"
-></div>
-
-</div>
-
-</section>
-
-
-</div>
-
-</main>
-
-</div>
-
-</div>
-
-
-<!-- ==========================================================
+<!-- =========================================================
      MODAL
-     ========================================================== -->
+     ========================================================= -->
 
 <div
     id="modal"
     class="modal"
 >
 
-<div class="modal-card">
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h3 id="modalTitle">
+                Detail
+            </h3>
+
+            <button
+                id="modalClose"
+                class="btn btn-secondary"
+            >
+                Tutup
+            </button>
+
+        </div>
 
 
-<div
-    style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:15px;
-    "
->
+        <div id="modalBody"></div>
 
-<h3
-    id="modalTitle"
->
-    Detail
-</h3>
-
-
-<button
-    class="btn-small light"
-    id="modalClose"
->
-    Tutup
-</button>
-
-</div>
-
-
-<div id="modalBody"></div>
-
-
-</div>
+    </div>
 
 </div>
 
 
 <script>
 
+/* ============================================================
+   CONFIG
+   ============================================================ */
 
 const API_URL =
     "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
 
+
+/* ============================================================
+   STATE
+   ============================================================ */
 
 let masterSession =
     null;
@@ -1482,56 +1650,60 @@ let masterSession =
 let dashboardData =
     null;
 
-let allPayments =
+let paymentItems =
     [];
 
 let maintenanceItems =
     [];
 
-let maintenanceItems = [];
-
-
-let mediaData =
+let mediaItems =
     [];
 
+let paymentFilter =
+    "ALL";
 
-let currentPaymentFilter =
+let mediaFilter =
     "ALL";
 
 
-let currentMediaFilter =
-    "ALL";
-
+/* ============================================================
+   ELEMENTS
+   ============================================================ */
 
 const loginView =
     document.getElementById(
         "loginView"
     );
 
-
 const appView =
     document.getElementById(
         "appView"
     );
 
+const bootError =
+    document.getElementById(
+        "bootError"
+    );
 
 const modal =
     document.getElementById(
         "modal"
     );
 
-
 const modalTitle =
     document.getElementById(
         "modalTitle"
     );
-
 
 const modalBody =
     document.getElementById(
         "modalBody"
     );
 
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
 
 function escapeHtml(
     value
@@ -1583,11 +1755,30 @@ function money(
 }
 
 
-/* ==========================================================
-   SESSION
-   ========================================================== */
+function showBootError(
+    message
+){
 
-function getSession(){
+    loginView.style.display =
+        "none";
+
+    appView.style.display =
+        "none";
+
+    bootError.style.display =
+        "flex";
+
+    document
+        .getElementById(
+            "bootErrorMessage"
+        )
+        .textContent =
+            message;
+
+}
+
+
+function getStoredMasterSession(){
 
     const raw =
         sessionStorage.getItem(
@@ -1604,9 +1795,24 @@ function getSession(){
 
     try{
 
-        return JSON.parse(
-            raw
-        );
+        const session =
+            JSON.parse(
+                raw
+            );
+
+
+        if(
+            !session ||
+            !session.masterId ||
+            !session.sessionToken
+        ){
+
+            return null;
+
+        }
+
+
+        return session;
 
     }catch(error){
 
@@ -1621,19 +1827,60 @@ function getSession(){
 }
 
 
+function setMasterSession(
+    session
+){
+
+    masterSession =
+        session;
+
+
+    sessionStorage.setItem(
+        "djMasterSession",
+        JSON.stringify(
+            session
+        )
+    );
+
+}
+
+
+function clearMasterSession(){
+
+    masterSession =
+        null;
+
+
+    sessionStorage.removeItem(
+        "djMasterSession"
+    );
+
+}
+
+
+/* ============================================================
+   SHOW LOGIN / APP
+   ============================================================ */
+
 function showLogin(){
 
-    loginView.style.display =
-        "block";
+    bootError.style.display =
+        "none";
 
     appView.style.display =
         "none";
+
+    loginView.style.display =
+        "flex";
 
 }
 
 
 function showApp(){
 
+    bootError.style.display =
+        "none";
+
     loginView.style.display =
         "none";
 
@@ -1643,16 +1890,17 @@ function showApp(){
 
     document
         .getElementById(
-            "masterName"
+            "masterDisplayName"
         )
         .textContent =
             masterSession.nama ||
+            masterSession.name ||
             "Master";
 
 
     document
         .getElementById(
-            "masterIdLabel"
+            "masterDisplayId"
         )
         .textContent =
             masterSession.masterId ||
@@ -1661,9 +1909,9 @@ function showApp(){
 }
 
 
-/* ==========================================================
+/* ============================================================
    API
-   ========================================================== */
+   ============================================================ */
 
 async function api(
     action,
@@ -1679,41 +1927,67 @@ async function api(
     }
 
 
-    const response =
-        await fetch(
-            API_URL,
-            {
+    let response;
 
-                method:
-                    "POST",
 
-                headers:{
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-                },
+    try{
 
-                body:
-                    JSON.stringify({
+        response =
+            await fetch(
+                API_URL,
+                {
 
-                        action:
-                            action,
+                    method:
+                        "POST",
 
-                        masterId:
-                            masterSession.masterId,
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
 
-                        sessionToken:
-                            masterSession.sessionToken,
+                    body:
+                        JSON.stringify({
 
-                        ...extra
+                            action:
+                                action,
 
-                    })
+                            masterId:
+                                masterSession.masterId,
 
-            }
+                            sessionToken:
+                                masterSession.sessionToken,
+
+                            ...extra
+
+                        })
+
+                }
+            );
+
+    }catch(error){
+
+        throw new Error(
+            "Tidak dapat terhubung ke server DJ Family Kost."
         );
 
+    }
 
-    const result =
-        await response.json();
+
+    let result;
+
+
+    try{
+
+        result =
+            await response.json();
+
+    }catch(error){
+
+        throw new Error(
+            "Server mengembalikan respons yang tidak valid."
+        );
+
+    }
 
 
     if(
@@ -1721,20 +1995,21 @@ async function api(
         result.ok !== true
     ){
 
-        if(
+        const errorMessage =
             result &&
-            result.error &&
+            result.error
+                ? result.error
+                : "Permintaan gagal.";
+
+
+        if(
             /session master/i.test(
-                result.error
+                errorMessage
             )
         ){
 
-            sessionStorage.removeItem(
-                "djMasterSession"
-            );
+            clearMasterSession();
 
-            masterSession =
-                null;
 
             showLogin();
 
@@ -1742,10 +2017,7 @@ async function api(
 
 
         throw new Error(
-            result &&
-            result.error
-                ? result.error
-                : "Permintaan gagal."
+            errorMessage
         );
 
     }
@@ -1756,9 +2028,9 @@ async function api(
 }
 
 
-/* ==========================================================
-   LOGIN
-   ========================================================== */
+/* ============================================================
+   MASTER LOGIN
+   ============================================================ */
 
 document
     .getElementById(
@@ -1783,12 +2055,38 @@ document
                 );
 
 
+            const masterId =
+                document
+                    .getElementById(
+                        "masterIdInput"
+                    )
+                    .value
+                    .trim()
+                    .toUpperCase();
+
+
+            const password =
+                document
+                    .getElementById(
+                        "masterPasswordInput"
+                    )
+                    .value;
+
+
             button.disabled =
                 true;
 
 
             button.textContent =
                 "Memeriksa...";
+
+
+            message.className =
+                "login-message";
+
+
+            message.textContent =
+                "";
 
 
             try{
@@ -1813,20 +2111,10 @@ document
                                         "masterLogin",
 
                                     masterId:
-                                        document
-                                            .getElementById(
-                                                "masterIdInput"
-                                            )
-                                            .value
-                                            .trim()
-                                            .toUpperCase(),
+                                        masterId,
 
                                     password:
-                                        document
-                                            .getElementById(
-                                                "masterPasswordInput"
-                                            )
-                                            .value
+                                        password
 
                                 })
 
@@ -1853,15 +2141,8 @@ document
                 }
 
 
-                masterSession =
-                    result.data;
-
-
-                sessionStorage.setItem(
-                    "djMasterSession",
-                    JSON.stringify(
-                        masterSession
-                    )
+                setMasterSession(
+                    result.data
                 );
 
 
@@ -1869,6 +2150,14 @@ document
 
 
                 await loadDashboard();
+
+
+                message.className =
+                    "login-message success";
+
+
+                message.textContent =
+                    "Login berhasil.";
 
 
             }catch(error){
@@ -1879,7 +2168,6 @@ document
 
                 message.textContent =
                     error.message;
-
 
             }finally{
 
@@ -1895,82 +2183,23 @@ document
     );
 
 
-/* ==========================================================
+/* ============================================================
    NAVIGATION
-   ========================================================== */
+   ============================================================ */
 
 document
     .querySelectorAll(
-        ".master-nav button[data-panel]"
+        ".sidebar-nav button[data-panel]"
     )
     .forEach(
         function(button){
 
             button.addEventListener(
                 "click",
-                async function(){
+                function(){
 
-                    document
-                        .querySelectorAll(
-                            ".master-nav button[data-panel]"
-                        )
-                        .forEach(
-                            function(item){
-
-                                item.classList
-                                    .remove(
-                                        "active"
-                                    );
-
-                            }
-                        );
-
-
-                    button.classList.add(
-                        "active"
-                    );
-
-
-                    document
-                        .querySelectorAll(
-                            ".panel"
-                        )
-                        .forEach(
-                            function(panel){
-
-                                panel.classList
-                                    .remove(
-                                        "active"
-                                    );
-
-                            }
-                        );
-
-
-                    const name =
-                        button.dataset.panel;
-
-
-                    document
-                        .getElementById(
-                            "panel-" +
-                            name
-                        )
-                        .classList.add(
-                            "active"
-                        );
-
-
-                    document
-                        .getElementById(
-                            "pageTitle"
-                        )
-                        .textContent =
-                            button.textContent.trim();
-
-
-                    await loadPanel(
-                        name
+                    openPanel(
+                        button.dataset.panel
                     );
 
                 }
@@ -1980,20 +2209,159 @@ document
     );
 
 
-function openMediaPage(){
+async function openPanel(
+    name
+){
 
     document
-        .querySelector(
-            '[data-panel="media"]'
+        .querySelectorAll(
+            ".sidebar-nav button[data-panel]"
         )
-        .click();
+        .forEach(
+            function(button){
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.panel ===
+                    name
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".panel"
+        )
+        .forEach(
+            function(panel){
+
+                panel.classList.toggle(
+                    "active",
+                    panel.id ===
+                    "panel-" +
+                    name
+                );
+
+            }
+        );
+
+
+    const button =
+        document.querySelector(
+            '[data-panel="' +
+            name +
+            '"]'
+        );
+
+
+    document
+        .getElementById(
+            "pageTitle"
+        )
+        .textContent =
+            button
+                ? button.textContent.trim()
+                : name;
+
+
+    try{
+
+        await loadPanel(
+            name
+        );
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
 
 }
 
 
-/* ==========================================================
+/* ============================================================
+   LOAD PANEL
+   ============================================================ */
+
+async function loadPanel(
+    name
+){
+
+    if(
+        name ===
+        "dashboard"
+    ){
+
+        await loadDashboard();
+
+    }else if(
+        name ===
+        "registrations"
+    ){
+
+        await loadRegistrations();
+
+    }else if(
+        name ===
+        "tenants"
+    ){
+
+        await loadTenants();
+
+    }else if(
+        name ===
+        "payments"
+    ){
+
+        await loadPayments();
+
+    }else if(
+        name ===
+        "maintenance"
+    ){
+
+        await loadMaintenance();
+
+    }else if(
+        name ===
+        "rooms"
+    ){
+
+        await loadDashboard();
+
+    }else if(
+        name ===
+        "media"
+    ){
+
+        await loadMedia();
+
+    }else if(
+        name ===
+        "whatsapp"
+    ){
+
+        await loadWhatsApp();
+
+    }else if(
+        name ===
+        "announcements"
+    ){
+
+        await loadAnnouncements();
+
+    }
+
+}
+
+
+/* ============================================================
    DASHBOARD
-   ========================================================== */
+   ============================================================ */
 
 async function loadDashboard(){
 
@@ -2003,75 +2371,78 @@ async function loadDashboard(){
         );
 
 
-    mediaData =
+    mediaItems =
+        dashboardData &&
         dashboardData.media &&
-        dashboardData.media.data
+        Array.isArray(
+            dashboardData.media.data
+        )
             ? dashboardData.media.data
             : [];
 
 
     renderSummary();
 
-
     renderAttention();
 
+    renderMediaCounts();
 
     renderRooms(
         dashboardData.rooms || []
     );
-
-
-    renderMediaSide();
 
 }
 
 
 function renderSummary(){
 
-    const s =
-        dashboardData.summary;
+    const summary =
+        dashboardData &&
+        dashboardData.summary
+            ? dashboardData.summary
+            : {};
 
 
-    const items = [
+    const cards = [
 
         [
             "Kamar",
-            s.totalRooms
+            summary.totalRooms || 0
         ],
 
         [
             "Terisi",
-            s.occupied
+            summary.occupied || 0
         ],
 
         [
             "Kosong",
-            s.vacant
+            summary.vacant || 0
         ],
 
         [
             "Tenant Aktif",
-            s.activeTenants
+            summary.activeTenants || 0
         ],
 
         [
             "Pendaftaran Pending",
-            s.pendingRegistrations
+            summary.pendingRegistrations || 0
         ],
 
         [
             "Pembayaran Pending",
-            s.pendingPayment
+            summary.pendingPayment || 0
         ],
 
         [
             "Sudah Lunas",
-            s.paidPayment
+            summary.paidPayment || 0
         ],
 
         [
-            "Maintenance",
-            s.openMaintenance
+            "Maintenance Aktif",
+            summary.openMaintenance || 0
         ]
 
     ];
@@ -2082,9 +2453,9 @@ function renderSummary(){
             "summaryGrid"
         )
         .innerHTML =
-            items
+            cards
                 .map(
-                    function(item){
+                    function(card){
 
                         return (
 
@@ -2092,13 +2463,13 @@ function renderSummary(){
 
                             '<span>' +
                             escapeHtml(
-                                item[0]
+                                card[0]
                             ) +
                             '</span>' +
 
                             '<strong>' +
                             escapeHtml(
-                                item[1]
+                                card[1]
                             ) +
                             '</strong>' +
 
@@ -2134,23 +2505,29 @@ function renderAttention(){
 
                 '<td>' +
                 escapeHtml(
-                    item.name
+                    item.name ||
+                    "—"
                 ) +
                 '</td>' +
 
                 '<td>Kamar ' +
                 escapeHtml(
-                    item.room
+                    item.room ||
+                    "—"
                 ) +
                 '</td>' +
 
                 '<td>' +
-                '<span class="badge warn">PENDING</span>' +
+
+                '<span class="badge badge-warn">' +
+                'PENDING' +
+                '</span>' +
+
                 '</td>' +
 
                 '<td>' +
 
-                '<button class="btn-small primary" onclick="goPanel(\'registrations\')">' +
+                '<button class="btn btn-primary" onclick="openPanel(\'registrations\')">' +
                 'Buka' +
                 '</button>' +
 
@@ -2180,23 +2557,29 @@ function renderAttention(){
                 '<td>' +
                 escapeHtml(
                     item.name ||
-                    item.tenantId
+                    item.tenantId ||
+                    "—"
                 ) +
                 '</td>' +
 
                 '<td>' +
                 escapeHtml(
-                    item.period
+                    item.period ||
+                    "—"
                 ) +
                 '</td>' +
 
                 '<td>' +
-                '<span class="badge warn">VERIFIKASI</span>' +
+
+                '<span class="badge badge-warn">' +
+                'VERIFIKASI' +
+                '</span>' +
+
                 '</td>' +
 
                 '<td>' +
 
-                '<button class="btn-small primary" onclick="goPanel(\'payments\')">' +
+                '<button class="btn btn-primary" onclick="openPanel(\'payments\')">' +
                 'Buka' +
                 '</button>' +
 
@@ -2226,27 +2609,32 @@ function renderAttention(){
                 '<td>' +
                 escapeHtml(
                     item.name ||
-                    item.tenantId
+                    item.tenantId ||
+                    "—"
                 ) +
                 '</td>' +
 
                 '<td>Kamar ' +
                 escapeHtml(
-                    item.room
+                    item.room ||
+                    "—"
                 ) +
                 '</td>' +
 
                 '<td>' +
-                '<span class="badge warn">' +
+
+                '<span class="badge badge-warn">' +
                 escapeHtml(
-                    item.status
+                    item.status ||
+                    "OPEN"
                 ) +
                 '</span>' +
+
                 '</td>' +
 
                 '<td>' +
 
-                '<button class="btn-small primary" onclick="goPanel(\'maintenance\')">' +
+                '<button class="btn btn-primary" onclick="openPanel(\'maintenance\')">' +
                 'Buka' +
                 '</button>' +
 
@@ -2301,69 +2689,113 @@ function renderAttention(){
 }
 
 
-function renderMediaSide(){
+function renderMediaCounts(){
 
-    const counts = {};
+    const counts = {
+
+        "Bukti Pembayaran":
+            0,
+
+        "Maintenance":
+            0,
+
+        "Data Diri":
+            0,
+
+        "Check-in / Check-out":
+            0,
+
+        "Pelanggaran":
+            0
+
+    };
 
 
-    mediaData.forEach(
+    mediaItems.forEach(
         function(item){
 
-            const key =
-                item.category ||
-                "Lainnya";
+            const category =
+                item.category;
 
 
-            counts[key] =
-                (
-                    counts[key] ||
-                    0
-                ) + 1;
+            if(
+                counts[category] !==
+                undefined
+            ){
+
+                counts[category]++;
+
+            }
 
         }
     );
 
 
-    const order = [
+    const labels = [
 
-        "Bukti Pembayaran",
-        "Maintenance",
-        "Data Diri",
-        "Check-in / Check-out",
-        "Pelanggaran"
+        [
+            "Bukti Pembayaran",
+            "Pembayaran",
+            "💳"
+        ],
+
+        [
+            "Maintenance",
+            "Maintenance",
+            "🔧"
+        ],
+
+        [
+            "Data Diri",
+            "Data Diri",
+            "🪪"
+        ],
+
+        [
+            "Check-in / Check-out",
+            "Check-in / Check-out",
+            "🚪"
+        ],
+
+        [
+            "Pelanggaran",
+            "Pelanggaran",
+            "⚠️"
+        ]
 
     ];
 
 
     document
         .getElementById(
-            "mediaSideCount"
+            "mediaCounts"
         )
         .innerHTML =
-            order
+            labels
                 .map(
-                    function(category){
+                    function(item){
 
                         return (
 
-                            '<button onclick="filterMediaFromSide(\'' +
+                            '<button onclick="openMediaCategory(\'' +
                             encodeURIComponent(
-                                category
+                                item[0]
                             ) +
                             '\')">' +
 
                             '<strong>' +
+                            item[2] +
+                            ' ' +
                             escapeHtml(
-                                category
+                                item[1]
                             ) +
                             '</strong>' +
 
                             '<span>' +
-                            (
-                                counts[category] ||
-                                0
-                            ) +
-                            ' file</span>' +
+                            counts[
+                                item[0]
+                            ] +
+                            ' media</span>' +
 
                             '</button>'
 
@@ -2376,7 +2808,7 @@ function renderMediaSide(){
 }
 
 
-function filterMediaFromSide(
+function openMediaCategory(
     encoded
 ){
 
@@ -2386,243 +2818,28 @@ function filterMediaFromSide(
         );
 
 
-    openMediaPage();
-
-
-    setTimeout(
+    openPanel(
+        "media"
+    )
+    .then(
         function(){
 
-            currentMediaFilter =
+            mediaFilter =
                 category;
 
-
-            renderMediaToolbar();
-
+            renderMediaFilters();
 
             renderMediaGrid();
 
-        },
-        200
+        }
     );
 
 }
 
 
-/* ==========================================================
-   ROOMS
-   ========================================================== */
-
-function renderRooms(
-    rooms
-){
-
-    document
-        .getElementById(
-            "roomsGrid"
-        )
-        .innerHTML =
-            (
-                rooms || []
-            )
-            .map(
-                function(room){
-
-                    const status =
-                        String(
-                            room.status ||
-                            ""
-                        ).toUpperCase();
-
-
-                    const price =
-                        Number(
-                            room.price ||
-                            0
-                        );
-
-
-                    const cls =
-                        status ===
-                        "TERISI"
-
-                            ? "occupied"
-
-                            : (
-                                price <= 0
-                                    ? "soon"
-                                    : ""
-                            );
-
-
-                    return (
-
-                        '<div class="room ' +
-                        cls +
-                        '">' +
-
-                        '<strong>' +
-                        escapeHtml(
-                            room.number
-                        ) +
-                        '</strong>' +
-
-                        '<small>' +
-                        escapeHtml(
-                            status
-                        ) +
-                        '</small>' +
-
-                        '<small>' +
-                        (
-                            price > 0
-                                ? money(
-                                    price
-                                  )
-                                : "Belum tersedia"
-                        ) +
-                        '</small>' +
-
-                        (
-                            room.tenantName
-                                ? (
-                                    '<small>' +
-                                    escapeHtml(
-                                        room.tenantName
-                                    ) +
-                                    '</small>'
-                                )
-                                : ""
-                        ) +
-
-                        '</div>'
-
-                    );
-
-                }
-            )
-            .join("");
-
-}
-
-
-/* ==========================================================
-   LOAD PANEL
-   ========================================================== */
-
-async function loadPanel(
-    name
-){
-
-    if(
-        name ===
-        "dashboard"
-    ){
-
-        await loadDashboard();
-
-    }
-
-
-    if(
-        name ===
-        "rooms"
-    ){
-
-        await loadDashboard();
-
-    }
-
-
-    if(
-        name ===
-        "media"
-    ){
-
-        await loadMedia();
-
-    }
-
-
-    if(
-        name ===
-        "registrations"
-    ){
-
-        await loadRegistrations();
-
-    }
-
-
-    if(
-        name ===
-        "tenants"
-    ){
-
-        await loadTenants();
-
-    }
-
-
-    if(
-        name ===
-        "payments"
-    ){
-
-        await loadPayments();
-
-    }
-
-
-    if(
-        name ===
-        "maintenance"
-    ){
-
-        await loadMaintenance();
-
-    }
-
-
-    if(
-        name ===
-        "whatsapp"
-    ){
-
-        await loadWhatsApp();
-
-    }
-
-
-    if(
-        name ===
-        "announcements"
-    ){
-
-        await loadAnnouncements();
-
-    }
-
-}
-
-
-function goPanel(
-    name
-){
-
-    document
-        .querySelector(
-            '[data-panel="' +
-            name +
-            '"]'
-        )
-        .click();
-
-}
-
-
-/* ==========================================================
+/* ============================================================
    REGISTRATIONS
-   ========================================================== */
+   ============================================================ */
 
 async function loadRegistrations(){
 
@@ -2633,15 +2850,25 @@ async function loadRegistrations(){
 
 
     const items =
-        (
-            data.items ||
-            []
+        Array.isArray(
+            data &&
+            data.items
         )
-        .filter(
+            ? data.items
+            : [];
+
+
+    const pending =
+        items.filter(
             function(item){
 
                 return (
-                    item.status ===
+                    String(
+                        item.status ||
+                        ""
+                    )
+                    .toUpperCase()
+                    ===
                     "MENUNGGU VERIFIKASI"
                 );
 
@@ -2655,110 +2882,110 @@ async function loadRegistrations(){
         )
         .innerHTML =
 
-        items.length
+        pending.length
 
-        ? (
+            ? (
 
-            '<table class="data-table">' +
+                '<table class="data-table">' +
 
-            '<thead>' +
+                '<thead>' +
 
-            '<tr>' +
+                '<tr>' +
 
-            '<th>ID</th>' +
-            '<th>Nama</th>' +
-            '<th>Kamar</th>' +
-            '<th>WhatsApp</th>' +
-            '<th>Aksi</th>' +
+                '<th>ID</th>' +
+                '<th>Nama</th>' +
+                '<th>Kamar</th>' +
+                '<th>WhatsApp</th>' +
+                '<th>Aksi</th>' +
 
-            '</tr>' +
+                '</tr>' +
 
-            '</thead>' +
+                '</thead>' +
 
-            '<tbody>' +
+                '<tbody>' +
 
-            items
-                .map(
-                    function(item){
+                pending
+                    .map(
+                        function(item){
 
-                        return (
+                            return (
 
-                            '<tr>' +
+                                '<tr>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.id
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.id
+                                ) +
+                                '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.name
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.name
+                                ) +
+                                '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.room
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.room
+                                ) +
+                                '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.phone
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.phone
+                                ) +
+                                '</td>' +
 
-                            '<td class="actions">' +
+                                '<td class="actions">' +
 
-                            '<button class="btn-small success" onclick="approveRegistration(\'' +
-                            encodeURIComponent(
-                                item.id
-                            ) +
-                            '\')">' +
+                                '<button class="btn btn-success" onclick="approveRegistration(\'' +
+                                encodeURIComponent(
+                                    item.id
+                                ) +
+                                '\')">' +
 
-                            'Setujui' +
+                                'Setujui' +
 
-                            '</button>' +
+                                '</button>' +
 
-                            '<button class="btn-small danger" onclick="rejectRegistration(\'' +
-                            encodeURIComponent(
-                                item.id
-                            ) +
-                            '\')">' +
+                                '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
+                                encodeURIComponent(
+                                    item.id
+                                ) +
+                                '\')">' +
 
-                            'Tolak' +
+                                'Tolak' +
 
-                            '</button>' +
+                                '</button>' +
 
-                            '</td>' +
+                                '</td>' +
 
-                            '</tr>'
+                                '</tr>'
 
-                        );
+                            );
 
-                    }
-                )
-                .join("") +
+                        }
+                    )
+                    .join("") +
 
-            '</tbody>' +
+                '</tbody>' +
 
-            '</table>'
+                '</table>'
 
-        )
+            )
 
-        : '<div class="empty">Tidak ada pendaftaran pending.</div>';
+            : '<div class="empty">Tidak ada pendaftaran pending.</div>';
 
 }
 
 
 async function approveRegistration(
-    encoded
+    encodedId
 ){
 
     const id =
         decodeURIComponent(
-            encoded
+            encodedId
         );
 
 
@@ -2781,25 +3008,40 @@ async function approveRegistration(
             await api(
                 "masterApproveRegistration",
                 {
+
                     registrationId:
                         id
+
                 }
             );
 
 
         alert(
+
             "Pendaftaran berhasil disetujui.\n\n" +
+
             "Tenant ID: " +
-            result.tenantId +
+            (
+                result.tenantId ||
+                "—"
+            ) +
+
             "\nKontrak ID: " +
-            result.kontrakId +
+            (
+                result.kontrakId ||
+                "—"
+            ) +
+
             "\nKamar: " +
-            result.room
+            (
+                result.room ||
+                "—"
+            )
+
         );
 
 
         await loadRegistrations();
-
 
         await loadDashboard();
 
@@ -2816,12 +3058,12 @@ async function approveRegistration(
 
 
 async function rejectRegistration(
-    encoded
+    encodedId
 ){
 
     const id =
         decodeURIComponent(
-            encoded
+            encodedId
         );
 
 
@@ -2836,6 +3078,19 @@ async function rejectRegistration(
         reason ===
         null
     ){
+
+        return;
+
+    }
+
+
+    if(
+        !reason.trim()
+    ){
+
+        alert(
+            "Alasan penolakan wajib diisi."
+        );
 
         return;
 
@@ -2860,7 +3115,6 @@ async function rejectRegistration(
 
         await loadRegistrations();
 
-
         await loadDashboard();
 
 
@@ -2875,9 +3129,9 @@ async function rejectRegistration(
 }
 
 
-/* ==========================================================
+/* ============================================================
    TENANTS
-   ========================================================== */
+   ============================================================ */
 
 async function loadTenants(){
 
@@ -2888,7 +3142,12 @@ async function loadTenants(){
 
 
     const items =
-        data.items || [];
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items
+            : [];
 
 
     document
@@ -2899,160 +3158,172 @@ async function loadTenants(){
 
         items.length
 
-        ? (
+            ? (
 
-            '<table class="data-table">' +
+                '<table class="data-table">' +
 
-            '<thead>' +
+                '<thead>' +
 
-            '<tr>' +
+                '<tr>' +
 
-            '<th>Tenant ID</th>' +
-            '<th>Nama</th>' +
-            '<th>Kamar</th>' +
-            '<th>WhatsApp</th>' +
-            '<th>Status</th>' +
-            '<th>Dokumen</th>' +
-            '<th>Aksi</th>' +
+                '<th>Tenant ID</th>' +
+                '<th>Nama</th>' +
+                '<th>Kamar</th>' +
+                '<th>WhatsApp</th>' +
+                '<th>Status</th>' +
+                '<th>Dokumen</th>' +
+                '<th>Aksi</th>' +
 
-            '</tr>' +
+                '</tr>' +
 
-            '</thead>' +
+                '</thead>' +
 
-            '<tbody>' +
+                '<tbody>' +
 
-            items
-                .map(
-                    function(item){
+                items
+                    .map(
+                        function(item){
 
-                        const docs =
-                            [];
-
-
-                        if(item.ktp){
-
-                            docs.push(
-                                "KTP"
-                            );
-
-                        }
+                            const documents =
+                                [];
 
 
-                        if(item.surat){
+                            if(
+                                item.ktp
+                            ){
 
-                            docs.push(
-                                "Surat"
-                            );
+                                documents.push(
+                                    "KTP"
+                                );
 
-                        }
-
-
-                        if(item.contractFile){
-
-                            docs.push(
-                                "Perjanjian"
-                            );
-
-                        }
+                            }
 
 
-                        return (
+                            if(
+                                item.surat
+                            ){
 
-                            '<tr>' +
+                                documents.push(
+                                    "Surat"
+                                );
 
-                            '<td>' +
-                            escapeHtml(
-                                item.tenantId
-                            ) +
-                            '</td>' +
+                            }
 
-                            '<td>' +
-                            escapeHtml(
-                                item.name
-                            ) +
-                            '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.room
-                            ) +
-                            '</td>' +
+                            if(
+                                item.contractFile
+                            ){
 
-                            '<td>' +
-                            escapeHtml(
-                                item.phone
-                            ) +
-                            '</td>' +
+                                documents.push(
+                                    "Perjanjian"
+                                );
 
-                            '<td>' +
+                            }
 
-                            '<span class="badge ' +
-                            (
-                                String(
+
+                            return (
+
+                                '<tr>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    item.tenantId
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    item.name
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    item.room
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    item.phone
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+
+                                '<span class="badge ' +
+
+                                (
+                                    String(
+                                        item.status ||
+                                        ""
+                                    )
+                                    .toUpperCase() ===
+                                    "AKTIF"
+                                        ? "badge-ok"
+                                        : ""
+                                ) +
+
+                                '">' +
+
+                                escapeHtml(
                                     item.status
-                                )
-                                .toUpperCase()
-                                ===
-                                "AKTIF"
-                                    ? "ok"
-                                    : ""
-                            ) +
-                            '">' +
+                                ) +
 
-                            escapeHtml(
-                                item.status
-                            ) +
+                                '</span>' +
 
-                            '</span>' +
+                                '</td>' +
 
-                            '</td>' +
+                                '<td>' +
 
-                            '<td>' +
-                            (
-                                docs.length
-                                    ? escapeHtml(
-                                        docs.join(
-                                            ", "
-                                        )
-                                      )
-                                    : "—"
-                            ) +
-                            '</td>' +
+                                (
+                                    documents.length
+                                        ? escapeHtml(
+                                            documents.join(
+                                                ", "
+                                            )
+                                          )
+                                        : "—"
+                                ) +
 
-                            '<td>' +
+                                '</td>' +
 
-                            '<button class="btn-small light" onclick="resetPassword(\'' +
-                            encodeURIComponent(
-                                item.tenantId
-                            ) +
-                            '\')">' +
+                                '<td>' +
 
-                            'Reset Password' +
+                                '<button class="btn btn-secondary" onclick="resetTenantPassword(\'' +
 
-                            '</button>' +
+                                encodeURIComponent(
+                                    item.tenantId
+                                ) +
 
-                            '</td>' +
+                                '\')">' +
 
-                            '</tr>'
+                                'Reset Password' +
 
-                        );
+                                '</button>' +
 
-                    }
-                )
-                .join("") +
+                                '</td>' +
 
-            '</tbody>' +
+                                '</tr>'
 
-            '</table>'
+                            );
 
-        )
+                        }
+                    )
+                    .join("") +
 
-        : '<div class="empty">Belum ada tenant.</div>';
+                '</tbody>' +
+
+                '</table>'
+
+            )
+
+            : '<div class="empty">Belum ada tenant.</div>';
 
 }
 
 
-async function resetPassword(
+async function resetTenantPassword(
     encoded
 ){
 
@@ -3081,8 +3352,10 @@ async function resetPassword(
             await api(
                 "masterResetPassword",
                 {
+
                     tenantId:
                         tenantId
+
                 }
             );
 
@@ -3094,7 +3367,7 @@ async function resetPassword(
             "Tenant ID: " +
             result.tenantId +
 
-            "\nPassword sementara:\n" +
+            "\n\nPassword sementara:\n" +
             result.temporaryPassword
 
         );
@@ -3110,9 +3383,9 @@ async function resetPassword(
 }
 
 
-/* ==========================================================
+/* ============================================================
    PAYMENTS
-   ========================================================== */
+   ============================================================ */
 
 async function loadPayments(){
 
@@ -3122,12 +3395,16 @@ async function loadPayments(){
         );
 
 
-    allPayments =
-        data.items || [];
+    paymentItems =
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items
+            : [];
 
 
     renderPaymentFilters();
-
 
     renderPayments();
 
@@ -3138,7 +3415,10 @@ function renderPaymentFilters(){
 
     const filters = [
 
-        ["ALL","Semua"],
+        [
+            "ALL",
+            "Semua"
+        ],
 
         [
             "MENUNGGU VERIFIKASI",
@@ -3163,37 +3443,44 @@ function renderPaymentFilters(){
             "paymentFilters"
         )
         .innerHTML =
+            filters
+                .map(
+                    function(item){
 
-        filters
-            .map(
-                function(filter){
+                        return (
 
-                    return (
+                            '<button ' +
 
-                        '<button class="payment-filter ' +
-                        (
-                            currentPaymentFilter ===
-                            filter[0]
-                                ? "active"
-                                : ""
-                        ) +
-                        '" onclick="setPaymentFilter(\'' +
-                        encodeURIComponent(
-                            filter[0]
-                        ) +
-                        '\')">' +
+                            'class="filter-btn ' +
 
-                        escapeHtml(
-                            filter[1]
-                        ) +
+                            (
+                                paymentFilter ===
+                                item[0]
+                                    ? "active"
+                                    : ""
+                            ) +
 
-                        '</button>'
+                            '" ' +
 
-                    );
+                            'onclick="setPaymentFilter(\'' +
 
-                }
-            )
-            .join("");
+                            encodeURIComponent(
+                                item[0]
+                            ) +
+
+                            '\')">' +
+
+                            escapeHtml(
+                                item[1]
+                            ) +
+
+                            '</button>'
+
+                        );
+
+                    }
+                )
+                .join("");
 
 }
 
@@ -3202,14 +3489,13 @@ function setPaymentFilter(
     encoded
 ){
 
-    currentPaymentFilter =
+    paymentFilter =
         decodeURIComponent(
             encoded
         );
 
 
     renderPaymentFilters();
-
 
     renderPayments();
 
@@ -3219,11 +3505,11 @@ function setPaymentFilter(
 function renderPayments(){
 
     let items =
-        allPayments.slice();
+        paymentItems.slice();
 
 
     if(
-        currentPaymentFilter !==
+        paymentFilter !==
         "ALL"
     ){
 
@@ -3232,8 +3518,13 @@ function renderPayments(){
                 function(item){
 
                     return (
-                        item.verification ===
-                        currentPaymentFilter
+                        String(
+                            item.verification ||
+                            ""
+                        )
+                        .toUpperCase()
+                        ===
+                        paymentFilter
                     );
 
                 }
@@ -3250,202 +3541,234 @@ function renderPayments(){
 
         items.length
 
-        ? (
+            ? (
 
-            '<table class="data-table">' +
+                '<table class="data-table">' +
 
-            '<thead>' +
+                '<thead>' +
 
-            '<tr>' +
+                '<tr>' +
 
-            '<th>Payment</th>' +
-            '<th>Tenant</th>' +
-            '<th>Periode</th>' +
-            '<th>Dibayar</th>' +
-            '<th>Status</th>' +
-            '<th>Verifikasi</th>' +
-            '<th>Aksi</th>' +
+                '<th>Payment</th>' +
+                '<th>Tenant</th>' +
+                '<th>Periode</th>' +
+                '<th>Dibayar</th>' +
+                '<th>Status</th>' +
+                '<th>Verifikasi</th>' +
+                '<th>Aksi</th>' +
 
-            '</tr>' +
+                '</tr>' +
 
-            '</thead>' +
+                '</thead>' +
 
-            '<tbody>' +
+                '<tbody>' +
 
-            items
-                .map(
-                    function(item){
+                items
+                    .map(
+                        function(item){
 
-                        const verification =
-                            item.verification ||
-                            "BELUM DIVERIFIKASI";
-
-
-                        const badgeClass =
-                            verification ===
-                            "TERVERIFIKASI"
-                                ? "ok"
-
-                                : (
-                                    verification ===
-                                    "DITOLAK"
-                                        ? "danger"
-                                        : "warn"
-                                );
+                            const verification =
+                                String(
+                                    item.verification ||
+                                    ""
+                                )
+                                .toUpperCase();
 
 
-                        let actions =
-                            '<button class="btn-small light" onclick="viewPaymentProof(\'' +
-                            encodeURIComponent(
-                                item.id
-                            ) +
-                            '\')">' +
-
-                            'Lihat Foto' +
-
-                            '</button>';
+                            let badgeClass =
+                                "badge-warn";
 
 
-                        if(
-                            verification ===
-                            "MENUNGGU VERIFIKASI"
-                        ){
+                            if(
+                                verification ===
+                                "TERVERIFIKASI"
+                            ){
 
-                            actions +=
+                                badgeClass =
+                                    "badge-ok";
 
-                                '<button class="btn-small success" onclick="verifyPayment(\'' +
+                            }else if(
+                                verification ===
+                                "DITOLAK"
+                            ){
+
+                                badgeClass =
+                                    "badge-danger";
+
+                            }
+
+
+                            let actions =
+
+                                '<button class="btn btn-secondary" onclick="viewPaymentProof(\'' +
+
                                 encodeURIComponent(
                                     item.id
                                 ) +
-                                '\',\'approve\')">' +
 
-                                'Setujui' +
+                                '\')">' +
 
-                                '</button>' +
-
-                                '<button class="btn-small danger" onclick="verifyPayment(\'' +
-                                encodeURIComponent(
-                                    item.id
-                                ) +
-                                '\',\'reject\')">' +
-
-                                'Tolak' +
+                                'Lihat Foto' +
 
                                 '</button>';
 
+
+                            if(
+                                verification ===
+                                "MENUNGGU VERIFIKASI"
+                            ){
+
+                                actions +=
+
+                                    '<button class="btn btn-success" onclick="verifyPayment(\'' +
+
+                                    encodeURIComponent(
+                                        item.id
+                                    ) +
+
+                                    '\',\'approve\')">' +
+
+                                    'Setujui' +
+
+                                    '</button>';
+
+
+                                actions +=
+
+                                    '<button class="btn btn-danger" onclick="verifyPayment(\'' +
+
+                                    encodeURIComponent(
+                                        item.id
+                                    ) +
+
+                                    '\',\'reject\')">' +
+
+                                    'Tolak' +
+
+                                    '</button>';
+
+                            }
+
+
+                            return (
+
+                                '<tr>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    item.id
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+
+                                '<strong>' +
+
+                                escapeHtml(
+                                    item.name ||
+                                    item.tenantId ||
+                                    "—"
+                                ) +
+
+                                '</strong>' +
+
+                                '<br>' +
+
+                                '<span class="small-text">' +
+
+                                escapeHtml(
+                                    item.tenantId
+                                ) +
+
+                                ' · Kamar ' +
+
+                                escapeHtml(
+                                    item.room
+                                ) +
+
+                                '</span>' +
+
+                                '</td>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    item.period
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                money(
+                                    item.paid
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+
+                                '<span class="badge ' +
+                                badgeClass +
+                                '">' +
+
+                                escapeHtml(
+                                    item.status ||
+                                    "—"
+                                ) +
+
+                                '</span>' +
+
+                                '</td>' +
+
+                                '<td>' +
+
+                                '<span class="badge ' +
+                                badgeClass +
+                                '">' +
+
+                                escapeHtml(
+                                    verification ||
+                                    "BELUM DIVERIFIKASI"
+                                ) +
+
+                                '</span>' +
+
+                                (
+                                    item.verifiedBy
+                                        ? (
+                                            '<br><span class="small-text">' +
+                                            escapeHtml(
+                                                item.verifiedBy
+                                            ) +
+                                            '</span>'
+                                          )
+                                        : ""
+                                ) +
+
+                                '</td>' +
+
+                                '<td>' +
+
+                                '<div class="actions">' +
+
+                                actions +
+
+                                '</div>' +
+
+                                '</td>' +
+
+                                '</tr>'
+
+                            );
+
                         }
+                    )
+                    .join("") +
 
+                '</tbody>' +
 
-                        return (
+                '</table>'
 
-                            '<tr>' +
+            )
 
-                            '<td>' +
-                            escapeHtml(
-                                item.id
-                            ) +
-                            '</td>' +
-
-                            '<td>' +
-
-                            '<strong>' +
-                            escapeHtml(
-                                item.name ||
-                                item.tenantId
-                            ) +
-                            '</strong>' +
-
-                            '<br>' +
-
-                            '<small>' +
-                            escapeHtml(
-                                item.tenantId
-                            ) +
-                            ' · Kamar ' +
-                            escapeHtml(
-                                item.room
-                            ) +
-                            '</small>' +
-
-                            '</td>' +
-
-                            '<td>' +
-                            escapeHtml(
-                                item.period
-                            ) +
-                            '</td>' +
-
-                            '<td>' +
-                            money(
-                                item.paid
-                            ) +
-                            '</td>' +
-
-                            '<td>' +
-
-                            '<span class="badge ' +
-                            badgeClass +
-                            '">' +
-
-                            escapeHtml(
-                                item.status
-                            ) +
-
-                            '</span>' +
-
-                            '</td>' +
-
-                            '<td>' +
-
-                            '<span class="badge ' +
-                            badgeClass +
-                            '">' +
-
-                            escapeHtml(
-                                verification
-                            ) +
-
-                            '</span>' +
-
-                            (
-                                item.verifiedBy
-                                    ? (
-                                        '<br><small>' +
-                                        escapeHtml(
-                                            item.verifiedBy
-                                        ) +
-                                        '</small>'
-                                    )
-                                    : ''
-                            ) +
-
-                            '</td>' +
-
-                            '<td>' +
-
-                            '<div class="actions">' +
-
-                            actions +
-
-                            '</div>' +
-
-                            '</td>' +
-
-                            '</tr>'
-
-                        );
-
-                    }
-                )
-                .join("") +
-
-            '</tbody>' +
-
-            '</table>'
-
-        )
-
-        : '<div class="empty">Tidak ada data pembayaran untuk filter ini.</div>';
+            : '<div class="empty">Tidak ada pembayaran untuk filter ini.</div>';
 
 }
 
@@ -3481,6 +3804,7 @@ async function viewPaymentProof(
 
 
         if(
+            result &&
             result.dataUrl
         ){
 
@@ -3489,43 +3813,69 @@ async function viewPaymentProof(
                 '<p>' +
 
                 '<strong>' +
+
                 escapeHtml(
-                    result.fileName
+                    result.fileName ||
+                    "Bukti Pembayaran"
                 ) +
+
                 '</strong>' +
 
                 '</p>' +
 
-                '<img class="modal-image" src="' +
+                '<img ' +
+
+                'class="modal-image" ' +
+
+                'src="' +
+
                 result.dataUrl +
-                '" alt="Bukti pembayaran">';
+
+                '" ' +
+
+                'alt="Bukti Pembayaran">';
+
+        }else if(
+            result &&
+            result.url
+        ){
+
+            modalBody.innerHTML =
+
+                '<p>' +
+                'Foto tersedia melalui penyimpanan.' +
+                '</p>' +
+
+                '<a href="' +
+
+                escapeHtml(
+                    result.url
+                ) +
+
+                '" target="_blank">' +
+
+                'Buka Foto Bukti Pembayaran' +
+
+                '</a>';
 
         }else{
 
             modalBody.innerHTML =
-
-                '<p>Foto dibuka melalui file penyimpanan.</p>' +
-
-                '<a href="' +
-                escapeHtml(
-                    result.url
-                ) +
-                '" target="_blank">' +
-
-                'Buka foto bukti pembayaran' +
-
-                '</a>';
+                '<div class="empty">Foto bukti tidak ditemukan.</div>';
 
         }
 
     }catch(error){
 
         modalBody.innerHTML =
-            '<p style="color:#b42318">' +
+
+            '<div class="empty" style="color:#b42318;">' +
+
             escapeHtml(
                 error.message
             ) +
-            '</p>';
+
+            '</div>';
 
     }
 
@@ -3550,10 +3900,17 @@ async function verifyPayment(
 
     const reason =
         prompt(
+
             approve
+
                 ? "Catatan verifikasi (opsional):"
-                : "Alasan penolakan:",
+
+                : "Alasan penolakan:"
+
+            ,
+
             ""
+
         );
 
 
@@ -3608,7 +3965,6 @@ async function verifyPayment(
 
         await loadPayments();
 
-
         await loadDashboard();
 
 
@@ -3623,9 +3979,9 @@ async function verifyPayment(
 }
 
 
-/* ==========================================================
+/* ============================================================
    MAINTENANCE
-   ========================================================== */
+   ============================================================ */
 
 async function loadMaintenance(){
 
@@ -3639,322 +3995,230 @@ async function loadMaintenance(){
         '<div class="loading">Memuat maintenance...</div>';
 
 
-    try{
-
-        const data =
-            await api(
-                "masterMaintenance"
-            );
+    const data =
+        await api(
+            "masterMaintenance"
+        );
 
 
-        /*
-         * Simpan ke variabel global.
-         * Ini yang sebelumnya menyebabkan:
-         *
-         * maintenanceItems is not defined
-         */
-
-        maintenanceItems =
-            (
-                data &&
-                Array.isArray(
-                    data.items
-                )
-                    ? data.items
-                    : []
-            )
-            .filter(
+    maintenanceItems =
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items.filter(
                 function(item){
-
-                    /*
-                     * Hanya ID maintenance resmi.
-                     *
-                     * Contoh:
-                     * MNT-WEB-0001
-                     *
-                     * Data lama seperti:
-                     * Column 15
-                     * Column 19
-                     *
-                     * otomatis dibuang dari website.
-                     */
 
                     return /^MNT-/i.test(
                         String(
-                            item.id || ""
+                            item.id ||
+                            ""
                         ).trim()
                     );
 
                 }
-            );
+              )
+            : [];
 
 
-        /*
-         * Urutkan:
-         * OPEN → PROSES → SELESAI/BATAL
-         * yang masih aktif berada di atas.
-         */
-
-        maintenanceItems.sort(
-            function(a,b){
-
-                const order = {
-
-                    OPEN: 1,
-
-                    PROSES: 2,
-
-                    SELESAI: 3,
-
-                    BATAL: 4
-
-                };
-
-
-                const aOrder =
-                    order[
-                        String(
-                            a.status || ""
-                        )
-                        .toUpperCase()
-                    ] ||
-                    99;
-
-
-                const bOrder =
-                    order[
-                        String(
-                            b.status || ""
-                        )
-                        .toUpperCase()
-                    ] ||
-                    99;
-
-
-                return (
-                    aOrder -
-                    bOrder
-                );
-
-            }
-        );
-
-
-        if(
-            !maintenanceItems.length
-        ){
-
-            box.innerHTML =
-                '<div class="empty">' +
-                'Belum ada laporan maintenance.' +
-                '</div>';
-
-
-            return;
-
-        }
-
+    if(
+        !maintenanceItems.length
+    ){
 
         box.innerHTML =
+            '<div class="empty">Belum ada laporan maintenance.</div>';
 
-            '<table class="data-table">' +
-
-            '<thead>' +
-
-            '<tr>' +
-
-            '<th>ID</th>' +
-
-            '<th>Tenant</th>' +
-
-            '<th>Kamar</th>' +
-
-            '<th>Masalah</th>' +
-
-            '<th>Status</th>' +
-
-            '<th>Aksi</th>' +
-
-            '</tr>' +
-
-            '</thead>' +
-
-            '<tbody>' +
-
-            maintenanceItems
-                .map(
-                    function(item){
-
-                        const status =
-                            String(
-                                item.status ||
-                                "OPEN"
-                            )
-                            .toUpperCase();
-
-
-                        let badgeClass =
-                            "warn";
-
-
-                        if(
-                            status ===
-                            "SELESAI"
-                        ){
-
-                            badgeClass =
-                                "ok";
-
-                        }else if(
-                            status ===
-                            "BATAL"
-                        ){
-
-                            badgeClass =
-                                "danger";
-
-                        }
-
-
-                        return (
-
-                            '<tr>' +
-
-                            '<td>' +
-
-                            '<strong>' +
-
-                            escapeHtml(
-                                item.id
-                            ) +
-
-                            '</strong>' +
-
-                            '</td>' +
-
-                            '<td>' +
-
-                            escapeHtml(
-                                item.name ||
-                                item.tenantId ||
-                                "—"
-                            ) +
-
-                            (
-                                item.tenantId
-
-                                    ? (
-                                        '<br><small>' +
-                                        escapeHtml(
-                                            item.tenantId
-                                        ) +
-                                        '</small>'
-                                      )
-
-                                    : ''
-                            ) +
-
-                            '</td>' +
-
-                            '<td>' +
-
-                            escapeHtml(
-                                item.room ||
-                                "—"
-                            ) +
-
-                            '</td>' +
-
-                            '<td>' +
-
-                            escapeHtml(
-                                item.problem ||
-                                "—"
-                            ) +
-
-                            (
-                                item.description
-
-                                    ? (
-                                        '<br><small>' +
-                                        escapeHtml(
-                                            item.description
-                                        ) +
-                                        '</small>'
-                                      )
-
-                                    : ''
-                            ) +
-
-                            '</td>' +
-
-                            '<td>' +
-
-                            '<span class="badge ' +
-                            badgeClass +
-                            '">' +
-
-                            escapeHtml(
-                                status
-                            ) +
-
-                            '</span>' +
-
-                            '</td>' +
-
-                            '<td>' +
-
-                            '<button ' +
-
-                            'class="btn-small primary" ' +
-
-                            'onclick="editMaintenance(\'' +
-
-                            encodeURIComponent(
-                                item.id
-                            ) +
-
-                            '\')">' +
-
-                            'Kelola' +
-
-                            '</button>' +
-
-                            '</td>' +
-
-                            '</tr>'
-
-                        );
-
-                    }
-                )
-                .join("") +
-
-            '</tbody>' +
-
-            '</table>';
-
-
-    }catch(error){
-
-        box.innerHTML =
-
-            '<div class="empty" style="color:#b42318;">' +
-
-            escapeHtml(
-                error.message
-            ) +
-
-            '</div>';
+        return;
 
     }
 
+
+    box.innerHTML =
+
+        '<table class="data-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+
+        '<th>ID</th>' +
+        '<th>Tenant</th>' +
+        '<th>Kamar</th>' +
+        '<th>Masalah</th>' +
+        '<th>Status</th>' +
+        '<th>Aksi</th>' +
+
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        maintenanceItems
+            .map(
+                function(item){
+
+                    const status =
+                        String(
+                            item.status ||
+                            "OPEN"
+                        )
+                        .toUpperCase();
+
+
+                    let badgeClass =
+                        "badge-warn";
+
+
+                    if(
+                        status ===
+                        "SELESAI"
+                    ){
+
+                        badgeClass =
+                            "badge-ok";
+
+                    }else if(
+                        status ===
+                        "BATAL"
+                    ){
+
+                        badgeClass =
+                            "badge-danger";
+
+                    }else if(
+                        status ===
+                        "PROSES"
+                    ){
+
+                        badgeClass =
+                            "badge-info";
+
+                    }
+
+
+                    return (
+
+                        '<tr>' +
+
+                        '<td>' +
+
+                        '<strong>' +
+
+                        escapeHtml(
+                            item.id
+                        ) +
+
+                        '</strong>' +
+
+                        '</td>' +
+
+                        '<td>' +
+
+                        escapeHtml(
+                            item.name ||
+                            item.tenantId ||
+                            "—"
+                        ) +
+
+                        (
+                            item.tenantId
+
+                                ? (
+                                    '<br><span class="small-text">' +
+
+                                    escapeHtml(
+                                        item.tenantId
+                                    ) +
+
+                                    '</span>'
+                                  )
+
+                                : ""
+
+                        ) +
+
+                        '</td>' +
+
+                        '<td>' +
+
+                        escapeHtml(
+                            item.room ||
+                            "—"
+                        ) +
+
+                        '</td>' +
+
+                        '<td>' +
+
+                        escapeHtml(
+                            item.problem ||
+                            "—"
+                        ) +
+
+                        (
+                            item.description
+
+                                ? (
+                                    '<br><span class="small-text">' +
+
+                                    escapeHtml(
+                                        item.description
+                                    ) +
+
+                                    '</span>'
+                                  )
+
+                                : ""
+
+                        ) +
+
+                        '</td>' +
+
+                        '<td>' +
+
+                        '<span class="badge ' +
+                        badgeClass +
+                        '">' +
+
+                        escapeHtml(
+                            status
+                        ) +
+
+                        '</span>' +
+
+                        '</td>' +
+
+                        '<td>' +
+
+                        '<button class="btn btn-primary" onclick="editMaintenance(\'' +
+
+                        encodeURIComponent(
+                            item.id
+                        ) +
+
+                        '\')">' +
+
+                        'Kelola' +
+
+                        '</button>' +
+
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</tbody>' +
+
+        '</table>';
+
 }
 
-
-/* ==========================================================
-   EDIT MAINTENANCE
-   ========================================================== */
 
 async function editMaintenance(
     encoded
@@ -3965,11 +4229,6 @@ async function editMaintenance(
             encoded
         );
 
-
-    /*
-     * Ambil dari maintenanceItems global.
-     * Tidak melakukan request ulang.
-     */
 
     const item =
         maintenanceItems.find(
@@ -3991,30 +4250,12 @@ async function editMaintenance(
     if(!item){
 
         alert(
-            "Maintenance tidak ditemukan."
+            "Data maintenance tidak ditemukan."
         );
 
         return;
 
     }
-
-
-    const status =
-        String(
-            item.status ||
-            "OPEN"
-        )
-        .toUpperCase();
-
-
-    const damagePhoto =
-        item.damagePhotoUrl ||
-        "";
-
-
-    const afterPhoto =
-        item.afterPhotoUrl ||
-        "";
 
 
     showModal(
@@ -4024,9 +4265,7 @@ async function editMaintenance(
 
         '<div>' +
 
-        '<div class="summary-card" style="margin-bottom:18px;">' +
-
-        '<span>Tenant</span>' +
+        '<div class="card card-padding" style="margin-bottom:15px;">' +
 
         '<strong>' +
 
@@ -4038,7 +4277,9 @@ async function editMaintenance(
 
         '</strong>' +
 
-        '<small>' +
+        '<br>' +
+
+        '<span class="small-text">' +
 
         escapeHtml(
             item.tenantId ||
@@ -4052,16 +4293,13 @@ async function editMaintenance(
             "—"
         ) +
 
-        '</small>' +
+        '</span>' +
 
-        '</div>' +
+        '<hr style="border:0;border-top:1px solid #edf0f4;margin:14px 0;">' +
 
+        '<p style="margin:6px 0;">' +
 
-        '<div class="card" style="padding:16px;margin-bottom:18px;">' +
-
-        '<h4 style="margin-top:0;">Detail Laporan</h4>' +
-
-        '<p><strong>Lokasi:</strong> ' +
+        '<strong>Masalah:</strong> ' +
 
         escapeHtml(
             item.problem ||
@@ -4070,7 +4308,9 @@ async function editMaintenance(
 
         '</p>' +
 
-        '<p><strong>Deskripsi:</strong> ' +
+        '<p style="margin:6px 0;">' +
+
+        '<strong>Deskripsi:</strong> ' +
 
         escapeHtml(
             item.description ||
@@ -4079,7 +4319,9 @@ async function editMaintenance(
 
         '</p>' +
 
-        '<p><strong>Urgensi:</strong> ' +
+        '<p style="margin:6px 0;">' +
+
+        '<strong>Urgensi:</strong> ' +
 
         escapeHtml(
             item.urgency ||
@@ -4088,17 +4330,17 @@ async function editMaintenance(
 
         '</p>' +
 
+        '<div class="actions" style="margin-top:12px;">' +
+
         (
-            damagePhoto
+            item.damagePhotoUrl
 
                 ? (
 
-                    '<button class="btn-small light" ' +
-
-                    'onclick="openMaintenanceMedia(\'' +
+                    '<button class="btn btn-secondary" onclick="viewMediaUrl(\'' +
 
                     encodeURIComponent(
-                        damagePhoto
+                        item.damagePhotoUrl
                     ) +
 
                     '\')">' +
@@ -4109,9 +4351,34 @@ async function editMaintenance(
 
                 )
 
-                : ''
+                : ""
 
         ) +
+
+        (
+            item.afterPhotoUrl
+
+                ? (
+
+                    '<button class="btn btn-secondary" onclick="viewMediaUrl(\'' +
+
+                    encodeURIComponent(
+                        item.afterPhotoUrl
+                    ) +
+
+                    '\')">' +
+
+                    'Lihat Foto Sesudah' +
+
+                    '</button>'
+
+                )
+
+                : ""
+
+        ) +
+
+        '</div>' +
 
         '</div>' +
 
@@ -4123,7 +4390,7 @@ async function editMaintenance(
 
         '<label>Status</label>' +
 
-        '<select id="maintStatus">' +
+        '<select id="maintenanceStatus">' +
 
         '<option value="OPEN">OPEN</option>' +
 
@@ -4142,14 +4409,7 @@ async function editMaintenance(
 
         '<label>PIC</label>' +
 
-        '<input id="maintPIC" value="' +
-
-        escapeHtml(
-            item.pic ||
-            ""
-        ) +
-
-        '">' +
+        '<input id="maintenancePIC">' +
 
         '</div>' +
 
@@ -4158,22 +4418,7 @@ async function editMaintenance(
 
         '<label>Biaya</label>' +
 
-        '<input ' +
-
-        'id="maintCost" ' +
-
-        'type="number" ' +
-
-        'min="0" ' +
-
-        'value="' +
-
-        Number(
-            item.cost ||
-            0
-        ) +
-
-        '">' +
+        '<input id="maintenanceCost" type="number" min="0">' +
 
         '</div>' +
 
@@ -4182,14 +4427,7 @@ async function editMaintenance(
 
         '<label>Catatan Penyelesaian</label>' +
 
-        '<textarea id="maintNote">' +
-
-        escapeHtml(
-            item.note ||
-            ""
-        ) +
-
-        '</textarea>' +
+        '<textarea id="maintenanceNote"></textarea>' +
 
         '</div>' +
 
@@ -4198,50 +4436,13 @@ async function editMaintenance(
 
         '<label>Foto Setelah Perbaikan</label>' +
 
-        '<input ' +
+        '<input id="maintenanceAfterPhoto" type="file" accept="image/*">' +
 
-        'id="maintAfterPhoto" ' +
+        '<div class="small-text" style="margin-top:6px;">' +
 
-        'type="file" ' +
+        'Upload foto kondisi setelah perbaikan selesai.' +
 
-        'accept="image/*"' +
-
-        '>' +
-
-        '<p class="help">' +
-
-        'Upload foto setelah perbaikan selesai.' +
-
-        '</p>' +
-
-        (
-            afterPhoto
-
-                ? (
-
-                    '<button ' +
-
-                    'class="btn-small light" ' +
-
-                    'type="button" ' +
-
-                    'onclick="openMaintenanceMedia(\'' +
-
-                    encodeURIComponent(
-                        afterPhoto
-                    ) +
-
-                    '\')">' +
-
-                    'Lihat Foto Sesudah' +
-
-                    '</button>'
-
-                )
-
-                : ''
-
-        ) +
+        '</div>' +
 
         '</div>' +
 
@@ -4249,13 +4450,7 @@ async function editMaintenance(
         '</div>' +
 
 
-        '<button ' +
-
-        'class="btn btn-primary" ' +
-
-        'style="margin-top:18px;width:100%;" ' +
-
-        'onclick="saveMaintenance(\'' +
+        '<button class="btn btn-primary" style="margin-top:10px;width:100%;" onclick="saveMaintenance(\'' +
 
         encodeURIComponent(
             id
@@ -4272,25 +4467,45 @@ async function editMaintenance(
     );
 
 
-    const statusSelect =
-        document.getElementById(
-            "maintStatus"
-        );
+    document
+        .getElementById(
+            "maintenanceStatus"
+        )
+        .value =
+            item.status ||
+            "OPEN";
 
 
-    if(statusSelect){
+    document
+        .getElementById(
+            "maintenancePIC"
+        )
+        .value =
+            item.pic ||
+            "";
 
-        statusSelect.value =
-            status;
 
-    }
+    document
+        .getElementById(
+            "maintenanceCost"
+        )
+        .value =
+            Number(
+                item.cost ||
+                0
+            );
+
+
+    document
+        .getElementById(
+            "maintenanceNote"
+        )
+        .value =
+            item.note ||
+            "";
 
 }
 
-
-/* ==========================================================
-   SAVE MAINTENANCE
-   ========================================================== */
 
 async function saveMaintenance(
     encoded
@@ -4305,7 +4520,7 @@ async function saveMaintenance(
     const status =
         document
             .getElementById(
-                "maintStatus"
+                "maintenanceStatus"
             )
             .value;
 
@@ -4313,7 +4528,7 @@ async function saveMaintenance(
     const pic =
         document
             .getElementById(
-                "maintPIC"
+                "maintenancePIC"
             )
             .value
             .trim();
@@ -4323,7 +4538,7 @@ async function saveMaintenance(
         Number(
             document
                 .getElementById(
-                    "maintCost"
+                    "maintenanceCost"
                 )
                 .value ||
             0
@@ -4333,67 +4548,69 @@ async function saveMaintenance(
     const note =
         document
             .getElementById(
-                "maintNote"
+                "maintenanceNote"
             )
             .value
             .trim();
 
 
-    const photoInput =
+    const input =
         document
             .getElementById(
-                "maintAfterPhoto"
+                "maintenanceAfterPhoto"
             );
 
 
-    const photo =
-        photoInput &&
-        photoInput.files &&
-        photoInput.files[0]
-            ? photoInput.files[0]
+    const file =
+        input &&
+        input.files &&
+        input.files[0]
+            ? input.files[0]
             : null;
 
 
     try{
 
-        let afterPhotoData =
-            {};
+        const payload = {
+
+            maintenanceId:
+                id,
+
+            status:
+                status,
+
+            pic:
+                pic,
+
+            cost:
+                cost,
+
+            note:
+                note
+
+        };
 
 
-        if(photo){
+        if(file){
 
-            let processed =
-                photo;
-
-
-            try{
-
-                processed =
-                    await compressMasterImage(
-                        photo
-                    );
-
-            }catch(error){}
+            const processed =
+                await compressImage(
+                    file
+                );
 
 
-            const base64 =
-                await masterFileToBase64(
+            payload.afterPhotoBase64 =
+                await fileToBase64(
                     processed
                 );
 
 
-            afterPhotoData = {
+            payload.afterPhotoMimeType =
+                "image/jpeg";
 
-                afterPhotoBase64:
-                    base64,
 
-                afterPhotoMimeType:
-                    "image/jpeg",
-
-                afterPhotoOriginalName:
-                    processed.name
-
-            };
+            payload.afterPhotoOriginalName =
+                processed.name;
 
         }
 
@@ -4401,26 +4618,7 @@ async function saveMaintenance(
         const result =
             await api(
                 "masterUpdateMaintenance",
-                {
-
-                    maintenanceId:
-                        id,
-
-                    status:
-                        status,
-
-                    pic:
-                        pic,
-
-                    cost:
-                        cost,
-
-                    note:
-                        note,
-
-                    ...afterPhotoData
-
-                }
+                payload
             );
 
 
@@ -4434,7 +4632,6 @@ async function saveMaintenance(
 
 
         await loadMaintenance();
-
 
         await loadDashboard();
 
@@ -4450,218 +4647,11 @@ async function saveMaintenance(
 }
 
 
-/* ==========================================================
-   FILE HELPERS
-   ========================================================== */
-
-function masterFileToBase64(
-    file
-){
-
-    return new Promise(
-        function(resolve,reject){
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function(){
-
-                    const result =
-                        String(
-                            reader.result ||
-                            ""
-                        );
-
-
-                    const comma =
-                        result.indexOf(
-                            ","
-                        );
-
-
-                    resolve(
-
-                        comma >= 0
-
-                            ? result.substring(
-                                comma + 1
-                              )
-
-                            : result
-
-                    );
-
-                };
-
-
-            reader.onerror =
-                reject;
-
-
-            reader.readAsDataURL(
-                file
-            );
-
-        }
-    );
-
-}
-
-
-function compressMasterImage(
-    file,
-    maxWidth=1600,
-    quality=.82
-){
-
-    return new Promise(
-        function(resolve,reject){
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function(){
-
-                    const image =
-                        new Image();
-
-
-                    image.onload =
-                        function(){
-
-                            let width =
-                                image.width;
-
-
-                            let height =
-                                image.height;
-
-
-                            if(
-                                width >
-                                maxWidth
-                            ){
-
-                                const ratio =
-                                    maxWidth /
-                                    width;
-
-
-                                width =
-                                    maxWidth;
-
-
-                                height =
-                                    Math.round(
-                                        height *
-                                        ratio
-                                    );
-
-                            }
-
-
-                            const canvas =
-                                document
-                                    .createElement(
-                                        "canvas"
-                                    );
-
-
-                            canvas.width =
-                                width;
-
-
-                            canvas.height =
-                                height;
-
-
-                            const ctx =
-                                canvas.getContext(
-                                    "2d"
-                                );
-
-
-                            ctx.drawImage(
-                                image,
-                                0,
-                                0,
-                                width,
-                                height
-                            );
-
-
-                            canvas.toBlob(
-                                function(blob){
-
-                                    if(!blob){
-
-                                        reject(
-                                            new Error(
-                                                "Foto gagal diproses."
-                                            )
-                                        );
-
-                                        return;
-
-                                    }
-
-
-                                    resolve(
-                                        new File(
-                                            [
-                                                blob
-                                            ],
-                                            "maintenance-after-" +
-                                            Date.now() +
-                                            ".jpg",
-                                            {
-                                                type:
-                                                    "image/jpeg"
-                                            }
-                                        )
-                                    );
-
-                                },
-                                "image/jpeg",
-                                quality
-                            );
-
-                        };
-
-
-                    image.onerror =
-                        reject;
-
-
-                    image.src =
-                        reader.result;
-
-                };
-
-
-            reader.onerror =
-                reject;
-
-
-            reader.readAsDataURL(
-                file
-            );
-
-        }
-    );
-
-}
-
-
-/* ==========================================================
-   OPEN MAINTENANCE MEDIA
-   ========================================================== */
-
-async function openMaintenanceMedia(
+/* ============================================================
+   GENERIC MEDIA OPEN
+   ============================================================ */
+
+async function viewMediaUrl(
     encodedUrl
 ){
 
@@ -4695,45 +4685,24 @@ async function openMaintenanceMedia(
 
 
         if(
+            result &&
             result.dataUrl
         ){
 
             modalBody.innerHTML =
 
-                '<p>' +
-
-                '<strong>' +
-
-                escapeHtml(
-                    result.fileName ||
-                    "Foto Maintenance"
-                ) +
-
-                '</strong>' +
-
-                '</p>' +
-
-                '<img ' +
-
-                'class="modal-image" ' +
-
-                'src="' +
+                '<img class="modal-image" src="' +
 
                 result.dataUrl +
 
-                '" ' +
+                '" alt="Foto">';
 
-                'alt="Foto Maintenance">';
-
-        }else{
+        }else if(
+            result &&
+            result.url
+        ){
 
             modalBody.innerHTML =
-
-                '<p>' +
-
-                'Foto dibuka melalui penyimpanan.' +
-
-                '</p>' +
 
                 '<a href="' +
 
@@ -4747,230 +4716,33 @@ async function openMaintenanceMedia(
 
                 '</a>';
 
+        }else{
+
+            modalBody.innerHTML =
+                '<div class="empty">Foto tidak ditemukan.</div>';
+
         }
 
     }catch(error){
 
         modalBody.innerHTML =
 
-            '<p style="color:#b42318;">' +
+            '<div class="empty" style="color:#b42318;">' +
 
             escapeHtml(
                 error.message
             ) +
 
-            '</p>';
+            '</div>';
 
     }
 
 }
 
 
-async function editMaintenance(
-    encoded
-){
-
-    const id =
-        decodeURIComponent(
-            encoded
-        );
-
-
-    const data =
-        await api(
-            "masterMaintenance"
-        );
-
-
-    const item =
-        (
-            data.items || []
-        )
-        .find(
-            function(row){
-
-                return (
-                    row.id ===
-                    id
-                );
-
-            }
-        );
-
-
-    if(!item){
-
-        alert(
-            "Maintenance tidak ditemukan."
-        );
-
-        return;
-
-    }
-
-
-    showModal(
-
-        "Maintenance " +
-        id,
-
-        '<div class="form-grid">' +
-
-        '<div class="field">' +
-
-        '<label>Status</label>' +
-
-        '<select id="maintStatus">' +
-
-        '<option value="OPEN">OPEN</option>' +
-
-        '<option value="PROSES">PROSES</option>' +
-
-        '<option value="SELESAI">SELESAI</option>' +
-
-        '<option value="BATAL">BATAL</option>' +
-
-        '</select>' +
-
-        '</div>' +
-
-        '<div class="field">' +
-
-        '<label>PIC</label>' +
-
-        '<input id="maintPIC" value="' +
-        escapeHtml(
-            item.pic
-        ) +
-        '">' +
-
-        '</div>' +
-
-        '<div class="field">' +
-
-        '<label>Biaya</label>' +
-
-        '<input id="maintCost" type="number" value="' +
-        Number(
-            item.cost || 0
-        ) +
-        '">' +
-
-        '</div>' +
-
-        '<div class="field full">' +
-
-        '<label>Catatan</label>' +
-
-        '<textarea id="maintNote">' +
-        escapeHtml(
-            item.note
-        ) +
-        '</textarea>' +
-
-        '</div>' +
-
-        '</div>' +
-
-        '<button class="btn btn-primary" style="margin-top:16px" onclick="saveMaintenance(\'' +
-        encodeURIComponent(
-            id
-        ) +
-        '\')">' +
-
-        'Simpan' +
-
-        '</button>'
-
-    );
-
-
-    document
-        .getElementById(
-            "maintStatus"
-        )
-        .value =
-            item.status;
-
-}
-
-
-async function saveMaintenance(
-    encoded
-){
-
-    const id =
-        decodeURIComponent(
-            encoded
-        );
-
-
-    try{
-
-        await api(
-            "masterUpdateMaintenance",
-            {
-
-                maintenanceId:
-                    id,
-
-                status:
-                    document
-                        .getElementById(
-                            "maintStatus"
-                        )
-                        .value,
-
-                pic:
-                    document
-                        .getElementById(
-                            "maintPIC"
-                        )
-                        .value,
-
-                cost:
-                    Number(
-                        document
-                            .getElementById(
-                                "maintCost"
-                            )
-                            .value
-                    ),
-
-                note:
-                    document
-                        .getElementById(
-                            "maintNote"
-                        )
-                        .value
-
-            }
-        );
-
-
-        closeModal();
-
-
-        await loadMaintenance();
-
-
-        await loadDashboard();
-
-
-    }catch(error){
-
-        alert(
-            error.message
-        );
-
-    }
-
-}
-
-
-/* ==========================================================
+/* ============================================================
    MEDIA
-   ========================================================== */
+   ============================================================ */
 
 async function loadMedia(){
 
@@ -4980,26 +4752,30 @@ async function loadMedia(){
         );
 
 
-    mediaData =
-        data.data || [];
+    mediaItems =
+        Array.isArray(
+            data &&
+            data.data
+        )
+            ? data.data
+            : [];
 
 
-    renderMediaToolbar();
-
+    renderMediaFilters();
 
     renderMediaGrid();
-
-
-    renderMediaSide();
 
 }
 
 
-function renderMediaToolbar(){
+function renderMediaFilters(){
 
-    const categories = [
+    const filters = [
 
-        ["ALL","Semua"],
+        [
+            "ALL",
+            "Semua"
+        ],
 
         [
             "Bukti Pembayaran",
@@ -5018,7 +4794,7 @@ function renderMediaToolbar(){
 
         [
             "Check-in / Check-out",
-            "Check-in / out"
+            "Check-in / Out"
         ],
 
         [
@@ -5031,40 +4807,47 @@ function renderMediaToolbar(){
 
     document
         .getElementById(
-            "mediaToolbar"
+            "mediaFilters"
         )
         .innerHTML =
+            filters
+                .map(
+                    function(item){
 
-        categories
-            .map(
-                function(item){
+                        return (
 
-                    return (
+                            '<button ' +
 
-                        '<button class="media-filter ' +
-                        (
-                            currentMediaFilter ===
-                            item[0]
-                                ? "active"
-                                : ""
-                        ) +
-                        '" onclick="setMediaFilter(\'' +
-                        encodeURIComponent(
-                            item[0]
-                        ) +
-                        '\')">' +
+                            'class="filter-btn ' +
 
-                        escapeHtml(
-                            item[1]
-                        ) +
+                            (
+                                mediaFilter ===
+                                item[0]
+                                    ? "active"
+                                    : ""
+                            ) +
 
-                        '</button>'
+                            '" ' +
 
-                    );
+                            'onclick="setMediaFilter(\'' +
 
-                }
-            )
-            .join("");
+                            encodeURIComponent(
+                                item[0]
+                            ) +
+
+                            '\')">' +
+
+                            escapeHtml(
+                                item[1]
+                            ) +
+
+                            '</button>'
+
+                        );
+
+                    }
+                )
+                .join("");
 
 }
 
@@ -5073,14 +4856,13 @@ function setMediaFilter(
     encoded
 ){
 
-    currentMediaFilter =
+    mediaFilter =
         decodeURIComponent(
             encoded
         );
 
 
-    renderMediaToolbar();
-
+    renderMediaFilters();
 
     renderMediaGrid();
 
@@ -5090,11 +4872,11 @@ function setMediaFilter(
 function renderMediaGrid(){
 
     let items =
-        mediaData.slice();
+        mediaItems.slice();
 
 
     if(
-        currentMediaFilter !==
+        mediaFilter !==
         "ALL"
     ){
 
@@ -5104,7 +4886,7 @@ function renderMediaGrid(){
 
                     return (
                         item.category ===
-                        currentMediaFilter
+                        mediaFilter
                     );
 
                 }
@@ -5121,144 +4903,156 @@ function renderMediaGrid(){
 
         items.length
 
-        ? items
-            .map(
-                function(item){
+            ? items
+                .map(
+                    function(item){
 
-                    let icon =
-                        "📄";
+                        let icon =
+                            "📄";
 
 
-                    if(
-                        item.category ===
-                        "Bukti Pembayaran"
-                    ){
+                        if(
+                            item.category ===
+                            "Bukti Pembayaran"
+                        ){
 
-                        icon =
-                            "💳";
+                            icon =
+                                "💳";
 
-                    }else if(
-                        item.category ===
-                        "Maintenance"
-                    ){
+                        }else if(
+                            item.category ===
+                            "Maintenance"
+                        ){
 
-                        icon =
-                            "🔧";
+                            icon =
+                                "🔧";
 
-                    }else if(
-                        item.category ===
-                        "Data Diri"
-                    ){
+                        }else if(
+                            item.category ===
+                            "Data Diri"
+                        ){
 
-                        icon =
-                            "🪪";
+                            icon =
+                                "🪪";
 
-                    }else if(
-                        item.category ===
-                        "Check-in / Check-out"
-                    ){
+                        }else if(
+                            item.category ===
+                            "Check-in / Check-out"
+                        ){
 
-                        icon =
-                            "🚪";
+                            icon =
+                                "🚪";
 
-                    }else if(
-                        item.category ===
-                        "Pelanggaran"
-                    ){
+                        }else if(
+                            item.category ===
+                            "Pelanggaran"
+                        ){
 
-                        icon =
-                            "⚠️";
+                            icon =
+                                "⚠️";
+
+                        }
+
+
+                        return (
+
+                            '<div class="media-card">' +
+
+                            '<div class="icon">' +
+                            icon +
+                            '</div>' +
+
+                            '<h4>' +
+
+                            escapeHtml(
+                                item.title ||
+                                item.type ||
+                                "Media"
+                            ) +
+
+                            '</h4>' +
+
+                            '<p>' +
+
+                            escapeHtml(
+                                item.name ||
+                                "—"
+                            ) +
+
+                            '</p>' +
+
+                            '<p>' +
+
+                            (
+                                item.tenantId
+                                    ? escapeHtml(
+                                        item.tenantId
+                                      ) +
+                                      " · "
+                                    : ""
+                            ) +
+
+                            (
+                                item.room
+                                    ? "Kamar " +
+                                      escapeHtml(
+                                          item.room
+                                      )
+                                    : ""
+                            ) +
+
+                            '</p>' +
+
+                            (
+                                item.status
+                                    ? (
+                                        '<p>Status: ' +
+                                        escapeHtml(
+                                            item.status
+                                        ) +
+                                        '</p>'
+                                    )
+                                    : ''
+                            ) +
+
+                            '<div class="actions" style="margin-top:10px;">' +
+
+                            '<button class="btn btn-primary" onclick="openStoredMedia(\'' +
+
+                            encodeURIComponent(
+                                item.fileId ||
+                                ""
+                            ) +
+
+                            '\',\'' +
+
+                            encodeURIComponent(
+                                item.url ||
+                                ""
+                            ) +
+
+                            '\')">' +
+
+                            'Lihat Media' +
+
+                            '</button>' +
+
+                            '</div>' +
+
+                            '</div>'
+
+                        );
 
                     }
+                )
+                .join("")
 
-
-                    return (
-
-                        '<div class="media-card">' +
-
-                        '<div class="media-icon">' +
-                        icon +
-                        '</div>' +
-
-                        '<h4>' +
-                        escapeHtml(
-                            item.title
-                        ) +
-                        '</h4>' +
-
-                        '<p>' +
-                        escapeHtml(
-                            item.name ||
-                            "—"
-                        ) +
-                        '</p>' +
-
-                        '<p>' +
-
-                        (
-                            item.tenantId
-                                ? escapeHtml(
-                                    item.tenantId
-                                  ) +
-                                  " · "
-                                : ""
-                        ) +
-
-                        (
-                            item.room
-                                ? "Kamar " +
-                                  escapeHtml(
-                                      item.room
-                                  )
-                                : ""
-                        ) +
-
-                        '</p>' +
-
-                        (
-                            item.status
-                                ? (
-                                    '<p>Status: ' +
-                                    escapeHtml(
-                                        item.status
-                                    ) +
-                                    '</p>'
-                                )
-                                : ''
-                        ) +
-
-                        '<div class="actions" style="margin-top:10px;">' +
-
-                        '<button class="btn-small primary" onclick="openMedia(\'' +
-                        encodeURIComponent(
-                            item.fileId || ""
-                        ) +
-                        '\',\'' +
-                        encodeURIComponent(
-                            item.url || ""
-                        ) +
-                        '\')">' +
-
-                        'Lihat Media' +
-
-                        '</button>' +
-
-                        '</div>' +
-
-                        '</div>'
-
-                    );
-
-                }
-            )
-            .join("")
-
-        : '<div class="empty">Tidak ada media pada kategori ini.</div>';
+            : '<div class="empty">Tidak ada media pada kategori ini.</div>';
 
 }
 
 
-async function openMedia(
+async function openStoredMedia(
     encodedFileId,
     encodedUrl
 ){
@@ -5299,58 +5093,194 @@ async function openMedia(
 
 
         if(
+            result &&
             result.dataUrl
         ){
 
             modalBody.innerHTML =
 
                 '<p>' +
+
                 '<strong>' +
+
                 escapeHtml(
-                    result.fileName
+                    result.fileName ||
+                    "Media"
                 ) +
+
                 '</strong>' +
+
                 '</p>' +
 
                 '<img class="modal-image" src="' +
+
                 result.dataUrl +
+
                 '" alt="Media">';
 
-        }else{
+        }else if(
+            result &&
+            result.url
+        ){
 
             modalBody.innerHTML =
 
-                '<p>Media dibuka melalui penyimpanan.</p>' +
+                '<p>' +
+                'Media tersedia melalui penyimpanan.' +
+                '</p>' +
 
                 '<a href="' +
+
                 escapeHtml(
                     result.url
                 ) +
+
                 '" target="_blank">' +
 
                 'Buka Media' +
 
                 '</a>';
 
+        }else{
+
+            modalBody.innerHTML =
+                '<div class="empty">Media tidak ditemukan.</div>';
+
         }
 
     }catch(error){
 
         modalBody.innerHTML =
-            '<p style="color:#b42318">' +
+
+            '<div class="empty" style="color:#b42318;">' +
+
             escapeHtml(
                 error.message
             ) +
-            '</p>';
+
+            '</div>';
 
     }
 
 }
 
 
-/* ==========================================================
+/* ============================================================
+   ROOMS
+   ============================================================ */
+
+function renderRooms(
+    rooms
+){
+
+    document
+        .getElementById(
+            "roomsGrid"
+        )
+        .innerHTML =
+
+        (
+            rooms || []
+        )
+        .map(
+            function(item){
+
+                const status =
+                    String(
+                        item.status ||
+                        ""
+                    )
+                    .toUpperCase();
+
+
+                const price =
+                    Number(
+                        item.price ||
+                        0
+                    );
+
+
+                const cssClass =
+                    status ===
+                    "TERISI"
+
+                        ? "occupied"
+
+                        : (
+                            price <= 0
+                                ? "soon"
+                                : ""
+                        );
+
+
+                return (
+
+                    '<div class="room-card ' +
+                    cssClass +
+                    '">' +
+
+                    '<div class="room-number">' +
+
+                    escapeHtml(
+                        item.number
+                    ) +
+
+                    '</div>' +
+
+                    '<div class="room-line">' +
+
+                    escapeHtml(
+                        status ||
+                        "—"
+                    ) +
+
+                    '</div>' +
+
+                    '<div class="room-line">' +
+
+                    (
+                        price > 0
+                            ? money(
+                                price
+                              )
+                            : "Belum tersedia"
+                    ) +
+
+                    '</div>' +
+
+                    (
+                        item.tenantName
+
+                            ? (
+
+                                '<div class="room-line">' +
+
+                                escapeHtml(
+                                    item.tenantName
+                                ) +
+
+                                '</div>'
+
+                              )
+
+                            : ""
+
+                    ) +
+
+                    '</div>'
+
+                );
+
+            }
+        )
+        .join("");
+
+}
+
+
+/* ============================================================
    WHATSAPP
-   ========================================================== */
+   ============================================================ */
 
 async function loadWhatsApp(){
 
@@ -5361,7 +5291,12 @@ async function loadWhatsApp(){
 
 
     const items =
-        data.items || [];
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items
+            : [];
 
 
     document
@@ -5372,98 +5307,112 @@ async function loadWhatsApp(){
 
         items.length
 
-        ? (
+            ? (
 
-            '<table class="data-table">' +
+                '<table class="data-table">' +
 
-            '<thead>' +
+                '<thead>' +
 
-            '<tr>' +
+                '<tr>' +
 
-            '<th>Tenant</th>' +
-            '<th>Kamar</th>' +
-            '<th>Periode</th>' +
-            '<th>Tagihan</th>' +
-            '<th>Aksi</th>' +
+                '<th>Tenant</th>' +
+                '<th>Kamar</th>' +
+                '<th>Periode</th>' +
+                '<th>Tagihan</th>' +
+                '<th>Aksi</th>' +
 
-            '</tr>' +
+                '</tr>' +
 
-            '</thead>' +
+                '</thead>' +
 
-            '<tbody>' +
+                '<tbody>' +
 
-            items
-                .map(
-                    function(item){
+                items
+                    .map(
+                        function(item){
 
-                        return (
+                            return (
 
-                            '<tr>' +
+                                '<tr>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.name
-                            ) +
-                            '<br>' +
-                            '<small>' +
-                            escapeHtml(
-                                item.phone
-                            ) +
-                            '</small>' +
-                            '</td>' +
+                                '<td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.room
-                            ) +
-                            '</td>' +
+                                '<strong>' +
+                                escapeHtml(
+                                    item.name
+                                ) +
+                                '</strong>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.period
-                            ) +
-                            '</td>' +
+                                '<br>' +
 
-                            '<td>' +
-                            money(
-                                item.amount
-                            ) +
-                            '</td>' +
+                                '<span class="small-text">' +
+                                escapeHtml(
+                                    item.phone
+                                ) +
+                                '</span>' +
 
-                            '<td>' +
+                                '</td>' +
 
-                            '<a class="btn-small success" href="' +
-                            item.waLink +
-                            '" target="_blank">' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.room
+                                ) +
+                                '</td>' +
 
-                            'Buka WhatsApp' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.period
+                                ) +
+                                '</td>' +
 
-                            '</a>' +
+                                '<td>' +
+                                money(
+                                    item.amount
+                                ) +
+                                '</td>' +
 
-                            '</td>' +
+                                '<td>' +
 
-                            '</tr>'
+                                '<a ' +
 
-                        );
+                                'class="btn btn-success" ' +
 
-                    }
-                )
-                .join("") +
+                                'href="' +
 
-            '</tbody>' +
+                                escapeHtml(
+                                    item.waLink
+                                ) +
 
-            '</table>'
+                                '" target="_blank">' +
 
-        )
+                                'Buka WhatsApp' +
 
-        : '<div class="empty">Tidak ada tenant yang perlu diingatkan.</div>';
+                                '</a>' +
+
+                                '</td>' +
+
+                                '</tr>'
+
+                            );
+
+                        }
+                    )
+                    .join("") +
+
+                '</tbody>' +
+
+                '</table>'
+
+            )
+
+            : '<div class="empty">Tidak ada tenant yang perlu diingatkan.</div>';
 
 }
 
 
-/* ==========================================================
-   ANNOUNCEMENT
-   ========================================================== */
+/* ============================================================
+   ANNOUNCEMENTS
+   ============================================================ */
 
 async function loadAnnouncements(){
 
@@ -5474,7 +5423,12 @@ async function loadAnnouncements(){
 
 
     const items =
-        data.items || [];
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items
+            : [];
 
 
     document
@@ -5485,72 +5439,72 @@ async function loadAnnouncements(){
 
         items.length
 
-        ? (
+            ? (
 
-            '<table class="data-table">' +
+                '<table class="data-table">' +
 
-            '<thead>' +
+                '<thead>' +
 
-            '<tr>' +
+                '<tr>' +
 
-            '<th>Judul</th>' +
-            '<th>Prioritas</th>' +
-            '<th>Isi</th>' +
-            '<th>Status</th>' +
+                '<th>Judul</th>' +
+                '<th>Prioritas</th>' +
+                '<th>Isi</th>' +
+                '<th>Status</th>' +
 
-            '</tr>' +
+                '</tr>' +
 
-            '</thead>' +
+                '</thead>' +
 
-            '<tbody>' +
+                '<tbody>' +
 
-            items
-                .map(
-                    function(item){
+                items
+                    .map(
+                        function(item){
 
-                        return (
+                            return (
 
-                            '<tr>' +
+                                '<tr>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.title
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.title
+                                ) +
+                                '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.priority
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.priority
+                                ) +
+                                '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.message
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.message
+                                ) +
+                                '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.status
-                            ) +
-                            '</td>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.status
+                                ) +
+                                '</td>' +
 
-                            '</tr>'
+                                '</tr>'
 
-                        );
+                            );
 
-                    }
-                )
-                .join("") +
+                        }
+                    )
+                    .join("") +
 
-            '</tbody>' +
+                '</tbody>' +
 
-            '</table>'
+                '</table>'
 
-        )
+            )
 
-        : '<div class="empty">Belum ada pengumuman.</div>';
+            : '<div class="empty">Belum ada pengumuman.</div>';
 
 }
 
@@ -5577,14 +5531,16 @@ document
                                 .getElementById(
                                     "announcementTitle"
                                 )
-                                .value,
+                                .value
+                                .trim(),
 
                         message:
                             document
                                 .getElementById(
                                     "announcementMessage"
                                 )
-                                .value,
+                                .value
+                                .trim(),
 
                         priority:
                             document
@@ -5620,24 +5576,20 @@ document
     );
 
 
-/* ==========================================================
+/* ============================================================
    AUTOMATION
-   ========================================================== */
+   ============================================================ */
 
 document
     .getElementById(
-        "runAutomationButton"
+        "automationButton"
     )
     .addEventListener(
         "click",
         async function(){
 
-            this.disabled =
-                true;
-
-
-            this.textContent =
-                "Menjalankan...";
+            const button =
+                this;
 
 
             const message =
@@ -5645,6 +5597,22 @@ document
                     .getElementById(
                         "automationMessage"
                     );
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Menjalankan...";
+
+
+            message.className =
+                "login-message";
+
+
+            message.textContent =
+                "";
 
 
             try{
@@ -5660,7 +5628,8 @@ document
 
 
                 message.textContent =
-                    result.message;
+                    result.message ||
+                    "Otomasi berhasil dijalankan.";
 
 
                 await loadDashboard();
@@ -5677,11 +5646,11 @@ document
 
             }finally{
 
-                this.disabled =
+                button.disabled =
                     false;
 
 
-                this.textContent =
+                button.textContent =
                     "Jalankan Otomasi";
 
             }
@@ -5690,9 +5659,9 @@ document
     );
 
 
-/* ==========================================================
+/* ============================================================
    MODAL
-   ========================================================== */
+   ============================================================ */
 
 function showModal(
     title,
@@ -5750,9 +5719,9 @@ modal.addEventListener(
 );
 
 
-/* ==========================================================
+/* ============================================================
    REFRESH
-   ========================================================== */
+   ============================================================ */
 
 document
     .getElementById(
@@ -5768,31 +5737,23 @@ document
 
 
                 const active =
-                    document
-                        .querySelector(
-                            ".panel.active"
-                        );
+                    document.querySelector(
+                        ".panel.active"
+                    );
 
 
-                if(active){
+                if(
+                    active &&
+                    active.id !==
+                    "panel-dashboard"
+                ){
 
-                    const name =
+                    await loadPanel(
                         active.id.replace(
                             "panel-",
                             ""
-                        );
-
-
-                    if(
-                        name !==
-                        "dashboard"
-                    ){
-
-                        await loadPanel(
-                            name
-                        );
-
-                    }
+                        )
+                    );
 
                 }
 
@@ -5808,13 +5769,13 @@ document
     );
 
 
-/* ==========================================================
+/* ============================================================
    LOGOUT
-   ========================================================== */
+   ============================================================ */
 
 document
     .getElementById(
-        "masterLogout"
+        "logoutButton"
     )
     .addEventListener(
         "click",
@@ -5822,20 +5783,20 @@ document
 
             try{
 
-                await api(
-                    "masterLogout"
-                );
+                if(
+                    masterSession
+                ){
+
+                    await api(
+                        "masterLogout"
+                    );
+
+                }
 
             }catch(error){}
 
 
-            sessionStorage.removeItem(
-                "djMasterSession"
-            );
-
-
-            masterSession =
-                null;
+            clearMasterSession();
 
 
             showLogin();
@@ -5844,37 +5805,288 @@ document
     );
 
 
-/* ==========================================================
-   INIT
-   ========================================================== */
+/* ============================================================
+   FILE BASE64
+   ============================================================ */
 
-masterSession =
-    getSession();
-
-
-if(
-    masterSession
+function fileToBase64(
+    file
 ){
 
-    showApp();
+    return new Promise(
+        function(resolve,reject){
+
+            const reader =
+                new FileReader();
 
 
-    loadDashboard()
-        .catch(
-            function(error){
+            reader.onload =
+                function(){
 
-                alert(
-                    error.message
-                );
+                    const result =
+                        String(
+                            reader.result ||
+                            ""
+                        );
 
-            }
-        );
 
-}else{
+                    const comma =
+                        result.indexOf(
+                            ","
+                        );
 
-    showLogin();
+
+                    resolve(
+
+                        comma >= 0
+
+                            ? result.substring(
+                                comma + 1
+                              )
+
+                            : result
+
+                    );
+
+                };
+
+
+            reader.onerror =
+                function(){
+
+                    reject(
+                        new Error(
+                            "File tidak dapat dibaca."
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
 
 }
+
+
+/* ============================================================
+   IMAGE COMPRESS
+   ============================================================ */
+
+function compressImage(
+    file,
+    maxWidth=1600,
+    quality=.82
+){
+
+    return new Promise(
+        function(resolve,reject){
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(){
+
+                    const image =
+                        new Image();
+
+
+                    image.onload =
+                        function(){
+
+                            let width =
+                                image.width;
+
+
+                            let height =
+                                image.height;
+
+
+                            if(
+                                width >
+                                maxWidth
+                            ){
+
+                                const ratio =
+                                    maxWidth /
+                                    width;
+
+
+                                width =
+                                    maxWidth;
+
+
+                                height =
+                                    Math.round(
+                                        height *
+                                        ratio
+                                    );
+
+                            }
+
+
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
+
+
+                            canvas.width =
+                                width;
+
+
+                            canvas.height =
+                                height;
+
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+
+                            ctx.drawImage(
+                                image,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            canvas.toBlob(
+                                function(blob){
+
+                                    if(!blob){
+
+                                        reject(
+                                            new Error(
+                                                "Foto gagal diproses."
+                                            )
+                                        );
+
+                                        return;
+
+                                    }
+
+
+                                    resolve(
+
+                                        new File(
+                                            [
+                                                blob
+                                            ],
+                                            "maintenance-after-" +
+                                            Date.now() +
+                                            ".jpg",
+                                            {
+                                                type:
+                                                    "image/jpeg"
+                                            }
+                                        )
+
+                                    );
+
+                                },
+                                "image/jpeg",
+                                quality
+                            );
+
+                        };
+
+
+                    image.onerror =
+                        function(){
+
+                            reject(
+                                new Error(
+                                    "Format foto tidak dapat diproses."
+                                )
+                            );
+
+                        };
+
+
+                    image.src =
+                        reader.result;
+
+                };
+
+
+            reader.onerror =
+                function(){
+
+                    reject(
+                        new Error(
+                            "Foto tidak dapat dibaca."
+                        )
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   INIT
+   ============================================================ */
+
+async function init(){
+
+    try{
+
+        masterSession =
+            getStoredMasterSession();
+
+
+        if(
+            !masterSession
+        ){
+
+            showLogin();
+
+            return;
+
+        }
+
+
+        showApp();
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        /*
+         * Jangan pernah biarkan halaman menjadi putih
+         * tanpa informasi.
+         */
+
+        showBootError(
+            error.message
+        );
+
+    }
+
+}
+
+
+init();
 
 </script>
 
