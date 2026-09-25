@@ -14,7 +14,7 @@
 
 <link
     rel="stylesheet"
-    href="app.css?v=20260925-payment-photo-01"
+    href="app.css?v=20260925-payment-final"
 >
 
 <style>
@@ -23,74 +23,51 @@
     padding:55px 0;
 }
 
-.payment-header{
-    margin-bottom:28px;
-}
-
 .payment-summary{
     display:grid;
     grid-template-columns:
         repeat(3,minmax(0,1fr));
     gap:16px;
-    margin-bottom:20px;
+    margin:25px 0;
 }
 
-.summary-card{
+.summary-card,
+.billing-card,
+.payment-card{
     background:#fff;
     border:1px solid #e5e7eb;
     border-radius:18px;
-    padding:20px;
+    padding:22px;
 }
 
-.summary-card span{
+.summary-card span,
+.billing-item span{
     display:block;
     color:#667085;
     font-size:13px;
-    margin-bottom:8px;
+    margin-bottom:7px;
 }
 
 .summary-card strong{
     font-size:22px;
 }
 
-.billing-card{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:20px;
-    padding:25px;
-    margin-bottom:20px;
-}
-
 .billing-grid{
     display:grid;
     grid-template-columns:
         repeat(3,minmax(0,1fr));
-    gap:16px;
+    gap:15px;
     margin-top:18px;
 }
 
 .billing-item{
+    background:#f7f8fa;
     padding:15px;
-    background:#f6f8fb;
-    border-radius:14px;
-}
-
-.billing-item span{
-    display:block;
-    font-size:12px;
-    color:#667085;
-    margin-bottom:5px;
+    border-radius:13px;
 }
 
 .billing-item strong{
     font-size:18px;
-}
-
-.payment-form-card{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:20px;
-    padding:28px;
 }
 
 .form-grid{
@@ -100,10 +77,14 @@
     gap:18px;
 }
 
+.field.full{
+    grid-column:1 / -1;
+}
+
 .field label{
     display:block;
     font-weight:700;
-    margin-bottom:8px;
+    margin-bottom:7px;
 }
 
 .field input,
@@ -113,10 +94,8 @@
     box-sizing:border-box;
     padding:13px 14px;
     border:1px solid #dfe3eb;
-    border-radius:12px;
-    background:#fff;
+    border-radius:11px;
     font:inherit;
-    outline:none;
 }
 
 .field textarea{
@@ -124,90 +103,51 @@
     resize:vertical;
 }
 
-.field.full{
-    grid-column:1 / -1;
-}
-
-.field input[readonly]{
-    background:#f6f8fb;
-}
-
 .photo-box{
-    border:1.5px dashed #c8ced9;
-    border-radius:16px;
-    padding:20px;
+    border:1.5px dashed #cbd2dc;
+    border-radius:15px;
+    padding:18px;
     background:#fafbfc;
 }
 
-.photo-input{
-    display:block;
-    width:100%;
-}
-
-.photo-help{
-    margin-top:9px;
-    font-size:13px;
-    line-height:1.6;
-    color:#667085;
-}
-
-.preview-wrap{
+.preview{
     display:none;
-    margin-top:16px;
+    margin-top:14px;
 }
 
-.preview-wrap img{
-    display:block;
+.preview img{
     width:100%;
-    max-width:460px;
-    max-height:360px;
+    max-width:450px;
+    max-height:350px;
     object-fit:contain;
-    border-radius:14px;
+    border-radius:13px;
     border:1px solid #e5e7eb;
-    background:#fff;
 }
 
-.preview-name{
+.help{
+    color:#667085;
+    font-size:13px;
+    line-height:1.6;
     margin-top:8px;
-    font-size:13px;
-    color:#667085;
 }
 
-.payment-message{
+.message{
     display:none;
-    margin-top:18px;
+    margin-top:17px;
     padding:14px;
     border-radius:12px;
-    font-size:14px;
-    line-height:1.6;
 }
 
-.payment-message.success{
+.message.success{
     display:block;
-    background:#ecfdf3;
     color:#027a48;
+    background:#ecfdf3;
 }
 
-.payment-message.error{
+.message.error{
     display:block;
-    background:#fff1f2;
     color:#b42318;
-}
-
-.payment-note{
-    margin-top:15px;
-    padding:14px;
-    border-radius:12px;
-    background:#f5f7fa;
-    color:#667085;
-    font-size:13px;
-    line-height:1.6;
-}
-
-.loading-box{
-    padding:55px 0;
-    text-align:center;
-    color:#667085;
+    background:#fff1f2;
 }
 
 @media(max-width:900px){
@@ -274,7 +214,6 @@
 <a
     href="#"
     id="logoutButton"
-    class="login-top"
 >
     Keluar
 </a>
@@ -295,25 +234,21 @@
 
 <div
     id="loading"
-    class="loading-box"
+    style="
+        text-align:center;
+        padding:45px;
+        color:#667085;
+    "
 >
     Memuat data pembayaran...
 </div>
 
 
 <div
-    id="errorBox"
-    class="payment-message error"
-></div>
-
-
-<div
-    id="paymentContent"
+    id="content"
     style="display:none;"
 >
 
-
-<div class="payment-header">
 
 <div class="eyebrow">
     TENANT
@@ -327,17 +262,11 @@
 
 <p
     class="lead"
-    id="tenantIntro"
+    id="intro"
 >
     —
 </p>
 
-</div>
-
-
-<!-- =========================================================
-     TENANT SUMMARY
-     ========================================================= -->
 
 <div class="payment-summary">
 
@@ -348,9 +277,7 @@
     Nama Tenant
 </span>
 
-<strong
-    id="tenantName"
->
+<strong id="tenantName">
     —
 </strong>
 
@@ -363,9 +290,7 @@
     Tenant ID
 </span>
 
-<strong
-    id="tenantId"
->
+<strong id="tenantId">
     —
 </strong>
 
@@ -378,26 +303,19 @@
     Kamar
 </span>
 
-<strong
-    id="tenantRoom"
->
+<strong id="tenantRoom">
     —
 </strong>
 
 </div>
 
-
 </div>
 
-
-<!-- =========================================================
-     BILLING
-     ========================================================= -->
 
 <div class="billing-card">
 
 <h3>
-    Tagihan Bulan Berjalan
+    Tagihan
 </h3>
 
 
@@ -410,9 +328,7 @@
     Periode
 </span>
 
-<strong
-    id="billingPeriod"
->
+<strong id="periodLabel">
     —
 </strong>
 
@@ -425,9 +341,7 @@
     Harga Sewa
 </span>
 
-<strong
-    id="billingRent"
->
+<strong id="rent">
     —
 </strong>
 
@@ -440,9 +354,7 @@
     Jatuh Tempo
 </span>
 
-<strong
-    id="billingDue"
->
+<strong id="dueDate">
     —
 </strong>
 
@@ -455,10 +367,8 @@
     Denda
 </span>
 
-<strong
-    id="billingFine"
->
-    Rp0
+<strong id="fine">
+    —
 </strong>
 
 </div>
@@ -467,12 +377,10 @@
 <div class="billing-item">
 
 <span>
-    Total Tagihan
+    Total
 </span>
 
-<strong
-    id="billingTotal"
->
+<strong id="total">
     —
 </strong>
 
@@ -485,9 +393,7 @@
     Status
 </span>
 
-<strong
-    id="billingStatus"
->
+<strong id="status">
     —
 </strong>
 
@@ -499,30 +405,14 @@
 </div>
 
 
-<!-- =========================================================
-     FORM
-     ========================================================= -->
-
-<div class="payment-form-card">
+<div class="payment-card">
 
 <h3>
     Kirim Pembayaran
 </h3>
 
 
-<p
-    style="
-        color:#667085;
-        line-height:1.6;
-    "
->
-    Data tenant dan kamar sudah diambil otomatis dari akun Anda.
-</p>
-
-
-<form
-    id="paymentForm"
->
+<form id="paymentForm">
 
 
 <div class="form-grid">
@@ -530,7 +420,7 @@
 
 <div class="field">
 
-<label for="period">
+<label>
     Periode Pembayaran
 </label>
 
@@ -545,7 +435,7 @@
 
 <div class="field">
 
-<label for="paymentDate">
+<label>
     Tanggal Pembayaran
 </label>
 
@@ -560,7 +450,7 @@
 
 <div class="field">
 
-<label for="amount">
+<label>
     Nominal Dibayar
 </label>
 
@@ -576,8 +466,8 @@
 
 <div class="field">
 
-<label for="method">
-    Metode Pembayaran
+<label>
+    Metode
 </label>
 
 <select
@@ -586,7 +476,7 @@
 >
 
 <option value="">
-    Pilih metode
+    Pilih
 </option>
 
 <option value="Transfer Bank">
@@ -606,10 +496,6 @@
 </div>
 
 
-<!-- =======================================================
-     FOTO
-     ======================================================= -->
-
 <div class="field full">
 
 <label>
@@ -621,7 +507,6 @@
 
 <input
     id="proofFile"
-    class="photo-input"
     type="file"
     accept="image/jpeg,image/png,image/webp"
     capture="environment"
@@ -629,35 +514,32 @@
 >
 
 
-<div class="photo-help">
+<div class="help">
 
-Ambil foto bukti pembayaran atau pilih foto
-dari perangkat Anda. Foto akan diperkecil
-secara otomatis sebelum dikirim.
-
-<br>
+Ambil foto bukti pembayaran atau pilih foto dari
+perangkat. Foto akan diperkecil otomatis sebelum
+dikirim.
 
 <strong>
-Tidak perlu upload ke Google Drive.
+    Tidak perlu Google Drive.
 </strong>
 
 </div>
 
 
 <div
-    id="previewWrap"
-    class="preview-wrap"
+    id="preview"
+    class="preview"
 >
 
 <img
-    id="proofPreview"
+    id="previewImage"
     alt="Preview bukti pembayaran"
 >
 
-
 <div
     id="previewName"
-    class="preview-name"
+    class="help"
 ></div>
 
 </div>
@@ -669,13 +551,12 @@ Tidak perlu upload ke Google Drive.
 
 <div class="field full">
 
-<label for="note">
+<label>
     Keterangan
 </label>
 
 <textarea
     id="note"
-    placeholder="Keterangan tambahan..."
 ></textarea>
 
 </div>
@@ -684,16 +565,21 @@ Tidak perlu upload ke Google Drive.
 </div>
 
 
-<div class="payment-note">
+<div
+    style="
+        margin-top:16px;
+        padding:14px;
+        border-radius:12px;
+        background:#f7f8fa;
+        color:#667085;
+        font-size:13px;
+        line-height:1.6;
+    "
+>
 
-<strong>
-    Catatan:
-</strong>
-
-Denda dihitung otomatis oleh server.
-Setelah pembayaran dikirim, status menjadi
-<strong>MENUNGGU VERIFIKASI</strong> sampai pengelola
-melakukan pemeriksaan.
+Setelah dikirim, pembayaran akan masuk ke
+<strong>Master Dashboard → Pembayaran</strong>
+untuk diverifikasi.
 
 </div>
 
@@ -703,8 +589,8 @@ melakukan pemeriksaan.
     id="submitButton"
     type="submit"
     style="
-        margin-top:18px;
         width:100%;
+        margin-top:18px;
     "
 >
     Kirim Pembayaran
@@ -712,8 +598,8 @@ melakukan pemeriksaan.
 
 
 <div
-    id="paymentMessage"
-    class="payment-message"
+    id="message"
+    class="message"
 ></div>
 
 
@@ -731,39 +617,31 @@ melakukan pemeriksaan.
 </main>
 
 
-<footer class="footer">
-
-<div class="container footer-inner">
-
-<div>
-
-<strong>
-    DJ FAMILY KOST
-</strong>
-
-<br>
-
-<small>
-    Hunian yang tertib, nyaman, dan terkelola.
-</small>
-
-</div>
-
-
-<small>
-    © 2026 DJ Family Kost
-</small>
-
-</div>
-
-</footer>
-
-
 <script>
 
 
-const TENANT_API_URL =
+const API_URL =
     "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
+
+const sessionRaw =
+    sessionStorage.getItem(
+        "djTenantSession"
+    );
+
+
+if(!sessionRaw){
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+const session =
+    JSON.parse(
+        sessionRaw
+    );
 
 
 const loading =
@@ -772,33 +650,9 @@ const loading =
     );
 
 
-const errorBox =
+const content =
     document.getElementById(
-        "errorBox"
-    );
-
-
-const paymentContent =
-    document.getElementById(
-        "paymentContent"
-    );
-
-
-const paymentForm =
-    document.getElementById(
-        "paymentForm"
-    );
-
-
-const paymentMessage =
-    document.getElementById(
-        "paymentMessage"
-    );
-
-
-const submitButton =
-    document.getElementById(
-        "submitButton"
+        "content"
     );
 
 
@@ -808,15 +662,15 @@ const proofFile =
     );
 
 
-const previewWrap =
+const preview =
     document.getElementById(
-        "previewWrap"
+        "preview"
     );
 
 
-const proofPreview =
+const previewImage =
     document.getElementById(
-        "proofPreview"
+        "previewImage"
     );
 
 
@@ -826,58 +680,22 @@ const previewName =
     );
 
 
-let currentBilling =
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+const submitButton =
+    document.getElementById(
+        "submitButton"
+    );
+
+
+let proofData =
     null;
 
 
-let selectedProofData =
-    null;
-
-
-/**
- * ============================================================
- * SESSION
- * ============================================================
- */
-function getSession(){
-
-    const raw =
-        sessionStorage.getItem(
-            "djTenantSession"
-        );
-
-
-    if(!raw){
-
-        return null;
-
-    }
-
-
-    try{
-
-        return JSON.parse(
-            raw
-        );
-
-    }catch(error){
-
-        sessionStorage.removeItem(
-            "djTenantSession"
-        );
-
-        return null;
-
-    }
-
-}
-
-
-/**
- * ============================================================
- * MONEY
- * ============================================================
- */
 function money(
     value
 ){
@@ -894,11 +712,6 @@ function money(
 }
 
 
-/**
- * ============================================================
- * CURRENT DATE
- * ============================================================
- */
 function todayISO(){
 
     const d =
@@ -928,12 +741,7 @@ function todayISO(){
 }
 
 
-/**
- * ============================================================
- * CURRENT MONTH
- * ============================================================
- */
-function currentMonthISO(){
+function monthISO(){
 
     const d =
         new Date();
@@ -955,24 +763,66 @@ function currentMonthISO(){
 }
 
 
+async function api(
+    body
+){
+
+    const response =
+        await fetch(
+            API_URL,
+            {
+
+                method:
+                    "POST",
+
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:
+                    JSON.stringify(
+                        body
+                    )
+
+            }
+        );
+
+
+    const result =
+        await response.json();
+
+
+    if(
+        !result ||
+        result.ok !== true
+    ){
+
+        throw new Error(
+            result &&
+            result.error
+                ? result.error
+                : "Permintaan gagal."
+        );
+
+    }
+
+
+    return result.data;
+
+}
+
+
 /**
- * ============================================================
- * COMPRESS PHOTO
- * ============================================================
- *
- * Foto dikurangi menjadi maksimal 1600px.
- *
- * Output:
- * JPEG quality 0.82
- *
- * Agar upload lebih ringan dari HP.
- * ============================================================
+ * ==========================================================
+ * COMPRESS
+ * ==========================================================
  */
 async function compressImage(
     file
 ){
 
-    const imageUrl =
+    const url =
         URL.createObjectURL(
             file
         );
@@ -982,10 +832,7 @@ async function compressImage(
 
         const image =
             await new Promise(
-                function(
-                    resolve,
-                    reject
-                ){
+                function(resolve,reject){
 
                     const img =
                         new Image();
@@ -993,34 +840,28 @@ async function compressImage(
 
                     img.onload =
                         function(){
-
-                            resolve(
-                                img
-                            );
-
+                            resolve(img);
                         };
 
 
                     img.onerror =
                         function(){
-
                             reject(
                                 new Error(
                                     "Foto tidak dapat dibaca."
                                 )
                             );
-
                         };
 
 
                     img.src =
-                        imageUrl;
+                        url;
 
                 }
             );
 
 
-        const maxSize =
+        const max =
             1600;
 
 
@@ -1033,16 +874,14 @@ async function compressImage(
 
 
         if(
-            width >
-            maxSize ||
-            height >
-            maxSize
+            width > max ||
+            height > max
         ){
 
             const scale =
                 Math.min(
-                    maxSize / width,
-                    maxSize / height
+                    max / width,
+                    max / height
                 );
 
 
@@ -1074,65 +913,26 @@ async function compressImage(
             height;
 
 
-        const ctx =
-            canvas.getContext(
-                "2d"
+        canvas
+            .getContext("2d")
+            .drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
             );
 
 
-        ctx.drawImage(
-            image,
-            0,
-            0,
-            width,
-            height
+        return canvas.toDataURL(
+            "image/jpeg",
+            0.80
         );
-
-
-        const dataUrl =
-            canvas.toDataURL(
-                "image/jpeg",
-                0.82
-            );
-
-
-        /*
-         * Pastikan base64 tidak berlebihan.
-         */
-
-        const approxBytes =
-            Math.floor(
-                (
-                    dataUrl.length -
-                    dataUrl.indexOf(
-                        ","
-                    ) -
-                    1
-                ) *
-                0.75
-            );
-
-
-        if(
-            approxBytes >
-            2200000
-        ){
-
-            return canvas.toDataURL(
-                "image/jpeg",
-                0.68
-            );
-
-        }
-
-
-        return dataUrl;
-
 
     }finally{
 
         URL.revokeObjectURL(
-            imageUrl
+            url
         );
 
     }
@@ -1141,9 +941,9 @@ async function compressImage(
 
 
 /**
- * ============================================================
- * FOTO CHANGE
- * ============================================================
+ * ==========================================================
+ * FILE SELECT
+ * ==========================================================
  */
 proofFile.addEventListener(
     "change",
@@ -1154,21 +954,12 @@ proofFile.addEventListener(
             this.files[0];
 
 
-        selectedProofData =
+        proofData =
             null;
 
 
-        previewWrap.style.display =
+        preview.style.display =
             "none";
-
-
-        proofPreview.removeAttribute(
-            "src"
-        );
-
-
-        previewName.textContent =
-            "";
 
 
         if(!file){
@@ -1189,7 +980,7 @@ proofFile.addEventListener(
 
 
             alert(
-                "Bukti pembayaran harus berupa foto."
+                "File harus berupa foto."
             );
 
 
@@ -1208,31 +999,19 @@ proofFile.addEventListener(
                 "Memproses foto...";
 
 
-            const compressed =
+            const dataUrl =
                 await compressImage(
                     file
                 );
 
 
             const parts =
-                compressed.split(
+                dataUrl.split(
                     "base64,"
                 );
 
 
-            if(
-                parts.length !==
-                2
-            ){
-
-                throw new Error(
-                    "Foto gagal diproses."
-                );
-
-            }
-
-
-            selectedProofData = {
+            proofData = {
 
                 base64:
                     parts[1],
@@ -1246,22 +1025,22 @@ proofFile.addEventListener(
             };
 
 
-            proofPreview.src =
-                compressed;
+            previewImage.src =
+                dataUrl;
 
 
             previewName.textContent =
                 file.name +
-                " · Foto siap dikirim";
+                " · siap dikirim";
 
 
-            previewWrap.style.display =
+            preview.style.display =
                 "block";
 
 
         }catch(error){
 
-            selectedProofData =
+            proofData =
                 null;
 
 
@@ -1270,8 +1049,7 @@ proofFile.addEventListener(
 
 
             alert(
-                error.message ||
-                "Foto gagal diproses."
+                error.message
             );
 
         }finally{
@@ -1290,107 +1068,27 @@ proofFile.addEventListener(
 
 
 /**
- * ============================================================
- * LOAD BILLING
- * ============================================================
+ * ==========================================================
+ * LOAD
+ * ==========================================================
  */
-async function loadPaymentPage(){
-
-    const session =
-        getSession();
-
-
-    if(!session){
-
-        window.location.href =
-            "login.html";
-
-        return;
-
-    }
-
+async function load(){
 
     try{
 
-        const response =
-            await fetch(
-                TENANT_API_URL,
-                {
-
-                    method:
-                        "POST",
-
-                    headers:{
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            action:
-                                "tenantDashboard",
-
-                            tenantId:
-                                session.tenantId,
-
-                            sessionToken:
-                                session.sessionToken
-
-                        })
-
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if(
-            !result ||
-            result.ok !== true ||
-            !result.data
-        ){
-
-            if(
-                result &&
-                result.error &&
-                /session/i.test(
-                    result.error
-                )
-            ){
-
-                sessionStorage.removeItem(
-                    "djTenantSession"
-                );
-
-
-                window.location.href =
-                    "login.html";
-
-
-                return;
-
-            }
-
-
-            throw new Error(
-                result &&
-                result.error
-                    ? result.error
-                    : "Data pembayaran gagal dimuat."
-            );
-
-        }
-
-
         const data =
-            result.data;
+            await api({
 
+                action:
+                    "tenantDashboard",
 
-        currentBilling =
-            data.billing;
+                tenantId:
+                    session.tenantId,
+
+                sessionToken:
+                    session.sessionToken
+
+            });
 
 
         document
@@ -1398,8 +1096,7 @@ async function loadPaymentPage(){
                 "tenantName"
             )
             .textContent =
-                data.tenant.name ||
-                "Tenant";
+                data.tenant.name;
 
 
         document
@@ -1407,8 +1104,7 @@ async function loadPaymentPage(){
                 "tenantId"
             )
             .textContent =
-                data.tenant.tenantId ||
-                "—";
+                data.tenant.tenantId;
 
 
         document
@@ -1416,18 +1112,15 @@ async function loadPaymentPage(){
                 "tenantRoom"
             )
             .textContent =
-                data.tenant.room ||
-                "—";
+                data.tenant.room;
 
 
         document
             .getElementById(
-                "tenantIntro"
+                "intro"
             )
             .textContent =
-                "Pembayaran " +
-                data.billing.period +
-                " untuk " +
+                "Pembayaran untuk " +
                 data.tenant.name +
                 " · Kamar " +
                 data.tenant.room;
@@ -1435,7 +1128,7 @@ async function loadPaymentPage(){
 
         document
             .getElementById(
-                "billingPeriod"
+                "periodLabel"
             )
             .textContent =
                 data.billing.period;
@@ -1443,7 +1136,7 @@ async function loadPaymentPage(){
 
         document
             .getElementById(
-                "billingRent"
+                "rent"
             )
             .textContent =
                 money(
@@ -1453,7 +1146,7 @@ async function loadPaymentPage(){
 
         document
             .getElementById(
-                "billingDue"
+                "dueDate"
             )
             .textContent =
                 data.billing.dueDate;
@@ -1461,7 +1154,7 @@ async function loadPaymentPage(){
 
         document
             .getElementById(
-                "billingFine"
+                "fine"
             )
             .textContent =
                 money(
@@ -1471,7 +1164,7 @@ async function loadPaymentPage(){
 
         document
             .getElementById(
-                "billingTotal"
+                "total"
             )
             .textContent =
                 money(
@@ -1481,7 +1174,7 @@ async function loadPaymentPage(){
 
         document
             .getElementById(
-                "billingStatus"
+                "status"
             )
             .textContent =
                 data.billing.status;
@@ -1492,7 +1185,7 @@ async function loadPaymentPage(){
                 "period"
             )
             .value =
-                currentMonthISO();
+                monthISO();
 
 
         document
@@ -1511,21 +1204,9 @@ async function loadPaymentPage(){
                 data.billing.total;
 
 
-        /*
-         * Jika sudah mengirim pembayaran
-         * untuk periode tersebut, cegah duplikat.
-         */
-
         if(
-            data.billing.verification &&
-            data.billing.verification
-                .toUpperCase()
-                .indexOf(
-                    "MENUNGGU"
-                ) >= 0 &&
-            Number(
-                data.billing.paidAmount || 0
-            ) > 0
+            data.billing.verification ===
+            "MENUNGGU VERIFIKASI"
         ){
 
             submitButton.disabled =
@@ -1536,12 +1217,10 @@ async function loadPaymentPage(){
                 "Menunggu Verifikasi";
 
 
-            paymentMessage.className =
-                "payment-message success";
-
-
-            paymentMessage.textContent =
-                "Pembayaran periode ini sudah dikirim dan sedang menunggu verifikasi pengelola.";
+            showMessage(
+                "Pembayaran periode ini sudah dikirim dan menunggu pemeriksaan Master.",
+                "success"
+            );
 
         }
 
@@ -1550,358 +1229,181 @@ async function loadPaymentPage(){
             "none";
 
 
-        errorBox.style.display =
-            "none";
-
-
-        paymentContent.style.display =
+        content.style.display =
             "block";
 
 
     }catch(error){
 
-        console.error(
-            error
-        );
+        loading.textContent =
+            error.message;
 
-
-        loading.style.display =
-            "none";
-
-
-        errorBox.style.display =
-            "block";
-
-
-        errorBox.textContent =
-            error.message ||
-            "Data pembayaran tidak dapat dimuat.";
+        loading.style.color =
+            "#b42318";
 
     }
 
 }
 
 
-/**
- * ============================================================
- * SUBMIT
- * ============================================================
- */
-paymentForm.addEventListener(
-    "submit",
-    async function(event){
+function showMessage(
+    text,
+    type
+){
 
-        event.preventDefault();
+    message.className =
+        "message " +
+        type;
 
+    message.textContent =
+        text;
 
-        const session =
-            getSession();
+}
 
 
-        if(!session){
+document
+    .getElementById(
+        "paymentForm"
+    )
+    .addEventListener(
+        "submit",
+        async function(event){
 
-            window.location.href =
-                "login.html";
+            event.preventDefault();
 
-            return;
 
-        }
+            if(!proofData){
 
-
-        const period =
-            document
-                .getElementById(
-                    "period"
-                )
-                .value;
-
-
-        const paymentDate =
-            document
-                .getElementById(
-                    "paymentDate"
-                )
-                .value;
-
-
-        const amount =
-            Number(
-                document
-                    .getElementById(
-                        "amount"
-                    )
-                    .value
-            );
-
-
-        const method =
-            document
-                .getElementById(
-                    "method"
-                )
-                .value;
-
-
-        const note =
-            document
-                .getElementById(
-                    "note"
-                )
-                .value
-                .trim();
-
-
-        if(
-            !selectedProofData
-        ){
-
-            paymentMessage.className =
-                "payment-message error";
-
-
-            paymentMessage.textContent =
-                "Silakan pilih dan tunggu sampai foto bukti siap diupload.";
-
-
-            return;
-
-        }
-
-
-        if(
-            !period
-        ){
-
-            paymentMessage.className =
-                "payment-message error";
-
-
-            paymentMessage.textContent =
-                "Periode pembayaran wajib diisi.";
-
-
-            return;
-
-        }
-
-
-        if(
-            !paymentDate
-        ){
-
-            paymentMessage.className =
-                "payment-message error";
-
-
-            paymentMessage.textContent =
-                "Tanggal pembayaran wajib diisi.";
-
-
-            return;
-
-        }
-
-
-        if(
-            amount <= 0
-        ){
-
-            paymentMessage.className =
-                "payment-message error";
-
-
-            paymentMessage.textContent =
-                "Nominal pembayaran tidak valid.";
-
-
-            return;
-
-        }
-
-
-        if(
-            !method
-        ){
-
-            paymentMessage.className =
-                "payment-message error";
-
-
-            paymentMessage.textContent =
-                "Pilih metode pembayaran.";
-
-
-            return;
-
-        }
-
-
-        submitButton.disabled =
-            true;
-
-
-        submitButton.textContent =
-            "Mengirim...";
-
-
-        paymentMessage.className =
-            "payment-message";
-
-
-        paymentMessage.textContent =
-            "";
-
-
-        try{
-
-            const response =
-                await fetch(
-                    TENANT_API_URL,
-                    {
-
-                        method:
-                            "POST",
-
-                        headers:{
-                            "Content-Type":
-                                "text/plain;charset=utf-8"
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                action:
-                                    "payment",
-
-                                tenantId:
-                                    session.tenantId,
-
-                                sessionToken:
-                                    session.sessionToken,
-
-                                period:
-                                    period,
-
-                                paymentDate:
-                                    paymentDate,
-
-                                amount:
-                                    amount,
-
-                                method:
-                                    method,
-
-                                proofBase64:
-                                    selectedProofData.base64,
-
-                                proofMimeType:
-                                    selectedProofData.mimeType,
-
-                                proofOriginalName:
-                                    selectedProofData.originalName,
-
-                                note:
-                                    note
-
-                            })
-
-                    }
+                showMessage(
+                    "Foto bukti pembayaran wajib dipilih.",
+                    "error"
                 );
 
-
-            const result =
-                await response.json();
-
-
-            if(
-                !result ||
-                result.ok !== true ||
-                !result.data
-            ){
-
-                throw new Error(
-                    result &&
-                    result.error
-                        ? result.error
-                        : "Pembayaran gagal disimpan."
-                );
+                return;
 
             }
 
 
-            paymentMessage.className =
-                "payment-message success";
-
-
-            paymentMessage.textContent =
-                result.data.message ||
-                "Pembayaran berhasil dikirim.";
-
-
-            submitButton.textContent =
-                "Pembayaran Terkirim";
-
-
-            /*
-             * Reset file setelah berhasil.
-             */
-
-            proofFile.value =
-                "";
-
-
-            selectedProofData =
-                null;
-
-
-            previewWrap.style.display =
-                "none";
-
-
-            /*
-             * Ambil data terbaru.
-             */
-
-            setTimeout(
-                loadPaymentPage,
-                700
-            );
-
-
-        }catch(error){
-
-            console.error(
-                error
-            );
-
-
-            paymentMessage.className =
-                "payment-message error";
-
-
-            paymentMessage.textContent =
-                error.message ||
-                "Pembayaran gagal dikirim.";
-
-
             submitButton.disabled =
-                false;
+                true;
 
 
             submitButton.textContent =
-                "Kirim Pembayaran";
+                "Mengirim...";
+
+
+            try{
+
+                const result =
+                    await api({
+
+                        action:
+                            "payment",
+
+                        tenantId:
+                            session.tenantId,
+
+                        sessionToken:
+                            session.sessionToken,
+
+                        period:
+                            document
+                                .getElementById(
+                                    "period"
+                                )
+                                .value,
+
+                        paymentDate:
+                            document
+                                .getElementById(
+                                    "paymentDate"
+                                )
+                                .value,
+
+                        amount:
+                            Number(
+                                document
+                                    .getElementById(
+                                        "amount"
+                                    )
+                                    .value
+                            ),
+
+                        method:
+                            document
+                                .getElementById(
+                                    "method"
+                                )
+                                .value,
+
+                        proofBase64:
+                            proofData.base64,
+
+                        proofMimeType:
+                            proofData.mimeType,
+
+                        proofOriginalName:
+                            proofData.originalName,
+
+                        note:
+                            document
+                                .getElementById(
+                                    "note"
+                                )
+                                .value
+
+                    });
+
+
+                showMessage(
+                    result.message,
+                    "success"
+                );
+
+
+                submitButton.textContent =
+                    "Pembayaran Terkirim";
+
+
+                proofData =
+                    null;
+
+
+                proofFile.value =
+                    "";
+
+
+                preview.style.display =
+                    "none";
+
+
+                setTimeout(
+                    load,
+                    700
+                );
+
+
+            }catch(error){
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+
+                submitButton.disabled =
+                    false;
+
+
+                submitButton.textContent =
+                    "Kirim Pembayaran";
+
+            }
 
         }
-
-    }
-);
+    );
 
 
-/**
- * ============================================================
- * LOGOUT
- * ============================================================
- */
 document
     .getElementById(
         "logoutButton"
@@ -1913,46 +1415,22 @@ document
             event.preventDefault();
 
 
-            const session =
-                getSession();
+            try{
 
+                await api({
 
-            if(session){
+                    action:
+                        "logout",
 
-                try{
+                    tenantId:
+                        session.tenantId,
 
-                    await fetch(
-                        TENANT_API_URL,
-                        {
+                    sessionToken:
+                        session.sessionToken
 
-                            method:
-                                "POST",
+                });
 
-                            headers:{
-                                "Content-Type":
-                                    "text/plain;charset=utf-8"
-                            },
-
-                            body:
-                                JSON.stringify({
-
-                                    action:
-                                        "logout",
-
-                                    tenantId:
-                                        session.tenantId,
-
-                                    sessionToken:
-                                        session.sessionToken
-
-                                })
-
-                        }
-                    );
-
-                }catch(error){}
-
-            }
+            }catch(error){}
 
 
             sessionStorage.removeItem(
@@ -1967,7 +1445,7 @@ document
     );
 
 
-loadPaymentPage();
+load();
 
 </script>
 
