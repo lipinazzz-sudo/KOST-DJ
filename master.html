@@ -14,80 +14,83 @@
 
 <link
     rel="stylesheet"
-    href="app.css?v=20260925-master-01"
+    href="app.css?v=20260925-master-payment-v2"
 >
 
 <style>
 
-body{
-    background:#f5f7fb;
-}
+/* ============================================================
+   GLOBAL
+   ============================================================ */
 
-.master-shell{
-    min-height:100vh;
+body{
+    margin:0;
+    background:#f5f7fb;
 }
 
 .master-layout{
     display:grid;
-    grid-template-columns:250px 1fr;
+    grid-template-columns:250px minmax(0,1fr);
     min-height:100vh;
 }
 
 .master-sidebar{
     background:#111b33;
     color:#fff;
-    padding:24px 16px;
+    padding:22px 15px;
+    box-sizing:border-box;
+    min-height:100vh;
     position:sticky;
     top:0;
     height:100vh;
-    box-sizing:border-box;
 }
 
 .master-brand{
     font-weight:900;
-    letter-spacing:.05em;
     font-size:15px;
-    padding:5px 10px 25px;
+    line-height:1.5;
+    padding:5px 10px 22px;
 }
 
 .master-user{
-    padding:14px 10px;
-    border-top:1px solid rgba(255,255,255,.10);
-    border-bottom:1px solid rgba(255,255,255,.10);
-    margin-bottom:16px;
+    border-top:1px solid rgba(255,255,255,.1);
+    border-bottom:1px solid rgba(255,255,255,.1);
+    padding:15px 10px;
+    margin-bottom:15px;
 }
 
 .master-user small{
     display:block;
-    color:#9eabc3;
-    margin-bottom:5px;
+    color:#aeb8cc;
+    margin-bottom:4px;
 }
 
 .master-nav{
     display:grid;
-    gap:6px;
+    gap:5px;
 }
 
 .master-nav button{
-    border:0;
-    background:transparent;
-    color:#cbd4e5;
-    padding:11px 12px;
-    border-radius:10px;
+    width:100%;
     text-align:left;
+    border:0;
+    color:#cbd4e4;
+    background:transparent;
+    border-radius:10px;
+    padding:11px 12px;
     cursor:pointer;
     font:inherit;
 }
 
 .master-nav button:hover,
 .master-nav button.active{
-    background:#223154;
+    background:#243456;
     color:#fff;
 }
 
 .master-nav .logout{
-    margin-top:15px;
     color:#fda4af;
+    margin-top:12px;
 }
 
 .master-main{
@@ -95,16 +98,16 @@ body{
 }
 
 .master-topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
     background:#fff;
     border-bottom:1px solid #e5e7eb;
-    padding:16px 28px;
+    padding:16px 26px;
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:15px;
-    position:sticky;
-    top:0;
-    z-index:10;
 }
 
 .master-topbar h1{
@@ -113,7 +116,7 @@ body{
 }
 
 .master-content{
-    padding:28px;
+    padding:26px;
 }
 
 .panel{
@@ -124,18 +127,23 @@ body{
     display:block;
 }
 
+
+/* ============================================================
+   SUMMARY
+   ============================================================ */
+
 .summary-grid{
     display:grid;
     grid-template-columns:
         repeat(4,minmax(0,1fr));
-    gap:16px;
+    gap:15px;
 }
 
 .summary-card{
     background:#fff;
     border:1px solid #e5e7eb;
     border-radius:16px;
-    padding:20px;
+    padding:19px;
 }
 
 .summary-card span{
@@ -146,8 +154,13 @@ body{
 .summary-card strong{
     display:block;
     margin-top:8px;
-    font-size:29px;
+    font-size:28px;
 }
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
 
 .card{
     background:#fff;
@@ -162,30 +175,39 @@ body{
 
 .data-table{
     width:100%;
-    border-collapse:collapse;
     min-width:760px;
+    border-collapse:collapse;
 }
 
 .data-table th{
-    text-align:left;
     background:#f7f8fa;
-    color:#475467;
-    font-size:12px;
-    padding:12px 14px;
     border-bottom:1px solid #e5e7eb;
+    padding:12px 14px;
+    text-align:left;
+    font-size:12px;
+    color:#475467;
 }
 
 .data-table td{
     padding:13px 14px;
     border-bottom:1px solid #eef0f3;
-    font-size:14px;
     vertical-align:top;
+    font-size:14px;
 }
+
+.data-table tr:last-child td{
+    border-bottom:0;
+}
+
+
+/* ============================================================
+   BADGES
+   ============================================================ */
 
 .badge{
     display:inline-flex;
-    padding:5px 9px;
     border-radius:999px;
+    padding:5px 9px;
     font-size:11px;
     font-weight:800;
     background:#eef2f7;
@@ -206,13 +228,24 @@ body{
     color:#b42318;
 }
 
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
 .btn-small{
     border:0;
     border-radius:9px;
     padding:8px 11px;
     cursor:pointer;
-    font-weight:700;
     font-size:12px;
+    font-weight:700;
 }
 
 .btn-small.primary{
@@ -235,23 +268,100 @@ body{
     color:#344054;
 }
 
-.actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
+
+/* ============================================================
+   ROOM GRID — FIX
+   ============================================================ */
+
+.room-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(5,minmax(0,1fr));
+    gap:12px;
+
+    /*
+     * Ini penting:
+     * baris hanya setinggi isi kartu.
+     */
+    grid-auto-rows:max-content;
+
+    /*
+     * Jangan stretching ke tinggi item lain.
+     */
+    align-items:start;
 }
 
-.toolbar{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:18px;
+.room{
+    box-sizing:border-box;
+
+    /*
+     * Paksa kartu mengikuti isi.
+     */
+    width:100%;
+    height:auto !important;
+    min-height:0 !important;
+
+    align-self:start;
+
+    display:block !important;
+
+    background:#fff;
+    border:1px solid #e1e5ea;
+    border-radius:14px;
+
+    padding:15px;
+
+    /*
+     * Override kemungkinan style lama.
+     */
+    justify-content:initial !important;
+    align-items:initial !important;
 }
 
-.notice-form{
-    padding:22px;
-    margin-top:18px;
+.room strong{
+    display:block;
+    font-size:20px;
+    margin:0 0 7px;
 }
+
+.room small{
+    display:block;
+    margin-top:5px;
+    color:#667085;
+    line-height:1.45;
+}
+
+.room.occupied{
+    background:#f1fbf5;
+    border-color:#b8dfc4;
+}
+
+.room.soon{
+    background:#fff9f0;
+    border-color:#f1dcc0;
+}
+
+
+/* ============================================================
+   EMPTY
+   ============================================================ */
+
+.empty{
+    padding:35px;
+    text-align:center;
+    color:#667085;
+}
+
+.loading{
+    padding:30px;
+    text-align:center;
+    color:#667085;
+}
+
+
+/* ============================================================
+   FORMS
+   ============================================================ */
 
 .form-grid{
     display:grid;
@@ -260,21 +370,25 @@ body{
     gap:16px;
 }
 
+.field.full{
+    grid-column:1 / -1;
+}
+
 .field label{
     display:block;
+    margin-bottom:7px;
     font-size:13px;
     font-weight:700;
-    margin-bottom:7px;
 }
 
 .field input,
-.field textarea,
-.field select{
+.field select,
+.field textarea{
     width:100%;
     box-sizing:border-box;
+    padding:12px 13px;
     border:1px solid #dfe3eb;
     border-radius:11px;
-    padding:12px 13px;
     font:inherit;
 }
 
@@ -283,73 +397,20 @@ body{
     resize:vertical;
 }
 
-.field.full{
-    grid-column:1 / -1;
-}
 
-.section-title{
-    margin-bottom:4px;
-}
-
-.muted{
-    color:#667085;
-}
-
-.loading{
-    padding:35px 0;
-    color:#667085;
-}
-
-.empty{
-    padding:35px;
-    text-align:center;
-    color:#667085;
-}
-
-.room-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(5,minmax(0,1fr));
-    gap:10px;
-    margin-top:18px;
-}
-
-.room{
-    border:1px solid #e5e7eb;
-    border-radius:12px;
-    padding:13px;
-    background:#fff;
-}
-
-.room strong{
-    display:block;
-    font-size:17px;
-}
-
-.room small{
-    display:block;
-    color:#667085;
-    margin-top:4px;
-}
-
-.room.occupied{
-    border-color:#b7e1c4;
-    background:#f2fcf5;
-}
-
-.room.soon{
-    background:#fff9f0;
-}
+/* ============================================================
+   MODAL
+   ============================================================ */
 
 .modal{
     position:fixed;
     inset:0;
-    background:rgba(15,23,42,.55);
+    z-index:100;
+    background:rgba(15,23,42,.58);
     display:none;
     align-items:center;
     justify-content:center;
     padding:20px;
-    z-index:50;
 }
 
 .modal.show{
@@ -357,20 +418,28 @@ body{
 }
 
 .modal-card{
-    background:#fff;
-    width:min(100%,720px);
+    width:min(100%,760px);
     max-height:90vh;
     overflow:auto;
+    background:#fff;
     border-radius:18px;
-    padding:25px;
+    padding:24px;
+    box-sizing:border-box;
 }
 
-.modal img{
-    max-width:100%;
+.modal-image{
+    width:100%;
     max-height:65vh;
     object-fit:contain;
-    border-radius:12px;
+    border-radius:14px;
+    border:1px solid #e5e7eb;
+    background:#f8fafc;
 }
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 @media(max-width:1100px){
 
@@ -395,6 +464,7 @@ body{
     .master-sidebar{
         position:static;
         height:auto;
+        min-height:auto;
     }
 
     .master-nav{
@@ -402,16 +472,18 @@ body{
             repeat(2,minmax(0,1fr));
     }
 
-    .master-nav button{
-        font-size:12px;
-    }
-
     .master-content{
         padding:18px;
     }
 
     .summary-grid{
-        grid-template-columns:1fr 1fr;
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .room-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
     }
 
     .form-grid{
@@ -422,11 +494,6 @@ body{
         grid-column:auto;
     }
 
-    .room-grid{
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
-    }
-
 }
 
 </style>
@@ -435,9 +502,6 @@ body{
 
 
 <body>
-
-
-<div class="master-shell">
 
 
 <div
@@ -464,7 +528,6 @@ body{
 
 <form id="masterLoginForm">
 
-
 <div class="field">
 
 <label>
@@ -474,7 +537,6 @@ body{
 <input
     id="masterIdInput"
     type="text"
-    placeholder="Contoh: MASTER-001"
     autocomplete="username"
     required
 >
@@ -502,7 +564,7 @@ body{
     id="masterLoginButton"
     class="btn btn-primary"
     type="submit"
-    style="width:100%;margin-top:20px;"
+    style="width:100%;margin-top:18px;"
 >
     Masuk sebagai Master
 </button>
@@ -512,7 +574,6 @@ body{
     id="masterLoginMessage"
     class="login-message"
 ></div>
-
 
 </form>
 
@@ -543,9 +604,11 @@ body{
 <aside class="master-sidebar">
 
 <div class="master-brand">
-    DJ FAMILY KOST
-    <br>
-    MASTER
+
+DJ FAMILY KOST
+<br>
+MASTER
+
 </div>
 
 
@@ -559,8 +622,6 @@ body{
     —
 </strong>
 
-<br>
-
 <small id="masterIdLabel">
     —
 </small>
@@ -570,7 +631,6 @@ body{
 
 <nav class="master-nav">
 
-
 <button
     class="active"
     data-panel="dashboard"
@@ -578,13 +638,11 @@ body{
     Dashboard
 </button>
 
-
 <button
     data-panel="registrations"
 >
     Pendaftaran
 </button>
-
 
 <button
     data-panel="tenants"
@@ -592,13 +650,11 @@ body{
     Tenant
 </button>
 
-
 <button
     data-panel="payments"
 >
     Pembayaran
 </button>
-
 
 <button
     data-panel="maintenance"
@@ -606,13 +662,11 @@ body{
     Maintenance
 </button>
 
-
 <button
     data-panel="rooms"
 >
     Kamar
 </button>
-
 
 <button
     data-panel="whatsapp"
@@ -620,13 +674,11 @@ body{
     WhatsApp
 </button>
 
-
 <button
     data-panel="announcements"
 >
     Pengumuman
 </button>
-
 
 <button
     data-panel="automation"
@@ -634,14 +686,12 @@ body{
     Otomasi
 </button>
 
-
 <button
-    class="logout"
     id="masterLogout"
+    class="logout"
 >
     Keluar
 </button>
-
 
 </nav>
 
@@ -658,16 +708,12 @@ body{
 </h1>
 
 
-<div class="actions">
-
 <button
     class="btn-small light"
     id="refreshButton"
 >
     Refresh
 </button>
-
-</div>
 
 </header>
 
@@ -684,12 +730,17 @@ body{
     class="panel active"
 >
 
-<h2 class="section-title">
+<h2>
     Ringkasan Operasional
 </h2>
 
-<p class="muted">
-    Semua data diambil langsung dari database DJ Family Kost.
+<p
+    style="
+        color:#667085;
+        line-height:1.6;
+    "
+>
+    Semua data diambil dari database DJ Family Kost.
 </p>
 
 
@@ -702,7 +753,11 @@ body{
 
 <div class="card table-card">
 
-<div style="padding:20px 20px 0;">
+<div
+    style="
+        padding:20px 20px 0;
+    "
+>
 
 <h3>
     Perlu Perhatian
@@ -712,9 +767,11 @@ body{
 
 
 <div id="attentionTable">
-    <div class="loading">
-        Memuat...
-    </div>
+
+<div class="loading">
+    Memuat...
+</div>
+
 </div>
 
 </div>
@@ -731,12 +788,16 @@ body{
     class="panel"
 >
 
-<h2 class="section-title">
+<h2>
     Pendaftaran Tenant
 </h2>
 
-<p class="muted">
-    Verifikasi atau tolak pendaftaran langsung dari sini.
+<p
+    style="
+        color:#667085;
+    "
+>
+    Verifikasi pendaftaran langsung dari website.
 </p>
 
 
@@ -750,7 +811,7 @@ body{
 
 
 <!-- ========================================================
-     TENANT
+     TENANTS
      ======================================================== -->
 
 <section
@@ -762,8 +823,12 @@ body{
     Data Tenant
 </h2>
 
-<p class="muted">
-    Data tenant aktif dan riwayat akun.
+<p
+    style="
+        color:#667085;
+    "
+>
+    Daftar tenant aktif dan akun tenant.
 </p>
 
 
@@ -777,7 +842,7 @@ body{
 
 
 <!-- ========================================================
-     PEMBAYARAN
+     PAYMENTS
      ======================================================== -->
 
 <section
@@ -786,11 +851,15 @@ body{
 >
 
 <h2>
-    Pembayaran
+    Verifikasi Pembayaran
 </h2>
 
-<p class="muted">
-    Verifikasi bukti pembayaran dari website Master.
+<p
+    style="
+        color:#667085;
+    "
+>
+    Pembayaran dengan foto bukti akan muncul di sini.
 </p>
 
 
@@ -816,8 +885,12 @@ body{
     Maintenance
 </h2>
 
-<p class="muted">
-    Pantau laporan dan ubah status pekerjaan.
+<p
+    style="
+        color:#667085;
+    "
+>
+    Kelola laporan maintenance tenant.
 </p>
 
 
@@ -831,7 +904,7 @@ body{
 
 
 <!-- ========================================================
-     KAMAR
+     ROOMS
      ======================================================== -->
 
 <section
@@ -843,8 +916,12 @@ body{
     Master Kamar
 </h2>
 
-<p class="muted">
-    Status seluruh kamar.
+<p
+    style="
+        color:#667085;
+    "
+>
+    Status dan harga seluruh kamar.
 </p>
 
 
@@ -870,9 +947,13 @@ body{
     Peringatan Pembayaran
 </h2>
 
-<p class="muted">
-    Daftar tenant yang belum lunas. Tombol WhatsApp
-    akan membuka pesan yang sudah disiapkan otomatis.
+<p
+    style="
+        color:#667085;
+    "
+>
+    Buka WhatsApp dengan pesan pembayaran
+    yang telah dibuat otomatis.
 </p>
 
 
@@ -886,7 +967,7 @@ body{
 
 
 <!-- ========================================================
-     PENGUMUMAN
+     ANNOUNCEMENTS
      ======================================================== -->
 
 <section
@@ -895,18 +976,19 @@ body{
 >
 
 <h2>
-    Pengumuman Penting
+    Pengumuman
 </h2>
 
-<p class="muted">
-    Buat pengumuman yang akan tersedia untuk sistem.
-</p>
 
-
-<div class="card notice-form">
+<div
+    class="card"
+    style="
+        padding:22px;
+        margin-top:18px;
+    "
+>
 
 <form id="announcementForm">
-
 
 <div class="form-grid">
 
@@ -955,7 +1037,7 @@ body{
 <div class="field full">
 
 <label>
-    Isi Pengumuman
+    Isi
 </label>
 
 <textarea
@@ -972,11 +1054,10 @@ body{
 <button
     class="btn btn-primary"
     type="submit"
-    style="margin-top:18px;"
+    style="margin-top:16px;"
 >
-    Terbitkan Pengumuman
+    Terbitkan
 </button>
-
 
 </form>
 
@@ -1002,33 +1083,34 @@ body{
 >
 
 <h2>
-    Otomasi Sistem
+    Otomasi
 </h2>
 
-<p class="muted">
-    Pengelola dapat menjalankan proses sinkronisasi dan
-    pembaruan sistem tanpa membuka Apps Script.
-</p>
 
+<div
+    class="card"
+    style="
+        padding:22px;
+        margin-top:18px;
+    "
+>
 
-<div class="card notice-form">
-
-<h3>
-    Jalankan Sinkronisasi / Otomasi
-</h3>
-
-<p class="muted">
-    Sistem akan menjalankan engine otomatis yang tersedia:
-    pembaruan hubungan database, tagihan, dashboard,
-    dan proses periodik.
+<p
+    style="
+        color:#667085;
+        line-height:1.6;
+    "
+>
+    Jalankan proses sinkronisasi dan pembaruan sistem
+    tanpa membuka Apps Script.
 </p>
 
 
 <button
-    class="btn btn-primary"
     id="runAutomationButton"
+    class="btn btn-primary"
 >
-    Jalankan Otomasi Sekarang
+    Jalankan Otomasi
 </button>
 
 
@@ -1050,8 +1132,6 @@ body{
 
 </div>
 
-</div>
-
 
 <!-- ==========================================================
      MODAL
@@ -1068,8 +1148,8 @@ body{
     style="
         display:flex;
         justify-content:space-between;
-        gap:15px;
         align-items:center;
+        gap:15px;
     "
 >
 
@@ -1104,6 +1184,14 @@ const API_URL =
     "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
 
 
+let masterSession =
+    null;
+
+
+let dashboardData =
+    null;
+
+
 const loginView =
     document.getElementById(
         "loginView"
@@ -1134,42 +1222,34 @@ const modalBody =
     );
 
 
-let masterSession =
-    null;
-
-
-let dashboardData =
-    null;
-
-
 function escapeHtml(
     value
 ){
 
     return String(
         value == null
-            ? ""
+            ? ''
             : value
     )
     .replace(
         /&/g,
-        "&amp;"
+        '&amp;'
     )
     .replace(
         /</g,
-        "&lt;"
+        '&lt;'
     )
     .replace(
         />/g,
-        "&gt;"
+        '&gt;'
     )
     .replace(
         /"/g,
-        "&quot;"
+        '&quot;'
     )
     .replace(
         /'/g,
-        "&#039;"
+        '&#039;'
     );
 
 }
@@ -1180,22 +1260,23 @@ function money(
 ){
 
     return (
-        "Rp" +
+        'Rp' +
         Number(
             value || 0
-        ).toLocaleString(
-            "id-ID"
+        )
+        .toLocaleString(
+            'id-ID'
         )
     );
 
 }
 
 
-function getMasterSession(){
+function getSession(){
 
     const raw =
         sessionStorage.getItem(
-            "djMasterSession"
+            'djMasterSession'
         );
 
 
@@ -1215,7 +1296,7 @@ function getMasterSession(){
     }catch(error){
 
         sessionStorage.removeItem(
-            "djMasterSession"
+            'djMasterSession'
         );
 
         return null;
@@ -1225,31 +1306,13 @@ function getMasterSession(){
 }
 
 
-function saveMasterSession(
-    session
-){
-
-    masterSession =
-        session;
-
-
-    sessionStorage.setItem(
-        "djMasterSession",
-        JSON.stringify(
-            session
-        )
-    );
-
-}
-
-
 function showLogin(){
 
     loginView.style.display =
-        "block";
+        'block';
 
     appView.style.display =
-        "none";
+        'none';
 
 }
 
@@ -1257,38 +1320,37 @@ function showLogin(){
 function showApp(){
 
     loginView.style.display =
-        "none";
+        'none';
 
     appView.style.display =
-        "block";
+        'block';
 
 
     document
         .getElementById(
-            "masterName"
+            'masterName'
         )
         .textContent =
             masterSession.nama ||
-            "Master";
+            'Master';
 
 
     document
         .getElementById(
-            "masterIdLabel"
+            'masterIdLabel'
         )
         .textContent =
             masterSession.masterId ||
-            "";
+            '';
 
 }
 
 
-/**
- * ==========================================================
- * REQUEST
- * ==========================================================
- */
-async function masterRequest(
+/* ==========================================================
+   API
+   ========================================================== */
+
+async function api(
     action,
     extra={}
 ){
@@ -1296,7 +1358,7 @@ async function masterRequest(
     if(!masterSession){
 
         throw new Error(
-            "Session Master tidak tersedia."
+            'Session Master tidak tersedia.'
         );
 
     }
@@ -1308,11 +1370,11 @@ async function masterRequest(
             {
 
                 method:
-                    "POST",
+                    'POST',
 
                 headers:{
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
+                    'Content-Type':
+                        'text/plain;charset=utf-8'
                 },
 
                 body:
@@ -1353,7 +1415,7 @@ async function masterRequest(
         ){
 
             sessionStorage.removeItem(
-                "djMasterSession"
+                'djMasterSession'
             );
 
             masterSession =
@@ -1368,7 +1430,7 @@ async function masterRequest(
             result &&
             result.error
                 ? result.error
-                : "Permintaan gagal."
+                : 'Permintaan gagal.'
         );
 
     }
@@ -1379,67 +1441,39 @@ async function masterRequest(
 }
 
 
-/**
- * ==========================================================
- * MASTER LOGIN
- * ==========================================================
- */
+/* ==========================================================
+   LOGIN
+   ========================================================== */
+
 document
     .getElementById(
-        "masterLoginForm"
+        'masterLoginForm'
     )
     .addEventListener(
-        "submit",
+        'submit',
         async function(event){
 
             event.preventDefault();
 
 
-            const masterId =
-                document
-                    .getElementById(
-                        "masterIdInput"
-                    )
-                    .value
-                    .trim()
-                    .toUpperCase();
-
-
-            const password =
-                document
-                    .getElementById(
-                        "masterPasswordInput"
-                    )
-                    .value;
-
-
             const button =
-                document
-                    .getElementById(
-                        "masterLoginButton"
-                    );
+                document.getElementById(
+                    'masterLoginButton'
+                );
 
 
             const message =
-                document
-                    .getElementById(
-                        "masterLoginMessage"
-                    );
+                document.getElementById(
+                    'masterLoginMessage'
+                );
 
 
             button.disabled =
                 true;
 
+
             button.textContent =
-                "Memeriksa...";
-
-
-            message.className =
-                "login-message";
-
-
-            message.textContent =
-                "";
+                'Memeriksa...';
 
 
             try{
@@ -1450,24 +1484,34 @@ document
                         {
 
                             method:
-                                "POST",
+                                'POST',
 
                             headers:{
-                                "Content-Type":
-                                    "text/plain;charset=utf-8"
+                                'Content-Type':
+                                    'text/plain;charset=utf-8'
                             },
 
                             body:
                                 JSON.stringify({
 
                                     action:
-                                        "masterLogin",
+                                        'masterLogin',
 
                                     masterId:
-                                        masterId,
+                                        document
+                                            .getElementById(
+                                                'masterIdInput'
+                                            )
+                                            .value
+                                            .trim()
+                                            .toUpperCase(),
 
                                     password:
-                                        password
+                                        document
+                                            .getElementById(
+                                                'masterPasswordInput'
+                                            )
+                                            .value
 
                                 })
 
@@ -1481,22 +1525,28 @@ document
 
                 if(
                     !result ||
-                    result.ok !== true ||
-                    !result.data
+                    result.ok !== true
                 ){
 
                     throw new Error(
                         result &&
                         result.error
                             ? result.error
-                            : "Login Master gagal."
+                            : 'Login Master gagal.'
                     );
 
                 }
 
 
-                saveMasterSession(
-                    result.data
+                masterSession =
+                    result.data;
+
+
+                sessionStorage.setItem(
+                    'djMasterSession',
+                    JSON.stringify(
+                        masterSession
+                    )
                 );
 
 
@@ -1509,11 +1559,11 @@ document
             }catch(error){
 
                 message.className =
-                    "login-message error";
+                    'login-message error';
+
 
                 message.textContent =
-                    error.message ||
-                    "Login Master gagal.";
+                    error.message;
 
 
             }finally{
@@ -1522,7 +1572,7 @@ document
                     false;
 
                 button.textContent =
-                    "Masuk sebagai Master";
+                    'Masuk sebagai Master';
 
             }
 
@@ -1530,32 +1580,31 @@ document
     );
 
 
-/**
- * ==========================================================
- * NAVIGATION
- * ==========================================================
- */
+/* ==========================================================
+   NAV
+   ========================================================== */
+
 document
     .querySelectorAll(
-        ".master-nav button[data-panel]"
+        '.master-nav button[data-panel]'
     )
     .forEach(
         function(button){
 
             button.addEventListener(
-                "click",
-                function(){
+                'click',
+                async function(){
 
                     document
                         .querySelectorAll(
-                            ".master-nav button"
+                            '.master-nav button'
                         )
                         .forEach(
                             function(item){
 
                                 item.classList
                                     .remove(
-                                        "active"
+                                        'active'
                                     );
 
                             }
@@ -1563,50 +1612,51 @@ document
 
 
                     button.classList.add(
-                        "active"
+                        'active'
                     );
-
-
-                    const panel =
-                        button.dataset.panel;
 
 
                     document
                         .querySelectorAll(
-                            ".panel"
+                            '.panel'
                         )
                         .forEach(
-                            function(section){
+                            function(panel){
 
-                                section.classList
+                                panel.classList
                                     .remove(
-                                        "active"
+                                        'active'
                                     );
 
                             }
                         );
 
 
+                    const panelName =
+                        button.dataset.panel;
+
+
                     document
                         .getElementById(
-                            "panel-" +
-                            panel
+                            'panel-' +
+                            panelName
                         )
                         .classList.add(
-                            "active"
+                            'active'
                         );
 
 
                     document
                         .getElementById(
-                            "pageTitle"
+                            'pageTitle'
                         )
                         .textContent =
-                            button.textContent.trim();
+                            button.textContent
+                                .trim();
 
 
-                    loadPanel(
-                        panel
+                    await loadPanel(
+                        panelName
                     );
 
                 }
@@ -1616,38 +1666,27 @@ document
     );
 
 
-/**
- * ==========================================================
- * LOAD DASHBOARD
- * ==========================================================
- */
+/* ==========================================================
+   DASHBOARD
+   ========================================================== */
+
 async function loadDashboard(){
 
-    try{
-
-        dashboardData =
-            await masterRequest(
-                "masterDashboard"
-            );
-
-
-        renderSummary();
-
-
-        renderAttention();
-
-
-        renderRooms();
-
-
-    }catch(error){
-
-        showToast(
-            error.message,
-            true
+    dashboardData =
+        await api(
+            'masterDashboard'
         );
 
-    }
+
+    renderSummary();
+
+
+    renderAttention();
+
+
+    renderRooms(
+        dashboardData.rooms
+    );
 
 }
 
@@ -1660,52 +1699,28 @@ function renderSummary(){
 
     const items = [
 
-        [
-            "Kamar",
-            s.totalRooms
-        ],
+        ['Kamar',s.totalRooms],
 
-        [
-            "Terisi",
-            s.occupied
-        ],
+        ['Terisi',s.occupied],
 
-        [
-            "Kosong",
-            s.vacant
-        ],
+        ['Kosong',s.vacant],
 
-        [
-            "Tenant Aktif",
-            s.activeTenants
-        ],
+        ['Tenant Aktif',s.activeTenants],
 
-        [
-            "Pendaftaran Pending",
-            s.pendingRegistrations
-        ],
+        ['Pendaftaran Pending',s.pendingRegistrations],
 
-        [
-            "Pembayaran Pending",
-            s.pendingPayment
-        ],
+        ['Pembayaran Pending',s.pendingPayment],
 
-        [
-            "Belum Lunas",
-            s.unpaid
-        ],
+        ['Belum Lunas',s.unpaid],
 
-        [
-            "Maintenance",
-            s.openMaintenance
-        ]
+        ['Maintenance',s.openMaintenance]
 
     ];
 
 
     document
         .getElementById(
-            "summaryGrid"
+            'summaryGrid'
         )
         .innerHTML =
             items
@@ -1734,174 +1749,458 @@ function renderSummary(){
 
                     }
                 )
-                .join("");
+                .join('');
 
 }
 
 
 function renderAttention(){
 
-    const data =
-        dashboardData;
+    const registrations =
+        dashboardData.registrations ||
+        [];
 
 
-    let html =
-        "";
+    const payments =
+        dashboardData.payments ||
+        [];
 
 
-    data.registrations
-        .forEach(
-            function(item){
-
-                html +=
-
-                    '<tr>' +
-
-                    '<td>PENDAFTARAN</td>' +
-
-                    '<td>' +
-                    escapeHtml(
-                        item.name
-                    ) +
-                    '</td>' +
-
-                    '<td>Kamar ' +
-                    escapeHtml(
-                        item.room
-                    ) +
-                    '</td>' +
-
-                    '<td><span class="badge warn">PENDING</span></td>' +
-
-                    '<td>' +
-
-                    '<button class="btn-small primary" ' +
-                    'onclick="openRegistration(\'' +
-                    encodeURIComponent(
-                        item.id
-                    ) +
-                    '\')">' +
-                    'Buka' +
-                    '</button>' +
-
-                    '</td>' +
-
-                    '</tr>';
-
-            }
-        );
+    const maintenance =
+        dashboardData.maintenance ||
+        [];
 
 
-    data.payments
-        .forEach(
-            function(item){
-
-                html +=
-
-                    '<tr>' +
-
-                    '<td>PEMBAYARAN</td>' +
-
-                    '<td>' +
-                    escapeHtml(
-                        item.name ||
-                        item.tenantId
-                    ) +
-                    '</td>' +
-
-                    '<td>' +
-                    escapeHtml(
-                        item.period
-                    ) +
-                    '</td>' +
-
-                    '<td><span class="badge warn">VERIFIKASI</span></td>' +
-
-                    '<td>' +
-
-                    '<button class="btn-small primary" ' +
-                    'onclick="openPayment(\'' +
-                    encodeURIComponent(
-                        item.id
-                    ) +
-                    '\')">' +
-                    'Buka' +
-                    '</button>' +
-
-                    '</td>' +
-
-                    '</tr>';
-
-            }
-        );
+    let rows =
+        '';
 
 
-    data.maintenance
-        .forEach(
-            function(item){
+    registrations.forEach(
+        function(item){
 
-                html +=
+            rows +=
 
-                    '<tr>' +
+                '<tr>' +
 
-                    '<td>MAINTENANCE</td>' +
+                '<td>Pendaftaran</td>' +
 
-                    '<td>' +
-                    escapeHtml(
-                        item.problem
-                    ) +
-                    '</td>' +
+                '<td>' +
+                escapeHtml(
+                    item.name
+                ) +
+                '</td>' +
 
-                    '<td>Kamar ' +
-                    escapeHtml(
-                        item.room
-                    ) +
-                    '</td>' +
+                '<td>Kamar ' +
+                escapeHtml(
+                    item.room
+                ) +
+                '</td>' +
 
-                    '<td><span class="badge warn">' +
-                    escapeHtml(
-                        item.status
-                    ) +
-                    '</span></td>' +
+                '<td>' +
+                '<span class="badge warn">' +
+                'PENDING' +
+                '</span>' +
+                '</td>' +
 
-                    '<td>' +
+                '<td>' +
 
-                    '<button class="btn-small primary" ' +
-                    'onclick="openMaintenance(\'' +
-                    encodeURIComponent(
-                        item.id
-                    ) +
-                    '\')">' +
-                    'Buka' +
-                    '</button>' +
+                '<button class="btn-small primary" onclick="goRegistrations()">' +
+                'Buka' +
+                '</button>' +
 
-                    '</td>' +
+                '</td>' +
 
-                    '</tr>';
+                '</tr>';
 
-            }
-        );
+        }
+    );
 
 
-    if(!html){
+    payments.forEach(
+        function(item){
 
-        document
-            .getElementById(
-                "attentionTable"
-            )
-            .innerHTML =
-                '<div class="empty">Tidak ada pekerjaan pending.</div>';
+            rows +=
 
-        return;
+                '<tr>' +
 
-    }
+                '<td>Pembayaran</td>' +
+
+                '<td>' +
+                escapeHtml(
+                    item.name ||
+                    item.tenantId
+                ) +
+                '</td>' +
+
+                '<td>' +
+                escapeHtml(
+                    item.period
+                ) +
+                '</td>' +
+
+                '<td>' +
+                '<span class="badge warn">' +
+                'VERIFIKASI' +
+                '</span>' +
+                '</td>' +
+
+                '<td>' +
+
+                '<button class="btn-small primary" onclick="goPayments()">' +
+                'Buka' +
+                '</button>' +
+
+                '</td>' +
+
+                '</tr>';
+
+        }
+    );
+
+
+    maintenance.forEach(
+        function(item){
+
+            rows +=
+
+                '<tr>' +
+
+                '<td>Maintenance</td>' +
+
+                '<td>' +
+                escapeHtml(
+                    item.name ||
+                    item.tenantId
+                ) +
+                '</td>' +
+
+                '<td>Kamar ' +
+                escapeHtml(
+                    item.room
+                ) +
+                '</td>' +
+
+                '<td>' +
+                '<span class="badge warn">' +
+                escapeHtml(
+                    item.status
+                ) +
+                '</span>' +
+                '</td>' +
+
+                '<td>' +
+
+                '<button class="btn-small primary" onclick="goMaintenance()">' +
+                'Buka' +
+                '</button>' +
+
+                '</td>' +
+
+                '</tr>';
+
+        }
+    );
 
 
     document
         .getElementById(
-            "attentionTable"
+            'attentionTable'
         )
         .innerHTML =
+
+        rows
+
+        ? (
+
+            '<table class="data-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+            '<th>Jenis</th>' +
+            '<th>Subjek</th>' +
+            '<th>Detail</th>' +
+            '<th>Status</th>' +
+            '<th></th>' +
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+            rows +
+            '</tbody>' +
+
+            '</table>'
+
+        )
+
+        : '<div class="empty">Tidak ada pekerjaan pending.</div>';
+
+}
+
+
+function renderRooms(
+    rooms
+){
+
+    document
+        .getElementById(
+            'roomsGrid'
+        )
+        .innerHTML =
+
+        (rooms || [])
+            .map(
+                function(room){
+
+                    const status =
+                        String(
+                            room.status ||
+                            ''
+                        ).toUpperCase();
+
+
+                    const price =
+                        Number(
+                            room.price ||
+                            0
+                        );
+
+
+                    const className =
+                        status ===
+                        'TERISI'
+
+                            ? 'occupied'
+
+                            : (
+                                price <= 0
+                                    ? 'soon'
+                                    : ''
+                            );
+
+
+                    return (
+
+                        '<div class="room ' +
+                        className +
+                        '">' +
+
+                        '<strong>' +
+                        escapeHtml(
+                            room.number
+                        ) +
+                        '</strong>' +
+
+                        '<small>' +
+                        escapeHtml(
+                            status
+                        ) +
+                        '</small>' +
+
+                        '<small>' +
+
+                        (
+                            price > 0
+                                ? money(
+                                    price
+                                  )
+
+                                : 'Belum tersedia'
+                        ) +
+
+                        '</small>' +
+
+                        (
+                            room.tenantName
+                                ? (
+                                    '<small>' +
+                                    escapeHtml(
+                                        room.tenantName
+                                    ) +
+                                    '</small>'
+                                )
+                                : ''
+                        ) +
+
+                        '</div>'
+
+                    );
+
+                }
+            )
+            .join('');
+
+}
+
+
+/* ==========================================================
+   PANELS
+   ========================================================== */
+
+async function loadPanel(
+    name
+){
+
+    if(
+        name ===
+        'dashboard'
+    ){
+
+        await loadDashboard();
+
+    }
+
+
+    if(
+        name ===
+        'rooms'
+    ){
+
+        await loadDashboard();
+
+    }
+
+
+    if(
+        name ===
+        'registrations'
+    ){
+
+        await loadRegistrations();
+
+    }
+
+
+    if(
+        name ===
+        'tenants'
+    ){
+
+        await loadTenants();
+
+    }
+
+
+    if(
+        name ===
+        'payments'
+    ){
+
+        await loadPayments();
+
+    }
+
+
+    if(
+        name ===
+        'maintenance'
+    ){
+
+        await loadMaintenance();
+
+    }
+
+
+    if(
+        name ===
+        'whatsapp'
+    ){
+
+        await loadWhatsApp();
+
+    }
+
+
+    if(
+        name ===
+        'announcements'
+    ){
+
+        await loadAnnouncements();
+
+    }
+
+}
+
+
+function clickPanel(
+    name
+){
+
+    document
+        .querySelector(
+            '[data-panel="' +
+            name +
+            '"]'
+        )
+        .click();
+
+}
+
+
+function goRegistrations(){
+
+    clickPanel(
+        'registrations'
+    );
+
+}
+
+
+function goPayments(){
+
+    clickPanel(
+        'payments'
+    );
+
+}
+
+
+function goMaintenance(){
+
+    clickPanel(
+        'maintenance'
+    );
+
+}
+
+
+/* ==========================================================
+   REGISTRATION
+   ========================================================== */
+
+async function loadRegistrations(){
+
+    const data =
+        await api(
+            'masterRegistrations'
+        );
+
+
+    const items =
+        (data.items || [])
+        .filter(
+            function(item){
+
+                return (
+                    item.status ===
+                    'MENUNGGU VERIFIKASI'
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            'registrationsTable'
+        )
+        .innerHTML =
+
+        items.length
+
+        ? (
 
             '<table class="data-table">' +
 
@@ -1909,11 +2208,11 @@ function renderAttention(){
 
             '<tr>' +
 
-            '<th>Jenis</th>' +
-            '<th>Subjek</th>' +
-            '<th>Detail</th>' +
-            '<th>Status</th>' +
-            '<th></th>' +
+            '<th>ID</th>' +
+            '<th>Nama</th>' +
+            '<th>Kamar</th>' +
+            '<th>WhatsApp</th>' +
+            '<th>Aksi</th>' +
 
             '</tr>' +
 
@@ -1921,283 +2220,92 @@ function renderAttention(){
 
             '<tbody>' +
 
-            html +
+            items
+                .map(
+                    function(item){
+
+                        return (
+
+                            '<tr>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.id
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.name
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.room
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.phone
+                            ) +
+                            '</td>' +
+
+                            '<td class="actions">' +
+
+                            '<button class="btn-small success" onclick="approveRegistration(\'' +
+                            encodeURIComponent(
+                                item.id
+                            ) +
+                            '\')">' +
+                            'Setujui' +
+                            '</button>' +
+
+                            '<button class="btn-small danger" onclick="rejectRegistration(\'' +
+                            encodeURIComponent(
+                                item.id
+                            ) +
+                            '\')">' +
+                            'Tolak' +
+                            '</button>' +
+
+                            '</td>' +
+
+                            '</tr>'
+
+                        );
+
+                    }
+                )
+                .join('') +
 
             '</tbody>' +
 
-            '</table>';
+            '</table>'
 
-}
-
-
-/**
- * ==========================================================
- * LOAD PANELS
- * ==========================================================
- */
-async function loadPanel(
-    panel
-){
-
-    try{
-
-        if(
-            panel ===
-            "dashboard"
-        ){
-
-            await loadDashboard();
-
-        }
-
-
-        if(
-            panel ===
-            "registrations"
-        ){
-
-            await loadRegistrations();
-
-        }
-
-
-        if(
-            panel ===
-            "tenants"
-        ){
-
-            await loadTenants();
-
-        }
-
-
-        if(
-            panel ===
-            "payments"
-        ){
-
-            await loadPayments();
-
-        }
-
-
-        if(
-            panel ===
-            "maintenance"
-        ){
-
-            await loadMaintenance();
-
-        }
-
-
-        if(
-            panel ===
-            "rooms"
-        ){
-
-            await loadDashboard();
-
-        }
-
-
-        if(
-            panel ===
-            "whatsapp"
-        ){
-
-            await loadWhatsApp();
-
-        }
-
-
-        if(
-            panel ===
-            "announcements"
-        ){
-
-            await loadAnnouncements();
-
-        }
-
-
-        if(
-            panel ===
-            "automation"
-        ){
-
-            document
-                .getElementById(
-                    "automationMessage"
-                )
-                .textContent =
-                    "";
-
-        }
-
-
-    }catch(error){
-
-        showToast(
-            error.message,
-            true
-        );
-
-    }
-
-}
-
-
-/**
- * ==========================================================
- * REGISTRATIONS
- * ==========================================================
- */
-async function loadRegistrations(){
-
-    const data =
-        await masterRequest(
-            "masterRegistrations"
-        );
-
-
-    const items =
-        data.items || [];
-
-
-    if(!items.length){
-
-        document
-            .getElementById(
-                "registrationsTable"
-            )
-            .innerHTML =
-                '<div class="empty">Belum ada pendaftaran pending.</div>';
-
-        return;
-
-    }
-
-
-    document
-        .getElementById(
-            "registrationsTable"
         )
-        .innerHTML =
 
-        '<table class="data-table">' +
-
-        '<thead>' +
-
-        '<tr>' +
-
-        '<th>Pendaftaran</th>' +
-        '<th>Nama</th>' +
-        '<th>Kamar</th>' +
-        '<th>WhatsApp</th>' +
-        '<th>Status</th>' +
-        '<th>Aksi</th>' +
-
-        '</tr>' +
-
-        '</thead>' +
-
-        '<tbody>' +
-
-        items
-            .map(
-                function(item){
-
-                    return (
-
-                        '<tr>' +
-
-                        '<td>' +
-                        escapeHtml(
-                            item.id
-                        ) +
-                        '</td>' +
-
-                        '<td>' +
-                        escapeHtml(
-                            item.name
-                        ) +
-                        '</td>' +
-
-                        '<td>' +
-                        escapeHtml(
-                            item.room
-                        ) +
-                        '</td>' +
-
-                        '<td>' +
-                        escapeHtml(
-                            item.phone
-                        ) +
-                        '</td>' +
-
-                        '<td>' +
-                        '<span class="badge warn">' +
-                        escapeHtml(
-                            item.status
-                        ) +
-                        '</span>' +
-                        '</td>' +
-
-                        '<td>' +
-
-                        '<div class="actions">' +
-
-                        '<button class="btn-small success" onclick="approveRegistration(\'' +
-                        encodeURIComponent(
-                            item.id
-                        ) +
-                        '\')">' +
-                        'Setujui' +
-                        '</button>' +
-
-                        '<button class="btn-small danger" onclick="rejectRegistration(\'' +
-                        encodeURIComponent(
-                            item.id
-                        ) +
-                        '\')">' +
-                        'Tolak' +
-                        '</button>' +
-
-                        '</div>' +
-
-                        '</td>' +
-
-                        '</tr>'
-
-                    );
-
-                }
-            )
-            .join("") +
-
-        '</tbody>' +
-
-        '</table>';
+        : '<div class="empty">Tidak ada pendaftaran pending.</div>';
 
 }
 
 
 async function approveRegistration(
-    encodedId
+    encoded
 ){
 
     const id =
         decodeURIComponent(
-            encodedId
+            encoded
         );
 
 
     if(
         !confirm(
-            "Setujui pendaftaran " +
+            'Setujui pendaftaran ' +
             id +
-            "?"
+            '?'
         )
     ){
 
@@ -2209,8 +2317,8 @@ async function approveRegistration(
     try{
 
         const result =
-            await masterRequest(
-                "masterApproveRegistration",
+            await api(
+                'masterApproveRegistration',
                 {
                     registrationId:
                         id
@@ -2219,13 +2327,8 @@ async function approveRegistration(
 
 
         alert(
-            "Berhasil.\n\n" +
-            "Tenant ID: " +
-            result.tenantId +
-            "\nKontrak ID: " +
-            result.kontrakId +
-            "\nKamar: " +
-            result.room
+            result.message ||
+            'Pendaftaran berhasil disetujui.'
         );
 
 
@@ -2247,19 +2350,19 @@ async function approveRegistration(
 
 
 async function rejectRegistration(
-    encodedId
+    encoded
 ){
 
     const id =
         decodeURIComponent(
-            encodedId
+            encoded
         );
 
 
     const reason =
         prompt(
-            "Alasan penolakan:",
-            ""
+            'Alasan penolakan:',
+            ''
         );
 
 
@@ -2275,14 +2378,16 @@ async function rejectRegistration(
 
     try{
 
-        await masterRequest(
-            "masterRejectRegistration",
+        await api(
+            'masterRejectRegistration',
             {
+
                 registrationId:
                     id,
 
                 reason:
                     reason
+
             }
         );
 
@@ -2304,104 +2409,15 @@ async function rejectRegistration(
 }
 
 
-function openRegistration(
-    encodedId
-){
+/* ==========================================================
+   TENANTS
+   ========================================================== */
 
-    document
-        .querySelector(
-            '[data-panel="registrations"]'
-        )
-        .click();
-
-
-    setTimeout(
-        function(){
-
-            const id =
-                decodeURIComponent(
-                    encodedId
-                );
-
-
-            const item =
-                (
-                    dashboardData
-                        .registrations ||
-                    []
-                )
-                .find(
-                    function(row){
-
-                        return (
-                            row.id ===
-                            id
-                        );
-
-                    }
-                );
-
-
-            if(item){
-
-                showModal(
-                    "Pendaftaran " +
-                    item.id,
-
-                    '<p><strong>Nama:</strong> ' +
-                    escapeHtml(
-                        item.name
-                    ) +
-                    '</p>' +
-
-                    '<p><strong>Kamar:</strong> ' +
-                    escapeHtml(
-                        item.room
-                    ) +
-                    '</p>' +
-
-                    '<p><strong>WhatsApp:</strong> ' +
-                    escapeHtml(
-                        item.phone
-                    ) +
-                    '</p>' +
-
-                    '<div class="actions">' +
-
-                    '<button class="btn-small success" onclick="approveRegistration(\'' +
-                    encodeURIComponent(
-                        item.id
-                    ) +
-                    '\')">Setujui</button>' +
-
-                    '<button class="btn-small danger" onclick="rejectRegistration(\'' +
-                    encodeURIComponent(
-                        item.id
-                    ) +
-                    '\')">Tolak</button>' +
-
-                    '</div>'
-                );
-
-            }
-
-        },
-        300
-    );
-
-}
-
-
-/**
- * ==========================================================
- * TENANTS
- * ==========================================================
- */
 async function loadTenants(){
 
     const data =
-        await masterRequest(
-            "masterTenants"
+        await api(
+            'masterTenants'
         );
 
 
@@ -2411,7 +2427,7 @@ async function loadTenants(){
 
     document
         .getElementById(
-            "tenantsTable"
+            'tenantsTable'
         )
         .innerHTML =
 
@@ -2425,7 +2441,7 @@ async function loadTenants(){
 
             '<tr>' +
 
-            '<th>ID</th>' +
+            '<th>Tenant ID</th>' +
             '<th>Nama</th>' +
             '<th>Kamar</th>' +
             '<th>WhatsApp</th>' +
@@ -2471,22 +2487,25 @@ async function loadTenants(){
                             '</td>' +
 
                             '<td>' +
+
                             '<span class="badge ' +
                             (
                                 String(
                                     item.status
-                                )
-                                .toUpperCase()
+                                ).toUpperCase()
                                 ===
-                                "AKTIF"
-                                    ? "ok"
-                                    : ""
+                                'AKTIF'
+                                    ? 'ok'
+                                    : ''
                             ) +
                             '">' +
+
                             escapeHtml(
                                 item.status
                             ) +
+
                             '</span>' +
+
                             '</td>' +
 
                             '<td>' +
@@ -2496,7 +2515,9 @@ async function loadTenants(){
                                 item.tenantId
                             ) +
                             '\')">' +
+
                             'Reset Password' +
+
                             '</button>' +
 
                             '</td>' +
@@ -2507,7 +2528,7 @@ async function loadTenants(){
 
                     }
                 )
-                .join("") +
+                .join('') +
 
             '</tbody>' +
 
@@ -2521,20 +2542,20 @@ async function loadTenants(){
 
 
 async function resetPassword(
-    encodedTenantId
+    encoded
 ){
 
     const tenantId =
         decodeURIComponent(
-            encodedTenantId
+            encoded
         );
 
 
     if(
         !confirm(
-            "Reset password " +
+            'Reset password ' +
             tenantId +
-            "?"
+            '?'
         )
     ){
 
@@ -2546,28 +2567,29 @@ async function resetPassword(
     try{
 
         const result =
-            await masterRequest(
-                "masterResetPassword",
+            await api(
+                'masterResetPassword',
                 {
+
                     tenantId:
                         tenantId
+
                 }
             );
 
 
         alert(
 
-            "RESET PASSWORD BERHASIL\n\n" +
+            'RESET PASSWORD BERHASIL\n\n' +
 
-            "Tenant ID: " +
+            'Tenant ID: ' +
             result.tenantId +
 
-            "\nPassword sementara:\n" +
-            result.temporaryPassword +
-
-            "\n\nSampaikan password ini kepada tenant."
+            '\nPassword sementara:\n' +
+            result.temporaryPassword
 
         );
+
 
     }catch(error){
 
@@ -2580,16 +2602,15 @@ async function resetPassword(
 }
 
 
-/**
- * ==========================================================
- * PAYMENTS
- * ==========================================================
- */
+/* ==========================================================
+   PAYMENTS
+   ========================================================== */
+
 async function loadPayments(){
 
     const data =
-        await masterRequest(
-            "masterPayments"
+        await api(
+            'masterPayments'
         );
 
 
@@ -2597,26 +2618,13 @@ async function loadPayments(){
         data.items || [];
 
 
-    const pending =
-        items.filter(
-            function(item){
-
-                return (
-                    item.verification ===
-                    "MENUNGGU VERIFIKASI"
-                );
-
-            }
-        );
-
-
     document
         .getElementById(
-            "paymentsTable"
+            'paymentsTable'
         )
         .innerHTML =
 
-        pending.length
+        items.length
 
         ? (
 
@@ -2630,7 +2638,8 @@ async function loadPayments(){
             '<th>Tenant</th>' +
             '<th>Kamar</th>' +
             '<th>Periode</th>' +
-            '<th>Nominal</th>' +
+            '<th>Dibayar</th>' +
+            '<th>Total</th>' +
             '<th>Aksi</th>' +
 
             '</tr>' +
@@ -2639,7 +2648,7 @@ async function loadPayments(){
 
             '<tbody>' +
 
-            pending
+            items
                 .map(
                     function(item){
 
@@ -2654,16 +2663,22 @@ async function loadPayments(){
                             '</td>' +
 
                             '<td>' +
+
+                            '<strong>' +
                             escapeHtml(
                                 item.name ||
                                 item.tenantId
                             ) +
+                            '</strong>' +
+
                             '<br>' +
+
                             '<small>' +
                             escapeHtml(
                                 item.tenantId
                             ) +
                             '</small>' +
+
                             '</td>' +
 
                             '<td>' +
@@ -2685,15 +2700,21 @@ async function loadPayments(){
                             '</td>' +
 
                             '<td>' +
+                            money(
+                                item.total
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
 
                             '<div class="actions">' +
 
-                            '<button class="btn-small light" onclick="viewPaymentProof(\'' +
+                            '<button class="btn-small light" onclick="viewProof(\'' +
                             encodeURIComponent(
                                 item.id
                             ) +
                             '\')">' +
-                            'Lihat Bukti' +
+                            'Lihat Foto' +
                             '</button>' +
 
                             '<button class="btn-small success" onclick="verifyPayment(\'' +
@@ -2722,7 +2743,7 @@ async function loadPayments(){
 
                     }
                 )
-                .join("") +
+                .join('') +
 
             '</tbody>' +
 
@@ -2735,18 +2756,18 @@ async function loadPayments(){
 }
 
 
-async function viewPaymentProof(
-    encodedPaymentId
+async function viewProof(
+    encoded
 ){
 
     const paymentId =
         decodeURIComponent(
-            encodedPaymentId
+            encoded
         );
 
 
     showModal(
-        "Bukti Pembayaran",
+        'Bukti Pembayaran',
         '<div class="loading">Memuat foto...</div>'
     );
 
@@ -2754,11 +2775,13 @@ async function viewPaymentProof(
     try{
 
         const result =
-            await masterRequest(
-                "masterPaymentProof",
+            await api(
+                'masterPaymentProof',
                 {
+
                     paymentId:
                         paymentId
+
                 }
             );
 
@@ -2769,13 +2792,17 @@ async function viewPaymentProof(
 
             modalBody.innerHTML =
 
-                '<p><strong>' +
+                '<p>' +
+
+                '<strong>' +
                 escapeHtml(
                     result.fileName
                 ) +
-                '</strong></p>' +
+                '</strong>' +
 
-                '<img src="' +
+                '</p>' +
+
+                '<img class="modal-image" src="' +
                 result.dataUrl +
                 '" alt="Bukti pembayaran">';
 
@@ -2783,12 +2810,16 @@ async function viewPaymentProof(
 
             modalBody.innerHTML =
 
-                '<p>Bukti tidak dapat ditampilkan langsung.</p>' +
+                '<p>Foto terlalu besar untuk ditampilkan langsung.</p>' +
 
                 '<a href="' +
-                result.url +
+                escapeHtml(
+                    result.url
+                ) +
                 '" target="_blank">' +
-                'Buka file bukti pembayaran' +
+
+                'Buka bukti pembayaran' +
+
                 '</a>';
 
         }
@@ -2796,7 +2827,7 @@ async function viewPaymentProof(
     }catch(error){
 
         modalBody.innerHTML =
-            '<p class="muted">' +
+            '<p style="color:#b42318">' +
             escapeHtml(
                 error.message
             ) +
@@ -2808,27 +2839,27 @@ async function viewPaymentProof(
 
 
 async function verifyPayment(
-    encodedPaymentId,
+    encoded,
     decision
 ){
 
     const paymentId =
         decodeURIComponent(
-            encodedPaymentId
+            encoded
         );
 
 
     const approved =
         decision ===
-        "approve";
+        'approve';
 
 
     const reason =
         prompt(
             approved
-                ? "Catatan verifikasi (opsional):"
-                : "Alasan penolakan:",
-            ""
+                ? 'Catatan verifikasi (opsional):'
+                : 'Alasan penolakan:',
+            ''
         );
 
 
@@ -2848,7 +2879,7 @@ async function verifyPayment(
     ){
 
         alert(
-            "Alasan penolakan wajib diisi."
+            'Alasan penolakan wajib diisi.'
         );
 
         return;
@@ -2859,8 +2890,8 @@ async function verifyPayment(
     try{
 
         const result =
-            await masterRequest(
-                "masterVerifyPayment",
+            await api(
+                'masterVerifyPayment',
                 {
 
                     paymentId:
@@ -2881,6 +2912,9 @@ async function verifyPayment(
         );
 
 
+        closeModal();
+
+
         await loadPayments();
 
 
@@ -2898,58 +2932,26 @@ async function verifyPayment(
 }
 
 
-function openPayment(
-    encodedId
-){
+/* ==========================================================
+   MAINTENANCE
+   ========================================================== */
 
-    document
-        .querySelector(
-            '[data-panel="payments"]'
-        )
-        .click();
-
-
-    setTimeout(
-        function(){
-
-            viewPaymentProof(
-                encodedId
-            );
-
-        },
-        300
-    );
-
-}
-
-
-/**
- * ==========================================================
- * MAINTENANCE
- * ==========================================================
- */
 async function loadMaintenance(){
 
     const data =
-        await masterRequest(
-            "masterMaintenance"
+        await api(
+            'masterMaintenance'
         );
 
 
     const items =
-        data.items || [];
-
-
-    const active =
-        items.filter(
+        (data.items || [])
+        .filter(
             function(item){
 
                 return (
-                    item.status ===
-                    "OPEN" ||
-
-                    item.status ===
-                    "PROSES"
+                    item.status === 'OPEN' ||
+                    item.status === 'PROSES'
                 );
 
             }
@@ -2958,11 +2960,11 @@ async function loadMaintenance(){
 
     document
         .getElementById(
-            "maintenanceTable"
+            'maintenanceTable'
         )
         .innerHTML =
 
-        active.length
+        items.length
 
         ? (
 
@@ -2977,7 +2979,6 @@ async function loadMaintenance(){
             '<th>Kamar</th>' +
             '<th>Masalah</th>' +
             '<th>Status</th>' +
-            '<th>PIC</th>' +
             '<th>Aksi</th>' +
 
             '</tr>' +
@@ -2986,7 +2987,7 @@ async function loadMaintenance(){
 
             '<tbody>' +
 
-            active
+            items
                 .map(
                     function(item){
 
@@ -3014,35 +3015,19 @@ async function loadMaintenance(){
                             '</td>' +
 
                             '<td>' +
-
-                            '<strong>' +
                             escapeHtml(
                                 item.problem
                             ) +
-                            '</strong>' +
-
-                            '<br>' +
-
-                            '<small>' +
-                            escapeHtml(
-                                item.description
-                            ) +
-                            '</small>' +
-
                             '</td>' +
 
                             '<td>' +
+
                             '<span class="badge warn">' +
                             escapeHtml(
                                 item.status
                             ) +
                             '</span>' +
-                            '</td>' +
 
-                            '<td>' +
-                            escapeHtml(
-                                item.pic
-                            ) +
                             '</td>' +
 
                             '<td>' +
@@ -3052,7 +3037,9 @@ async function loadMaintenance(){
                                 item.id
                             ) +
                             '\')">' +
+
                             'Kelola' +
+
                             '</button>' +
 
                             '</td>' +
@@ -3063,7 +3050,7 @@ async function loadMaintenance(){
 
                     }
                 )
-                .join("") +
+                .join('') +
 
             '</tbody>' +
 
@@ -3076,52 +3063,24 @@ async function loadMaintenance(){
 }
 
 
-function openMaintenance(
-    encodedId
-){
-
-    document
-        .querySelector(
-            '[data-panel="maintenance"]'
-        )
-        .click();
-
-
-    setTimeout(
-        function(){
-
-            editMaintenance(
-                encodedId
-            );
-
-        },
-        300
-    );
-
-}
-
-
 async function editMaintenance(
-    encodedId
+    encoded
 ){
 
     const id =
         decodeURIComponent(
-            encodedId
+            encoded
         );
 
 
     const data =
-        await masterRequest(
-            "masterMaintenance"
+        await api(
+            'masterMaintenance'
         );
 
 
     const item =
-        (
-            data.items ||
-            []
-        )
+        (data.items || [])
         .find(
             function(row){
 
@@ -3137,7 +3096,7 @@ async function editMaintenance(
     if(!item){
 
         alert(
-            "Data maintenance tidak ditemukan."
+            'Maintenance tidak ditemukan.'
         );
 
         return;
@@ -3147,7 +3106,7 @@ async function editMaintenance(
 
     showModal(
 
-        "Maintenance " +
+        'Maintenance ' +
         id,
 
         '<div class="form-grid">' +
@@ -3158,41 +3117,13 @@ async function editMaintenance(
 
         '<select id="maintStatus">' +
 
-        '<option value="OPEN"' +
-        (
-            item.status ===
-            "OPEN"
-                ? " selected"
-                : ""
-        ) +
-        '>OPEN</option>' +
+        '<option value="OPEN">OPEN</option>' +
 
-        '<option value="PROSES"' +
-        (
-            item.status ===
-            "PROSES"
-                ? " selected"
-                : ""
-        ) +
-        '>PROSES</option>' +
+        '<option value="PROSES">PROSES</option>' +
 
-        '<option value="SELESAI"' +
-        (
-            item.status ===
-            "SELESAI"
-                ? " selected"
-                : ""
-        ) +
-        '>SELESAI</option>' +
+        '<option value="SELESAI">SELESAI</option>' +
 
-        '<option value="BATAL"' +
-        (
-            item.status ===
-            "BATAL"
-                ? " selected"
-                : ""
-        ) +
-        '>BATAL</option>' +
+        '<option value="BATAL">BATAL</option>' +
 
         '</select>' +
 
@@ -3236,35 +3167,43 @@ async function editMaintenance(
 
         '</div>' +
 
-        '<button class="btn btn-primary" style="margin-top:18px" onclick="saveMaintenance(\'' +
+        '<button class="btn btn-primary" style="margin-top:16px" onclick="saveMaintenance(\'' +
         encodeURIComponent(
             id
         ) +
         '\')">' +
 
-        'Simpan Perubahan' +
+        'Simpan' +
 
         '</button>'
 
     );
 
+
+    document
+        .getElementById(
+            'maintStatus'
+        )
+        .value =
+            item.status;
+
 }
 
 
 async function saveMaintenance(
-    encodedId
+    encoded
 ){
 
     const id =
         decodeURIComponent(
-            encodedId
+            encoded
         );
 
 
     try{
 
-        await masterRequest(
-            "masterUpdateMaintenance",
+        await api(
+            'masterUpdateMaintenance',
             {
 
                 maintenanceId:
@@ -3273,14 +3212,14 @@ async function saveMaintenance(
                 status:
                     document
                         .getElementById(
-                            "maintStatus"
+                            'maintStatus'
                         )
                         .value,
 
                 pic:
                     document
                         .getElementById(
-                            "maintPIC"
+                            'maintPIC'
                         )
                         .value,
 
@@ -3288,7 +3227,7 @@ async function saveMaintenance(
                     Number(
                         document
                             .getElementById(
-                                "maintCost"
+                                'maintCost'
                             )
                             .value
                     ),
@@ -3296,7 +3235,7 @@ async function saveMaintenance(
                 note:
                     document
                         .getElementById(
-                            "maintNote"
+                            'maintNote'
                         )
                         .value
 
@@ -3324,109 +3263,15 @@ async function saveMaintenance(
 }
 
 
-/**
- * ==========================================================
- * ROOMS
- * ==========================================================
- */
-function renderRooms(){
+/* ==========================================================
+   WHATSAPP
+   ========================================================== */
 
-    if(
-        !dashboardData ||
-        !dashboardData.rooms
-    ){
-
-        return;
-
-    }
-
-
-    document
-        .getElementById(
-            "roomsGrid"
-        )
-        .innerHTML =
-
-        dashboardData.rooms
-            .map(
-                function(room){
-
-                    const status =
-                        String(
-                            room.status ||
-                            ''
-                        )
-                        .toUpperCase();
-
-
-                    const price =
-                        Number(
-                            room.price || 0
-                        );
-
-
-                    const className =
-                        status ===
-                        "TERISI"
-
-                            ? "occupied"
-
-                            : (
-                                price <= 0
-                                    ? "soon"
-                                    : ""
-                            );
-
-
-                    return (
-
-                        '<div class="room ' +
-                        className +
-                        '">' +
-
-                        '<strong>' +
-                        escapeHtml(
-                            room.number
-                        ) +
-                        '</strong>' +
-
-                        '<small>' +
-                        escapeHtml(
-                            room.status
-                        ) +
-                        '</small>' +
-
-                        '<small>' +
-                        (
-                            price > 0
-                                ? money(
-                                    price
-                                  )
-                                : "Belum tersedia"
-                        ) +
-                        '</small>' +
-
-                        '</div>'
-
-                    );
-
-                }
-            )
-            .join("");
-
-}
-
-
-/**
- * ==========================================================
- * WHATSAPP
- * ==========================================================
- */
 async function loadWhatsApp(){
 
     const data =
-        await masterRequest(
-            "masterWhatsApp"
+        await api(
+            'masterWhatsApp'
         );
 
 
@@ -3436,7 +3281,7 @@ async function loadWhatsApp(){
 
     document
         .getElementById(
-            "whatsappTable"
+            'whatsappTable'
         )
         .innerHTML =
 
@@ -3471,21 +3316,15 @@ async function loadWhatsApp(){
                             '<tr>' +
 
                             '<td>' +
-
-                            '<strong>' +
                             escapeHtml(
                                 item.name
                             ) +
-                            '</strong>' +
-
                             '<br>' +
-
                             '<small>' +
                             escapeHtml(
                                 item.phone
                             ) +
                             '</small>' +
-
                             '</td>' +
 
                             '<td>' +
@@ -3524,7 +3363,7 @@ async function loadWhatsApp(){
 
                     }
                 )
-                .join("") +
+                .join('') +
 
             '</tbody>' +
 
@@ -3532,21 +3371,20 @@ async function loadWhatsApp(){
 
         )
 
-        : '<div class="empty">Tidak ada tenant yang perlu dikirimi pengingat.</div>';
+        : '<div class="empty">Tidak ada tenant untuk diingatkan.</div>';
 
 }
 
 
-/**
- * ==========================================================
- * ANNOUNCEMENTS
- * ==========================================================
- */
+/* ==========================================================
+   ANNOUNCEMENTS
+   ========================================================== */
+
 async function loadAnnouncements(){
 
     const data =
-        await masterRequest(
-            "masterAnnouncements"
+        await api(
+            'masterAnnouncements'
         );
 
 
@@ -3556,7 +3394,7 @@ async function loadAnnouncements(){
 
     document
         .getElementById(
-            "announcementsTable"
+            'announcementsTable'
         )
         .innerHTML =
 
@@ -3596,28 +3434,9 @@ async function loadAnnouncements(){
                             '</td>' +
 
                             '<td>' +
-                            '<span class="badge ' +
-                            (
-                                item.priority ===
-                                "DARURAT"
-
-                                    ? "danger"
-
-                                    : (
-                                        item.priority ===
-                                        "PENTING"
-                                            ? "warn"
-                                            : ""
-                                    )
-                            ) +
-                            '">' +
-
                             escapeHtml(
                                 item.priority
                             ) +
-
-                            '</span>' +
-
                             '</td>' +
 
                             '<td>' +
@@ -3638,7 +3457,7 @@ async function loadAnnouncements(){
 
                     }
                 )
-                .join("") +
+                .join('') +
 
             '</tbody>' +
 
@@ -3653,10 +3472,10 @@ async function loadAnnouncements(){
 
 document
     .getElementById(
-        "announcementForm"
+        'announcementForm'
     )
     .addEventListener(
-        "submit",
+        'submit',
         async function(event){
 
             event.preventDefault();
@@ -3664,28 +3483,28 @@ document
 
             try{
 
-                await masterRequest(
-                    "masterSaveAnnouncement",
+                await api(
+                    'masterSaveAnnouncement',
                     {
 
                         title:
                             document
                                 .getElementById(
-                                    "announcementTitle"
+                                    'announcementTitle'
                                 )
                                 .value,
 
                         message:
                             document
                                 .getElementById(
-                                    "announcementMessage"
+                                    'announcementMessage'
                                 )
                                 .value,
 
                         priority:
                             document
                                 .getElementById(
-                                    "announcementPriority"
+                                    'announcementPriority'
                                 )
                                 .value
 
@@ -3700,7 +3519,7 @@ document
 
 
                 alert(
-                    "Pengumuman berhasil diterbitkan."
+                    'Pengumuman berhasil diterbitkan.'
                 );
 
 
@@ -3716,58 +3535,55 @@ document
     );
 
 
-/**
- * ==========================================================
- * AUTOMATION
- * ==========================================================
- */
+/* ==========================================================
+   AUTOMATION
+   ========================================================== */
+
 document
     .getElementById(
-        "runAutomationButton"
+        'runAutomationButton'
     )
     .addEventListener(
-        "click",
+        'click',
         async function(){
-
-            const button =
-                this;
-
 
             const message =
                 document
                     .getElementById(
-                        "automationMessage"
+                        'automationMessage'
                     );
 
 
-            button.disabled =
+            this.disabled =
                 true;
 
 
-            button.textContent =
-                "Menjalankan...";
+            this.textContent =
+                'Menjalankan...';
 
 
             try{
 
                 const result =
-                    await masterRequest(
-                        "masterRunAutomation"
+                    await api(
+                        'masterRunAutomation'
                     );
 
 
                 message.className =
-                    "login-message success";
+                    'login-message success';
 
 
                 message.textContent =
                     result.message +
-                    " Proses: " +
                     (
-                        result.executed || []
-                    )
-                    .join(
-                        ", "
+                        result.executed &&
+                        result.executed.length
+                            ? ' Proses: ' +
+                              result.executed.join(
+                                  ', '
+                              )
+                            : ''
                     );
 
 
@@ -3777,7 +3593,7 @@ document
             }catch(error){
 
                 message.className =
-                    "login-message error";
+                    'login-message error';
 
 
                 message.textContent =
@@ -3786,12 +3602,12 @@ document
 
             }finally{
 
-                button.disabled =
+                this.disabled =
                     false;
 
 
-                button.textContent =
-                    "Jalankan Otomasi Sekarang";
+                this.textContent =
+                    'Jalankan Otomasi';
 
             }
 
@@ -3799,11 +3615,10 @@ document
     );
 
 
-/**
- * ==========================================================
- * MODAL
- * ==========================================================
- */
+/* ==========================================================
+   MODAL
+   ========================================================== */
+
 function showModal(
     title,
     body
@@ -3818,7 +3633,7 @@ function showModal(
 
 
     modal.classList.add(
-        "show"
+        'show'
     );
 
 }
@@ -3827,7 +3642,7 @@ function showModal(
 function closeModal(){
 
     modal.classList.remove(
-        "show"
+        'show'
     );
 
 }
@@ -3835,16 +3650,16 @@ function closeModal(){
 
 document
     .getElementById(
-        "modalClose"
+        'modalClose'
     )
     .addEventListener(
-        "click",
+        'click',
         closeModal
     );
 
 
 modal.addEventListener(
-    "click",
+    'click',
     function(event){
 
         if(
@@ -3860,40 +3675,56 @@ modal.addEventListener(
 );
 
 
-/**
- * ==========================================================
- * REFRESH
- * ==========================================================
- */
+/* ==========================================================
+   REFRESH
+   ========================================================== */
+
 document
     .getElementById(
-        "refreshButton"
+        'refreshButton'
     )
     .addEventListener(
-        "click",
+        'click',
         async function(){
 
-            const active =
-                document
-                    .querySelector(
-                        ".panel.active"
-                    );
+            try{
+
+                await loadDashboard();
 
 
-            await loadDashboard();
+                const active =
+                    document
+                        .querySelector(
+                            '.panel.active'
+                        );
 
 
-            if(active){
+                if(active){
 
-                const panel =
-                    active.id.replace(
-                        "panel-",
-                        ""
-                    );
+                    const name =
+                        active.id.replace(
+                            'panel-',
+                            ''
+                        );
 
 
-                await loadPanel(
-                    panel
+                    if(
+                        name !==
+                        'dashboard'
+                    ){
+
+                        await loadPanel(
+                            name
+                        );
+
+                    }
+
+                }
+
+            }catch(error){
+
+                alert(
+                    error.message
                 );
 
             }
@@ -3902,17 +3733,16 @@ document
     );
 
 
-/**
- * ==========================================================
- * LOGOUT
- * ==========================================================
- */
+/* ==========================================================
+   LOGOUT
+   ========================================================== */
+
 document
     .getElementById(
-        "masterLogout"
+        'masterLogout'
     )
     .addEventListener(
-        "click",
+        'click',
         async function(){
 
             try{
@@ -3921,8 +3751,8 @@ document
                     masterSession
                 ){
 
-                    await masterRequest(
-                        "masterLogout"
+                    await api(
+                        'masterLogout'
                     );
 
                 }
@@ -3931,7 +3761,7 @@ document
 
 
             sessionStorage.removeItem(
-                "djMasterSession"
+                'djMasterSession'
             );
 
 
@@ -3945,25 +3775,12 @@ document
     );
 
 
-function showToast(
-    text,
-    error=false
-){
+/* ==========================================================
+   INIT
+   ========================================================== */
 
-    alert(
-        text
-    );
-
-}
-
-
-/**
- * ==========================================================
- * INIT
- * ==========================================================
- */
 masterSession =
-    getMasterSession();
+    getSession();
 
 
 if(
@@ -3972,7 +3789,17 @@ if(
 
     showApp();
 
-    loadDashboard();
+
+    loadDashboard()
+        .catch(
+            function(error){
+
+                alert(
+                    error.message
+                );
+
+            }
+        );
 
 }else{
 
