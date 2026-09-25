@@ -3,326 +3,1613 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
+<meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  >
+>
 
-  <title>Pembayaran — DJ Family Kost</title>
+<title>Pembayaran — DJ Family Kost</title>
 
-  <link
+<link
     rel="stylesheet"
-    href="app.css"
-  >
+    href="app.css?v=20260925-payment-01"
+>
+
+<style>
+
+.payment-wrap{
+    padding:55px 0;
+}
+
+.payment-header{
+    margin-bottom:28px;
+}
+
+.payment-summary{
+    display:grid;
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+    gap:16px;
+    margin-bottom:20px;
+}
+
+.summary-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+    padding:20px;
+}
+
+.summary-card span{
+    display:block;
+    color:#667085;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.summary-card strong{
+    font-size:22px;
+}
+
+.billing-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:20px;
+}
+
+.billing-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+    gap:16px;
+    margin-top:18px;
+}
+
+.billing-item{
+    padding:15px;
+    background:#f6f8fb;
+    border-radius:14px;
+}
+
+.billing-item span{
+    display:block;
+    font-size:12px;
+    color:#667085;
+    margin-bottom:5px;
+}
+
+.billing-item strong{
+    font-size:18px;
+}
+
+.payment-form-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:20px;
+    padding:28px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+    gap:18px;
+}
+
+.field label{
+    display:block;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    box-sizing:border-box;
+    padding:13px 14px;
+    border:1px solid #dfe3eb;
+    border-radius:12px;
+    background:#fff;
+    font:inherit;
+    outline:none;
+}
+
+.field textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.field.full{
+    grid-column:1 / -1;
+}
+
+.field input[readonly]{
+    background:#f6f8fb;
+}
+
+.payment-message{
+    display:none;
+    margin-top:18px;
+    padding:14px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+.payment-message.success{
+    display:block;
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.payment-message.error{
+    display:block;
+    background:#fff1f2;
+    color:#b42318;
+}
+
+.payment-note{
+    margin-top:15px;
+    padding:14px;
+    border-radius:12px;
+    background:#f5f7fa;
+    color:#667085;
+    font-size:13px;
+    line-height:1.6;
+}
+
+@media(max-width:900px){
+
+    .payment-summary,
+    .billing-grid,
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+}
+
+</style>
 
 </head>
 
 
-<body data-page="payment">
+<body>
+
 
 <header class="nav">
 
-  <div class="container nav-inner">
+<div class="nav-inner">
 
-    <a
-      class="brand"
-      href="portal.html"
-    >
-
-      <span class="brand-mark"></span>
-
-      DJ FAMILY KOST · TENANT
-
-    </a>
+<a
+    class="brand"
+    href="portal.html"
+>
+    <span class="brand-mark"></span>
+    DJ FAMILY KOST · TENANT
+</a>
 
 
-    <nav class="nav-links">
+<nav class="nav-links">
 
-      <a href="portal.html">
-        Dashboard
-      </a>
+<a href="portal.html">
+    Dashboard
+</a>
 
-      <a href="pembayaran.html">
-        Pembayaran
-      </a>
+<a href="pembayaran.html">
+    Pembayaran
+</a>
 
-      <a href="maintenance.html">
-        Maintenance
-      </a>
+<a href="maintenance.html">
+    Maintenance
+</a>
 
-      <a href="checkinout.html">
-        Check-in/out
-      </a>
+<a href="checkinout.html">
+    Check-in/out
+</a>
 
-      <a href="cafe.html">
-        Cafe
-      </a>
+<a href="cafe.html">
+    Cafe
+</a>
 
-      <a href="laundry.html">
-        Laundry
-      </a>
+<a href="laundry.html">
+    Laundry
+</a>
 
-      <a
-        href="#"
-        id="logoutTop"
-        class="login-top"
-      >
-        Keluar
-      </a>
+<a
+    href="#"
+    id="logoutButton"
+    class="login-top"
+>
+    Keluar
+</a>
 
-    </nav>
+</nav>
 
-  </div>
+</div>
 
 </header>
 
 
-<section class="section">
+<main>
 
-  <div class="container">
+<section class="section payment-wrap">
 
-    <a
-      class="back"
-      href="portal.html"
-    >
-      ← Kembali ke portal
-    </a>
+<div class="container">
 
 
-    <div class="eyebrow">
-      TENANT
-    </div>
+<div
+    id="loading"
+    style="
+        text-align:center;
+        padding:50px 0;
+        color:#667085;
+    "
+>
+    Memuat data pembayaran...
+</div>
 
 
-    <h1>
-      Pembayaran
-    </h1>
+<div
+    id="errorBox"
+    class="payment-message error"
+></div>
 
 
-    <div
-      class="grid grid-2"
-      style="margin-top:28px"
-    >
+<div
+    id="paymentContent"
+    style="display:none;"
+>
 
-      <div class="card kpi-card">
 
-        <div class="kpi-label">
-          TENANT
-        </div>
+<div class="payment-header">
 
-        <div
-          class="kpi-value"
-          id="paymentTenant"
-        >
-          -
-        </div>
+<div class="eyebrow">
+    TENANT
+</div>
 
-      </div>
+<h1>
+    Pembayaran
+</h1>
 
+<p
+    class="lead"
+    id="tenantIntro"
+>
+    —
+</p>
 
-      <div class="card kpi-card">
+</div>
 
-        <div class="kpi-label">
-          NO. KAMAR
-        </div>
 
-        <div
-          class="kpi-value"
-          id="paymentRoom"
-        >
-          -
-        </div>
+<!-- =========================================================
+     SUMMARY
+     ========================================================= -->
 
-      </div>
+<div class="payment-summary">
 
-    </div>
 
+<div class="summary-card">
 
-    <div
-      id="paymentSummary"
-      class="card"
-      style="padding:22px;margin-top:18px"
-    >
+<span>
+    Tenant
+</span>
 
-      Memuat tagihan...
+<strong
+    id="tenantName"
+>
+    —
+</strong>
 
-    </div>
+</div>
 
 
-    <div class="card form-card">
+<div class="summary-card">
 
-      <form id="paymentForm">
+<span>
+    Tenant ID
+</span>
 
-        <div class="form-grid">
+<strong
+    id="tenantId"
+>
+    —
+</strong>
 
-          <div class="field">
+</div>
 
-            <label>
-              Periode Pembayaran
-            </label>
 
-            <input
-              id="paymentPeriod"
-              type="month"
-              required
-            >
+<div class="summary-card">
 
-          </div>
+<span>
+    Kamar
+</span>
 
+<strong
+    id="tenantRoom"
+>
+    —
+</strong>
 
-          <div class="field">
+</div>
 
-            <label>
-              Tanggal Pembayaran
-            </label>
 
-            <input
-              id="paymentDate"
-              type="date"
-              required
-            >
+</div>
 
-          </div>
 
+<!-- =========================================================
+     BILLING
+     ========================================================= -->
 
-          <div class="field">
+<div class="billing-card">
 
-            <label>
-              Nominal Dibayar
-            </label>
+<h3>
+    Tagihan Bulan Berjalan
+</h3>
 
-            <input
-              id="paymentAmount"
-              type="number"
-              min="1"
-              required
-            >
 
-          </div>
+<div class="billing-grid">
 
 
-          <div class="field">
+<div class="billing-item">
 
-            <label>
-              Metode Pembayaran
-            </label>
+<span>
+    Periode
+</span>
 
-            <select
-              id="paymentMethod"
-              required
-            >
+<strong
+    id="billingPeriod"
+>
+    —
+</strong>
 
-              <option value="">
-                Pilih
-              </option>
+</div>
 
-              <option>
-                Transfer Bank
-              </option>
 
-              <option>
-                QRIS
-              </option>
+<div class="billing-item">
 
-              <option>
-                Tunai
-              </option>
+<span>
+    Harga Sewa
+</span>
 
-            </select>
+<strong
+    id="billingRent"
+>
+    —
+</strong>
 
-          </div>
+</div>
 
 
-          <div class="field full">
+<div class="billing-item">
 
-            <label>
-              Link Bukti Pembayaran
-            </label>
+<span>
+    Jatuh Tempo
+</span>
 
-            <input
-              id="paymentProof"
-              type="url"
-              placeholder="Tempel link bukti pembayaran"
-            >
+<strong
+    id="billingDue"
+>
+    —
+</strong>
 
-          </div>
+</div>
 
 
-          <div class="field full">
+<div class="billing-item">
 
-            <label>
-              Keterangan
-            </label>
+<span>
+    Denda
+</span>
 
-            <textarea
-              id="paymentNote"
-            ></textarea>
+<strong
+    id="billingFine"
+>
+    Rp0
+</strong>
 
-          </div>
+</div>
 
-        </div>
 
+<div class="billing-item">
 
-        <div
-          class="note"
-          style="margin-top:18px"
-        >
+<span>
+    Total Tagihan
+</span>
 
-          Tenant ID dan nomor kamar
-          dikunci dari akun login.
-          Tenant tidak perlu mengetik
-          keduanya secara manual.
+<strong
+    id="billingTotal"
+>
+    —
+</strong>
 
-        </div>
+</div>
 
 
-        <div
-          id="paymentMessage"
-          class="message"
-        ></div>
+<div class="billing-item">
 
+<span>
+    Status
+</span>
 
-        <button
-          id="paymentButton"
-          class="btn btn-primary"
-          style="margin-top:18px;width:100%"
-        >
-          Kirim Pembayaran
-        </button>
+<strong
+    id="billingStatus"
+>
+    —
+</strong>
 
-      </form>
+</div>
 
-    </div>
 
-  </div>
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     PAYMENT FORM
+     ========================================================= -->
+
+<div class="payment-form-card">
+
+<h3>
+    Kirim Pembayaran
+</h3>
+
+<p
+    style="
+        color:#667085;
+        line-height:1.6;
+    "
+>
+    Data tenant dan kamar sudah diambil otomatis
+    dari akun Anda.
+</p>
+
+
+<form
+    id="paymentForm"
+>
+
+
+<div class="form-grid">
+
+
+<div class="field">
+
+<label>
+    Periode Pembayaran
+</label>
+
+<input
+    id="period"
+    type="month"
+    required
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+    Tanggal Pembayaran
+</label>
+
+<input
+    id="paymentDate"
+    type="date"
+    required
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+    Nominal Dibayar
+</label>
+
+<input
+    id="amount"
+    type="number"
+    min="1"
+    required
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+    Metode Pembayaran
+</label>
+
+<select
+    id="method"
+    required
+>
+
+<option value="">
+    Pilih metode
+</option>
+
+<option value="Transfer Bank">
+    Transfer Bank
+</option>
+
+<option value="QRIS">
+    QRIS
+</option>
+
+<option value="Tunai">
+    Tunai
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field full">
+
+<label>
+    Link Bukti Transfer
+</label>
+
+<input
+    id="proofUrl"
+    type="url"
+    placeholder="https://drive.google.com/..."
+>
+
+</div>
+
+
+<div class="field full">
+
+<label>
+    Keterangan
+</label>
+
+<textarea
+    id="note"
+    placeholder="Keterangan tambahan..."
+></textarea>
+
+</div>
+
+
+</div>
+
+
+<div class="payment-note">
+
+<strong>
+    Catatan:
+</strong>
+
+Denda dihitung otomatis oleh server berdasarkan
+tanggal pembayaran dan tanggal jatuh tempo.
+Setelah dikirim, pembayaran akan berstatus
+<strong>MENUNGGU VERIFIKASI</strong> sampai diperiksa
+oleh pengelola.
+
+</div>
+
+
+<button
+    class="btn btn-primary"
+    id="submitButton"
+    type="submit"
+    style="
+        margin-top:18px;
+        width:100%;
+    "
+>
+    Kirim Pembayaran
+</button>
+
+
+<div
+    id="paymentMessage"
+    class="payment-message"
+></div>
+
+
+</form>
+
+</div>
+
+
+</div>
+
+</div>
 
 </section>
+
+</main>
 
 
 <footer class="footer">
 
-  <div class="container footer-inner">
+<div class="container footer-inner">
 
-    <div>
+<div>
 
-      <strong>
-        DJ FAMILY KOST
-      </strong>
+<strong>
+    DJ FAMILY KOST
+</strong>
 
-    </div>
+<br>
 
-    <small>
-      © 2026 DJ Family Kost
-    </small>
+<small>
+    Hunian yang tertib, nyaman, dan terkelola.
+</small>
 
-  </div>
+</div>
+
+
+<small>
+    © 2026 DJ Family Kost
+</small>
+
+</div>
 
 </footer>
 
 
-<script src="dj-kost.js"></script>
+<script>
+
+
+const TENANT_API_URL =
+    "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+
+const errorBox =
+    document.getElementById(
+        "errorBox"
+    );
+
+
+const paymentContent =
+    document.getElementById(
+        "paymentContent"
+    );
+
+
+const paymentForm =
+    document.getElementById(
+        "paymentForm"
+    );
+
+
+const paymentMessage =
+    document.getElementById(
+        "paymentMessage"
+    );
+
+
+const submitButton =
+    document.getElementById(
+        "submitButton"
+    );
+
+
+let currentBilling =
+    null;
+
+
+function getSession(){
+
+    const raw =
+        sessionStorage.getItem(
+            "djTenantSession"
+        );
+
+
+    if(!raw){
+
+        return null;
+
+    }
+
+
+    try{
+
+        return JSON.parse(
+            raw
+        );
+
+    }catch(error){
+
+        sessionStorage.removeItem(
+            "djTenantSession"
+        );
+
+        return null;
+
+    }
+
+}
+
+
+function money(
+    value
+){
+
+    return (
+        "Rp" +
+        Number(
+            value || 0
+        ).toLocaleString(
+            "id-ID"
+        )
+    );
+
+}
+
+
+function todayISO(){
+
+    const d =
+        new Date();
+
+
+    const year =
+        d.getFullYear();
+
+
+    const month =
+        String(
+            d.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            d.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
+
+}
+
+
+function currentMonthISO(){
+
+    const d =
+        new Date();
+
+
+    return (
+
+        d.getFullYear() +
+        "-" +
+        String(
+            d.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+function calculateEstimatedFine(){
+
+    if(!currentBilling){
+
+        return 0;
+
+    }
+
+
+    const value =
+        document
+            .getElementById(
+                "paymentDate"
+            )
+            .value;
+
+
+    if(!value){
+
+        return 0;
+
+    }
+
+
+    const paymentDate =
+        new Date(
+            value +
+            "T00:00:00"
+        );
+
+
+    const dueText =
+        currentBilling.dueDate;
+
+
+    /*
+     * dueDate dari API berbentuk dd/MM/yyyy.
+     */
+
+    const parts =
+        String(
+            dueText || ''
+        ).split('/');
+
+
+    if(
+        parts.length !== 3
+    ){
+
+        return 0;
+
+    }
+
+
+    const dueDate =
+        new Date(
+            Number(parts[2]),
+            Number(parts[1]) - 1,
+            Number(parts[0])
+        );
+
+
+    paymentDate.setHours(
+        0,0,0,0
+    );
+
+
+    dueDate.setHours(
+        0,0,0,0
+    );
+
+
+    const daysLate =
+        Math.floor(
+            (
+                paymentDate.getTime() -
+                dueDate.getTime()
+            ) /
+            86400000
+        );
+
+
+    if(daysLate <= 1){
+
+        return 0;
+
+    }
+
+
+    if(daysLate <= 4){
+
+        return 25000;
+
+    }
+
+
+    return 50000;
+
+}
+
+
+function refreshEstimatedTotal(){
+
+    if(!currentBilling){
+
+        return;
+
+    }
+
+
+    const fine =
+        calculateEstimatedFine();
+
+
+    const rent =
+        Number(
+            currentBilling.amount || 0
+        );
+
+
+    document
+        .getElementById(
+            "billingFine"
+        )
+        .textContent =
+            money(
+                fine
+            );
+
+
+    document
+        .getElementById(
+            "billingTotal"
+        )
+        .textContent =
+            money(
+                rent + fine
+            );
+
+
+}
+
+
+async function loadPaymentPage(){
+
+    const session =
+        getSession();
+
+
+    if(!session){
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                TENANT_API_URL,
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "tenantDashboard",
+
+                            tenantId:
+                                session.tenantId,
+
+                            sessionToken:
+                                session.sessionToken
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(
+            !result ||
+            result.ok !== true ||
+            !result.data
+        ){
+
+            throw new Error(
+                result &&
+                result.error
+                    ? result.error
+                    : "Data pembayaran gagal dimuat."
+            );
+
+        }
+
+
+        const data =
+            result.data;
+
+
+        currentBilling =
+            data.billing;
+
+
+        document
+            .getElementById(
+                "tenantName"
+            )
+            .textContent =
+                data.tenant.name;
+
+
+        document
+            .getElementById(
+                "tenantId"
+            )
+            .textContent =
+                data.tenant.tenantId;
+
+
+        document
+            .getElementById(
+                "tenantRoom"
+            )
+            .textContent =
+                data.tenant.room;
+
+
+        document
+            .getElementById(
+                "tenantIntro"
+            )
+            .textContent =
+                "Pembayaran untuk " +
+                data.tenant.name +
+                " · Kamar " +
+                data.tenant.room;
+
+
+        document
+            .getElementById(
+                "billingPeriod"
+            )
+            .textContent =
+                data.billing.period;
+
+
+        document
+            .getElementById(
+                "billingRent"
+            )
+            .textContent =
+                money(
+                    data.billing.amount
+                );
+
+
+        document
+            .getElementById(
+                "billingDue"
+            )
+            .textContent =
+                data.billing.dueDate;
+
+
+        document
+            .getElementById(
+                "billingFine"
+            )
+            .textContent =
+                money(
+                    data.billing.fine
+                );
+
+
+        document
+            .getElementById(
+                "billingTotal"
+            )
+            .textContent =
+                money(
+                    data.billing.total
+                );
+
+
+        document
+            .getElementById(
+                "billingStatus"
+            )
+            .textContent =
+                data.billing.status;
+
+
+        document
+            .getElementById(
+                "period"
+            )
+            .value =
+                currentMonthISO();
+
+
+        document
+            .getElementById(
+                "paymentDate"
+            )
+            .value =
+                todayISO();
+
+
+        document
+            .getElementById(
+                "amount"
+            )
+            .value =
+                data.billing.total;
+
+
+        /*
+         * Estimasi denda berdasarkan
+         * tanggal pembayaran sekarang.
+         */
+
+        refreshEstimatedTotal();
+
+
+        /*
+         * Kalau sudah ada pembayaran menunggu
+         * verifikasi, cegah submit duplikat.
+         */
+
+        if(
+            data.billing.verification &&
+            data.billing.verification
+                .toUpperCase()
+                .indexOf(
+                    "MENUNGGU"
+                ) >= 0 &&
+            Number(
+                data.billing.paidAmount || 0
+            ) > 0
+        ){
+
+            submitButton.disabled =
+                true;
+
+            submitButton.textContent =
+                "Menunggu Verifikasi";
+
+            paymentMessage.className =
+                "payment-message success";
+
+            paymentMessage.textContent =
+                "Pembayaran periode ini sudah dikirim dan sedang menunggu verifikasi pengelola.";
+
+        }
+
+
+        loading.style.display =
+            "none";
+
+
+        errorBox.style.display =
+            "none";
+
+
+        paymentContent.style.display =
+            "block";
+
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+
+        loading.style.display =
+            "none";
+
+
+        errorBox.style.display =
+            "block";
+
+
+        errorBox.textContent =
+            error.message ||
+            "Pembayaran gagal dimuat.";
+
+    }
+
+}
+
+
+document
+    .getElementById(
+        "paymentDate"
+    )
+    .addEventListener(
+        "change",
+        refreshEstimatedTotal
+    );
+
+
+document
+    .getElementById(
+        "period"
+    )
+    .addEventListener(
+        "change",
+        function(){
+
+            /*
+             * Untuk periode berbeda,
+             * server tetap menjadi sumber
+             * perhitungan final.
+             */
+
+            if(currentBilling){
+
+                document
+                    .getElementById(
+                        "amount"
+                    )
+                    .value =
+                        currentBilling.amount ||
+                        0;
+
+            }
+
+        }
+    );
+
+
+paymentForm.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const session =
+            getSession();
+
+
+        if(!session){
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        const period =
+            document
+                .getElementById(
+                    "period"
+                )
+                .value;
+
+
+        const paymentDate =
+            document
+                .getElementById(
+                    "paymentDate"
+                )
+                .value;
+
+
+        const amount =
+            Number(
+                document
+                    .getElementById(
+                        "amount"
+                    )
+                    .value
+            );
+
+
+        const method =
+            document
+                .getElementById(
+                    "method"
+                )
+                .value;
+
+
+        const proofUrl =
+            document
+                .getElementById(
+                    "proofUrl"
+                )
+                .value
+                .trim();
+
+
+        const note =
+            document
+                .getElementById(
+                    "note"
+                )
+                .value
+                .trim();
+
+
+        paymentMessage.className =
+            "payment-message";
+
+
+        paymentMessage.textContent =
+            "";
+
+
+        if(!period){
+
+            paymentMessage.className =
+                "payment-message error";
+
+            paymentMessage.textContent =
+                "Periode pembayaran wajib diisi.";
+
+            return;
+
+        }
+
+
+        if(!paymentDate){
+
+            paymentMessage.className =
+                "payment-message error";
+
+            paymentMessage.textContent =
+                "Tanggal pembayaran wajib diisi.";
+
+            return;
+
+        }
+
+
+        if(
+            !amount ||
+            amount <= 0
+        ){
+
+            paymentMessage.className =
+                "payment-message error";
+
+            paymentMessage.textContent =
+                "Nominal pembayaran tidak valid.";
+
+            return;
+
+        }
+
+
+        if(!method){
+
+            paymentMessage.className =
+                "payment-message error";
+
+            paymentMessage.textContent =
+                "Pilih metode pembayaran.";
+
+            return;
+
+        }
+
+
+        submitButton.disabled =
+            true;
+
+        submitButton.textContent =
+            "Menyimpan...";
+
+
+        try{
+
+            const response =
+                await fetch(
+                    TENANT_API_URL,
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                action:
+                                    "payment",
+
+                                tenantId:
+                                    session.tenantId,
+
+                                sessionToken:
+                                    session.sessionToken,
+
+                                period:
+                                    period,
+
+                                paymentDate:
+                                    paymentDate,
+
+                                amount:
+                                    amount,
+
+                                method:
+                                    method,
+
+                                proofUrl:
+                                    proofUrl,
+
+                                note:
+                                    note
+
+                            })
+
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if(
+                !result ||
+                result.ok !== true ||
+                !result.data
+            ){
+
+                throw new Error(
+                    result &&
+                    result.error
+                        ? result.error
+                        : "Pembayaran gagal disimpan."
+                );
+
+            }
+
+
+            paymentMessage.className =
+                "payment-message success";
+
+
+            paymentMessage.textContent =
+                result.data.message ||
+                "Pembayaran berhasil dikirim.";
+
+
+            submitButton.textContent =
+                "Pembayaran Terkirim";
+
+
+            /*
+             * Refresh data billing.
+             */
+
+            setTimeout(
+                loadPaymentPage,
+                700
+            );
+
+
+        }catch(error){
+
+            console.error(
+                error
+            );
+
+
+            paymentMessage.className =
+                "payment-message error";
+
+
+            paymentMessage.textContent =
+                error.message ||
+                "Pembayaran gagal dikirim.";
+
+
+            submitButton.disabled =
+                false;
+
+
+            submitButton.textContent =
+                "Kirim Pembayaran";
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+ * LOGOUT
+ * ============================================================
+ */
+document
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        async function(event){
+
+            event.preventDefault();
+
+
+            const session =
+                getSession();
+
+
+            if(session){
+
+                try{
+
+                    await fetch(
+                        TENANT_API_URL,
+                        {
+
+                            method:"POST",
+
+                            headers:{
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    action:
+                                        "logout",
+
+                                    tenantId:
+                                        session.tenantId,
+
+                                    sessionToken:
+                                        session.sessionToken
+
+                                })
+
+                        }
+                    );
+
+                }catch(error){}
+
+            }
+
+
+            sessionStorage.removeItem(
+                "djTenantSession"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+    );
+
+
+loadPaymentPage();
+
+</script>
 
 </body>
 </html>
