@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8">
+
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
@@ -12,7 +14,7 @@
 
 <link
     rel="stylesheet"
-    href="app.css?v=20260925-tenant-login-01"
+    href="app.css?v=20260925-master-entry-01"
 >
 
 <style>
@@ -54,25 +56,18 @@
 
 .field input{
     width:100%;
+    box-sizing:border-box;
     padding:14px 15px;
     border:1px solid #dfe3eb;
     border-radius:12px;
     background:#fff;
     font:inherit;
     outline:none;
-    box-sizing:border-box;
-}
-
-.field input:focus{
-    border-color:#7c8ba1;
-    box-shadow:0 0 0 3px rgba(23,33,59,.06);
 }
 
 .login-button{
     width:100%;
     margin-top:22px;
-    border:0;
-    cursor:pointer;
 }
 
 .login-button:disabled{
@@ -81,10 +76,10 @@
 }
 
 .login-message{
+    display:none;
     margin-top:16px;
     padding:13px 14px;
     border-radius:12px;
-    display:none;
     font-size:14px;
 }
 
@@ -103,7 +98,6 @@
 .login-footer{
     margin-top:22px;
     text-align:center;
-    color:#667085;
     font-size:13px;
 }
 
@@ -111,113 +105,126 @@
 
 </head>
 
+
 <body>
+
 
 <div class="login-page">
 
-    <div class="login-card">
+<div class="login-card">
 
-        <div class="eyebrow">
-            TENANT PORTAL
-        </div>
-
-        <h1>
-            Login Tenant
-        </h1>
-
-        <p>
-            Masukkan Tenant ID dan password yang telah
-            diberikan oleh pengelola DJ Family Kost.
-        </p>
+<div class="eyebrow">
+    TENANT PORTAL
+</div>
 
 
-        <form id="tenantLoginForm">
-
-            <div class="field">
-
-                <label for="tenantId">
-                    Tenant ID
-                </label>
-
-                <input
-                    id="tenantId"
-                    name="tenantId"
-                    type="text"
-                    autocomplete="username"
-                    placeholder="Contoh: TEN-001"
-                    required
-                >
-
-            </div>
+<h1>
+    Login Tenant
+</h1>
 
 
-            <div class="field">
-
-                <label for="password">
-                    Password
-                </label>
-
-                <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autocomplete="current-password"
-                    placeholder="Masukkan password"
-                    required
-                >
-
-            </div>
+<p>
+    Masukkan Tenant ID dan password yang telah
+    diberikan oleh pengelola DJ Family Kost.
+</p>
 
 
-            <button
-                class="btn btn-primary login-button"
-                id="loginButton"
-                type="submit"
-            >
-                Masuk
-            </button>
+<form id="loginForm">
 
 
-            <div
-                class="login-message"
-                id="loginMessage"
-            ></div>
+<div class="field">
 
-        </form>
+<label for="tenantId">
+    Tenant ID
+</label>
+
+<input
+    id="tenantId"
+    type="text"
+    autocomplete="username"
+    placeholder="Contoh: TEN-001"
+    required
+>
+
+</div>
 
 
-        <div class="login-footer">
+<div class="field">
 
-            <a href="index.html">
-                ← Kembali ke beranda
-            </a>
+<label for="password">
+    Password
+</label>
 
-        </div>
+<input
+    id="password"
+    type="password"
+    autocomplete="current-password"
+    required
+>
 
-    </div>
+</div>
+
+
+<button
+    id="loginButton"
+    type="submit"
+    class="btn btn-primary login-button"
+>
+    Masuk
+</button>
+
+
+<div
+    id="message"
+    class="login-message"
+></div>
+
+
+</form>
+
+
+<div class="login-footer">
+
+<a href="index.html">
+    ← Kembali ke beranda
+</a>
+
+</div>
+
+</div>
 
 </div>
 
 
 <script>
 
-const TENANT_API_URL =
+
+const API_URL =
     "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
+
+/*
+ * Kode pintu masuk Master.
+ *
+ * Kode ini TIDAK merupakan password Master.
+ */
+const MASTER_ENTRY_CODE =
+    "999999";
 
 
 const form =
     document.getElementById(
-        "tenantLoginForm"
+        "loginForm"
     );
 
 
-const tenantIdInput =
+const tenantId =
     document.getElementById(
         "tenantId"
     );
 
 
-const passwordInput =
+const password =
     document.getElementById(
         "password"
     );
@@ -229,21 +236,21 @@ const loginButton =
     );
 
 
-const messageBox =
+const message =
     document.getElementById(
-        "loginMessage"
+        "message"
     );
 
 
 function showMessage(
-    message,
+    text,
     type
 ){
 
-    messageBox.textContent =
-        message;
+    message.textContent =
+        text;
 
-    messageBox.className =
+    message.className =
         "login-message " +
         type;
 
@@ -257,25 +264,30 @@ form.addEventListener(
         event.preventDefault();
 
 
-        const tenantId =
-            tenantIdInput.value
+        const id =
+            tenantId.value
                 .trim()
                 .toUpperCase();
 
 
-        const password =
-            passwordInput.value;
+        const pass =
+            password.value;
 
 
-        if(
-            !tenantId ||
-            !password
-        ){
+        /*
+         * ----------------------------------------------------
+         * MASTER ENTRY
+         * ----------------------------------------------------
+         *
+         * Tidak memanggil API tenant.
+         */
+        if (
+            id ===
+            MASTER_ENTRY_CODE
+        ) {
 
-            showMessage(
-                "Tenant ID dan password wajib diisi.",
-                "error"
-            );
+            window.location.href =
+                "master.html";
 
             return;
 
@@ -284,6 +296,7 @@ form.addEventListener(
 
         loginButton.disabled =
             true;
+
 
         loginButton.textContent =
             "Memeriksa...";
@@ -299,9 +312,11 @@ form.addEventListener(
 
             const response =
                 await fetch(
-                    TENANT_API_URL,
+                    API_URL,
                     {
-                        method:"POST",
+
+                        method:
+                            "POST",
 
                         headers:{
                             "Content-Type":
@@ -315,12 +330,13 @@ form.addEventListener(
                                     "login",
 
                                 tenantId:
-                                    tenantId,
+                                    id,
 
                                 password:
-                                    password
+                                    pass
 
                             })
+
                     }
                 );
 
@@ -345,58 +361,16 @@ form.addEventListener(
             }
 
 
-            const session = {
-
-                tenantId:
-                    result.data.tenantId,
-
-                nama:
-                    result.data.nama,
-
-                kamar:
-                    result.data.kamar,
-
-                email:
-                    result.data.email,
-
-                status:
-                    result.data.status,
-
-                sessionToken:
-                    result.data.sessionToken,
-
-                sessionExpires:
-                    result.data.sessionExpires
-
-            };
-
-
             sessionStorage.setItem(
                 "djTenantSession",
                 JSON.stringify(
-                    session
+                    result.data
                 )
             );
 
 
-            /*
-             * Hapus session demo lama.
-             */
-
             sessionStorage.removeItem(
                 "djTenantDemo"
-            );
-
-            sessionStorage.removeItem(
-                "djTenantName"
-            );
-
-            sessionStorage.removeItem(
-                "djTenantId"
-            );
-
-            sessionStorage.removeItem(
-                "djTenantRoom"
             );
 
 
@@ -413,26 +387,20 @@ form.addEventListener(
                         "portal.html";
 
                 },
-                350
+                300
             );
 
 
         }catch(error){
 
-            console.error(
-                "Tenant login error:",
-                error
-            );
-
-
             showMessage(
                 error.message ||
-                "Tidak dapat terhubung ke server.",
+                "Login gagal.",
                 "error"
             );
 
 
-            passwordInput.value =
+            password.value =
                 "";
 
 
@@ -452,4 +420,5 @@ form.addEventListener(
 </script>
 
 </body>
+
 </html>
