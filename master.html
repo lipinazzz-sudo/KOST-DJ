@@ -1484,8 +1484,9 @@ let dashboardData =
     null;
 
 
-let allPayments =
-    [];
+let allPayments = [];
+
+let maintenanceItems = [];
 
 
 let mediaData =
@@ -3626,41 +3627,133 @@ async function verifyPayment(
 
 async function loadMaintenance(){
 
-    const data =
-        await api(
-            "masterMaintenance"
+    const box =
+        document.getElementById(
+            "maintenanceTable"
         );
 
 
-    const items =
-        (
-            data.items ||
-            []
-        )
-        .filter(
-            function(item){
+    box.innerHTML =
+        '<div class="loading">Memuat maintenance...</div>';
+
+
+    try{
+
+        const data =
+            await api(
+                "masterMaintenance"
+            );
+
+
+        /*
+         * Simpan ke variabel global.
+         * Ini yang sebelumnya menyebabkan:
+         *
+         * maintenanceItems is not defined
+         */
+
+        maintenanceItems =
+            (
+                data &&
+                Array.isArray(
+                    data.items
+                )
+                    ? data.items
+                    : []
+            )
+            .filter(
+                function(item){
+
+                    /*
+                     * Hanya ID maintenance resmi.
+                     *
+                     * Contoh:
+                     * MNT-WEB-0001
+                     *
+                     * Data lama seperti:
+                     * Column 15
+                     * Column 19
+                     *
+                     * otomatis dibuang dari website.
+                     */
+
+                    return /^MNT-/i.test(
+                        String(
+                            item.id || ""
+                        ).trim()
+                    );
+
+                }
+            );
+
+
+        /*
+         * Urutkan:
+         * OPEN → PROSES → SELESAI/BATAL
+         * yang masih aktif berada di atas.
+         */
+
+        maintenanceItems.sort(
+            function(a,b){
+
+                const order = {
+
+                    OPEN: 1,
+
+                    PROSES: 2,
+
+                    SELESAI: 3,
+
+                    BATAL: 4
+
+                };
+
+
+                const aOrder =
+                    order[
+                        String(
+                            a.status || ""
+                        )
+                        .toUpperCase()
+                    ] ||
+                    99;
+
+
+                const bOrder =
+                    order[
+                        String(
+                            b.status || ""
+                        )
+                        .toUpperCase()
+                    ] ||
+                    99;
+
 
                 return (
-                    item.status ===
-                    "OPEN" ||
-
-                    item.status ===
-                    "PROSES"
+                    aOrder -
+                    bOrder
                 );
 
             }
         );
 
 
-    document
-        .getElementById(
-            "maintenanceTable"
-        )
-        .innerHTML =
+        if(
+            !maintenanceItems.length
+        ){
 
-        items.length
+            box.innerHTML =
+                '<div class="empty">' +
+                'Belum ada laporan maintenance.' +
+                '</div>';
 
-        ? (
+
+            return;
+
+        }
+
+
+        box.innerHTML =
 
             '<table class="data-table">' +
 
@@ -3669,10 +3762,15 @@ async function loadMaintenance(){
             '<tr>' +
 
             '<th>ID</th>' +
+
             '<th>Tenant</th>' +
+
             '<th>Kamar</th>' +
+
             '<th>Masalah</th>' +
+
             '<th>Status</th>' +
+
             '<th>Aksi</th>' +
 
             '</tr>' +
@@ -3681,55 +3779,139 @@ async function loadMaintenance(){
 
             '<tbody>' +
 
-            items
+            maintenanceItems
                 .map(
                     function(item){
+
+                        const status =
+                            String(
+                                item.status ||
+                                "OPEN"
+                            )
+                            .toUpperCase();
+
+
+                        let badgeClass =
+                            "warn";
+
+
+                        if(
+                            status ===
+                            "SELESAI"
+                        ){
+
+                            badgeClass =
+                                "ok";
+
+                        }else if(
+                            status ===
+                            "BATAL"
+                        ){
+
+                            badgeClass =
+                                "danger";
+
+                        }
+
 
                         return (
 
                             '<tr>' +
 
                             '<td>' +
+
+                            '<strong>' +
+
                             escapeHtml(
                                 item.id
                             ) +
+
+                            '</strong>' +
+
                             '</td>' +
 
                             '<td>' +
+
                             escapeHtml(
                                 item.name ||
+                                item.tenantId ||
+                                "—"
+                            ) +
+
+                            (
                                 item.tenantId
+
+                                    ? (
+                                        '<br><small>' +
+                                        escapeHtml(
+                                            item.tenantId
+                                        ) +
+                                        '</small>'
+                                      )
+
+                                    : ''
                             ) +
+
                             '</td>' +
 
                             '<td>' +
+
                             escapeHtml(
-                                item.room
+                                item.room ||
+                                "—"
                             ) +
+
                             '</td>' +
 
                             '<td>' +
+
                             escapeHtml(
-                                item.problem
+                                item.problem ||
+                                "—"
                             ) +
+
+                            (
+                                item.description
+
+                                    ? (
+                                        '<br><small>' +
+                                        escapeHtml(
+                                            item.description
+                                        ) +
+                                        '</small>'
+                                      )
+
+                                    : ''
+                            ) +
+
                             '</td>' +
 
                             '<td>' +
 
-                            '<span class="badge warn">' +
+                            '<span class="badge ' +
+                            badgeClass +
+                            '">' +
+
                             escapeHtml(
-                                item.status
+                                status
                             ) +
+
                             '</span>' +
 
                             '</td>' +
 
                             '<td>' +
 
-                            '<button class="btn-small primary" onclick="editMaintenance(\'' +
+                            '<button ' +
+
+                            'class="btn-small primary" ' +
+
+                            'onclick="editMaintenance(\'' +
+
                             encodeURIComponent(
                                 item.id
                             ) +
+
                             '\')">' +
 
                             'Kelola' +
@@ -3748,11 +3930,836 @@ async function loadMaintenance(){
 
             '</tbody>' +
 
-            '</table>'
+            '</table>';
 
+
+    }catch(error){
+
+        box.innerHTML =
+
+            '<div class="empty" style="color:#b42318;">' +
+
+            escapeHtml(
+                error.message
+            ) +
+
+            '</div>';
+
+    }
+
+}
+
+
+/* ==========================================================
+   EDIT MAINTENANCE
+   ========================================================== */
+
+async function editMaintenance(
+    encoded
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+
+    /*
+     * Ambil dari maintenanceItems global.
+     * Tidak melakukan request ulang.
+     */
+
+    const item =
+        maintenanceItems.find(
+            function(row){
+
+                return (
+                    String(
+                        row.id
+                    ) ===
+                    String(
+                        id
+                    )
+                );
+
+            }
+        );
+
+
+    if(!item){
+
+        alert(
+            "Maintenance tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+
+    const status =
+        String(
+            item.status ||
+            "OPEN"
         )
+        .toUpperCase();
 
-        : '<div class="empty">Tidak ada maintenance aktif.</div>';
+
+    const damagePhoto =
+        item.damagePhotoUrl ||
+        "";
+
+
+    const afterPhoto =
+        item.afterPhotoUrl ||
+        "";
+
+
+    showModal(
+
+        "Kelola Maintenance — " +
+        id,
+
+        '<div>' +
+
+        '<div class="summary-card" style="margin-bottom:18px;">' +
+
+        '<span>Tenant</span>' +
+
+        '<strong>' +
+
+        escapeHtml(
+            item.name ||
+            item.tenantId ||
+            "—"
+        ) +
+
+        '</strong>' +
+
+        '<small>' +
+
+        escapeHtml(
+            item.tenantId ||
+            ""
+        ) +
+
+        ' · Kamar ' +
+
+        escapeHtml(
+            item.room ||
+            "—"
+        ) +
+
+        '</small>' +
+
+        '</div>' +
+
+
+        '<div class="card" style="padding:16px;margin-bottom:18px;">' +
+
+        '<h4 style="margin-top:0;">Detail Laporan</h4>' +
+
+        '<p><strong>Lokasi:</strong> ' +
+
+        escapeHtml(
+            item.problem ||
+            "—"
+        ) +
+
+        '</p>' +
+
+        '<p><strong>Deskripsi:</strong> ' +
+
+        escapeHtml(
+            item.description ||
+            "—"
+        ) +
+
+        '</p>' +
+
+        '<p><strong>Urgensi:</strong> ' +
+
+        escapeHtml(
+            item.urgency ||
+            "—"
+        ) +
+
+        '</p>' +
+
+        (
+            damagePhoto
+
+                ? (
+
+                    '<button class="btn-small light" ' +
+
+                    'onclick="openMaintenanceMedia(\'' +
+
+                    encodeURIComponent(
+                        damagePhoto
+                    ) +
+
+                    '\')">' +
+
+                    'Lihat Foto Kerusakan' +
+
+                    '</button>'
+
+                )
+
+                : ''
+
+        ) +
+
+        '</div>' +
+
+
+        '<div class="form-grid">' +
+
+
+        '<div class="field">' +
+
+        '<label>Status</label>' +
+
+        '<select id="maintStatus">' +
+
+        '<option value="OPEN">OPEN</option>' +
+
+        '<option value="PROSES">PROSES</option>' +
+
+        '<option value="SELESAI">SELESAI</option>' +
+
+        '<option value="BATAL">BATAL</option>' +
+
+        '</select>' +
+
+        '</div>' +
+
+
+        '<div class="field">' +
+
+        '<label>PIC</label>' +
+
+        '<input id="maintPIC" value="' +
+
+        escapeHtml(
+            item.pic ||
+            ""
+        ) +
+
+        '">' +
+
+        '</div>' +
+
+
+        '<div class="field">' +
+
+        '<label>Biaya</label>' +
+
+        '<input ' +
+
+        'id="maintCost" ' +
+
+        'type="number" ' +
+
+        'min="0" ' +
+
+        'value="' +
+
+        Number(
+            item.cost ||
+            0
+        ) +
+
+        '">' +
+
+        '</div>' +
+
+
+        '<div class="field full">' +
+
+        '<label>Catatan Penyelesaian</label>' +
+
+        '<textarea id="maintNote">' +
+
+        escapeHtml(
+            item.note ||
+            ""
+        ) +
+
+        '</textarea>' +
+
+        '</div>' +
+
+
+        '<div class="field full">' +
+
+        '<label>Foto Setelah Perbaikan</label>' +
+
+        '<input ' +
+
+        'id="maintAfterPhoto" ' +
+
+        'type="file" ' +
+
+        'accept="image/*"' +
+
+        '>' +
+
+        '<p class="help">' +
+
+        'Upload foto setelah perbaikan selesai.' +
+
+        '</p>' +
+
+        (
+            afterPhoto
+
+                ? (
+
+                    '<button ' +
+
+                    'class="btn-small light" ' +
+
+                    'type="button" ' +
+
+                    'onclick="openMaintenanceMedia(\'' +
+
+                    encodeURIComponent(
+                        afterPhoto
+                    ) +
+
+                    '\')">' +
+
+                    'Lihat Foto Sesudah' +
+
+                    '</button>'
+
+                )
+
+                : ''
+
+        ) +
+
+        '</div>' +
+
+
+        '</div>' +
+
+
+        '<button ' +
+
+        'class="btn btn-primary" ' +
+
+        'style="margin-top:18px;width:100%;" ' +
+
+        'onclick="saveMaintenance(\'' +
+
+        encodeURIComponent(
+            id
+        ) +
+
+        '\')">' +
+
+        'Simpan Perubahan' +
+
+        '</button>' +
+
+        '</div>'
+
+    );
+
+
+    const statusSelect =
+        document.getElementById(
+            "maintStatus"
+        );
+
+
+    if(statusSelect){
+
+        statusSelect.value =
+            status;
+
+    }
+
+}
+
+
+/* ==========================================================
+   SAVE MAINTENANCE
+   ========================================================== */
+
+async function saveMaintenance(
+    encoded
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+
+    const status =
+        document
+            .getElementById(
+                "maintStatus"
+            )
+            .value;
+
+
+    const pic =
+        document
+            .getElementById(
+                "maintPIC"
+            )
+            .value
+            .trim();
+
+
+    const cost =
+        Number(
+            document
+                .getElementById(
+                    "maintCost"
+                )
+                .value ||
+            0
+        );
+
+
+    const note =
+        document
+            .getElementById(
+                "maintNote"
+            )
+            .value
+            .trim();
+
+
+    const photoInput =
+        document
+            .getElementById(
+                "maintAfterPhoto"
+            );
+
+
+    const photo =
+        photoInput &&
+        photoInput.files &&
+        photoInput.files[0]
+            ? photoInput.files[0]
+            : null;
+
+
+    try{
+
+        let afterPhotoData =
+            {};
+
+
+        if(photo){
+
+            let processed =
+                photo;
+
+
+            try{
+
+                processed =
+                    await compressMasterImage(
+                        photo
+                    );
+
+            }catch(error){}
+
+
+            const base64 =
+                await masterFileToBase64(
+                    processed
+                );
+
+
+            afterPhotoData = {
+
+                afterPhotoBase64:
+                    base64,
+
+                afterPhotoMimeType:
+                    "image/jpeg",
+
+                afterPhotoOriginalName:
+                    processed.name
+
+            };
+
+        }
+
+
+        const result =
+            await api(
+                "masterUpdateMaintenance",
+                {
+
+                    maintenanceId:
+                        id,
+
+                    status:
+                        status,
+
+                    pic:
+                        pic,
+
+                    cost:
+                        cost,
+
+                    note:
+                        note,
+
+                    ...afterPhotoData
+
+                }
+            );
+
+
+        alert(
+            result.message ||
+            "Maintenance berhasil diperbarui."
+        );
+
+
+        closeModal();
+
+
+        await loadMaintenance();
+
+
+        await loadDashboard();
+
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================================
+   FILE HELPERS
+   ========================================================== */
+
+function masterFileToBase64(
+    file
+){
+
+    return new Promise(
+        function(resolve,reject){
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(){
+
+                    const result =
+                        String(
+                            reader.result ||
+                            ""
+                        );
+
+
+                    const comma =
+                        result.indexOf(
+                            ","
+                        );
+
+
+                    resolve(
+
+                        comma >= 0
+
+                            ? result.substring(
+                                comma + 1
+                              )
+
+                            : result
+
+                    );
+
+                };
+
+
+            reader.onerror =
+                reject;
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+function compressMasterImage(
+    file,
+    maxWidth=1600,
+    quality=.82
+){
+
+    return new Promise(
+        function(resolve,reject){
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(){
+
+                    const image =
+                        new Image();
+
+
+                    image.onload =
+                        function(){
+
+                            let width =
+                                image.width;
+
+
+                            let height =
+                                image.height;
+
+
+                            if(
+                                width >
+                                maxWidth
+                            ){
+
+                                const ratio =
+                                    maxWidth /
+                                    width;
+
+
+                                width =
+                                    maxWidth;
+
+
+                                height =
+                                    Math.round(
+                                        height *
+                                        ratio
+                                    );
+
+                            }
+
+
+                            const canvas =
+                                document
+                                    .createElement(
+                                        "canvas"
+                                    );
+
+
+                            canvas.width =
+                                width;
+
+
+                            canvas.height =
+                                height;
+
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+
+                            ctx.drawImage(
+                                image,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            canvas.toBlob(
+                                function(blob){
+
+                                    if(!blob){
+
+                                        reject(
+                                            new Error(
+                                                "Foto gagal diproses."
+                                            )
+                                        );
+
+                                        return;
+
+                                    }
+
+
+                                    resolve(
+                                        new File(
+                                            [
+                                                blob
+                                            ],
+                                            "maintenance-after-" +
+                                            Date.now() +
+                                            ".jpg",
+                                            {
+                                                type:
+                                                    "image/jpeg"
+                                            }
+                                        )
+                                    );
+
+                                },
+                                "image/jpeg",
+                                quality
+                            );
+
+                        };
+
+
+                    image.onerror =
+                        reject;
+
+
+                    image.src =
+                        reader.result;
+
+                };
+
+
+            reader.onerror =
+                reject;
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+/* ==========================================================
+   OPEN MAINTENANCE MEDIA
+   ========================================================== */
+
+async function openMaintenanceMedia(
+    encodedUrl
+){
+
+    const url =
+        decodeURIComponent(
+            encodedUrl
+        );
+
+
+    showModal(
+        "Foto Maintenance",
+        '<div class="loading">Memuat foto...</div>'
+    );
+
+
+    try{
+
+        const result =
+            await api(
+                "masterMediaOpen",
+                {
+
+                    fileId:
+                        "",
+
+                    url:
+                        url
+
+                }
+            );
+
+
+        if(
+            result.dataUrl
+        ){
+
+            modalBody.innerHTML =
+
+                '<p>' +
+
+                '<strong>' +
+
+                escapeHtml(
+                    result.fileName ||
+                    "Foto Maintenance"
+                ) +
+
+                '</strong>' +
+
+                '</p>' +
+
+                '<img ' +
+
+                'class="modal-image" ' +
+
+                'src="' +
+
+                result.dataUrl +
+
+                '" ' +
+
+                'alt="Foto Maintenance">';
+
+        }else{
+
+            modalBody.innerHTML =
+
+                '<p>' +
+
+                'Foto dibuka melalui penyimpanan.' +
+
+                '</p>' +
+
+                '<a href="' +
+
+                escapeHtml(
+                    result.url
+                ) +
+
+                '" target="_blank">' +
+
+                'Buka Foto' +
+
+                '</a>';
+
+        }
+
+    }catch(error){
+
+        modalBody.innerHTML =
+
+            '<p style="color:#b42318;">' +
+
+            escapeHtml(
+                error.message
+            ) +
+
+            '</p>';
+
+    }
 
 }
 
