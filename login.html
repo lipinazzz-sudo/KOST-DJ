@@ -721,6 +721,33 @@ async function doLogin(){
 
     saveTenantSession(data);
 
+    const savedSession =
+      JSON.parse(
+        sessionStorage.getItem(
+          "djTenantSession"
+        ) || "{}"
+      );
+
+    if (
+      savedSession.mustChangePassword === true
+    ) {
+
+      showResult(
+        "success",
+        "Login berhasil. Password sementara wajib diganti sebelum masuk ke portal."
+      );
+
+      setTimeout(
+        function(){
+          window.location.href =
+            "ganti-password.html?first=1";
+        },
+        500
+      );
+
+      return;
+    }
+
     showResult(
       "success",
       "Login berhasil. Membuka portal tenant..."
