@@ -1821,3 +1821,1131 @@ textarea:focus{
   }
 
 }
+
+
+/* ============================================================
+   DJ FAMILY KOST — V2 DISTINCTIVE VISUAL DESIGN
+   ============================================================
+   IMPORTANT:
+   - SEMUA CSS sebelumnya dipertahankan.
+   - BLOK INI HANYA MENAMBAHKAN / OVERRIDE TAMPILAN.
+   - TIDAK ADA perubahan HTML.
+   - TIDAK ADA perubahan JavaScript.
+   - TIDAK ADA perubahan class/id existing.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   01. GLOBAL — PREMIUM BOUTIQUE LOOK
+   ------------------------------------------------------------ */
+
+body{
+  background:
+    linear-gradient(
+      180deg,
+      #f8f9fc 0%,
+      #f2f4f8 52%,
+      #f7f8fb 100%
+    );
+  color:var(--text);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  z-index:-10;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(
+      circle at 0% 12%,
+      rgba(201,151,74,.08),
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 100% 38%,
+      rgba(25,168,90,.045),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(60,120,216,.04),
+      transparent 28%
+    );
+}
+
+.container{
+  width:min(1240px,calc(100% - 56px));
+}
+
+@media(max-width:850px){
+  .container{
+    width:calc(100% - 30px);
+  }
+}
+
+@media(max-width:520px){
+  .container{
+    width:calc(100% - 22px);
+  }
+}
+
+
+/* ------------------------------------------------------------
+   02. NAV — MORE DISTINCTIVE
+   ------------------------------------------------------------ */
+
+.nav{
+  background:
+    rgba(255,255,255,.94);
+  border-bottom:
+    1px solid rgba(16,24,45,.075);
+  box-shadow:
+    0 10px 34px rgba(16,24,45,.08);
+}
+
+.nav-inner{
+  min-height:78px;
+}
+
+.brand{
+  font-size:15px;
+  letter-spacing:.055em;
+}
+
+.brand-mark{
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 25%,
+      #e8f7ed 25% 58%,
+      #d7eadf 58%
+    );
+  border:1px solid rgba(16,24,45,.08);
+  box-shadow:
+    inset 0 0 0 4px #fff,
+    0 7px 22px rgba(16,24,45,.10);
+}
+
+.nav-links{
+  gap:12px;
+}
+
+.nav-links a{
+  padding:9px 11px;
+  border-radius:10px;
+}
+
+.nav-links a:not(.login-top):hover{
+  background:#f5f7fa;
+}
+
+.login-top{
+  padding:11px 16px !important;
+  border-radius:12px !important;
+  background:
+    linear-gradient(
+      135deg,
+      #10182d,
+      #253454
+    );
+}
+
+
+/* ------------------------------------------------------------
+   03. HERO — STRONG VISUAL IDENTITY
+   ------------------------------------------------------------ */
+
+.hero{
+  padding:
+    104px 0
+    86px;
+  text-align:left;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0c1428 0%,
+      #111b35 46%,
+      #1b2948 100%
+    );
+  color:#fff;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:620px;
+  height:620px;
+  left:-260px;
+  top:-300px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.22) 0,
+      rgba(201,151,74,.06) 36%,
+      transparent 68%
+    );
+  pointer-events:none;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  right:-280px;
+  bottom:-390px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(25,168,90,.11) 0,
+      rgba(25,168,90,.025) 42%,
+      transparent 70%
+    );
+  pointer-events:none;
+}
+
+.hero .container{
+  position:relative;
+  z-index:2;
+  max-width:1240px;
+}
+
+.hero .eyebrow{
+  padding:9px 14px;
+  color:#f2ce8b;
+  background:
+    rgba(201,151,74,.11);
+  border:
+    1px solid rgba(215,173,97,.35);
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.16);
+}
+
+.hero h1{
+  max-width:860px;
+  margin:
+    20px 0
+    22px;
+  font-size:
+    clamp(44px,6vw,82px);
+  line-height:
+    .98;
+  letter-spacing:
+    -.055em;
+  color:#fff;
+  text-shadow:
+    0 18px 44px rgba(0,0,0,.25);
+}
+
+.hero h1::after{
+  width:100px;
+  height:4px;
+  margin:
+    26px 0
+    0;
+  background:
+    linear-gradient(
+      90deg,
+      #c9974a,
+      #f0cf90,
+      transparent
+    );
+}
+
+.hero .lead{
+  max-width:700px;
+  margin:0;
+  color:
+    rgba(238,242,248,.78);
+  font-size:18px;
+}
+
+.hero-actions{
+  justify-content:flex-start;
+  margin-top:31px;
+  gap:12px;
+}
+
+.hero-actions .btn-primary{
+  background:
+    linear-gradient(
+      135deg,
+      #d6a857,
+      #b97f2e
+    );
+  color:#fff;
+  border:
+    1px solid rgba(255,255,255,.12);
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.23),
+    0 5px 0 rgba(104,68,15,.25);
+}
+
+.hero-actions .btn-primary:hover{
+  background:
+    linear-gradient(
+      135deg,
+      #e0b66b,
+      #c38735
+    );
+}
+
+.hero-actions .btn-light{
+  background:
+    rgba(255,255,255,.07);
+  color:#fff;
+  border:
+    1px solid rgba(255,255,255,.20);
+  box-shadow:none;
+}
+
+.hero-actions .btn-light:hover{
+  background:
+    rgba(255,255,255,.13);
+  border-color:
+    rgba(255,255,255,.32);
+}
+
+
+/* ------------------------------------------------------------
+   04. SECTION SPACING
+   ------------------------------------------------------------ */
+
+.section{
+  padding:
+    78px 0;
+}
+
+#kamar.section{
+  position:relative;
+  background:
+    linear-gradient(
+      180deg,
+      #f4f6fa 0%,
+      #f8f9fc 100%
+    );
+}
+
+.quick-section{
+  position:relative;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f4f6fa 100%
+    );
+  border-top:
+    1px solid rgba(16,24,45,.055);
+}
+
+.section-head,
+.menu-title{
+  margin-bottom:32px;
+}
+
+
+/* ------------------------------------------------------------
+   05. SECTION TITLES — EDITORIAL
+   ------------------------------------------------------------ */
+
+.section-head .eyebrow,
+.menu-title .eyebrow,
+.tenant-menu .eyebrow{
+  font-size:11px;
+  letter-spacing:.18em;
+}
+
+.section-head h2,
+.menu-title h2{
+  font-size:
+    clamp(28px,3vw,40px);
+  letter-spacing:
+    -.035em;
+  margin-top:8px;
+}
+
+.section-head p,
+.menu-title .lead{
+  color:#657089;
+}
+
+
+/* ------------------------------------------------------------
+   06. ROOM SUMMARY — BIGGER AND MORE VISUAL
+   ------------------------------------------------------------ */
+
+.room-summary{
+  gap:16px;
+  margin-bottom:30px;
+}
+
+.stat-card{
+  min-height:132px;
+  padding:24px;
+  border-radius:20px;
+  border:
+    1px solid rgba(16,24,45,.08);
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f6f8fb
+    );
+}
+
+.stat-card:nth-child(1){
+  border-top:
+    4px solid #17213b;
+}
+
+.stat-card:nth-child(2){
+  border-top:
+    4px solid #19a85a;
+}
+
+.stat-card:nth-child(3){
+  border-top:
+    4px solid #c9974a;
+}
+
+.stat-card:hover{
+  transform:
+    translateY(-5px);
+  box-shadow:
+    0 24px 52px rgba(16,24,45,.13);
+}
+
+.stat-number{
+  font-size:38px;
+  letter-spacing:-.05em;
+}
+
+.stat-card .eyebrow{
+  font-size:10px;
+}
+
+
+/* ------------------------------------------------------------
+   07. FLOOR CARDS — LUXURY LISTING FEEL
+   ------------------------------------------------------------ */
+
+.floor-list{
+  gap:20px;
+}
+
+.floor-card{
+  border-radius:22px;
+  border:
+    1px solid rgba(16,24,45,.08);
+  box-shadow:
+    0 14px 35px rgba(16,24,45,.075);
+  background:#fff;
+}
+
+.floor-card:hover{
+  box-shadow:
+    0 24px 56px rgba(16,24,45,.12);
+}
+
+.floor-head{
+  position:relative;
+  padding:
+    23px
+    25px;
+  min-height:86px;
+  background:
+    linear-gradient(
+      110deg,
+      #10182d 0%,
+      #182543 60%,
+      #253555 100%
+    );
+  color:#fff;
+  border-bottom:0;
+}
+
+.floor-head::before{
+  width:5px;
+  height:auto;
+  min-height:40px;
+  margin-right:3px;
+  background:
+    linear-gradient(
+      180deg,
+      #d9b267,
+      #a77529
+    );
+  opacity:1;
+}
+
+.floor-head::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 48%,
+      rgba(255,255,255,.035) 48% 50%,
+      transparent 50%
+    );
+  background-size:20px 20px;
+}
+
+.floor-meta{
+  color:
+    rgba(255,255,255,.67);
+}
+
+.floor-card:nth-child(4) .floor-head{
+  background:
+    linear-gradient(
+      110deg,
+      #8d651f,
+      #bc8d3d
+    );
+}
+
+.floor-rooms{
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+  gap:12px;
+  padding:20px;
+  background:
+    #f8fafc;
+}
+
+.room-card{
+  min-height:106px;
+  border-radius:17px;
+  border:
+    1px solid #e0e5ec;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f6f8fb
+    );
+  box-shadow:
+    0 7px 18px rgba(16,24,45,.045);
+}
+
+.room-card:hover{
+  transform:
+    translateY(-4px);
+  border-color:
+    #cbd3de;
+  box-shadow:
+    0 16px 34px rgba(16,24,45,.11);
+}
+
+.room-card.is-kosong{
+  border-color:
+    rgba(25,168,90,.26);
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f4fbf7
+    );
+}
+
+.room-card.is-kosong::after{
+  content:"TERSEDIA";
+  position:absolute;
+  left:10px;
+  top:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#e7f7ed;
+  color:#147541;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.room-card.is-terisi{
+  border-color:
+    rgba(201,74,74,.18);
+}
+
+.room-card.is-terisi::after{
+  content:"TERISI";
+  position:absolute;
+  left:10px;
+  top:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#faecec;
+  color:#a52929;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.room-card.is-segera{
+  border-color:
+    rgba(201,151,74,.30);
+}
+
+.room-card.is-segera::after{
+  content:"SEGERA";
+  position:absolute;
+  left:10px;
+  top:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#fff4d9;
+  color:#986a00;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.room-number{
+  margin-top:10px;
+  font-size:22px;
+}
+
+.room-price{
+  font-size:12px;
+  font-weight:700;
+}
+
+
+/* ------------------------------------------------------------
+   08. PUBLIC MENU — MORE CHARACTER
+   ------------------------------------------------------------ */
+
+.menu-grid{
+  gap:18px;
+}
+
+.menu-card{
+  min-height:226px;
+  padding:24px;
+  border-radius:20px;
+  border:
+    1px solid rgba(16,24,45,.08);
+  background:
+    linear-gradient(
+      180deg,
+      #fff 0%,
+      #f9fafc 100%
+    );
+}
+
+.public-menu .menu-card{
+  box-shadow:
+    0 12px 28px rgba(16,24,45,.06);
+}
+
+.menu-card::before{
+  height:4px;
+  transform:scaleX(1);
+  opacity:.75;
+}
+
+.public-menu .menu-card:nth-child(1)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #17213b,
+      #17213b,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(2)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #3c78d8,
+      #3c78d8,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(3)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #c9974a,
+      #c9974a,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(4)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #19a85a,
+      #19a85a,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(5)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #7956b4,
+      #7956b4,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(6)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #10182d,
+      #10182d,
+      transparent
+    );
+}
+
+.menu-icon{
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  margin-bottom:18px;
+  border:
+    1px solid rgba(16,24,45,.06);
+  box-shadow:
+    0 8px 22px rgba(16,24,45,.07);
+  font-size:18px;
+}
+
+.public-menu .menu-card:nth-child(1) .menu-icon{
+  background:#edf1f8;
+  color:#17213b;
+}
+
+.public-menu .menu-card:nth-child(2) .menu-icon{
+  background:#edf4ff;
+  color:#3267ba;
+}
+
+.public-menu .menu-card:nth-child(3) .menu-icon{
+  background:#fcf5e9;
+  color:#986a00;
+}
+
+.public-menu .menu-card:nth-child(4) .menu-icon{
+  background:#eaf8ef;
+  color:#147541;
+}
+
+.public-menu .menu-card:nth-child(5) .menu-icon{
+  background:#f3eefb;
+  color:#6d4ba4;
+}
+
+.public-menu .menu-card:nth-child(6) .menu-icon{
+  background:#eef1f7;
+  color:#17213b;
+}
+
+.menu-card h3{
+  font-size:21px;
+  letter-spacing:-.02em;
+}
+
+.menu-card p{
+  color:#69758b;
+  font-size:14px;
+  max-width:300px;
+}
+
+.menu-card .btn{
+  margin-top:19px;
+}
+
+.menu-card:hover{
+  transform:translateY(-7px);
+}
+
+
+/* ------------------------------------------------------------
+   09. TENANT MENU — DISTINCT "PRIVATE" ZONE
+   ------------------------------------------------------------ */
+
+.tenant-menu{
+  margin-top:60px;
+  padding-top:44px;
+  position:relative;
+}
+
+.tenant-menu::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(201,151,74,.5),
+      transparent
+    );
+}
+
+.tenant-menu .menu-title{
+  display:flex;
+  flex-direction:column;
+}
+
+.tenant-menu .menu-grid{
+  position:relative;
+}
+
+.tenant-menu .menu-card{
+  min-height:220px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f3f6fa
+    );
+}
+
+.tenant-menu .menu-card::after{
+  width:210px;
+  height:210px;
+  right:-120px;
+  bottom:-125px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(16,24,45,.08),
+      transparent 70%
+    );
+}
+
+.tenant-menu .menu-icon{
+  width:56px;
+  height:56px;
+  background:
+    linear-gradient(
+      135deg,
+      #eef1f7,
+      #e4e8f0
+    );
+}
+
+
+/* ------------------------------------------------------------
+   10. CTA / BUTTON LANGUAGE
+   ------------------------------------------------------------ */
+
+.btn{
+  min-height:44px;
+  border-radius:12px;
+  letter-spacing:.005em;
+}
+
+.btn-primary{
+  background:
+    linear-gradient(
+      135deg,
+      #10182d,
+      #263655
+    );
+}
+
+.btn-primary:hover:not(:disabled){
+  background:
+    linear-gradient(
+      135deg,
+      #18233d,
+      #2d4066
+    );
+}
+
+
+/* ------------------------------------------------------------
+   11. LOADING STATE — MORE POLISHED
+   ------------------------------------------------------------ */
+
+.loading{
+  position:relative;
+  min-height:116px;
+  display:grid;
+  place-items:center;
+  border:
+    1px dashed #d5dae3;
+  background:
+    linear-gradient(
+      135deg,
+      #fbfcfe,
+      #f4f6f9
+    );
+}
+
+.loading::before{
+  content:"";
+  position:absolute;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  border:
+    3px solid #dce2ea;
+  border-top-color:
+    var(--gold);
+  animation:
+    djKostSpin .9s linear infinite;
+}
+
+.loading{
+  text-indent:-9999px;
+}
+
+@keyframes djKostSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+
+/* ------------------------------------------------------------
+   12. INFO BANNER — STRONGER
+   ------------------------------------------------------------ */
+
+.info-banner{
+  padding:22px 24px;
+  border:
+    1px solid rgba(255,255,255,.08);
+  box-shadow:
+    0 24px 55px rgba(16,24,45,.17);
+}
+
+.info-banner strong{
+  color:#f3d493;
+}
+
+
+/* ------------------------------------------------------------
+   13. FORM CARD — STRONGER HIERARCHY
+   ------------------------------------------------------------ */
+
+.form-card{
+  border-radius:24px;
+  border:
+    1px solid rgba(16,24,45,.09);
+}
+
+.form-card::before{
+  height:5px;
+  background:
+    linear-gradient(
+      90deg,
+      #10182d 0%,
+      #c9974a 48%,
+      #19a85a 100%
+    );
+}
+
+label{
+  color:#39455c;
+}
+
+input,
+select,
+textarea{
+  border:
+    1px solid #d7dce5;
+  border-radius:13px;
+  background:
+    rgba(255,255,255,.94);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#c9974a;
+  box-shadow:
+    0 0 0 3px rgba(201,151,74,.10),
+    0 12px 26px rgba(16,24,45,.07);
+}
+
+
+/* ------------------------------------------------------------
+   14. FOOTER — MORE PREMIUM
+   ------------------------------------------------------------ */
+
+.footer{
+  padding:44px 0;
+  margin-top:0;
+  border-top:
+    1px solid rgba(255,255,255,.06);
+}
+
+.footer strong{
+  font-size:16px;
+  letter-spacing:.05em;
+}
+
+.footer small{
+  line-height:1.7;
+}
+
+
+/* ------------------------------------------------------------
+   15. TABLE / HISTORY
+   ------------------------------------------------------------ */
+
+.history th{
+  background:#f6f8fb;
+}
+
+.history tbody tr:hover{
+  background:
+    linear-gradient(
+      90deg,
+      #fbfcfe,
+      #ffffff
+    );
+}
+
+
+/* ------------------------------------------------------------
+   16. RESPONSIVE — DISTINCT BUT CONTROLLED
+   ------------------------------------------------------------ */
+
+@media(max-width:850px){
+
+  .hero{
+    text-align:center;
+    padding:
+      72px 0
+      62px;
+  }
+
+  .hero h1{
+    max-width:680px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero h1::after{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero .lead{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero-actions{
+    justify-content:center;
+  }
+
+  .floor-head{
+    min-height:78px;
+  }
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+  .menu-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .menu-card{
+    min-height:210px;
+  }
+
+}
+
+@media(max-width:620px){
+
+  .nav-inner{
+    min-height:62px;
+  }
+
+  .hero{
+    padding:
+      58px 0
+      50px;
+  }
+
+  .hero h1{
+    font-size:
+      clamp(38px,11vw,56px);
+  }
+
+  .hero .lead{
+    font-size:15px;
+  }
+
+  .room-summary{
+    grid-template-columns:1fr;
+  }
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .menu-grid{
+    grid-template-columns:1fr;
+  }
+
+  .menu-card{
+    min-height:200px;
+  }
+
+  .tenant-menu{
+    margin-top:48px;
+    padding-top:36px;
+  }
+
+}
+
+@media(max-width:420px){
+
+  .hero-actions .btn{
+    width:100%;
+  }
+
+  .floor-rooms{
+    gap:8px;
+    padding:12px;
+  }
+
+  .room-card{
+    min-height:82px;
+  }
+
+  .room-number{
+    font-size:20px;
+  }
+
+  .room-card.is-kosong::after,
+  .room-card.is-terisi::after,
+  .room-card.is-segera::after{
+    font-size:7px;
+    left:7px;
+    top:7px;
+    padding:2px 5px;
+  }
+
+}
