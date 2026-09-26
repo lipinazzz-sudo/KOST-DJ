@@ -1,1758 +1,473 @@
 <!DOCTYPE html>
 <html lang="id" class="dj-auth-pending">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Maintenance — DJ Family Kost</title>
-
-<link
-    rel="stylesheet"
-    href="app.css?v=20260925-maintenance-v2"
->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in / Check-out — DJ Family Kost</title>
 <style>
-html.dj-auth-pending body{
-    visibility:hidden;
-}
+html.dj-auth-pending body{visibility:hidden}
+
+:root{--navy:#10182d;--gold:#c9974a;--green:#168548;--red:#b42318;--bg:#f6f7fb;--text:#17213b;--muted:#667085;--line:#e5e8ef;--white:#fff;--shadow:0 18px 50px rgba(16,24,45,.10);--radius:22px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}a{text-decoration:none;color:inherit}.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}.nav-inner{max-width:1180px;margin:auto;padding:16px 22px;display:flex;justify-content:space-between;gap:18px;align-items:center}.brand{font-weight:900;display:flex;align-items:center;gap:10px}.brand-mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#fff 45%,#ccebd7 45%);border:1px solid #dce2ea;box-shadow:inset 0 0 0 4px #fff}.nav-links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.nav-links a{font-size:13px;font-weight:800;color:#59657c}.section{padding:58px 0}.container{max-width:1180px;margin:auto;padding:0 22px}.eyebrow{font-size:12px;letter-spacing:.13em;font-weight:900;color:var(--gold);text-transform:uppercase}.back{display:inline-flex;margin-bottom:18px;font-size:13px;font-weight:800;color:var(--muted)}h1{font-size:clamp(38px,6vw,64px);line-height:1.04;letter-spacing:-.045em;margin:0 0 12px}.lead{max-width:800px;color:var(--muted);font-size:16px;margin:0}.grid{display:grid;gap:18px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.card-pad{padding:24px}.profile{margin-top:25px}.profile-item span{display:block;color:var(--muted);font-size:12px}.profile-item strong{display:block;margin-top:3px;font-size:17px}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:25px 0 16px}.tab{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:11px 16px;font-weight:900;cursor:pointer}.tab.active{background:var(--navy);color:#fff}.form-section{display:none}.form-section.active{display:block}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:13px;font-weight:850}.field input,.field select,.field textarea{width:100%;font:inherit;padding:12px 13px;border:1px solid #dfe4ec;border-radius:12px;background:#fff;color:var(--text);outline:none}.field textarea{min-height:130px;resize:vertical}.field input[readonly]{background:#f2f4f7;color:#475467}.field input[type=file]{padding:10px;background:#fff}.field input:focus,.field select:focus,.field textarea:focus{border-color:#9aa7bc;box-shadow:0 0 0 3px rgba(23,33,59,.07)}.full{grid-column:1/-1}.note{padding:13px 14px;border:1px solid #e4e8ee;border-radius:12px;background:#f8fafc;color:#5f6b80;font-size:13px}.warn{background:#fff7ed;border-color:#fed7aa;color:#9a3412}.success{background:#ecfdf3;border-color:#abefc6;color:#067647}.danger{background:#fff1f2;border-color:#fecdd3;color:#b42318}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:13px;padding:12px 18px;font-weight:900;cursor:pointer}.btn-primary{background:var(--navy);color:#fff}.btn-secondary{background:#eef2f6;color:#344054}.btn:disabled{opacity:.6;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap}.status{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900;background:#eef2f6;color:#475467}.status-checkin{background:#ecfdf3;color:#027a48}.status-checkout{background:#eff6ff;color:#175cd3}.history{margin-top:25px}.history-card{padding:18px}.history-card h4{margin:0 0 7px;font-size:16px}.history-card p{margin:5px 0;color:var(--muted);font-size:13px}.preview{width:100%;max-height:260px;object-fit:contain;border-radius:12px;border:1px solid var(--line);background:#f8fafc}.result{display:none;margin-top:16px}.result.show{display:block}.footer{margin-top:30px;background:var(--navy);color:#fff;padding:28px 0}.footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.footer small{color:#aeb7ca}.hidden{display:none!important}@media(max-width:850px){.grid-2,.grid-3{grid-template-columns:1fr}.nav-links{display:none}.section{padding:42px 0}.card-pad{padding:19px}}
 </style>
-
-<style>
-
-.tenant-summary{
-    display:grid;
-    grid-template-columns:
-        repeat(3,minmax(0,1fr));
-    gap:14px;
-    margin-bottom:20px;
-}
-
-.summary-item{
-    background:#f7f8fa;
-    border:1px solid #e6e9f0;
-    border-radius:14px;
-    padding:16px;
-}
-
-.summary-item span{
-    display:block;
-    color:#667085;
-    font-size:12px;
-    margin-bottom:5px;
-}
-
-.summary-item strong{
-    font-size:17px;
-}
-
-.readonly{
-    background:#f4f6fa !important;
-    color:#4b5565 !important;
-    cursor:not-allowed;
-}
-
-.help{
-    color:#667085;
-    font-size:12px;
-    line-height:1.5;
-}
-
-.result{
-    display:none;
-    margin-top:18px;
-    border-radius:14px;
-    padding:15px;
-    font-size:14px;
-}
-
-.result.success{
-    display:block;
-    background:#ecfdf3;
-    border:1px solid #b7ebc6;
-    color:#027a48;
-}
-
-.result.error{
-    display:block;
-    background:#fff1f2;
-    border:1px solid #fecdd3;
-    color:#b42318;
-}
-
-.history{
-    margin-top:28px;
-}
-
-.history-card{
-    background:#fff;
-    border:1px solid #e6e9f0;
-    border-radius:15px;
-    padding:17px;
-    margin-top:10px;
-}
-
-.history-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:12px;
-}
-
-.history-card h3{
-    margin:0;
-    font-size:16px;
-}
-
-.history-meta{
-    color:#667085;
-    font-size:12px;
-    margin-top:6px;
-    line-height:1.5;
-}
-
-.status-badge{
-    display:inline-flex;
-    padding:5px 9px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:800;
-    background:#eef2f7;
-}
-
-.status-open{
-    background:#fff7ed;
-    color:#b54708;
-}
-
-.status-proses{
-    background:#eff6ff;
-    color:#175cd3;
-}
-
-.status-selesai{
-    background:#ecfdf3;
-    color:#027a48;
-}
-
-.status-batal{
-    background:#fff1f2;
-    color:#b42318;
-}
-
-.photo-preview{
-    display:none;
-    margin-top:10px;
-}
-
-.photo-preview img{
-    max-width:180px;
-    max-height:180px;
-    object-fit:cover;
-    border-radius:12px;
-    border:1px solid #e6e9f0;
-}
-
-@media(max-width:800px){
-
-    .tenant-summary{
-        grid-template-columns:1fr;
-    }
-
-}
-
-</style>
-
 </head>
-
-
 <body>
-
-
-<header class="nav">
-
-<div class="nav-inner">
-
-<a
-    class="brand"
-    href="portal.html"
->
-    <span class="brand-mark"></span>
-    DJ FAMILY KOST · TENANT
-</a>
-
-
-<nav class="nav-links">
-
-<a href="portal.html">
-    Dashboard
-</a>
-
-<a href="pembayaran.html">
-    Pembayaran
-</a>
-
-<a href="maintenance.html">
-    Maintenance
-</a>
-
-<a href="checkinout.html">
-    Check-in/out
-</a>
-
-<a href="cafe.html">
-    Cafe
-</a>
-
-<a href="laundry.html">
-    Laundry
-</a>
-
-<a
-    href="#"
-    id="logoutTop"
-    class="login-top"
->
-    Keluar
-</a>
-
-</nav>
-
-</div>
-
-</header>
-
+<header class="nav"><div class="nav-inner"><a class="brand" href="portal.html"><span class="brand-mark"></span>DJ FAMILY KOST · TENANT</a><nav class="nav-links"><a href="portal.html">Dashboard</a><a href="pembayaran.html">Pembayaran</a><a href="maintenance.html">Maintenance</a><a href="checkinout.html">Check-in/out</a><a href="cafe.html">Cafe</a><a href="laundry.html">Laundry</a><a href="#" id="logoutTop">Keluar</a></nav></div></header>
 
 <section class="section">
-
 <div class="container">
+<a class="back" href="portal.html">← Kembali ke Portal</a>
+<div class="eyebrow">TENANT PORTAL</div>
+<h1>Check-in / Check-out</h1>
+<p class="lead">Serah-terima kamar dilakukan dengan dua formulir yang berbeda. Identitas tenant dan nomor kamar diambil otomatis dari akun yang sedang login.</p>
 
-
-<a
-    class="back"
-    href="portal.html"
->
-    ← Kembali ke Portal
-</a>
-
-
-<div class="eyebrow">
-    TENANT SERVICE
+<div class="card card-pad profile">
+  <div class="grid grid-3">
+    <div class="profile-item"><span>Tenant</span><strong id="tenantName">Memuat...</strong></div>
+    <div class="profile-item"><span>Tenant ID</span><strong id="tenantId">Memuat...</strong></div>
+    <div class="profile-item"><span>No. Kamar</span><strong id="tenantRoom">Memuat...</strong></div>
+  </div>
 </div>
 
-
-<h1 style="font-size:48px">
-    Laporan Maintenance
-</h1>
-
-
-<p
-    class="lead"
-    style="
-        margin:0;
-        max-width:800px;
-    "
->
-    Laporkan kerusakan fasilitas dari portal Anda.
-    Identitas tenant dan nomor kamar diambil otomatis
-    dari akun yang sedang login.
-</p>
-
-
-<div
-    class="card form-card"
-    style="max-width:900px;"
->
-
-
-<!-- ======================================================
-     TENANT SUMMARY
-     ====================================================== -->
-
-<div class="tenant-summary">
-
-
-<div class="summary-item">
-
-<span>
-    Tenant
-</span>
-
-<strong id="tenantName">
-    Memuat...
-</strong>
-
+<div class="tabs">
+  <button class="tab active" data-mode="CHECK-IN">CHECK-IN</button>
+  <button class="tab" data-mode="CHECK-OUT">CHECK-OUT</button>
 </div>
 
-
-<div class="summary-item">
-
-<span>
-    Tenant ID
-</span>
-
-<strong id="tenantId">
-    Memuat...
-</strong>
-
-</div>
-
-
-<div class="summary-item">
-
-<span>
-    No. Kamar
-</span>
-
-<strong id="roomNumber">
-    Memuat...
-</strong>
-
-</div>
-
-
-</div>
-
-
-<div
-    class="note"
-    style="margin-bottom:20px;"
->
-🔒 Data tenant dan kamar dikunci dari akun login.
-Anda tidak perlu mengisi ulang Tenant ID atau nomor kamar.
-</div>
-
-
-<!-- ======================================================
-     FORM
-     ====================================================== -->
-
-<form id="maintenanceForm">
-
-
-<div class="form-grid">
-
-
-<div class="field full">
-
-<label>
-    Lokasi Masalah
-</label>
-
-<input
-    id="location"
-    name="location"
-    placeholder="Contoh: kamar mandi, AC, wastafel, lampu..."
-    required
->
-
-</div>
-
-
-<div class="field">
-
-<label>
-    Jenis Masalah
-</label>
-
-<select
-    id="problemType"
-    required
->
-
-<option value="">
-    Pilih
-</option>
-
-<option value="Listrik">
-    Listrik
-</option>
-
-<option value="Air">
-    Air
-</option>
-
-<option value="AC">
-    AC
-</option>
-
-<option value="Fasilitas Kamar">
-    Fasilitas Kamar
-</option>
-
-<option value="Bangunan">
-    Bangunan
-</option>
-
-<option value="Internet / WiFi">
-    Internet / WiFi
-</option>
-
-<option value="Kebersihan">
-    Kebersihan
-</option>
-
-<option value="Lainnya">
-    Lainnya
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>
-    Urgensi
-</label>
-
-<select
-    id="urgency"
-    required
->
-
-<option value="">
-    Pilih
-</option>
-
-<option value="Rendah">
-    Rendah
-</option>
-
-<option value="Sedang">
-    Sedang
-</option>
-
-<option value="Tinggi">
-    Tinggi
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>
-    Izin Masuk Kamar
-</label>
-
-<select
-    id="allowEntry"
-    required
->
-
-<option value="Ya">
-    Ya
-</option>
-
-<option value="Tidak">
-    Tidak
-</option>
-
-</select>
-
-<p class="help">
-    Apakah pengelola/teknisi diperbolehkan masuk
-    untuk pemeriksaan atau perbaikan?
-</p>
-
-</div>
-
-
-<div class="field">
-
-<label>
-    Waktu Nyaman
-</label>
-
-<input
-    id="comfortableTime"
-    type="datetime-local"
->
-
-<p class="help">
-    Pilih waktu yang nyaman untuk pemeriksaan.
-</p>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-    Deskripsi Masalah
-</label>
-
-<textarea
-    id="description"
-    required
-    placeholder="Jelaskan kerusakan secara detail..."
-></textarea>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-    Foto Kerusakan
-</label>
-
-<input
-    id="damagePhoto"
-    type="file"
-    accept="image/*"
-    required
->
-
-<p class="help">
-    Foto akan dikirim sebagai bukti laporan.
-    Maksimal 1 foto utama untuk laporan.
-</p>
-
-
-<div
-    id="photoPreview"
-    class="photo-preview"
->
-
-<img
-    id="photoPreviewImage"
-    alt="Preview foto kerusakan"
->
-
-</div>
-
-</div>
-
-
-</div>
-
-
-<button
-    id="submitButton"
-    class="btn btn-primary"
-    type="submit"
-    style="
-        margin-top:18px;
-        width:100%;
-    "
->
-    Kirim Laporan
-</button>
-
-
-<div
-    id="result"
-    class="result"
-></div>
-
-
-</form>
-
-
-<!-- ======================================================
-     HISTORY
-     ====================================================== -->
-
-<div class="history">
-
-<h2
-    style="
-        font-size:24px;
-        margin-bottom:8px;
-    "
->
-    Riwayat Maintenance
-</h2>
-
-
-<p
-    class="help"
-    style="margin-bottom:12px;"
->
-    Semua laporan maintenance Anda tetap tersimpan
-    dan statusnya dapat dipantau dari sini.
-</p>
-
-
-<div id="historyList">
-
-<div class="loading">
-    Memuat riwayat...
-</div>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-</div>
-
+<div id="modeInfo" class="note">Check-in mencatat kondisi awal kamar dan serah-terima fasilitas. Kunci belum perlu dinyatakan dikembalikan.</div>
+
+<section id="checkinSection" class="form-section active">
+  <form id="checkinForm" class="card card-pad" style="margin-top:16px">
+    <div class="grid grid-2">
+      <div class="field"><label>Tanggal Check-in</label><input id="checkinDate" type="date" required></div>
+      <div class="field"><label>Jumlah Kunci / Akses</label><input id="checkinKeyCount" type="number" min="0" value="1" required></div>
+      <div class="field full"><label>Kondisi Kamar Saat Masuk</label><textarea id="checkinCondition" required placeholder="Contoh: kamar bersih, dinding baik, AC normal, kamar mandi bersih..."></textarea></div>
+      <div class="field full"><label>Catatan Kondisi</label><textarea id="checkinNote" placeholder="Catatan tambahan kondisi awal kamar."></textarea></div>
+      <div class="field"><label>Foto Kondisi Kamar</label><input id="checkinConditionPhoto" type="file" accept="image/*" required></div>
+      <div class="field"><label>Foto Meter Listrik</label><input id="checkinMeterPhoto" type="file" accept="image/*"></div>
+      <div class="field full"><label>Kondisi Fasilitas</label><textarea id="checkinFacilities" placeholder="AC, kasur, lemari, WiFi, air, kunci, dan fasilitas lainnya."></textarea></div>
+      <div class="field full"><label>Persetujuan</label><label style="display:flex;gap:8px;align-items:flex-start;font-weight:600"><input id="checkinAgreement" type="checkbox" style="width:auto;margin-top:3px" required> Saya menyatakan kondisi awal kamar yang saya laporkan sesuai dengan kondisi saat serah-terima.</label></div>
+    </div>
+    <button id="checkinSubmit" class="btn btn-primary" type="submit" style="width:100%;margin-top:18px">Kirim Check-in</button>
+    <div id="checkinResult" class="result"></div>
+  </form>
 </section>
 
+<section id="checkoutSection" class="form-section">
+  <form id="checkoutForm" class="card card-pad" style="margin-top:16px">
+    <div class="note warn" style="margin-bottom:16px">Check-out digunakan saat masa tinggal berakhir. Sistem akan memeriksa bahwa tenant sudah memiliki Check-in.</div>
+    <div class="grid grid-2">
+      <div class="field"><label>Tanggal Check-out</label><input id="checkoutDate" type="date" required></div>
+      <div class="field"><label>Jumlah Kunci / Akses</label><input id="checkoutKeyCount" type="number" min="0" value="1" required></div>
+      <div class="field full"><label>Kondisi Kamar Saat Keluar</label><textarea id="checkoutCondition" required placeholder="Catat kondisi akhir kamar sebelum meninggalkan kamar."></textarea></div>
+      <div class="field full"><label>Catatan Kondisi Akhir</label><textarea id="checkoutNote" placeholder="Catatan tambahan kondisi akhir."></textarea></div>
+      <div class="field"><label>Foto Kondisi Kamar</label><input id="checkoutConditionPhoto" type="file" accept="image/*" required></div>
+      <div class="field"><label>Foto Meter Listrik</label><input id="checkoutMeterPhoto" type="file" accept="image/*"></div>
+      <div class="field full"><label>Kondisi Fasilitas</label><textarea id="checkoutFacilities" placeholder="Kondisi fasilitas saat dikembalikan."></textarea></div>
+      <div class="field"><label>Kunci / Akses Dikembalikan?</label><select id="checkoutKeyReturned" required><option value="">Pilih</option><option value="YA">Ya</option><option value="TIDAK">Tidak</option></select></div>
+      <div class="field"><label>Ada Kerusakan / Kehilangan?</label><select id="checkoutDamage" required><option value="TIDAK">Tidak</option><option value="YA">Ya</option></select></div>
+      <div class="field full hidden" id="damageDetailField"><label>Detail Kerusakan / Kehilangan</label><textarea id="checkoutDamageDetail" placeholder="Jelaskan kerusakan atau barang yang hilang."></textarea></div>
+      <div class="field"><label>Perkiraan Pengurangan Deposit</label><input id="checkoutDeduction" type="number" min="0" max="300000" value="0" required></div>
+      <div class="field"><label>Deposit</label><input value="Rp300.000" readonly></div>
+      <div class="field full"><label>Persetujuan</label><label style="display:flex;gap:8px;align-items:flex-start;font-weight:600"><input id="checkoutAgreement" type="checkbox" style="width:auto;margin-top:3px" required> Saya menyatakan kondisi akhir kamar dan pengembalian akses sesuai dengan keadaan sebenarnya.</label></div>
+    </div>
+    <button id="checkoutSubmit" class="btn btn-primary" type="submit" style="width:100%;margin-top:18px">Kirim Check-out</button>
+    <div id="checkoutResult" class="result"></div>
+  </form>
+</section>
 
-<footer class="footer">
-
-<div class="container footer-inner">
-
-<div>
-
-<strong>
-    DJ FAMILY KOST
-</strong>
-
-<br>
-
-<small>
-    Hunian yang tertib, nyaman, dan terkelola.
-</small>
-
+<div class="history">
+  <h2 style="margin:0 0 8px">Riwayat Serah-terima</h2>
+  <p style="color:var(--muted);margin-top:0">Semua catatan check-in dan check-out tenant ini tetap tersimpan.</p>
+  <div id="historyBox" class="grid grid-2"><div class="card card-pad" style="color:var(--muted)">Memuat riwayat...</div></div>
 </div>
 
-
-<small>
-    © 2026 DJ Family Kost
-</small>
-
 </div>
+</section>
 
-</footer>
-
+<footer class="footer"><div class="container footer-inner"><div><strong>DJ FAMILY KOST</strong><br><small>Hunian yang tertib, nyaman, dan terkelola.</small></div><small>© 2026 DJ Family Kost</small></div></footer>
 
 <script>
-
-
-/* ==========================================================
-   CONFIG
-   ========================================================== */
-
-const API_URL =
-    "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
-
-
-/* ==========================================================
-   SESSION
-   ========================================================== */
+const API_URL = "https://dj-family-kost.mahjongjong.workers.dev";
 
 let tenantSession = null;
+let currentMode = "CHECK-IN";
 
-
-function readTenantSession(){
-
-    const raw =
-        sessionStorage.getItem(
-            "djTenantSession"
-        );
-
-
-    /*
-     * Versi login saat ini juga menyimpan
-     * beberapa field langsung.
-     */
-
-    if(raw){
-
-        try{
-
-            const parsed =
-                JSON.parse(
-                    raw
-                );
-
-            if(parsed){
-
-                return parsed;
-
-            }
-
-        }catch(error){}
-
-    }
-
-
-    const tenantId =
-        sessionStorage.getItem(
-            "djTenantId"
-        );
-
-
-    const name =
-        sessionStorage.getItem(
-            "djTenantName"
-        );
-
-
-    const room =
-        sessionStorage.getItem(
-            "djTenantRoom"
-        );
-
-
-    const token =
-        sessionStorage.getItem(
-            "djTenantSessionToken"
-        ) ||
-        sessionStorage.getItem(
-            "djSessionToken"
-        );
-
-
-    if(
-        tenantId &&
-        token
-    ){
-
-        return {
-
-            tenantId:
-                tenantId,
-
-            nama:
-                name || "",
-
-            name:
-                name || "",
-
-            kamar:
-                room || "",
-
-            room:
-                room || "",
-
-            sessionToken:
-                token
-
-        };
-
-    }
-
-
-    return null;
-
+function e(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-
-/* ==========================================================
-   HELPERS
-   ========================================================== */
-
-function escapeHtml(
-    value
-){
-
-    return String(
-        value == null
-            ? ""
-            : value
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
+function dateToday(){
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${yyyy}-${mm}-${dd}`;
 }
 
-
-function showResult(
-    message,
-    type
-){
-
-    const box =
-        document.getElementById(
-            "result"
-        );
-
-
-    box.className =
-        "result " +
-        type;
-
-
-    box.textContent =
-        message;
-
-}
-
-
-function fileToBase64(
-    file
-){
-
-    return new Promise(
-        function(resolve,reject){
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function(){
-
-                    const result =
-                        String(
-                            reader.result ||
-                            ""
-                        );
-
-
-                    const comma =
-                        result.indexOf(
-                            ","
-                        );
-
-
-                    resolve(
-                        comma >= 0
-                            ? result.slice(
-                                comma + 1
-                              )
-                            : result
-                    );
-
-                };
-
-
-            reader.onerror =
-                reject;
-
-
-            reader.readAsDataURL(
-                file
-            );
-
-        }
-    );
-
-}
-
-
-/*
- * Kompres foto supaya request tidak terlalu besar.
- */
-
-function compressImage(
-    file,
-    maxWidth=1600,
-    quality=.82
-){
-
-    return new Promise(
-        function(resolve,reject){
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function(){
-
-                    const img =
-                        new Image();
-
-
-                    img.onload =
-                        function(){
-
-                            let width =
-                                img.width;
-
-
-                            let height =
-                                img.height;
-
-
-                            if(
-                                width >
-                                maxWidth
-                            ){
-
-                                const ratio =
-                                    maxWidth /
-                                    width;
-
-
-                                width =
-                                    maxWidth;
-
-
-                                height =
-                                    Math.round(
-                                        height *
-                                        ratio
-                                    );
-
-                            }
-
-
-                            const canvas =
-                                document
-                                    .createElement(
-                                        "canvas"
-                                    );
-
-
-                            canvas.width =
-                                width;
-
-
-                            canvas.height =
-                                height;
-
-
-                            const ctx =
-                                canvas
-                                    .getContext(
-                                        "2d"
-                                    );
-
-
-                            ctx.drawImage(
-                                img,
-                                0,
-                                0,
-                                width,
-                                height
-                            );
-
-
-                            canvas.toBlob(
-                                function(blob){
-
-                                    if(!blob){
-
-                                        reject(
-                                            new Error(
-                                                "Foto tidak dapat diproses."
-                                            )
-                                        );
-
-                                        return;
-
-                                    }
-
-
-                                    resolve(
-                                        new File(
-                                            [
-                                                blob
-                                            ],
-                                            "maintenance-" +
-                                            Date.now() +
-                                            ".jpg",
-                                            {
-                                                type:
-                                                    "image/jpeg"
-                                            }
-                                        )
-                                    );
-
-                                },
-                                "image/jpeg",
-                                quality
-                            );
-
-                        };
-
-
-                    img.onerror =
-                        reject;
-
-
-                    img.src =
-                        reader.result;
-
-                };
-
-
-            reader.onerror =
-                reject;
-
-
-            reader.readAsDataURL(
-                file
-            );
-
-        }
-    );
-
-}
-
-
-/* ==========================================================
-   LOAD TENANT DATA
-   ========================================================== */
-
-async function validateTenantSessionServer_(){
-
+function readSession(){
+  const keys = ["djTenantSession","djTenantAuth"];
+  for(const key of keys){
+    const raw = sessionStorage.getItem(key);
+    if(!raw) continue;
     try{
+      const data = JSON.parse(raw);
+      if(data && (data.tenantId || data.sessionToken)) return data;
+    }catch(_){ }
+  }
 
-        await apiPost({
-            action:
-                "tenantdashboard",
-            tenantId:
-                tenantSession.tenantId,
-            sessionToken:
-                tenantSession.sessionToken
-        });
+  const tenantId = sessionStorage.getItem("djTenantId") || "";
+  const sessionToken = sessionStorage.getItem("djTenantSessionToken") || sessionStorage.getItem("djTenantToken") || "";
+  const nama = sessionStorage.getItem("djTenantName") || "";
+  const kamar = sessionStorage.getItem("djTenantRoom") || "";
 
-        return true;
-
-    }catch(error){
-
-        [
-            "djTenantSession",
-            "djTenantAuth",
-            "djTenantData",
-            "djTenantId",
-            "djTenantName",
-            "djTenantRoom",
-            "djTenantSessionToken",
-            "djTenantToken"
-        ].forEach(function(key){
-            try{
-                sessionStorage.removeItem(key);
-            }catch(_){ }
-        });
-
-        location.href =
-            "login.html?redirect=maintenance.html";
-
-        return false;
-
-    }
-
+  if(tenantId && sessionToken){
+    return {tenantId,sessionToken,nama,kamar,name:nama,room:kamar};
+  }
+  return null;
 }
 
+async function api(action, extra={}){
+  if(!tenantSession) throw new Error("Sesi tenant tidak tersedia. Silakan login kembali.");
 
-async function initTenant(){
+  let response;
+  try{
+    response = await fetch(API_URL, {
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({
+        action,
+        tenantId:tenantSession.tenantId,
+        sessionToken:tenantSession.sessionToken,
+        ...extra
+      })
+    });
+  }catch(err){
+    throw new Error("Tidak dapat terhubung ke server DJ Family Kost.");
+  }
 
-    tenantSession =
-        readTenantSession();
+  let result;
+  try{
+    result = await response.json();
+  }catch(err){
+    throw new Error("Server mengembalikan respons yang tidak valid.");
+  }
 
-
-    if(
-        !tenantSession ||
-        !tenantSession.tenantId ||
-        !tenantSession.sessionToken
-    ){
-
-        location.href =
-            "login.html?redirect=maintenance.html";
-
-        return false;
-
-    }
-
-
-    const sessionIsValid =
-        await validateTenantSessionServer_();
-
-
-    if(!sessionIsValid){
-
-        return false;
-
-    }
-
-
-    const name =
-        tenantSession.nama ||
-        tenantSession.name ||
-        tenantSession.tenantName ||
-        "";
-
-
-    const tenantId =
-        tenantSession.tenantId ||
-        tenantSession.Tenant_ID ||
-        "";
-
-
-    const room =
-        tenantSession.kamar ||
-        tenantSession.room ||
-        tenantSession.noKamar ||
-        "";
-
-
-    document
-        .getElementById(
-            "tenantName"
-        )
-        .textContent =
-            name || "Tenant";
-
-
-    document
-        .getElementById(
-            "tenantId"
-        )
-        .textContent =
-            tenantId || "—";
-
-
-    document
-        .getElementById(
-            "roomNumber"
-        )
-        .textContent =
-            room || "—";
-
-
-    if(
-        !tenantId ||
-        !room ||
-        !tenantSession.sessionToken
-    ){
-
-        showResult(
-            "Session tenant tidak lengkap. Silakan logout lalu login kembali.",
-            "error"
-        );
-
-        document
-            .getElementById(
-                "submitButton"
-            )
-            .disabled =
-                true;
-
-        return false;
-
-    }
-
-
-    loadHistory();
-
-
-    return true;
-
+  if(!result || result.ok !== true){
+    throw new Error(result && result.error ? result.error : "Permintaan gagal.");
+  }
+  return result.data;
 }
 
-
-/* ==========================================================
-   API POST
-   ========================================================== */
-
-async function apiPost(
-    payload
-){
-
-    const response =
-        await fetch(
-            API_URL,
-            {
-
-                method:
-                    "POST",
-
-                headers:{
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-                },
-
-                body:
-                    JSON.stringify(
-                        payload
-                    )
-
-            }
-        );
-
-
-    const result =
-        await response.json();
-
-
-    if(
-        !result ||
-        result.ok !== true
-    ){
-
-        throw new Error(
-            result &&
-            result.error
-                ? result.error
-                : "Permintaan gagal."
-        );
-
-    }
-
-
-    return result.data;
-
+async function fileToPayload(file){
+  if(!file) return null;
+  const processed = await compressImage(file);
+  const base64 = await fileToBase64(processed);
+  return {
+    base64,
+    mimeType:"image/jpeg",
+    originalName:processed.name
+  };
 }
 
-
-/* ==========================================================
-   SUBMIT MAINTENANCE
-   ========================================================== */
-
-document
-    .getElementById(
-        "maintenanceForm"
-    )
-    .addEventListener(
-        "submit",
-        async function(event){
-
-            event.preventDefault();
-
-
-            const button =
-                document.getElementById(
-                    "submitButton"
-                );
-
-
-            const tenantId =
-                tenantSession.tenantId;
-
-
-            const room =
-                tenantSession.kamar ||
-                tenantSession.room;
-
-
-            const name =
-                tenantSession.nama ||
-                tenantSession.name ||
-                "";
-
-
-            const photo =
-                document.getElementById(
-                    "damagePhoto"
-                ).files[0];
-
-
-            if(
-                !photo
-            ){
-
-                showResult(
-                    "Foto kerusakan wajib diupload.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            button.disabled =
-                true;
-
-
-            button.textContent =
-                "Mengirim laporan...";
-
-
-            try{
-
-                /*
-                 * Kompres foto client-side.
-                 */
-
-                let processedPhoto;
-
-
-                try{
-
-                    processedPhoto =
-                        await compressImage(
-                            photo
-                        );
-
-                }catch(error){
-
-                    processedPhoto =
-                        photo;
-
-                }
-
-
-                const base64 =
-                    await fileToBase64(
-                        processedPhoto
-                    );
-
-
-                const result =
-                    await apiPost({
-
-                        action:
-                            "maintenance",
-
-                        tenantId:
-                            tenantId,
-
-                        sessionToken:
-                            tenantSession.sessionToken,
-
-                        nama:
-                            name,
-
-                        room:
-                            room,
-
-                        location:
-                            document
-                                .getElementById(
-                                    "location"
-                                )
-                                .value
-                                .trim(),
-
-                        problemType:
-                            document
-                                .getElementById(
-                                    "problemType"
-                                )
-                                .value,
-
-                        urgency:
-                            document
-                                .getElementById(
-                                    "urgency"
-                                )
-                                .value,
-
-                        allowEntry:
-                            document
-                                .getElementById(
-                                    "allowEntry"
-                                )
-                                .value,
-
-                        comfortableTime:
-                            document
-                                .getElementById(
-                                    "comfortableTime"
-                                )
-                                .value,
-
-                        description:
-                            document
-                                .getElementById(
-                                    "description"
-                                )
-                                .value
-                                .trim(),
-
-                        photoBase64:
-                            base64,
-
-                        photoMimeType:
-                            "image/jpeg",
-
-                        photoOriginalName:
-                            processedPhoto.name
-
-                    });
-
-
-                showResult(
-
-                    result &&
-                    result.message
-
-                        ? result.message
-
-                        : "Laporan maintenance berhasil dikirim.",
-
-                    "success"
-
-                );
-
-
-                this.reset();
-
-
-                document
-                    .getElementById(
-                        "photoPreview"
-                    )
-                    .style.display =
-                        "none";
-
-
-                await loadHistory();
-
-
-            }catch(error){
-
-                showResult(
-                    error.message,
-                    "error"
-                );
-
-            }finally{
-
-                button.disabled =
-                    false;
-
-                button.textContent =
-                    "Kirim Laporan";
-
-            }
-
-        }
-    );
-
-
-/* ==========================================================
-   PHOTO PREVIEW
-   ========================================================== */
-
-document
-    .getElementById(
-        "damagePhoto"
-    )
-    .addEventListener(
-        "change",
-        function(){
-
-            const file =
-                this.files[0];
-
-
-            if(!file){
-
-                document
-                    .getElementById(
-                        "photoPreview"
-                    )
-                    .style.display =
-                        "none";
-
-                return;
-
-            }
-
-
-            const url =
-                URL.createObjectURL(
-                    file
-                );
-
-
-            document
-                .getElementById(
-                    "photoPreviewImage"
-                )
-                .src =
-                    url;
-
-
-            document
-                .getElementById(
-                    "photoPreview"
-                )
-                .style.display =
-                    "block";
-
-        }
-    );
-
-
-/* ==========================================================
-   HISTORY
-   ========================================================== */
-
-async function loadHistory(){
-
-    const box =
-        document.getElementById(
-            "historyList"
-        );
-
-
-    try{
-
-        const data =
-            await apiPost({
-
-                action:
-                    "maintenanceHistory",
-
-                tenantId:
-                    tenantSession.tenantId,
-
-                sessionToken:
-                    tenantSession.sessionToken
-
-            });
-
-
-        const items =
-            data &&
-            Array.isArray(
-                data.items
-            )
-                ? data.items
-                : [];
-
-
-        if(
-            !items.length
-        ){
-
-            box.innerHTML =
-                '<div class="empty">' +
-                'Belum ada laporan maintenance.' +
-                '</div>';
-
-            return;
-
-        }
-
-
-        box.innerHTML =
-            items
-                .map(
-                    function(item){
-
-                        const status =
-                            String(
-                                item.status ||
-                                "OPEN"
-                            )
-                            .toUpperCase();
-
-
-                        let cls =
-                            "status-open";
-
-
-                        if(
-                            status ===
-                            "PROSES"
-                        ){
-
-                            cls =
-                                "status-proses";
-
-                        }else if(
-                            status ===
-                            "SELESAI"
-                        ){
-
-                            cls =
-                                "status-selesai";
-
-                        }else if(
-                            status ===
-                            "BATAL"
-                        ){
-
-                            cls =
-                                "status-batal";
-
-                        }
-
-
-                        return (
-
-                            '<div class="history-card">' +
-
-                            '<div class="history-head">' +
-
-                            '<div>' +
-
-                            '<h3>' +
-
-                            escapeHtml(
-                                item.problem ||
-                                item.type ||
-                                "Maintenance"
-                            ) +
-
-                            '</h3>' +
-
-                            '<div class="history-meta">' +
-
-                            'Maintenance ID: ' +
-                            escapeHtml(
-                                item.id ||
-                                ""
-                            ) +
-
-                            '<br>' +
-
-                            escapeHtml(
-                                item.location ||
-                                ""
-                            ) +
-
-                            '</div>' +
-
-                            '</div>' +
-
-                            '<span class="status-badge ' +
-                            cls +
-                            '">' +
-
-                            escapeHtml(
-                                status
-                            ) +
-
-                            '</span>' +
-
-                            '</div>' +
-
-                            '<div class="history-meta" style="margin-top:12px;">' +
-
-                            escapeHtml(
-                                item.description ||
-                                ""
-                            ) +
-
-                            '</div>' +
-
-                            (
-                                item.pic
-
-                                    ? (
-                                        '<div class="history-meta">' +
-                                        'PIC: ' +
-                                        escapeHtml(
-                                            item.pic
-                                        ) +
-                                        '</div>'
-                                    )
-
-                                    : ""
-                            ) +
-
-                            (
-                                item.note
-
-                                    ? (
-                                        '<div class="history-meta">' +
-                                        'Catatan: ' +
-                                        escapeHtml(
-                                            item.note
-                                        ) +
-                                        '</div>'
-                                    )
-
-                                    : ""
-                            ) +
-
-                            '</div>'
-
-                        );
-
-                    }
-                )
-                .join("");
-
-
-    }catch(error){
-
-        box.innerHTML =
-            '<div class="result error" style="display:block">' +
-            escapeHtml(
-                error.message
-            ) +
-            '</div>';
-
-    }
-
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const value = String(reader.result || "");
+      const comma = value.indexOf(",");
+      resolve(comma >= 0 ? value.slice(comma+1) : value);
+    };
+    reader.onerror = ()=>reject(new Error("Foto tidak dapat dibaca."));
+    reader.readAsDataURL(file);
+  });
 }
 
-
-/* ==========================================================
-   LOGOUT
-   ========================================================== */
-
-document
-    .getElementById(
-        "logoutTop"
-    )
-    .addEventListener(
-        "click",
-        function(event){
-
-            event.preventDefault();
-
-
-            sessionStorage.clear();
-
-
-            location.href =
-                "login.html";
-
+function compressImage(file,maxWidth=1600,quality=.82){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w = img.width;
+        let h = img.height;
+        if(w > maxWidth){
+          const r = maxWidth / w;
+          w = maxWidth;
+          h = Math.round(h*r);
         }
-    );
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d").drawImage(img,0,0,w,h);
+        canvas.toBlob(blob=>{
+          if(!blob){ reject(new Error("Foto gagal diproses.")); return; }
+          resolve(new File([blob], `cio-${Date.now()}.jpg`, {type:"image/jpeg"}));
+        },"image/jpeg",quality);
+      };
+      img.onerror = ()=>reject(new Error("Foto gagal diproses."));
+      img.src = reader.result;
+    };
+    reader.onerror = ()=>reject(new Error("Foto tidak dapat dibaca."));
+    reader.readAsDataURL(file);
+  });
+}
 
+function showResult(id,kind,message){
+  const box = document.getElementById(id);
+  box.className = `result show note ${kind || ""}`;
+  box.innerHTML = e(message).replace(/\n/g,"<br>");
+}
 
-/* ==========================================================
-   INIT
-   ========================================================== */
+function setMode(mode){
+  currentMode = mode;
+  document.querySelectorAll(".tab").forEach(btn=>btn.classList.toggle("active",btn.dataset.mode===mode));
+  document.getElementById("checkinSection").classList.toggle("active",mode==="CHECK-IN");
+  document.getElementById("checkoutSection").classList.toggle("active",mode==="CHECK-OUT");
+  document.getElementById("modeInfo").className = `note ${mode==="CHECK-OUT" ? "warn" : ""}`;
+  document.getElementById("modeInfo").textContent = mode==="CHECK-IN"
+    ? "Check-in mencatat kondisi awal kamar dan serah-terima fasilitas. Kunci belum perlu dinyatakan dikembalikan."
+    : "Check-out mencatat kondisi akhir kamar, pengembalian akses, kemungkinan kerusakan, dan pengurangan deposit.";
+}
 
-initTenant()
-    .finally(function(){
-        document.documentElement.classList.remove(
-            "dj-auth-pending"
-        );
+async function submitCheckIn(event){
+  event.preventDefault();
+  const button = document.getElementById("checkinSubmit");
+  button.disabled = true;
+  button.textContent = "Mengirim...";
+
+  try{
+    const conditionPhoto = await fileToPayload(document.getElementById("checkinConditionPhoto").files[0]);
+    const meterFile = document.getElementById("checkinMeterPhoto").files[0];
+    const meterPhoto = meterFile ? await fileToPayload(meterFile) : null;
+
+    const result = await api("checkinout",{
+      process:"CHECK-IN",
+      processDate:document.getElementById("checkinDate").value,
+      condition:document.getElementById("checkinCondition").value.trim(),
+      conditionNote:document.getElementById("checkinNote").value.trim(),
+      conditionPhotoBase64:conditionPhoto.base64,
+      conditionPhotoMimeType:conditionPhoto.mimeType,
+      conditionPhotoOriginalName:conditionPhoto.originalName,
+      meterPhotoBase64:meterPhoto ? meterPhoto.base64 : "",
+      meterPhotoMimeType:meterPhoto ? meterPhoto.mimeType : "",
+      meterPhotoOriginalName:meterPhoto ? meterPhoto.originalName : "",
+      facilities:document.getElementById("checkinFacilities").value.trim(),
+      keyCount:Number(document.getElementById("checkinKeyCount").value || 0),
+      keyReturned:"",
+      hasDamage:"TIDAK",
+      damageDetail:"",
+      depositDeduction:0,
+      agreement:"YA"
     });
 
+    showResult("checkinResult","success",result.message || `Check-in berhasil. ID: ${result.checkInOutId || "—"}`);
+    document.getElementById("checkinForm").reset();
+    document.getElementById("checkinDate").value = dateToday();
+    document.getElementById("checkinKeyCount").value = "1";
+    await loadHistory();
+  }catch(err){
+    showResult("checkinResult","danger",err.message);
+  }finally{
+    button.disabled = false;
+    button.textContent = "Kirim Check-in";
+  }
+}
 
-window.addEventListener(
-    "pageshow",
-    function(){
+async function submitCheckOut(event){
+  event.preventDefault();
+  const button = document.getElementById("checkoutSubmit");
+  button.disabled = true;
+  button.textContent = "Mengirim...";
 
-        if(
-            sessionStorage.getItem(
-                "djTenantSession"
-            )
-        ){
+  try{
+    const conditionPhoto = await fileToPayload(document.getElementById("checkoutConditionPhoto").files[0]);
+    const meterFile = document.getElementById("checkoutMeterPhoto").files[0];
+    const meterPhoto = meterFile ? await fileToPayload(meterFile) : null;
 
-            initTenant();
+    const result = await api("checkinout",{
+      process:"CHECK-OUT",
+      processDate:document.getElementById("checkoutDate").value,
+      condition:document.getElementById("checkoutCondition").value.trim(),
+      conditionNote:document.getElementById("checkoutNote").value.trim(),
+      conditionPhotoBase64:conditionPhoto.base64,
+      conditionPhotoMimeType:conditionPhoto.mimeType,
+      conditionPhotoOriginalName:conditionPhoto.originalName,
+      meterPhotoBase64:meterPhoto ? meterPhoto.base64 : "",
+      meterPhotoMimeType:meterPhoto ? meterPhoto.mimeType : "",
+      meterPhotoOriginalName:meterPhoto ? meterPhoto.originalName : "",
+      facilities:document.getElementById("checkoutFacilities").value.trim(),
+      keyCount:Number(document.getElementById("checkoutKeyCount").value || 0),
+      keyReturned:document.getElementById("checkoutKeyReturned").value,
+      hasDamage:document.getElementById("checkoutDamage").value,
+      damageDetail:document.getElementById("checkoutDamageDetail").value.trim(),
+      depositDeduction:Number(document.getElementById("checkoutDeduction").value || 0),
+      agreement:"YA"
+    });
 
-        } else {
+    showResult("checkoutResult","success",`${result.message || "Check-out berhasil."}\nPengembalian deposit: Rp${Number(result.refund || 0).toLocaleString("id-ID")}\nID: ${result.checkInOutId || "—"}\n\nAkun tenant sekarang NONAKTIF dan sesi telah ditutup.`);
 
-            location.href =
-                "login.html?redirect=maintenance.html";
+    /* Setelah check-out berhasil, sesi browser dibuang.
+       Tenant tidak dibiarkan tetap berada di layanan privat. */
+    [
+      "djTenantSession",
+      "djTenantAuth",
+      "djTenantId",
+      "djTenantName",
+      "djTenantRoom",
+      "djTenantSessionToken",
+      "djTenantToken"
+    ].forEach(function(key){
+      try{
+        sessionStorage.removeItem(key);
+      }catch(_){ }
+    });
 
-        }
+    button.textContent = "Check-out Selesai";
 
+    setTimeout(
+      function(){
+        window.location.href =
+          "login.html?checkout=1";
+      },
+      1800
+    );
+
+    return;
+  }catch(err){
+    showResult("checkoutResult","danger",err.message);
+  }finally{
+    if(document.body.contains(button) && button.textContent !== "Check-out Selesai"){
+      button.disabled = false;
+      button.textContent = "Kirim Check-out";
     }
-);
+  }
+}
 
+async function loadHistory(){
+  const box = document.getElementById("historyBox");
+  box.innerHTML = '<div class="card card-pad" style="color:#667085">Memuat riwayat...</div>';
+  try{
+    const data = await api("checkinouthistory");
+    const items = Array.isArray(data && data.items) ? data.items : [];
+    if(!items.length){
+      box.innerHTML = '<div class="card card-pad" style="color:#667085">Belum ada riwayat serah-terima.</div>';
+      return;
+    }
+    box.innerHTML = items.map(item=>{
+      const process = item.process || "—";
+      const cls = process === "CHECK-OUT" ? "status-checkout" : "status-checkin";
+      const photos = [];
+      if(item.conditionPhotoUrl) photos.push(`<a class="btn btn-secondary" href="${e(item.conditionPhotoUrl)}" target="_blank" rel="noopener">Foto Kondisi</a>`);
+      if(item.meterPhotoUrl) photos.push(`<a class="btn btn-secondary" href="${e(item.meterPhotoUrl)}" target="_blank" rel="noopener">Foto Meter</a>`);
+      return `<div class="card history-card"><h4>${e(item.id || "Record")}</h4><div class="actions"><span class="status ${cls}">${e(process)}</span></div><p>Tanggal: ${e(item.date || "—")}</p><p>Kamar: ${e(item.room || tenantSession.room || tenantSession.kamar || "—")}</p><p>Kondisi: ${e(item.condition || "—")}</p><p>Kunci: ${e(item.keyCount || "0")} ${item.keyReturned ? `· Dikembalikan: ${e(item.keyReturned)}` : ""}</p><p>Kerusakan: ${e(item.damage || "TIDAK")}${item.damageDetail ? ` · ${e(item.damageDetail)}` : ""}</p><p>Pengurangan deposit: Rp${Number(item.depositDeduction || 0).toLocaleString("id-ID")}</p><div class="actions">${photos.join("")}</div></div>`;
+    }).join("");
+  }catch(err){
+    box.innerHTML = `<div class="card card-pad note danger">${e(err.message)}</div>`;
+  }
+}
+
+async function validateTenantSessionServer(){
+  try{
+    const result = await fetch(API_URL, {
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({
+        action:"tenantdashboard",
+        tenantId:tenantSession.tenantId,
+        sessionToken:tenantSession.sessionToken
+      })
+    });
+
+    let data;
+    try{
+      data = await result.json();
+    }catch(err){
+      throw new Error("Session tenant tidak valid.");
+    }
+
+    if(!data || data.ok !== true){
+      throw new Error(
+        data && data.error
+          ? data.error
+          : "Session tenant tidak valid atau sudah kedaluwarsa."
+      );
+    }
+
+    return true;
+  }catch(err){
+    [
+      "djTenantSession",
+      "djTenantAuth",
+      "djTenantData",
+      "djTenantId",
+      "djTenantName",
+      "djTenantRoom",
+      "djTenantSessionToken",
+      "djTenantToken"
+    ].forEach(function(key){
+      try{sessionStorage.removeItem(key);}catch(_){ }
+    });
+
+    location.href = "login.html";
+    return false;
+  }
+}
+
+async function init(){
+  tenantSession = readSession();
+  if(!tenantSession || !tenantSession.tenantId || !tenantSession.sessionToken){
+    location.href = "login.html";
+    return false;
+  }
+
+  const sessionIsValid = await validateTenantSessionServer();
+  if(!sessionIsValid){
+    return false;
+  }
+
+  const tenantName = tenantSession.nama || tenantSession.name || "Tenant";
+  const tenantId = tenantSession.tenantId || "—";
+  const room = tenantSession.kamar || tenantSession.room || "—";
+
+  document.getElementById("tenantName").textContent = tenantName;
+  document.getElementById("tenantId").textContent = tenantId;
+  document.getElementById("tenantRoom").textContent = room;
+
+  document.getElementById("checkinDate").value = dateToday();
+  document.getElementById("checkoutDate").value = dateToday();
+
+  document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>setMode(btn.dataset.mode)));
+  document.getElementById("checkinForm").addEventListener("submit",submitCheckIn);
+  document.getElementById("checkoutForm").addEventListener("submit",submitCheckOut);
+  document.getElementById("checkoutDamage").addEventListener("change",event=>{
+    document.getElementById("damageDetailField").classList.toggle("hidden",event.target.value!=="YA");
+  });
+  document.getElementById("logoutTop").addEventListener("click",event=>{
+    event.preventDefault();
+    sessionStorage.clear();
+    location.href="login.html";
+  });
+
+  loadHistory();
+}
+
+init().finally(function(){
+  document.documentElement.classList.remove("dj-auth-pending");
+});
+
+window.addEventListener("pageshow",function(){
+  if(sessionStorage.getItem("djTenantSession")){
+    init();
+  }else{
+    location.href="login.html";
+  }
+});
 </script>
-
 </body>
-
 </html>
