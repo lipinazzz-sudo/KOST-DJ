@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dj-auth-pending">
 
 <head>
 
@@ -16,6 +16,12 @@
     rel="stylesheet"
     href="app.css?v=20260925-maintenance-v2"
 >
+
+<style>
+html.dj-auth-pending body{
+    visibility:hidden;
+}
+</style>
 
 <style>
 
@@ -1005,18 +1011,73 @@ function compressImage(
    LOAD TENANT DATA
    ========================================================== */
 
-function initTenant(){
+async function validateTenantSessionServer_(){
+
+    try{
+
+        await apiPost({
+            action:
+                "tenantdashboard",
+            tenantId:
+                tenantSession.tenantId,
+            sessionToken:
+                tenantSession.sessionToken
+        });
+
+        return true;
+
+    }catch(error){
+
+        [
+            "djTenantSession",
+            "djTenantAuth",
+            "djTenantData",
+            "djTenantId",
+            "djTenantName",
+            "djTenantRoom",
+            "djTenantSessionToken",
+            "djTenantToken"
+        ].forEach(function(key){
+            try{
+                sessionStorage.removeItem(key);
+            }catch(_){ }
+        });
+
+        location.href =
+            "login.html?redirect=maintenance.html";
+
+        return false;
+
+    }
+
+}
+
+
+async function initTenant(){
 
     tenantSession =
         readTenantSession();
 
 
     if(
-        !tenantSession
+        !tenantSession ||
+        !tenantSession.tenantId ||
+        !tenantSession.sessionToken
     ){
 
         location.href =
             "login.html?redirect=maintenance.html";
+
+        return false;
+
+    }
+
+
+    const sessionIsValid =
+        await validateTenantSessionServer_();
+
+
+    if(!sessionIsValid){
 
         return false;
 
@@ -1660,7 +1721,35 @@ document
    INIT
    ========================================================== */
 
-initTenant();
+initTenant()
+    .finally(function(){
+        document.documentElement.classList.remove(
+            "dj-auth-pending"
+        );
+    });
+
+
+window.addEventListener(
+    "pageshow",
+    function(){
+
+        if(
+            sessionStorage.getItem(
+                "djTenantSession"
+            )
+        ){
+
+            initTenant();
+
+        } else {
+
+            location.href =
+                "login.html?redirect=maintenance.html";
+
+        }
+
+    }
+);
 
 </script>
 
