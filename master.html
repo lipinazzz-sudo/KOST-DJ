@@ -3741,17 +3741,39 @@ async function loadTenants(){
 
                                 '</button>' +
 
-                                '<button class="btn btn-warning" onclick="resetTenantPassword(\'' +
+                                (
+                                    String(
+                                        item.status ||
+                                        ""
+                                    )
+                                    .trim()
+                                    .toUpperCase() ===
+                                    "AKTIF" &&
+                                    item.accountExists === true &&
+                                    String(
+                                        item.accountStatus ||
+                                        ""
+                                    )
+                                    .trim()
+                                    .toUpperCase() ===
+                                    "AKTIF"
 
-                                encodeURIComponent(
-                                    item.tenantId
+                                        ? (
+                                            '<button class="btn btn-warning" onclick="resetTenantPassword(\'' +
+
+                                            encodeURIComponent(
+                                                item.tenantId
+                                            ) +
+
+                                            '\')">' +
+
+                                            'Reset Password' +
+
+                                            '</button>'
+                                          )
+
+                                        : ''
                                 ) +
-
-                                '\')">' +
-
-                                'Reset Password' +
-
-                                '</button>' +
 
                                 '</div>' +
 
@@ -3945,6 +3967,67 @@ async function resetTenantPassword(
         decodeURIComponent(
             encoded
         );
+
+
+    const tenant =
+        tenantItems.find(
+            function(item){
+
+                return (
+                    String(
+                        item.tenantId ||
+                        ""
+                    )
+                    .trim()
+                    .toUpperCase() ===
+                    String(
+                        tenantId ||
+                        ""
+                    )
+                    .trim()
+                    .toUpperCase()
+                );
+
+            }
+        );
+
+
+    const tenantStatus =
+        String(
+            tenant &&
+            tenant.status ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    const accountStatus =
+        String(
+            tenant &&
+            tenant.accountStatus ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    const canResetPassword =
+        !!tenant &&
+        tenantStatus === "AKTIF" &&
+        tenant.accountExists === true &&
+        accountStatus === "AKTIF";
+
+
+    if(!canResetPassword){
+
+        alert(
+            "Reset password tidak tersedia untuk tenant ini."
+        );
+
+        return;
+
+    }
 
 
     if(
