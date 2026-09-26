@@ -1,67 +1,4 @@
-
-kemarin 16.54
-
-
-DJ_Family_Kost_Perjanjian_Sewa_FINAL_V1.0(1).docx
-Dokumen
-oke nanti kita bahas lebih lanjut soal whatsapp ini
-ada hal mendesak baru yang saya pikirkan saat tenant aktivasi akun tenant membaca aturan tapi tidak membaca perjanjian sewa harusnya ini juga ada di dalam dan setelah di tanda tangan secara fisik fotonya juga harus di upload beserta ktp agar benar benar aktif dan sesuai prosedur
-
-Tangkapan Layar 2026-09-26 pukul 17.07.21.png
-
-Sudah. Saya buat backup lengkap sebelum reset data test dalam satu ZIP.
-
-DOWNLOAD — DJ_Family_Kost_BACKUP_2026-09-26.zip
-
-Ukuran sekitar 15 MB dan berisi 190 file.
-
-Di dalamnya saya pisahkan menjadi:
-
-01_PROJECT_BASELINE
-→ KOST-DJ-main
-→ ZIP baseline
-
-02_LATEST_KNOWN_CURRENT
-→ master.html
-→ aktivasi.html
-→ TENANT_API_V2.gs
-→ PAYMENT_ENGINE_DJ39_V2.gs
-→ WHATSAPP_AUTO_DJ39.gs
-→ maintenance.html
-→ checkinout.html
-→ reset/test tools
-
-03_VERSION_HISTORY
-→ hasil-hasil file perbaikan dan versi sebelumnya
-
-04_DATA_AND_DOCUMENTS
-→ DJ_Family_Kost.xlsx
-→ Perjanjian Sewa
-→ arsip response file
-
-05_QA_SCREENSHOTS
-→ screenshot pengujian yang tersedia
-Saya juga memasukkan BACKUP_INFO.txt di dalam ZIP yang menjelaskan isi dan status snapshot.
-
-Penting: proses backup ini tidak mengubah Apps Script, GitHub, maupun Google Sheets Anda.
-
-Sebelum kita menjalankan reset, simpan ZIP ini di tempat yang aman. Setelah itu baru kita bisa melakukan reset data test dan memulai database tenant dari awal.
-
-
-hari ini 2.25
-Jepretan Layar 2026-09-27 pukul 02.25.12.png
-ada masalah apa ini?
-
-Jepretan Layar 2026-09-27 pukul 02.30.47.png
-https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec
-
-Jepretan Layar 2026-09-27 pukul 02.37.09.png
-Jepretan Layar 2026-09-27 pukul 02.37.26.png
-
-
-Teks yang ditempel (1)(6).txt
-Dokumen
-ini kode index saya sejujurnya sudah berkerja dengan sangat baik dan bagus tapi tampilan terlalu polos dan tidak ada unik atau design yang menarik coba di buat tambahan style css tanpa merubah sedikitpun struktur kode dan menghapus apapun dari file ini :root{
+:root{
   --navy:#10182d;
   --navy2:#17213b;
   --gold:#c9974a;
@@ -730,210 +667,2433 @@ input[readonly]{
 
 }
 
-ini kode css saya jika di perlukan
-
-Jepretan Layar 2026-09-27 pukul 02.46.59.png
-saya tidak melihat adanya perubahan mungkin ada sedikit tapi ini sama saja menurut saya
-
-Betul. Setelah melihat hasil screenshot, saya setuju bahwa versi sebelumnya terlalu halus. Secara teknis berubah, tetapi secara visual belum memberikan identitas baru yang terasa.
-
-Saya buat V2 yang jauh lebih terlihat, tetap hanya CSS.
-
-Perubahan yang sekarang akan terasa
-Hero
-→ berubah menjadi dark navy premium
-→ aksen gold lebih kuat
-→ layout hero lebih editorial
-
-Kamar
-→ summary card lebih tegas
-→ floor header navy/gold
-→ room card lebih besar dan hidup
-→ status TERSEDIA / TERISI / SEGERA lebih jelas
-
-Menu
-→ setiap kartu punya aksen warna sendiri
-→ icon lebih besar
-→ hover lebih terasa
-→ public/private section lebih berbeda
-
-Navbar
-→ lebih premium
-→ Login Tenant lebih menonjol
-
-Background
-→ gradient dan lighting lebih terlihat
-
-Button
-→ elevation + shimmer + press effect
-
-Footer
-→ lebih berkarakter
-Yang penting:
-
-HTML                  ✅ TIDAK DIUBAH
-JavaScript            ✅ TIDAK DIUBAH
-ID/class               ✅ TIDAK DIUBAH
-CSS lama               ✅ TETAP ADA
-CSS sebelumnya         ✅ TETAP ADA
-Kode dihapus           ❌ 0
-Kode struktur diubah   ❌ 0
-Saya sengaja menaruh desain V2 sebagai layer tambahan paling bawah, sehingga tidak perlu menyentuh CSS yang sudah ada.
-
-File baru
-app.css.txt — DJ Family Kost Visual Design V2
-
-Cara pasang
-Di GitHub:
-
-KOST-DJ
-→ app.css
-Lalu:
-
-Cmd + A
-→ copy SELURUH isi file V2
-→ paste
-→ Commit changes
-Setelah itu buka:
-
-https://lipinazzz-sudo.github.io/KOST-DJ/index.html
-Lakukan:
-
-Cmd + Shift + R
-Kali ini perubahannya harus jelas terlihat, terutama pada hero, header lantai, kartu kamar, kartu menu, dan tombol.
-
-File index.html Anda memang hanya memanggil ./app.css, jadi perubahan visual ini tidak memerlukan modifikasi struktur HTML. 
-
-Setelah dipasang, kirim screenshot baru. Kita evaluasi visualnya saja; tidak akan menyentuh logic yang sudah berjalan. 
-
-app.css.txt
-Dokumen
-
-
-Jepretan Layar 2026-09-27 pukul 02.50.58.png
-ini baru perubahan yang bagus tapi saya butuh sedikit gambar background tipis dan logo untuk bagian seperti di gambar saya
-generate gambar yang pas dan sesuai atau buat abstract asalkan tidak polos
-
-Gambar yang dibuat: Latar Arsitektur Mewah Biru Malam
-
-
-Edit
-
-
-Gambar yang dibuat: Latar Arsitektur Mewah Biru Malam
-Gambar yang dibuat: Latar Arsitektur Mewah Biru Malam
-Gambar yang dibuat: Latar Arsitektur Mewah Biru Malam
-
-Gambar yang dibuat: Emblem Rumah Mewah Navy Emas daun hijau
-Gambar yang dibuat: Emblem Rumah Mewah Navy Emas daun hijau
-
-oke saya suka keduanya bagaimana sekarang cara saya mengaplikasikannya?
-
-Keduanya bisa langsung kita pasang ke index.html tanpa mengubah struktur HTML atau JavaScript. Justru desain yang kita punya sekarang cocok sekali dengan struktur yang sudah ada.
-
-Saya sarankan penempatannya seperti ini:
-
-┌─────────────────────────────────────────────────────┐
-│  LOGO   DJ FAMILY KOST                 menu ...     │
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│       HERO TEXT              BACKGROUND ART        │
-│       Hunian Nyaman...       gedung + gold         │
-│                                                     │
-├─────────────────────────────────────────────────────┤
-│       Katalog Kamar                                │
-└─────────────────────────────────────────────────────┘
-1. Simpan kedua gambar ke repository GitHub
-Download/simpan:
-
-Background Hero DJ Family Kost
-
-Logo DJ Family Kost
-
-Di repository:
-
-KOST-DJ/
-│
-├── index.html
-├── app.css
-├── dj-kost.js
-│
-└── assets/
-    ├── dj-family-kost-hero.png
-    └── dj-family-kost-logo.png
-Buat folder:
-
-assets
-kemudian upload kedua gambar tersebut.
-
-Saya sarankan nama persis:
-
-dj-family-kost-hero.png
-dj-family-kost-logo.png
-2. Background hero
-Tidak perlu mengubah index.html.
-
-Karena index.html Anda memang sudah menggunakan .hero dan stylesheet app.css. 
-
-Tambahkan CSS paling bawah app.css:
 
 /* ============================================================
-   DJ FAMILY KOST — HERO BACKGROUND IMAGE
+   DJ FAMILY KOST — VISUAL ENHANCEMENT LAYER
+   ============================================================
+   Hanya TAMBAHAN CSS.
+   Semua rule CSS existing di atas dipertahankan.
+   Tidak mengubah struktur HTML.
    ============================================================ */
 
-.hero{
+:root{
+  --luxury-gold:#d7ad61;
+  --luxury-gold-soft:#f5ead7;
+  --navy-soft:#22304f;
+  --hero-ink:#0d162b;
+  --glass:rgba(255,255,255,.76);
+  --glass-strong:rgba(255,255,255,.90);
+  --shadow-soft:0 14px 36px rgba(16,24,45,.08);
+  --shadow-hover:0 26px 70px rgba(16,24,45,.14);
+}
+
+/* ------------------------------------------------------------
+   GLOBAL ATMOSPHERE
+   ------------------------------------------------------------ */
+
+body{
+  background:
+    radial-gradient(
+      circle at 8% 0%,
+      rgba(201,151,74,.055),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 96% 12%,
+      rgba(60,120,216,.045),
+      transparent 24%
+    ),
+    var(--bg);
+}
+
+::selection{
+  background:rgba(201,151,74,.22);
+  color:var(--navy);
+}
+
+a,
+button,
+.room-card,
+.menu-card,
+.action-card,
+.card{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ------------------------------------------------------------
+   NAVIGATION
+   ------------------------------------------------------------ */
+
+.nav{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.97),
+      rgba(255,255,255,.91)
+    );
+  box-shadow:
+    0 8px 30px rgba(16,24,45,.045);
+}
+
+.nav-inner{
+  position:relative;
+}
+
+.brand{
+  position:relative;
+  transition:
+    transform .22s ease,
+    opacity .22s ease;
+}
+
+.brand::after{
+  content:"";
+  position:absolute;
+  left:40px;
+  right:0;
+  bottom:-5px;
+  height:1px;
   background:
     linear-gradient(
       90deg,
-      rgba(10,18,38,.96) 0%,
-      rgba(14,25,49,.91) 42%,
-      rgba(14,25,49,.72) 68%,
-      rgba(14,25,49,.52) 100%
+      transparent,
+      rgba(201,151,74,.55),
+      transparent
+    );
+  opacity:0;
+  transform:scaleX(.7);
+  transition:
+    opacity .22s ease,
+    transform .22s ease;
+}
+
+.brand:hover{
+  transform:translateY(-1px);
+}
+
+.brand:hover::after{
+  opacity:1;
+  transform:scaleX(1);
+}
+
+.brand-mark{
+  position:relative;
+  flex:none;
+  box-shadow:
+    inset 0 0 0 4px #fff,
+    0 6px 16px rgba(25,168,90,.10);
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease;
+}
+
+.brand:hover .brand-mark{
+  transform:rotate(-3deg) scale(1.04);
+  box-shadow:
+    inset 0 0 0 4px #fff,
+    0 8px 22px rgba(25,168,90,.17);
+}
+
+.nav-links a{
+  position:relative;
+  padding:8px 2px;
+  transition:
+    color .18s ease,
+    transform .18s ease;
+}
+
+.nav-links a:not(.login-top)::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:2px;
+  height:2px;
+  border-radius:999px;
+  background:var(--gold);
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .18s ease;
+}
+
+.nav-links a:not(.login-top):hover{
+  transform:translateY(-1px);
+}
+
+.nav-links a:not(.login-top):hover::after{
+  transform:scaleX(1);
+}
+
+.login-top{
+  position:relative;
+  overflow:hidden;
+  box-shadow:
+    0 8px 22px rgba(16,24,45,.13);
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.login-top::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-120%;
+  width:80%;
+  height:100%;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.16),
+      transparent
+    );
+  transform:skewX(-18deg);
+  transition:left .42s ease;
+}
+
+.login-top:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 12px 28px rgba(16,24,45,.18);
+}
+
+.login-top:hover::before{
+  left:135%;
+}
+
+/* ------------------------------------------------------------
+   HERO
+   ------------------------------------------------------------ */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(255,255,255,1) 0,
+      rgba(255,255,255,.70) 24%,
+      transparent 48%
     ),
-    url("./assets/dj-family-kost-hero.png")
-    center right / cover no-repeat;
+    radial-gradient(
+      circle at 88% 4%,
+      rgba(201,151,74,.10) 0,
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #fbfcff 0%,
+      var(--bg) 100%
+    );
+}
+
+.hero::before,
+.hero::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  border-radius:50%;
+  pointer-events:none;
 }
 
 .hero::before{
-  opacity:.28;
+  width:360px;
+  height:360px;
+  top:-190px;
+  left:-150px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(25,168,90,.10) 0,
+      rgba(25,168,90,.03) 46%,
+      transparent 72%
+    );
 }
 
 .hero::after{
-  opacity:.20;
+  width:440px;
+  height:440px;
+  right:-210px;
+  bottom:-250px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.12) 0,
+      rgba(201,151,74,.035) 46%,
+      transparent 72%
+    );
 }
-Hasilnya:
 
-Kiri
-→ tetap gelap
-→ teks tetap sangat mudah dibaca
+.hero .eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  border:1px solid rgba(201,151,74,.20);
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  box-shadow:
+    0 8px 26px rgba(16,24,45,.055);
+}
 
-Kanan
-→ bangunan muncul samar
-→ gold lighting terlihat
-→ tidak terasa seperti background polos
-Ini penting karena gambar yang kita buat memang sengaja mempunyai negative space di sebelah kiri untuk teks.
+.hero .eyebrow::before,
+.hero .eyebrow::after{
+  content:"";
+  width:22px;
+  height:1px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(201,151,74,.65)
+    );
+}
 
-3. Pasang logo
-Struktur HTML Anda saat ini sudah punya:
+.hero .eyebrow::after{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(201,151,74,.65),
+      transparent
+    );
+}
 
-<span class="brand-mark"></span>
-jadi kita tidak perlu menambahkan elemen HTML baru. 
+.hero h1{
+  position:relative;
+  text-wrap:balance;
+  text-shadow:
+    0 8px 30px rgba(16,24,45,.045);
+}
 
-Tambahkan ke paling bawah app.css:
+.hero h1::after{
+  content:"";
+  display:block;
+  width:74px;
+  height:3px;
+  margin:20px auto 0;
+  border-radius:999px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--gold),
+      transparent
+    );
+}
+
+.hero .lead{
+  max-width:720px;
+}
+
+/* ------------------------------------------------------------
+   SECTION TITLES
+   ------------------------------------------------------------ */
+
+.section-head,
+.menu-title{
+  position:relative;
+}
+
+.section-head .eyebrow,
+.menu-title .eyebrow,
+.tenant-menu .eyebrow{
+  display:inline-block;
+  margin-bottom:8px;
+  position:relative;
+}
+
+.section-head .eyebrow::after,
+.menu-title .eyebrow::after,
+.tenant-menu .eyebrow::after{
+  content:"";
+  display:block;
+  width:34px;
+  height:2px;
+  margin-top:6px;
+  border-radius:999px;
+  background:var(--gold);
+  opacity:.65;
+}
+
+.section-head h2,
+.menu-title h2{
+  text-wrap:balance;
+}
+
+/* ------------------------------------------------------------
+   CARDS
+   ------------------------------------------------------------ */
+
+.card{
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow-soft);
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.68),
+      transparent 42%
+    );
+  opacity:.52;
+}
+
+.card:hover{
+  border-color:#dde2ea;
+  box-shadow:var(--shadow-hover);
+}
+
+/* ------------------------------------------------------------
+   ACTION CARDS
+   ------------------------------------------------------------ */
+
+.action-card{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #fbfcfe
+    );
+}
+
+.action-card::after{
+  content:"";
+  position:absolute;
+  width:110px;
+  height:110px;
+  right:-52px;
+  top:-52px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.12),
+      transparent 68%
+    );
+  pointer-events:none;
+}
+
+.action-icon{
+  transition:
+    transform .22s ease,
+    background .22s ease,
+    box-shadow .22s ease;
+}
+
+.action-card:hover .action-icon{
+  transform:translateY(-2px) rotate(-2deg);
+  background:var(--luxury-gold-soft);
+  box-shadow:
+    0 8px 20px rgba(201,151,74,.12);
+}
+
+/* ------------------------------------------------------------
+   MENU / QUICK CARDS
+   ------------------------------------------------------------ */
+
+.menu-card{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #fbfcff 100%
+    );
+}
+
+.menu-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:3px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(201,151,74,.72),
+      transparent
+    );
+  transform:scaleX(.35);
+  transition:transform .22s ease;
+}
+
+.menu-card::after{
+  content:"";
+  position:absolute;
+  width:160px;
+  height:160px;
+  right:-90px;
+  bottom:-90px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(23,33,59,.055),
+      transparent 70%
+    );
+  pointer-events:none;
+}
+
+.menu-card:hover{
+  transform:translateY(-6px);
+  box-shadow:
+    0 28px 70px rgba(16,24,45,.13);
+}
+
+.menu-card:hover::before{
+  transform:scaleX(1);
+}
+
+.menu-icon{
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    background .22s ease;
+}
+
+.menu-card:hover .menu-icon{
+  transform:translateY(-3px) scale(1.04);
+  box-shadow:
+    0 10px 24px rgba(16,24,45,.08);
+}
+
+/* ------------------------------------------------------------
+   BUTTONS
+   ------------------------------------------------------------ */
+
+.btn{
+  position:relative;
+  overflow:hidden;
+  transform:translateZ(0);
+  transition:
+    transform .16s ease,
+    box-shadow .16s ease,
+    background .16s ease,
+    border-color .16s ease;
+}
+
+.btn::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-130%;
+  width:80%;
+  height:100%;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.17),
+      transparent
+    );
+  transform:skewX(-18deg);
+  transition:left .42s ease;
+}
+
+.btn:hover:not(:disabled){
+  transform:translateY(-2px);
+}
+
+.btn:hover:not(:disabled)::before{
+  left:135%;
+}
+
+.btn:active:not(:disabled){
+  transform:translateY(0) scale(.985);
+}
+
+.btn-primary{
+  box-shadow:
+    0 9px 24px rgba(16,24,45,.12);
+}
+
+.btn-primary:hover:not(:disabled){
+  background:var(--navy2);
+  box-shadow:
+    0 14px 32px rgba(16,24,45,.17);
+}
+
+.btn-light{
+  box-shadow:
+    0 6px 18px rgba(16,24,45,.045);
+}
+
+.btn-light:hover:not(:disabled){
+  background:#fbfcff;
+  border-color:#d3d9e3;
+  box-shadow:
+    0 10px 24px rgba(16,24,45,.08);
+}
+
+.btn-gold{
+  box-shadow:
+    0 10px 24px rgba(201,151,74,.20);
+}
+
+.btn-gold:hover:not(:disabled){
+  background:var(--luxury-gold);
+  box-shadow:
+    0 14px 30px rgba(201,151,74,.27);
+}
+
+/* ------------------------------------------------------------
+   FORM CONTROLS
+   ------------------------------------------------------------ */
+
+.form-card{
+  position:relative;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.98),
+      rgba(250,251,253,.98)
+    );
+  box-shadow:
+    0 24px 70px rgba(16,24,45,.09);
+}
+
+.form-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:4px;
+  border-radius:var(--radius) var(--radius) 0 0;
+  background:
+    linear-gradient(
+      90deg,
+      var(--navy),
+      var(--gold),
+      var(--green)
+    );
+  opacity:.82;
+}
+
+input,
+select,
+textarea{
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease,
+    background .18s ease;
+}
+
+input:hover,
+select:hover,
+textarea:hover{
+  border-color:#ccd3df;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  transform:translateY(-1px);
+  border-color:var(--gold);
+  box-shadow:
+    0 0 0 3px rgba(201,151,74,.10),
+    0 10px 24px rgba(16,24,45,.06);
+}
+
+/* ------------------------------------------------------------
+   NOTES / MESSAGES
+   ------------------------------------------------------------ */
+
+.note{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      135deg,
+      #f7f8fb,
+      #f2f4f8
+    );
+}
+
+.note::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:
+    linear-gradient(
+      180deg,
+      var(--gold),
+      var(--green)
+    );
+}
+
+.message{
+  box-shadow:
+    0 8px 24px rgba(16,24,45,.045);
+}
+
+/* ------------------------------------------------------------
+   STATUS BADGES
+   ------------------------------------------------------------ */
+
+.status{
+  position:relative;
+  letter-spacing:.01em;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.44);
+}
+
+.status-kosong{
+  box-shadow:
+    inset 0 0 0 1px rgba(25,168,90,.08);
+}
+
+.status-terisi{
+  box-shadow:
+    inset 0 0 0 1px rgba(201,74,74,.08);
+}
+
+.status-segera{
+  box-shadow:
+    inset 0 0 0 1px rgba(152,106,0,.08);
+}
+
+/* ------------------------------------------------------------
+   ROOM SUMMARY / KPI
+   ------------------------------------------------------------ */
+
+.stat-card{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fafbfe
+    );
+}
+
+.stat-card::after{
+  content:"";
+  position:absolute;
+  width:110px;
+  height:110px;
+  right:-58px;
+  bottom:-58px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.10),
+      transparent 70%
+    );
+}
+
+.stat-number,
+.kpi-value{
+  letter-spacing:-.03em;
+}
+
+.stat-card:hover{
+  transform:translateY(-3px);
+  box-shadow:
+    0 20px 46px rgba(16,24,45,.10);
+}
+
+/* ------------------------------------------------------------
+   ROOM CATALOG
+   ------------------------------------------------------------ */
+
+.floor-card{
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfcff
+    );
+}
+
+.floor-head{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(16,24,45,.028),
+      rgba(201,151,74,.035)
+    );
+}
+
+.floor-head::before{
+  content:"";
+  width:4px;
+  align-self:stretch;
+  border-radius:999px;
+  background:
+    linear-gradient(
+      180deg,
+      var(--gold),
+      rgba(201,151,74,.15)
+    );
+  margin-right:2px;
+}
+
+.floor-rooms{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(246,247,251,.50),
+      rgba(255,255,255,.65)
+    );
+}
+
+.room-card{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfcfe
+    );
+  box-shadow:
+    0 6px 18px rgba(16,24,45,.035);
+}
+
+.room-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.72),
+      transparent 45%
+    );
+  pointer-events:none;
+}
+
+.room-card:hover{
+  border-color:#d6dce6;
+  box-shadow:
+    0 14px 34px rgba(16,24,45,.09);
+}
+
+.room-card.is-kosong{
+  border-color:rgba(25,168,90,.18);
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f8fcf9
+    );
+}
+
+.room-card.is-kosong:hover{
+  border-color:rgba(25,168,90,.34);
+  box-shadow:
+    0 16px 34px rgba(25,168,90,.10);
+}
+
+.room-card.is-terisi{
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbf7f7
+    );
+}
+
+.room-card.is-segera{
+  border-color:rgba(201,151,74,.18);
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fffaf0
+    );
+}
+
+.room-number{
+  position:relative;
+  z-index:1;
+}
+
+.room-price{
+  position:relative;
+  z-index:1;
+}
+
+/* ------------------------------------------------------------
+   INFO BANNER
+   ------------------------------------------------------------ */
+
+.info-banner{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 92% 18%,
+      rgba(201,151,74,.17),
+      transparent 24%
+    ),
+    linear-gradient(
+      135deg,
+      var(--navy),
+      var(--navy2)
+    );
+  box-shadow:
+    0 22px 50px rgba(16,24,45,.16);
+}
+
+.info-banner::after{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-80px;
+  bottom:-110px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:
+    0 0 0 20px rgba(255,255,255,.025),
+    0 0 0 40px rgba(255,255,255,.018);
+  pointer-events:none;
+}
+
+/* ------------------------------------------------------------
+   DASHBOARD / PROFILE
+   ------------------------------------------------------------ */
+
+.profile-card,
+.kpi-card{
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fafbfe
+    );
+}
+
+.kpi-card{
+  position:relative;
+  overflow:hidden;
+}
+
+.kpi-card::after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  right:-42px;
+  top:-42px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(25,168,90,.08),
+      transparent 70%
+    );
+}
+
+/* ------------------------------------------------------------
+   HISTORY TABLE
+   ------------------------------------------------------------ */
+
+.history tr{
+  transition:background .16s ease;
+}
+
+.history tbody tr:hover{
+  background:#fafbfe;
+}
+
+.history th{
+  letter-spacing:.08em;
+}
+
+/* ------------------------------------------------------------
+   RULES
+   ------------------------------------------------------------ */
+
+.rule{
+  position:relative;
+}
+
+.rule::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:24px;
+  width:4px;
+  height:24px;
+  border-radius:999px;
+  background:
+    linear-gradient(
+      180deg,
+      var(--gold),
+      rgba(201,151,74,.16)
+    );
+}
+
+/* ------------------------------------------------------------
+   FOOTER
+   ------------------------------------------------------------ */
+
+.footer{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 92% 20%,
+      rgba(201,151,74,.12),
+      transparent 24%
+    ),
+    linear-gradient(
+      135deg,
+      #0d1528,
+      var(--navy)
+    );
+}
+
+.footer::before{
+  content:"";
+  position:absolute;
+  left:-120px;
+  top:-80px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.045);
+  box-shadow:
+    0 0 0 22px rgba(255,255,255,.018),
+    0 0 0 44px rgba(255,255,255,.012);
+  pointer-events:none;
+}
+
+.footer-inner{
+  position:relative;
+  z-index:1;
+}
+
+/* ------------------------------------------------------------
+   BACK / LOADING / EMPTY
+   ------------------------------------------------------------ */
+
+.back{
+  position:relative;
+  transition:
+    color .18s ease,
+    transform .18s ease;
+}
+
+.back::before{
+  content:"";
+  width:28px;
+  height:1px;
+  margin-right:8px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      currentColor
+    );
+  opacity:.45;
+}
+
+.back:hover{
+  color:var(--navy);
+  transform:translateX(-2px);
+}
+
+.loading{
+  border:1px dashed #d9dee7;
+  border-radius:18px;
+  background:rgba(255,255,255,.55);
+}
+
+/* ------------------------------------------------------------
+   SOFT ACCESSIBILITY / MOTION
+   ------------------------------------------------------------ */
+
+:focus-visible{
+  outline:3px solid rgba(201,151,74,.22);
+  outline-offset:2px;
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto !important;
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+
+}
+
+/* ------------------------------------------------------------
+   MOBILE REFINEMENT — ADDITIONAL ONLY
+   ------------------------------------------------------------ */
+
+@media(max-width:850px){
+
+  .hero{
+    padding-bottom:50px;
+  }
+
+  .hero .eyebrow{
+    font-size:10px;
+    letter-spacing:.12em;
+  }
+
+  .hero h1::after{
+    margin-top:16px;
+  }
+
+  .menu-card:hover,
+  .action-card:hover,
+  .stat-card:hover{
+    transform:translateY(-3px);
+  }
+
+  .floor-head{
+    align-items:flex-start;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .container{
+    width:calc(100% - 24px);
+  }
+
+  .hero{
+    padding-top:48px;
+  }
+
+  .hero h1{
+    letter-spacing:-.04em;
+  }
+
+  .hero .lead{
+    font-size:15px;
+  }
+
+  .section{
+    padding:38px 0;
+  }
+
+  .section-head{
+    margin-bottom:22px;
+  }
+
+  .stat-number{
+    font-size:29px;
+  }
+
+  .floor-rooms{
+    gap:9px;
+    padding:14px;
+  }
+
+  .room-card{
+    min-height:86px;
+  }
+
+}
+
 
 /* ============================================================
-   DJ FAMILY KOST — BRAND LOGO
+   DJ FAMILY KOST — V2 DISTINCTIVE VISUAL DESIGN
+   ============================================================
+   IMPORTANT:
+   - SEMUA CSS sebelumnya dipertahankan.
+   - BLOK INI HANYA MENAMBAHKAN / OVERRIDE TAMPILAN.
+   - TIDAK ADA perubahan HTML.
+   - TIDAK ADA perubahan JavaScript.
+   - TIDAK ADA perubahan class/id existing.
    ============================================================ */
 
+/* ------------------------------------------------------------
+   01. GLOBAL — PREMIUM BOUTIQUE LOOK
+   ------------------------------------------------------------ */
+
+body{
+  background:
+    linear-gradient(
+      180deg,
+      #f8f9fc 0%,
+      #f2f4f8 52%,
+      #f7f8fb 100%
+    );
+  color:var(--text);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  z-index:-10;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(
+      circle at 0% 12%,
+      rgba(201,151,74,.08),
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 100% 38%,
+      rgba(25,168,90,.045),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(60,120,216,.04),
+      transparent 28%
+    );
+}
+
+.container{
+  width:min(1240px,calc(100% - 56px));
+}
+
+@media(max-width:850px){
+  .container{
+    width:calc(100% - 30px);
+  }
+}
+
+@media(max-width:520px){
+  .container{
+    width:calc(100% - 22px);
+  }
+}
+
+
+/* ------------------------------------------------------------
+   02. NAV — MORE DISTINCTIVE
+   ------------------------------------------------------------ */
+
+.nav{
+  background:
+    rgba(255,255,255,.94);
+  border-bottom:
+    1px solid rgba(16,24,45,.075);
+  box-shadow:
+    0 10px 34px rgba(16,24,45,.08);
+}
+
+.nav-inner{
+  min-height:78px;
+}
+
+.brand{
+  font-size:15px;
+  letter-spacing:.055em;
+}
+
 .brand-mark{
-  width:38px;
-  height:38px;
-  border-radius:12px;
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 25%,
+      #e8f7ed 25% 58%,
+      #d7eadf 58%
+    );
+  border:1px solid rgba(16,24,45,.08);
+  box-shadow:
+    inset 0 0 0 4px #fff,
+    0 7px 22px rgba(16,24,45,.10);
+}
+
+.nav-links{
+  gap:12px;
+}
+
+.nav-links a{
+  padding:9px 11px;
+  border-radius:10px;
+}
+
+.nav-links a:not(.login-top):hover{
+  background:#f5f7fa;
+}
+
+.login-top{
+  padding:11px 16px !important;
+  border-radius:12px !important;
+  background:
+    linear-gradient(
+      135deg,
+      #10182d,
+      #253454
+    );
+}
+
+
+/* ------------------------------------------------------------
+   03. HERO — STRONG VISUAL IDENTITY
+   ------------------------------------------------------------ */
+
+.hero{
+  padding:
+    104px 0
+    86px;
+  text-align:left;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
 
   background:
-    #ffffff
-    url("./assets/dj-family-kost-logo.png")
-    center / 31px 31px
+    linear-gradient(
+      135deg,
+      #0c1428 0%,
+      #111b35 46%,
+      #1b2948 100%
+    );
+  color:#fff;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:620px;
+  height:620px;
+  left:-260px;
+  top:-300px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.22) 0,
+      rgba(201,151,74,.06) 36%,
+      transparent 68%
+    );
+  pointer-events:none;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  right:-280px;
+  bottom:-390px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(25,168,90,.11) 0,
+      rgba(25,168,90,.025) 42%,
+      transparent 70%
+    );
+  pointer-events:none;
+}
+
+.hero .container{
+  position:relative;
+  z-index:2;
+  max-width:1240px;
+}
+
+.hero .eyebrow{
+  padding:9px 14px;
+  color:#f2ce8b;
+  background:
+    rgba(201,151,74,.11);
+  border:
+    1px solid rgba(215,173,97,.35);
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.16);
+}
+
+.hero h1{
+  max-width:860px;
+  margin:
+    20px 0
+    22px;
+  font-size:
+    clamp(44px,6vw,82px);
+  line-height:
+    .98;
+  letter-spacing:
+    -.055em;
+  color:#fff;
+  text-shadow:
+    0 18px 44px rgba(0,0,0,.25);
+}
+
+.hero h1::after{
+  width:100px;
+  height:4px;
+  margin:
+    26px 0
+    0;
+  background:
+    linear-gradient(
+      90deg,
+      #c9974a,
+      #f0cf90,
+      transparent
+    );
+}
+
+.hero .lead{
+  max-width:700px;
+  margin:0;
+  color:
+    rgba(238,242,248,.78);
+  font-size:18px;
+}
+
+.hero-actions{
+  justify-content:flex-start;
+  margin-top:31px;
+  gap:12px;
+}
+
+.hero-actions .btn-primary{
+  background:
+    linear-gradient(
+      135deg,
+      #d6a857,
+      #b97f2e
+    );
+  color:#fff;
+  border:
+    1px solid rgba(255,255,255,.12);
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.23),
+    0 5px 0 rgba(104,68,15,.25);
+}
+
+.hero-actions .btn-primary:hover{
+  background:
+    linear-gradient(
+      135deg,
+      #e0b66b,
+      #c38735
+    );
+}
+
+.hero-actions .btn-light{
+  background:
+    rgba(255,255,255,.07);
+  color:#fff;
+  border:
+    1px solid rgba(255,255,255,.20);
+  box-shadow:none;
+}
+
+.hero-actions .btn-light:hover{
+  background:
+    rgba(255,255,255,.13);
+  border-color:
+    rgba(255,255,255,.32);
+}
+
+
+/* ------------------------------------------------------------
+   04. SECTION SPACING
+   ------------------------------------------------------------ */
+
+.section{
+  padding:
+    78px 0;
+}
+
+#kamar.section{
+  position:relative;
+  background:
+    linear-gradient(
+      180deg,
+      #f4f6fa 0%,
+      #f8f9fc 100%
+    );
+}
+
+.quick-section{
+  position:relative;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f4f6fa 100%
+    );
+  border-top:
+    1px solid rgba(16,24,45,.055);
+}
+
+.section-head,
+.menu-title{
+  margin-bottom:32px;
+}
+
+
+/* ------------------------------------------------------------
+   05. SECTION TITLES — EDITORIAL
+   ------------------------------------------------------------ */
+
+.section-head .eyebrow,
+.menu-title .eyebrow,
+.tenant-menu .eyebrow{
+  font-size:11px;
+  letter-spacing:.18em;
+}
+
+.section-head h2,
+.menu-title h2{
+  font-size:
+    clamp(28px,3vw,40px);
+  letter-spacing:
+    -.035em;
+  margin-top:8px;
+}
+
+.section-head p,
+.menu-title .lead{
+  color:#657089;
+}
+
+
+/* ------------------------------------------------------------
+   06. ROOM SUMMARY — BIGGER AND MORE VISUAL
+   ------------------------------------------------------------ */
+
+.room-summary{
+  gap:16px;
+  margin-bottom:30px;
+}
+
+.stat-card{
+  min-height:132px;
+  padding:24px;
+  border-radius:20px;
+  border:
+    1px solid rgba(16,24,45,.08);
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f6f8fb
+    );
+}
+
+.stat-card:nth-child(1){
+  border-top:
+    4px solid #17213b;
+}
+
+.stat-card:nth-child(2){
+  border-top:
+    4px solid #19a85a;
+}
+
+.stat-card:nth-child(3){
+  border-top:
+    4px solid #c9974a;
+}
+
+.stat-card:hover{
+  transform:
+    translateY(-5px);
+  box-shadow:
+    0 24px 52px rgba(16,24,45,.13);
+}
+
+.stat-number{
+  font-size:38px;
+  letter-spacing:-.05em;
+}
+
+.stat-card .eyebrow{
+  font-size:10px;
+}
+
+
+/* ------------------------------------------------------------
+   07. FLOOR CARDS — LUXURY LISTING FEEL
+   ------------------------------------------------------------ */
+
+.floor-list{
+  gap:20px;
+}
+
+.floor-card{
+  border-radius:22px;
+  border:
+    1px solid rgba(16,24,45,.08);
+  box-shadow:
+    0 14px 35px rgba(16,24,45,.075);
+  background:#fff;
+}
+
+.floor-card:hover{
+  box-shadow:
+    0 24px 56px rgba(16,24,45,.12);
+}
+
+.floor-head{
+  position:relative;
+  padding:
+    23px
+    25px;
+  min-height:86px;
+  background:
+    linear-gradient(
+      110deg,
+      #10182d 0%,
+      #182543 60%,
+      #253555 100%
+    );
+  color:#fff;
+  border-bottom:0;
+}
+
+.floor-head::before{
+  width:5px;
+  height:auto;
+  min-height:40px;
+  margin-right:3px;
+  background:
+    linear-gradient(
+      180deg,
+      #d9b267,
+      #a77529
+    );
+  opacity:1;
+}
+
+.floor-head::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 48%,
+      rgba(255,255,255,.035) 48% 50%,
+      transparent 50%
+    );
+  background-size:20px 20px;
+}
+
+.floor-meta{
+  color:
+    rgba(255,255,255,.67);
+}
+
+.floor-card:nth-child(4) .floor-head{
+  background:
+    linear-gradient(
+      110deg,
+      #8d651f,
+      #bc8d3d
+    );
+}
+
+.floor-rooms{
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+  gap:12px;
+  padding:20px;
+  background:
+    #f8fafc;
+}
+
+.room-card{
+  min-height:106px;
+  border-radius:17px;
+  border:
+    1px solid #e0e5ec;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f6f8fb
+    );
+  box-shadow:
+    0 7px 18px rgba(16,24,45,.045);
+}
+
+.room-card:hover{
+  transform:
+    translateY(-4px);
+  border-color:
+    #cbd3de;
+  box-shadow:
+    0 16px 34px rgba(16,24,45,.11);
+}
+
+.room-card.is-kosong{
+  border-color:
+    rgba(25,168,90,.26);
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f4fbf7
+    );
+}
+
+.room-card.is-kosong::after{
+  content:"TERSEDIA";
+  position:absolute;
+  left:10px;
+  top:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#e7f7ed;
+  color:#147541;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.room-card.is-terisi{
+  border-color:
+    rgba(201,74,74,.18);
+}
+
+.room-card.is-terisi::after{
+  content:"TERISI";
+  position:absolute;
+  left:10px;
+  top:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#faecec;
+  color:#a52929;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.room-card.is-segera{
+  border-color:
+    rgba(201,151,74,.30);
+}
+
+.room-card.is-segera::after{
+  content:"SEGERA";
+  position:absolute;
+  left:10px;
+  top:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#fff4d9;
+  color:#986a00;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.room-number{
+  margin-top:10px;
+  font-size:22px;
+}
+
+.room-price{
+  font-size:12px;
+  font-weight:700;
+}
+
+
+/* ------------------------------------------------------------
+   08. PUBLIC MENU — MORE CHARACTER
+   ------------------------------------------------------------ */
+
+.menu-grid{
+  gap:18px;
+}
+
+.menu-card{
+  min-height:226px;
+  padding:24px;
+  border-radius:20px;
+  border:
+    1px solid rgba(16,24,45,.08);
+  background:
+    linear-gradient(
+      180deg,
+      #fff 0%,
+      #f9fafc 100%
+    );
+}
+
+.public-menu .menu-card{
+  box-shadow:
+    0 12px 28px rgba(16,24,45,.06);
+}
+
+.menu-card::before{
+  height:4px;
+  transform:scaleX(1);
+  opacity:.75;
+}
+
+.public-menu .menu-card:nth-child(1)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #17213b,
+      #17213b,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(2)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #3c78d8,
+      #3c78d8,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(3)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #c9974a,
+      #c9974a,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(4)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #19a85a,
+      #19a85a,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(5)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #7956b4,
+      #7956b4,
+      transparent
+    );
+}
+
+.public-menu .menu-card:nth-child(6)::before{
+  background:
+    linear-gradient(
+      90deg,
+      #10182d,
+      #10182d,
+      transparent
+    );
+}
+
+.menu-icon{
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  margin-bottom:18px;
+  border:
+    1px solid rgba(16,24,45,.06);
+  box-shadow:
+    0 8px 22px rgba(16,24,45,.07);
+  font-size:18px;
+}
+
+.public-menu .menu-card:nth-child(1) .menu-icon{
+  background:#edf1f8;
+  color:#17213b;
+}
+
+.public-menu .menu-card:nth-child(2) .menu-icon{
+  background:#edf4ff;
+  color:#3267ba;
+}
+
+.public-menu .menu-card:nth-child(3) .menu-icon{
+  background:#fcf5e9;
+  color:#986a00;
+}
+
+.public-menu .menu-card:nth-child(4) .menu-icon{
+  background:#eaf8ef;
+  color:#147541;
+}
+
+.public-menu .menu-card:nth-child(5) .menu-icon{
+  background:#f3eefb;
+  color:#6d4ba4;
+}
+
+.public-menu .menu-card:nth-child(6) .menu-icon{
+  background:#eef1f7;
+  color:#17213b;
+}
+
+.menu-card h3{
+  font-size:21px;
+  letter-spacing:-.02em;
+}
+
+.menu-card p{
+  color:#69758b;
+  font-size:14px;
+  max-width:300px;
+}
+
+.menu-card .btn{
+  margin-top:19px;
+}
+
+.menu-card:hover{
+  transform:translateY(-7px);
+}
+
+
+/* ------------------------------------------------------------
+   09. TENANT MENU — DISTINCT "PRIVATE" ZONE
+   ------------------------------------------------------------ */
+
+.tenant-menu{
+  margin-top:60px;
+  padding-top:44px;
+  position:relative;
+}
+
+.tenant-menu::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(201,151,74,.5),
+      transparent
+    );
+}
+
+.tenant-menu .menu-title{
+  display:flex;
+  flex-direction:column;
+}
+
+.tenant-menu .menu-grid{
+  position:relative;
+}
+
+.tenant-menu .menu-card{
+  min-height:220px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f3f6fa
+    );
+}
+
+.tenant-menu .menu-card::after{
+  width:210px;
+  height:210px;
+  right:-120px;
+  bottom:-125px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(16,24,45,.08),
+      transparent 70%
+    );
+}
+
+.tenant-menu .menu-icon{
+  width:56px;
+  height:56px;
+  background:
+    linear-gradient(
+      135deg,
+      #eef1f7,
+      #e4e8f0
+    );
+}
+
+
+/* ------------------------------------------------------------
+   10. CTA / BUTTON LANGUAGE
+   ------------------------------------------------------------ */
+
+.btn{
+  min-height:44px;
+  border-radius:12px;
+  letter-spacing:.005em;
+}
+
+.btn-primary{
+  background:
+    linear-gradient(
+      135deg,
+      #10182d,
+      #263655
+    );
+}
+
+.btn-primary:hover:not(:disabled){
+  background:
+    linear-gradient(
+      135deg,
+      #18233d,
+      #2d4066
+    );
+}
+
+
+/* ------------------------------------------------------------
+   11. LOADING STATE — MORE POLISHED
+   ------------------------------------------------------------ */
+
+.loading{
+  position:relative;
+  min-height:116px;
+  display:grid;
+  place-items:center;
+  border:
+    1px dashed #d5dae3;
+  background:
+    linear-gradient(
+      135deg,
+      #fbfcfe,
+      #f4f6f9
+    );
+}
+
+.loading::before{
+  content:"";
+  position:absolute;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  border:
+    3px solid #dce2ea;
+  border-top-color:
+    var(--gold);
+  animation:
+    djKostSpin .9s linear infinite;
+}
+
+.loading{
+  text-indent:-9999px;
+}
+
+@keyframes djKostSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+
+/* ------------------------------------------------------------
+   12. INFO BANNER — STRONGER
+   ------------------------------------------------------------ */
+
+.info-banner{
+  padding:22px 24px;
+  border:
+    1px solid rgba(255,255,255,.08);
+  box-shadow:
+    0 24px 55px rgba(16,24,45,.17);
+}
+
+.info-banner strong{
+  color:#f3d493;
+}
+
+
+/* ------------------------------------------------------------
+   13. FORM CARD — STRONGER HIERARCHY
+   ------------------------------------------------------------ */
+
+.form-card{
+  border-radius:24px;
+  border:
+    1px solid rgba(16,24,45,.09);
+}
+
+.form-card::before{
+  height:5px;
+  background:
+    linear-gradient(
+      90deg,
+      #10182d 0%,
+      #c9974a 48%,
+      #19a85a 100%
+    );
+}
+
+label{
+  color:#39455c;
+}
+
+input,
+select,
+textarea{
+  border:
+    1px solid #d7dce5;
+  border-radius:13px;
+  background:
+    rgba(255,255,255,.94);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#c9974a;
+  box-shadow:
+    0 0 0 3px rgba(201,151,74,.10),
+    0 12px 26px rgba(16,24,45,.07);
+}
+
+
+/* ------------------------------------------------------------
+   14. FOOTER — MORE PREMIUM
+   ------------------------------------------------------------ */
+
+.footer{
+  padding:44px 0;
+  margin-top:0;
+  border-top:
+    1px solid rgba(255,255,255,.06);
+}
+
+.footer strong{
+  font-size:16px;
+  letter-spacing:.05em;
+}
+
+.footer small{
+  line-height:1.7;
+}
+
+
+/* ------------------------------------------------------------
+   15. TABLE / HISTORY
+   ------------------------------------------------------------ */
+
+.history th{
+  background:#f6f8fb;
+}
+
+.history tbody tr:hover{
+  background:
+    linear-gradient(
+      90deg,
+      #fbfcfe,
+      #ffffff
+    );
+}
+
+
+/* ------------------------------------------------------------
+   16. RESPONSIVE — DISTINCT BUT CONTROLLED
+   ------------------------------------------------------------ */
+
+@media(max-width:850px){
+
+  .hero{
+    text-align:center;
+    padding:
+      72px 0
+      62px;
+  }
+
+  .hero h1{
+    max-width:680px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero h1::after{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero .lead{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero-actions{
+    justify-content:center;
+  }
+
+  .floor-head{
+    min-height:78px;
+  }
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+  .menu-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .menu-card{
+    min-height:210px;
+  }
+
+}
+
+@media(max-width:620px){
+
+  .nav-inner{
+    min-height:62px;
+  }
+
+  .hero{
+    padding:
+      58px 0
+      50px;
+  }
+
+  .hero h1{
+    font-size:
+      clamp(38px,11vw,56px);
+  }
+
+  .hero .lead{
+    font-size:15px;
+  }
+
+  .room-summary{
+    grid-template-columns:1fr;
+  }
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .menu-grid{
+    grid-template-columns:1fr;
+  }
+
+  .menu-card{
+    min-height:200px;
+  }
+
+  .tenant-menu{
+    margin-top:48px;
+    padding-top:36px;
+  }
+
+}
+
+@media(max-width:420px){
+
+  .hero-actions .btn{
+    width:100%;
+  }
+
+  .floor-rooms{
+    gap:8px;
+    padding:12px;
+  }
+
+  .room-card{
+    min-height:82px;
+  }
+
+  .room-number{
+    font-size:20px;
+  }
+
+  .room-card.is-kosong::after,
+  .room-card.is-terisi::after,
+  .room-card.is-segera::after{
+    font-size:7px;
+    left:7px;
+    top:7px;
+    padding:2px 5px;
+  }
+
+}
+
+
+/* ============================================================
+   DJ FAMILY KOST — FINAL IMAGE / LOGO FIX
+   ============================================================
+   Purpose:
+   - Make the supplied hero image load reliably.
+   - Make the supplied logo load reliably.
+   - Keep the image clearly visible on the right side of Hero.
+   - Keep the left-side text readable.
+   - No HTML or JavaScript changes.
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   01. HERO IMAGE — ROBUST PATH + CONTROLLED OVERLAY
+   ------------------------------------------------------------ */
+
+.hero{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+
+  background-color:#10182d;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(8,15,32,.97) 0%,
+      rgba(10,18,38,.92) 32%,
+      rgba(10,18,38,.58) 57%,
+      rgba(10,18,38,.18) 100%
+    ),
+    url("./assets/dj-family-kost-hero.png"),
+    url("./dj-family-kost-hero.png");
+
+  background-position:
+    center,
+    center right,
+    center right;
+
+  background-size:
+    cover,
+    cover,
+    cover;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat;
+
+  background-attachment:
+    scroll,
+    scroll,
+    scroll;
+}
+
+
+/* Make the decorative pseudo-elements subtle.
+   They must never cover the generated image. */
+
+.hero::before{
+  opacity:.10;
+  z-index:-1;
+}
+
+.hero::after{
+  opacity:.08;
+  z-index:-1;
+}
+
+
+/* ------------------------------------------------------------
+   02. HERO IMAGE DETAIL / WATERMARK
+   ------------------------------------------------------------ */
+
+.hero .container::after{
+  content:"";
+
+  position:absolute;
+  z-index:1;
+
+  right:2%;
+  bottom:-8%;
+
+  width:190px;
+  height:190px;
+
+  background-image:
+    url("./assets/dj-family-kost-logo.png"),
+    url("./dj-family-kost-logo.png");
+
+  background-position:
+    center,
+    center;
+
+  background-size:
+    contain,
+    contain;
+
+  background-repeat:
+    no-repeat,
+    no-repeat;
+
+  opacity:.11;
+
+  filter:
+    drop-shadow(
+      0 18px 34px rgba(0,0,0,.24)
+    );
+
+  pointer-events:none;
+}
+
+
+/* ------------------------------------------------------------
+   03. NAVBAR LOGO — ROBUST PATH
+   ------------------------------------------------------------ */
+
+.brand-mark{
+  position:relative;
+
+  width:38px;
+  height:38px;
+
+  flex:none;
+
+  border-radius:12px;
+
+  background-color:#fff;
+
+  background-image:
+    url("./assets/dj-family-kost-logo.png"),
+    url("./dj-family-kost-logo.png");
+
+  background-position:
+    center,
+    center;
+
+  background-size:
+    31px 31px,
+    31px 31px;
+
+  background-repeat:
+    no-repeat,
     no-repeat;
 
   border:
@@ -942,306 +3102,84 @@ Tambahkan ke paling bawah app.css:
   box-shadow:
     0 8px 24px rgba(16,24,45,.12),
     inset 0 0 0 3px #fff;
-
-  flex:none;
 }
-Jadi logo generatif yang kita buat akan menggantikan kotak dekoratif lama.
 
-4. Saya sarankan logo juga muncul di hero
-Supaya branding terasa lebih kuat tanpa menambah HTML, kita bisa pakai pseudo-element yang sudah ada di .hero.
 
-Tambahkan:
+/* ------------------------------------------------------------
+   04. REMOVE THE OLD DECORATIVE BRAND-MARK PAINT
+   ------------------------------------------------------------ */
 
-/* ============================================================
-   DJ FAMILY KOST — HERO BRAND DETAIL
-   ============================================================ */
-
-.hero .container::after{
-  content:"";
-  position:absolute;
-  right:0;
-  bottom:-25px;
-
-  width:150px;
-  height:150px;
-
-  background:
-    url("./assets/dj-family-kost-logo.png")
-    center / contain
-    no-repeat;
-
-  opacity:.10;
-  filter:
-    drop-shadow(
-      0 10px 30px rgba(0,0,0,.25)
-    );
-
-  pointer-events:none;
+.brand-mark::before,
+.brand-mark::after{
+  display:none !important;
+  content:none !important;
 }
+
+
+/* ------------------------------------------------------------
+   05. HERO MOBILE
+   ------------------------------------------------------------ */
 
 @media(max-width:850px){
 
+  .hero{
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(8,15,32,.94) 0%,
+        rgba(10,18,38,.82) 54%,
+        rgba(10,18,38,.58) 100%
+      ),
+      url("./assets/dj-family-kost-hero.png"),
+      url("./dj-family-kost-hero.png");
+
+    background-position:
+      center,
+      center,
+      center;
+
+    background-size:
+      cover,
+      cover,
+      cover;
+  }
+
   .hero .container::after{
     right:50%;
-    transform:translateX(50%);
-    bottom:-60px;
+    bottom:-5%;
 
-    width:120px;
-    height:120px;
+    width:130px;
+    height:130px;
+
+    transform:translateX(50%);
 
     opacity:.07;
   }
 
 }
-Ini sangat samar, jadi tidak mengganggu headline.
-
-5. Struktur akhirnya
-Repository Anda akan menjadi:
-
-KOST-DJ
-│
-├── index.html
-├── app.css
-├── dj-kost.js
-│
-├── aturan.html
-├── kunjungan.html
-├── pendaftaran.html
-├── hubungi.html
-├── login.html
-│
-├── portal.html
-├── pembayaran.html
-├── maintenance.html
-├── checkinout.html
-├── cafe.html
-├── laundry.html
-│
-└── assets
-    ├── dj-family-kost-hero.png
-    └── dj-family-kost-logo.png
-Tidak ada perubahan pada struktur HTML.
-
-6. Hal yang paling penting
-Jangan replace seluruh app.css lagi.
-
-Karena sekarang kita sudah punya CSS V2 yang bagus dan stabil.
-
-Cukup:
-
-app.css
-↓
-Scroll paling bawah
-↓
-paste CSS tambahan di atas
-↓
-Commit
-Ini mengikuti prinsip yang kita sepakati: kode lama tidak dihapus atau dipendekkan; kita hanya menambahkan layer visual.
-
-Setelah upload
-Buka:
-
-https://lipinazzz-sudo.github.io/KOST-DJ/index.html
-lalu:
-
-Cmd + Shift + R
-Hasil yang saya harapkan:
-
-Navbar
-✅ Logo DJ Family Kost
-
-Hero
-✅ Navy premium
-✅ Gedung/bangunan samar di kanan
-✅ Gold lighting
-✅ Tidak polos
-✅ Teks tetap jelas
-
-Kamar
-✅ Tetap seperti sekarang
-✅ Tidak terpengaruh logic
-
-Menu
-✅ Tetap seperti sekarang
-✅ Tidak terpengaruh link/function
-Kalau Anda ingin cara yang paling aman dan minim risiko, saya sarankan sekarang Anda upload dua gambar dulu ke folder assets, lalu setelah itu saya berikan satu blok CSS final yang tinggal ditempel di paling bawah app.css.
 
 
-a_wide_dark_navy_blue_luxury_minimalist_background.png
-Gambar
+@media(max-width:520px){
 
+  .brand-mark{
+    width:34px;
+    height:34px;
 
-a_clean_vector_style_logo_branding_icon_on_a_trans.png
-Gambar
+    background-size:
+      28px 28px,
+      28px 28px;
+  }
 
+  .hero{
+    background-position:
+      center,
+      66% center,
+      66% center;
+  }
 
-Jepretan Layar 2026-09-27 pukul 03.02.33.png
-tidak muncul padahal sudah sama nama dan file yang di simpan apakah salah pemanggilan nama?atau ada salah kode css?coba tulis lengkap css nya
+  .hero .container::after{
+    width:100px;
+    height:100px;
+  }
 
-Ya, dari screenshot sekarang penyebabnya hampir pasti bukan desainnya, tetapi gambar tidak berhasil dipanggil oleh browser. Indikasinya kuat karena background Hero dan logo sama-sama tidak muncul, sementara CSS lainnya bekerja normal.
-
-Saya sudah buat app.css FULL FINAL yang tetap mempertahankan seluruh CSS sebelumnya dan menambahkan pemanggilan gambar dengan dua kemungkinan lokasi:
-
-./assets/dj-family-kost-hero.png
-./dj-family-kost-hero.png
-
-./assets/dj-family-kost-logo.png
-./dj-family-kost-logo.png
-Jadi tidak bergantung hanya pada satu lokasi.
-
-File FULL CSS
-app.css.txt — FULL FINAL + IMAGE/LOGO FIX
-
-Yang sudah saya pastikan:
-
-CSS sebelumnya                  ✅ tetap
-CSS V2                          ✅ tetap
-HTML                            ✅ tidak diubah
-JavaScript                      ✅ tidak diubah
-Kode lama dihapus               ❌ 0
-Kode lama dipangkas             ❌ 0
-Image path assets/              ✅
-Image path root                 ✅ fallback
-Logo path assets/               ✅
-Logo path root                  ✅ fallback
-Struktur GitHub yang paling aman
-Saya sarankan file berada seperti ini:
-
-KOST-DJ/
-│
-├── index.html
-├── app.css
-├── dj-kost.js
-│
-└── assets/
-    ├── dj-family-kost-hero.png
-    └── dj-family-kost-logo.png
-Dan nama file harus persis:
-
-dj-family-kost-hero.png
-dj-family-kost-logo.png
-Huruf besar/kecil juga harus sama persis.
-
-Sekarang lakukan ini
-Di GitHub:
-
-KOST-DJ
-→ app.css
-→ Cmd + A
-→ paste seluruh isi app.css.txt
-→ Commit changes
-Pastikan kedua PNG benar-benar ada di:
-
-assets/
-Setelah itu:
-
-https://lipinazzz-sudo.github.io/KOST-DJ/index.html
-lalu:
-
-Cmd + Shift + R
-Target hasilnya
-Hero akan menjadi:
-
-NAVY DARK
-────────────────────────────────────
-Teks                       gambar
-Hunian Nyaman...           gedung samar
-Pengelolaan...             gold lighting
-────────────────────────────────────
-Dan logo di navbar:
-
-[ LOGO ] DJ FAMILY KOST
-bukan lagi kotak putih kosong.
-
-Jangan mengubah index.html atau dj-kost.js. Struktur index.html Anda memang sudah memanggil ./app.css, sehingga kasus ini cukup kita selesaikan dari stylesheet dan file asset. 
-
-Setelah upload, kirim screenshot hasil baru. Dari situ kita bisa memastikan apakah path asset sudah benar dan kemudian melakukan finishing visual tanpa menyentuh logic. 
-
-app.css.txt
-Dokumen
-
-
-Pustaka
-/
-app.css.txt
-
-
-
-:root{
-  --navy:#10182d;
-  --navy2:#17213b;
-  --gold:#c9974a;
-  --green:#19a85a;
-  --red:#c94a4a;
-  --blue:#3c78d8;
-  --bg:#f6f7fb;
-  --text:#17213b;
-  --muted:#667085;
-  --line:#e6e9f0;
-  --white:#fff;
-  --shadow:0 18px 50px rgba(16,24,45,.10);
-  --radius:22px;
 }
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  margin:0;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.6;
-}
-
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-button,
-input,
-select,
-textarea{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.container{
-  width:min(1180px,calc(100% - 44px));
-  margin:auto;
-}
-
-.nav{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(255,255,255,.95);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line);
-}
-
-.nav-inner{
-  min-height:72px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-}
-
-.brand{
