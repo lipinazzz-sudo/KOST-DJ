@@ -3183,3 +3183,332 @@ textarea:focus{
   }
 
 }
+/* ============================================================
+   DJ FAMILY KOST — ROOM LAYOUT 2 x 2 + SOFT BACKGROUND
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   01. SECTION KAMAR — SOFT DECORATIVE BACKGROUND
+   ------------------------------------------------------------ */
+
+#kamar.section{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f7f8fb 0%,
+      #f3f5f9 48%,
+      #f8f9fc 100%
+    );
+}
+
+#kamar.section::before{
+  content:"";
+  position:absolute;
+  z-index:-2;
+
+  width:520px;
+  height:520px;
+
+  left:-250px;
+  top:-180px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.085) 0%,
+      rgba(201,151,74,.025) 42%,
+      transparent 72%
+    );
+
+  pointer-events:none;
+}
+
+#kamar.section::after{
+  content:"";
+  position:absolute;
+  z-index:-2;
+
+  width:620px;
+  height:620px;
+
+  right:-310px;
+  bottom:-330px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(25,168,90,.055) 0%,
+      rgba(25,168,90,.018) 42%,
+      transparent 72%
+    );
+
+  pointer-events:none;
+}
+
+
+/* ------------------------------------------------------------
+   02. FLOOR LIST — 2 KIRI + 2 KANAN
+   ------------------------------------------------------------ */
+
+.floor-list{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:20px;
+}
+
+
+/* ------------------------------------------------------------
+   03. FLOOR CARD — LEBIH COMPACT
+   ------------------------------------------------------------ */
+
+.floor-card{
+  min-width:0;
+
+  border-radius:20px;
+
+  box-shadow:
+    0 14px 34px rgba(16,24,45,.075);
+
+  transition:
+    transform .20s ease,
+    box-shadow .20s ease;
+}
+
+.floor-card:hover{
+  transform:translateY(-4px);
+
+  box-shadow:
+    0 22px 46px rgba(16,24,45,.12);
+}
+
+
+/* ------------------------------------------------------------
+   04. FLOOR HEADER — LEBIH RINGKAS
+   ------------------------------------------------------------ */
+
+.floor-head{
+  min-height:72px;
+
+  padding:
+    17px
+    19px;
+}
+
+.floor-meta{
+  font-size:11px;
+}
+
+
+/* ------------------------------------------------------------
+   05. ROOM AREA — COMPACT
+   ------------------------------------------------------------ */
+
+.floor-rooms{
+  gap:9px;
+  padding:14px;
+}
+
+
+/* ------------------------------------------------------------
+   06. ROOM CARD — LEBIH KECIL
+   ------------------------------------------------------------ */
+
+.room-card{
+  min-height:78px;
+
+  border-radius:13px;
+
+  padding:
+    8px
+    6px;
+}
+
+.room-number{
+  font-size:18px;
+}
+
+.room-price{
+  margin-top:3px;
+  font-size:10px;
+}
+
+
+/* Status kecil agar tidak memenuhi kartu */
+
+.room-card.is-kosong::after,
+.room-card.is-terisi::after,
+.room-card.is-segera::after{
+  left:7px;
+  top:6px;
+
+  padding:
+    2px
+    5px;
+
+  font-size:6.5px;
+}
+
+
+/* ------------------------------------------------------------
+   07. MENU PUBLIK — BACKGROUND HALUS
+   ------------------------------------------------------------ */
+
+.quick-section{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f6f7fa 58%,
+      #f1f3f7 100%
+    );
+}
+
+.quick-section::before{
+  content:"";
+
+  position:absolute;
+  z-index:-2;
+
+  width:500px;
+  height:500px;
+
+  right:-230px;
+  top:-210px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(60,120,216,.045) 0%,
+      rgba(60,120,216,.015) 44%,
+      transparent 72%
+    );
+
+  pointer-events:none;
+}
+
+.quick-section::after{
+  content:"";
+
+  position:absolute;
+  z-index:-2;
+
+  width:440px;
+  height:440px;
+
+  left:-230px;
+  bottom:-240px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.055) 0%,
+      rgba(201,151,74,.014) 46%,
+      transparent 72%
+    );
+
+  pointer-events:none;
+}
+
+
+/* ------------------------------------------------------------
+   08. MENU CARD — SEDIKIT LEBIH RINGKAS
+   ------------------------------------------------------------ */
+
+.menu-card{
+  min-height:210px;
+}
+
+.menu-icon{
+  width:52px;
+  height:52px;
+  border-radius:15px;
+}
+
+
+/* ------------------------------------------------------------
+   09. TABLET
+   ------------------------------------------------------------ */
+
+@media(max-width:850px){
+
+  .floor-list{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:15px;
+  }
+
+  .floor-head{
+    padding:
+      15px
+      17px;
+  }
+
+  .floor-rooms{
+    padding:12px;
+    gap:8px;
+  }
+
+}
+
+
+/* ------------------------------------------------------------
+   10. MOBILE
+   ------------------------------------------------------------ */
+
+@media(max-width:620px){
+
+  .floor-list{
+    grid-template-columns:1fr;
+  }
+
+  .floor-card{
+    border-radius:18px;
+  }
+
+  .floor-head{
+    min-height:68px;
+  }
+
+  .room-card{
+    min-height:82px;
+  }
+
+}
+
+
+/* ------------------------------------------------------------
+   11. VERY SMALL SCREEN
+   ------------------------------------------------------------ */
+
+@media(max-width:420px){
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+  .room-card{
+    min-height:76px;
+  }
+
+}
