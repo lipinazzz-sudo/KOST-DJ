@@ -308,18 +308,42 @@ async function submitCheckOut(event){
       agreement:"YA"
     });
 
-    showResult("checkoutResult","success",`${result.message || "Check-out berhasil."}\nPengembalian deposit: Rp${Number(result.refund || 0).toLocaleString("id-ID")}\nID: ${result.checkInOutId || "—"}`);
-    document.getElementById("checkoutForm").reset();
-    document.getElementById("checkoutDate").value = dateToday();
-    document.getElementById("checkoutKeyCount").value = "1";
-    document.getElementById("checkoutDeduction").value = "0";
-    document.getElementById("damageDetailField").classList.add("hidden");
-    await loadHistory();
+    showResult("checkoutResult","success",`${result.message || "Check-out berhasil."}\nPengembalian deposit: Rp${Number(result.refund || 0).toLocaleString("id-ID")}\nID: ${result.checkInOutId || "—"}\n\nAkun tenant sekarang NONAKTIF dan sesi telah ditutup.`);
+
+    /* Setelah check-out berhasil, sesi browser dibuang.
+       Tenant tidak dibiarkan tetap berada di layanan privat. */
+    [
+      "djTenantSession",
+      "djTenantAuth",
+      "djTenantId",
+      "djTenantName",
+      "djTenantRoom",
+      "djTenantSessionToken",
+      "djTenantToken"
+    ].forEach(function(key){
+      try{
+        sessionStorage.removeItem(key);
+      }catch(_){ }
+    });
+
+    button.textContent = "Check-out Selesai";
+
+    setTimeout(
+      function(){
+        window.location.href =
+          "login.html?checkout=1";
+      },
+      1800
+    );
+
+    return;
   }catch(err){
     showResult("checkoutResult","danger",err.message);
   }finally{
-    button.disabled = false;
-    button.textContent = "Kirim Check-out";
+    if(document.body.contains(button) && button.textContent !== "Check-out Selesai"){
+      button.disabled = false;
+      button.textContent = "Kirim Check-out";
+    }
   }
 }
 
