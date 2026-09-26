@@ -1675,8 +1675,6 @@ let tenantItems = [];
 
 let registrationItems = [];
 
-let registrationAvailableRooms = [];
-
 let announcementItems = [];
 
 let paymentFilter = "ALL";
@@ -2975,16 +2973,7 @@ async function loadRegistrations(){
             : [];
 
 
-    registrationAvailableRooms =
-        Array.isArray(
-            data &&
-            data.availableRooms
-        )
-            ? data.availableRooms
-            : [];
-
-
-    const visibleItems =
+    registrationItems =
         registrationItems.filter(
             function(item){
 
@@ -2993,7 +2982,6 @@ async function loadRegistrations(){
                         item.status ||
                         ""
                     )
-                    .trim()
                     .toUpperCase()
                     ===
                     "MENUNGGU VERIFIKASI"
@@ -3003,150 +2991,111 @@ async function loadRegistrations(){
         );
 
 
-    const box =
-        document.getElementById(
+    document
+        .getElementById(
             "registrationsBox"
-        );
+        )
+        .innerHTML =
 
+        registrationItems.length
 
-    if(
-        !visibleItems.length
-    ){
+            ? (
 
-        box.innerHTML =
-            '<div class="empty">Tidak ada pendaftaran yang perlu diproses.</div>';
+                '<table class="data-table">' +
 
-        return;
+                '<thead>' +
 
-    }
+                '<tr>' +
 
+                '<th>ID</th>' +
+                '<th>Nama</th>' +
+                '<th>Kamar</th>' +
+                '<th>WhatsApp</th>' +
+                '<th>Aksi</th>' +
 
-    box.innerHTML =
+                '</tr>' +
 
-        '<table class="data-table">' +
+                '</thead>' +
 
-        '<thead>' +
+                '<tbody>' +
 
-        '<tr>' +
+                registrationItems
+                    .map(
+                        function(item){
 
-        '<th>ID</th>' +
-        '<th>Nama</th>' +
-        '<th>Kamar Diminati</th>' +
-        '<th>Kamar Final</th>' +
-        '<th>WhatsApp</th>' +
-        '<th>Status</th>' +
-        '<th>Aksi</th>' +
+                            return (
 
-        '</tr>' +
+                                '<tr>' +
 
-        '</thead>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.id
+                                ) +
+                                '</td>' +
 
-        '<tbody>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.name
+                                ) +
+                                '</td>' +
 
-        visibleItems
-            .map(
-                function(item){
+                                '<td>' +
+                                escapeHtml(
+                                    item.room
+                                ) +
+                                '</td>' +
 
-                    const requestedRoom =
-                        String(
-                            item.requestedRoom ||
-                            item.room ||
-                            ""
-                        )
-                        .trim();
+                                '<td>' +
+                                escapeHtml(
+                                    item.phone
+                                ) +
+                                '</td>' +
 
+                                '<td class="actions">' +
 
-                    const finalRoom =
-                        String(
-                            item.finalRoom ||
-                            ""
-                        )
-                        .trim();
+                                '<button class="btn btn-success" onclick="approveRegistration(\'' +
 
+                                encodeURIComponent(
+                                    item.id
+                                ) +
 
-                    return (
+                                '\')">' +
 
-                        '<tr>' +
+                                'Setujui' +
 
-                        '<td>' +
-                        escapeHtml(
-                            item.id
-                        ) +
-                        '</td>' +
+                                '</button>' +
 
-                        '<td>' +
-                        escapeHtml(
-                            item.name ||
-                            "—"
-                        ) +
-                        '</td>' +
+                                '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
 
-                        '<td>' +
-                        escapeHtml(
-                            requestedRoom ||
-                            "—"
-                        ) +
-                        '</td>' +
+                                encodeURIComponent(
+                                    item.id
+                                ) +
 
-                        '<td>' +
-                        escapeHtml(
-                            finalRoom ||
-                            "—"
-                        ) +
-                        '</td>' +
+                                '\')">' +
 
-                        '<td>' +
-                        escapeHtml(
-                            item.phone ||
-                            "—"
-                        ) +
-                        '</td>' +
+                                'Tolak' +
 
-                        '<td>' +
-                        '<span class="badge badge-warn">MENUNGGU VERIFIKASI</span>' +
-                        '</td>' +
+                                '</button>' +
 
-                        '<td class="actions">' +
+                                '</td>' +
 
-                        '<button class="btn btn-success" onclick="approveRegistration(\'' +
+                                '</tr>'
 
-                        encodeURIComponent(
-                            item.id
-                        ) +
+                            );
 
-                        '\')">' +
+                        }
+                    )
+                    .join("")
 
-                        'Setujui & Tetapkan Kamar' +
+                +
 
-                        '</button>' +
+                '</tbody>' +
 
-                        '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
+                '</table>'
 
-                        encodeURIComponent(
-                            item.id
-                        ) +
-
-                        '\')">' +
-
-                        'Tolak' +
-
-                        '</button>' +
-
-                        '</td>' +
-
-                        '</tr>'
-
-                    );
-
-                }
             )
-            .join("")
 
-        +
-
-        '</tbody>' +
-
-        '</table>';
+            : '<div class="empty">Tidak ada pendaftaran pending.</div>';
 
 }
 
@@ -3161,287 +3110,11 @@ async function approveRegistration(
         );
 
 
-    const item =
-        registrationItems.find(
-            function(row){
-
-                return (
-                    String(
-                        row.id
-                    ) ===
-                    String(
-                        id
-                    )
-                );
-
-            }
-        );
-
-
-    if(
-        !item
-    ){
-
-        alert(
-            "Pendaftaran tidak ditemukan di halaman."
-        );
-
-        return;
-
-    }
-
-
-    const available =
-        registrationAvailableRooms
-            .filter(
-                function(room){
-
-                    return (
-                        String(
-                            room.status ||
-                            ""
-                        )
-                        .trim()
-                        .toUpperCase()
-                        ===
-                        "KOSONG"
-
-                        &&
-
-                        Number(
-                            room.price ||
-                            0
-                        ) > 0
-                    );
-
-                }
-            );
-
-
-    if(
-        !available.length
-    ){
-
-        alert(
-            "Tidak ada kamar kosong yang dapat dipilih sebagai kamar final."
-        );
-
-        return;
-
-    }
-
-
-    const requestedRoom =
-        String(
-            item.requestedRoom ||
-            item.room ||
-            ""
-        )
-        .trim();
-
-
-    let options =
-        '<option value="">Pilih kamar final</option>';
-
-
-    available.forEach(
-        function(room){
-
-            const roomNumber =
-                String(
-                    room.number ||
-                    ""
-                )
-                .trim();
-
-
-            if(
-                !roomNumber
-            ){
-
-                return;
-
-            }
-
-
-            const selected =
-                roomNumber ===
-                requestedRoom
-                    ? " selected"
-                    : "";
-
-
-            options +=
-                '<option value="' +
-                escapeHtml(
-                    roomNumber
-                ) +
-                '"' +
-                selected +
-                '>' +
-                escapeHtml(
-                    roomNumber
-                ) +
-                ' — ' +
-                money(
-                    room.price ||
-                    0
-                ) +
-                ' / bulan' +
-                '</option>';
-
-        }
-    );
-
-
-    const body =
-
-        '<div class="detail-box">' +
-
-        '<strong>Calon Tenant</strong>' +
-
-        escapeHtml(
-            item.name ||
-            "—"
-        ) +
-
-        '<br>' +
-
-        '<span class="muted-text">' +
-
-        'WhatsApp: ' +
-
-        escapeHtml(
-            item.phone ||
-            "—"
-        ) +
-
-        '</span>' +
-
-        '</div>' +
-
-        '<div class="detail-box">' +
-
-        '<strong>Kamar yang Diminati</strong>' +
-
-        escapeHtml(
-            requestedRoom ||
-            "—"
-        ) +
-
-        '<br>' +
-
-        '<span class="muted-text">' +
-
-        'Kamar final dapat Anda ubah di bawah.' +
-
-        '</span>' +
-
-        '</div>' +
-
-        '<div class="field">' +
-
-        '<label for="finalRoomSelect">' +
-
-        'Kamar Final' +
-
-        '</label>' +
-
-        '<select id="finalRoomSelect">' +
-
-        options +
-
-        '</select>' +
-
-        '</div>' +
-
-        '<div class="note">' +
-
-        '<strong>Perhatikan:</strong> setelah disetujui, ' +
-
-        'kamar akan dikunci sebagai <strong>DIPESAN</strong>. ' +
-
-        'Tenant belum aktif dan belum mendapat Tenant ID atau password ' +
-
-        'sampai proses aktivasi akun selesai.' +
-
-        '</div>' +
-
-        '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap">' +
-
-        '<button class="btn btn-light" onclick="closeModal()">' +
-
-        'Batal' +
-
-        '</button>' +
-
-        '<button class="btn btn-success" onclick="confirmApproval(\'' +
-
-        encodeURIComponent(
-            id
-        ) +
-
-        '\')">' +
-
-        'Setujui & Tetapkan' +
-
-        '</button>' +
-
-        '</div>';
-
-
-    openModal(
-        "Setujui Pendaftaran",
-        body
-    );
-
-}
-
-
-async function confirmApproval(
-    encoded
-){
-
-    const id =
-        decodeURIComponent(
-            encoded
-        );
-
-
-    const select =
-        document.getElementById(
-            "finalRoomSelect"
-        );
-
-
-    const finalRoom =
-        select
-            ? String(
-                select.value ||
-                ""
-              )
-              .trim()
-            : "";
-
-
-    if(
-        !finalRoom
-    ){
-
-        alert(
-            "Silakan pilih kamar final terlebih dahulu."
-        );
-
-        return;
-
-    }
-
-
     if(
         !confirm(
-            "Tetapkan kamar " +
-            finalRoom +
-            " sebagai kamar final?"
+            "Setujui pendaftaran " +
+            id +
+            "?"
         )
     ){
 
@@ -3458,43 +3131,33 @@ async function confirmApproval(
                 {
 
                     registrationId:
-                        id,
-
-                    finalRoom:
-                        finalRoom
+                        id
 
                 }
             );
 
 
-        closeModal();
-
-
         alert(
 
-            "Pendaftaran disetujui.\n\n" +
+            "Pendaftaran berhasil disetujui.\n\n" +
 
-            "Nama: " +
+            "Tenant ID: " +
             (
-                result.nama ||
+                result.tenantId ||
                 "—"
             ) +
 
-            "\nKamar final: " +
+            "\nKontrak ID: " +
             (
-                result.finalRoom ||
+                result.kontrakId ||
                 "—"
             ) +
 
-            "\nHarga: " +
-            money(
-                result.price ||
-                0
-            ) +
-
-            " / bulan" +
-
-            "\n\nStatus: MENUNGGU AKTIVASI AKUN"
+            "\nKamar: " +
+            (
+                result.room ||
+                "—"
+            )
 
         );
 
@@ -3502,6 +3165,7 @@ async function confirmApproval(
         await loadRegistrations();
 
         await loadDashboard();
+
 
     }catch(error){
 
