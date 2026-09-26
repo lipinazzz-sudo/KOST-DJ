@@ -101,17 +101,6 @@ button{
     color:#fff;
 }
 
-.muted-text{
-    color:#667085;
-    font-size:12px;
-}
-
-.badge-warn{
-    background:#fff4e5;
-    color:#b54708;
-}
-
-
 .btn-light{
     background:#fff;
     color:#344054;
@@ -1690,8 +1679,6 @@ var tenantItems = Array.isArray(window.tenantItems) ? window.tenantItems : [];
 
 var registrationItems = Array.isArray(window.registrationItems) ? window.registrationItems : [];
 
-var registrationAvailableRooms = Array.isArray(window.registrationAvailableRooms) ? window.registrationAvailableRooms : [];
-
 var announcementItems = Array.isArray(window.announcementItems) ? window.announcementItems : [];
 
 var paymentFilter = window.paymentFilter || "ALL";
@@ -1706,7 +1693,6 @@ window.maintenanceItems = maintenanceItems;
 window.mediaItems = mediaItems;
 window.tenantItems = tenantItems;
 window.registrationItems = registrationItems;
-window.registrationAvailableRooms = registrationAvailableRooms;
 window.announcementItems = announcementItems;
 window.paymentFilter = paymentFilter;
 window.mediaFilter = mediaFilter;
@@ -2544,11 +2530,6 @@ function renderSummary(){
         ],
 
         [
-            "Dipesan",
-            summary.reserved || 0
-        ],
-
-        [
             "Terisi",
             summary.occupied || 0
         ],
@@ -3019,115 +3000,89 @@ async function loadRegistrations(){
             : [];
 
 
-    registrationAvailableRooms =
-        Array.isArray(
-            data &&
-            data.availableRooms
-        )
-            ? data.availableRooms
-            : [];
-
-
     window.registrationItems =
         registrationItems;
 
 
-    window.registrationAvailableRooms =
-        registrationAvailableRooms;
-
-
-    const visibleItems =
+    registrationItems =
         registrationItems.filter(
             function(item){
 
-                const status =
+                return (
                     String(
                         item.status ||
                         ""
                     )
-                    .trim()
-                    .toUpperCase();
-
-
-                return (
-                    status ===
-                        "MENUNGGU VERIFIKASI"
-                    ||
-                    status ===
-                        "MENUNGGU AKTIVASI AKUN"
+                    .toUpperCase()
+                    ===
+                    "MENUNGGU VERIFIKASI"
                 );
 
             }
         );
 
 
-    const box =
-        document.getElementById(
+    document
+        .getElementById(
             "registrationsBox"
-        );
+        )
+        .innerHTML =
 
+        registrationItems.length
 
-    if(
-        !visibleItems.length
-    ){
+            ? (
 
-        box.innerHTML =
-            '<div class="empty">Tidak ada pendaftaran yang perlu diproses.</div>';
+                '<table class="data-table">' +
 
-        return;
+                '<thead>' +
 
-    }
+                '<tr>' +
 
+                '<th>ID</th>' +
+                '<th>Nama</th>' +
+                '<th>Kamar</th>' +
+                '<th>WhatsApp</th>' +
+                '<th>Aksi</th>' +
 
-    box.innerHTML =
+                '</tr>' +
 
-        '<table class="data-table">' +
+                '</thead>' +
 
-        '<thead>' +
+                '<tbody>' +
 
-        '<tr>' +
+                registrationItems
+                    .map(
+                        function(item){
 
-        '<th>ID</th>' +
-        '<th>Nama</th>' +
-        '<th>Kamar Diminati</th>' +
-        '<th>Kamar Final</th>' +
-        '<th>Status</th>' +
-        '<th>Aksi</th>' +
+                            return (
 
-        '</tr>' +
+                                '<tr>' +
 
-        '</thead>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.id
+                                ) +
+                                '</td>' +
 
-        '<tbody>' +
+                                '<td>' +
+                                escapeHtml(
+                                    item.name
+                                ) +
+                                '</td>' +
 
-        visibleItems
-            .map(
-                function(item){
+                                '<td>' +
+                                escapeHtml(
+                                    item.room
+                                ) +
+                                '</td>' +
 
-                    const status =
-                        String(
-                            item.status ||
-                            ""
-                        )
-                        .trim()
-                        .toUpperCase();
+                                '<td>' +
+                                escapeHtml(
+                                    item.phone
+                                ) +
+                                '</td>' +
 
-
-                    const isPending =
-                        status ===
-                        "MENUNGGU VERIFIKASI";
-
-
-                    const statusBadge =
-                        isPending
-                            ? '<span class="badge badge-warn">MENUNGGU VERIFIKASI</span>'
-                            : '<span class="badge badge-ok">MENUNGGU AKTIVASI AKUN</span>';
-
-
-                    const actionHtml =
-                        isPending
-
-                            ? (
+                                '<td class="actions">' +
 
                                 '<button class="btn btn-success" onclick="approveRegistration(\'' +
 
@@ -3137,78 +3092,41 @@ async function loadRegistrations(){
 
                                 '\')">' +
 
-                                'Setujui & Tetapkan Kamar' +
+                                'Setujui' +
 
-                                '</button>'
+                                '</button>' +
 
-                              )
+                                '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
 
-                            : (
+                                encodeURIComponent(
+                                    item.id
+                                ) +
 
-                                '<span class="muted-text">Menunggu tenant</span>'
+                                '\')">' +
 
-                              );
+                                'Tolak' +
 
+                                '</button>' +
 
-                    return (
+                                '</td>' +
 
-                        '<tr>' +
+                                '</tr>'
 
-                        '<td><strong>' +
-                        escapeHtml(
-                            item.id
-                        ) +
-                        '</strong></td>' +
+                            );
 
-                        '<td>' +
-                        escapeHtml(
-                            item.name
-                        ) +
-                        '<div class="muted-text">' +
-                        escapeHtml(
-                            item.phone
-                        ) +
-                        '</div></td>' +
+                        }
+                    )
+                    .join("")
 
-                        '<td>' +
-                        escapeHtml(
-                            item.requestedRoom ||
-                            item.room ||
-                            "—"
-                        ) +
-                        '</td>' +
+                +
 
-                        '<td>' +
-                        escapeHtml(
-                            item.finalRoom ||
-                            "—"
-                        ) +
-                        '</td>' +
+                '</tbody>' +
 
-                        '<td>' +
-                        statusBadge +
-                        '</td>' +
+                '</table>'
 
-                        '<td class="actions">' +
-                        actionHtml +
-                        (
-                            isPending
-                                ? '<button class="btn btn-danger" onclick="rejectRegistration(\'' + encodeURIComponent(item.id) + '\')">Tolak</button>'
-                                : ''
-                        ) +
-                        '</td>' +
-
-                        '</tr>'
-
-                    );
-
-                }
             )
-            .join("") +
 
-        '</tbody>' +
-
-        '</table>';
+            : '<div class="empty">Tidak ada pendaftaran pending.</div>';
 
 }
 
@@ -3223,204 +3141,11 @@ async function approveRegistration(
         );
 
 
-    const item =
-        registrationItems.find(
-            function(row){
-                return String(row.id) === String(id);
-            }
-        );
-
-
-    if(
-        !item
-    ){
-
-        alert(
-            "Pendaftaran tidak ditemukan di halaman."
-        );
-
-        return;
-
-    }
-
-
-    const available =
-        registrationAvailableRooms
-            .filter(
-                function(room){
-
-                    return (
-                        String(
-                            room.status ||
-                            ""
-                        )
-                        .trim()
-                        .toUpperCase() ===
-                        "KOSONG"
-                        &&
-                        Number(
-                            room.price ||
-                            0
-                        ) > 0
-                    );
-
-                }
-            );
-
-
-    const requestedRoom =
-        String(
-            item.requestedRoom ||
-            item.room ||
-            ""
-        );
-
-
-    let options =
-        '<option value="">Pilih kamar final</option>';
-
-
-    available.forEach(
-        function(room){
-
-            const selected =
-                String(
-                    room.number
-                ) ===
-                requestedRoom
-                    ? ' selected'
-                    : '';
-
-
-            options +=
-                '<option value="' +
-                escapeHtml(
-                    room.number
-                ) +
-                '"' +
-                selected +
-                '>' +
-                escapeHtml(
-                    room.number
-                ) +
-                ' — ' +
-                money(
-                    room.price
-                ) +
-                ' / bulan</option>';
-
-        }
-    );
-
-
-    const body =
-
-        '<div class="detail-box">' +
-
-        '<strong>Calon Tenant</strong>' +
-        escapeHtml(
-            item.name ||
-            "—"
-        ) +
-
-        '<br><span class="muted-text">WhatsApp: ' +
-        escapeHtml(
-            item.phone ||
-            "—"
-        ) +
-        '</span>' +
-
-        '</div>' +
-
-        '<div class="detail-box">' +
-
-        '<strong>Kamar yang Diminati</strong>' +
-        escapeHtml(
-            requestedRoom ||
-            "—"
-        ) +
-
-        '<br><span class="muted-text">Kamar final dapat Anda ubah di bawah.</span>' +
-
-        '</div>' +
-
-        '<div class="field">' +
-
-        '<label for="finalRoomSelect">Kamar Final</label>' +
-
-        '<select id="finalRoomSelect">' +
-        options +
-        '</select>' +
-
-        '</div>' +
-
-        '<div class="note">' +
-
-        '<strong>Perhatikan:</strong> setelah disetujui, kamar akan dikunci sebagai <strong>DIPESAN</strong>. Tenant belum menjadi aktif dan belum mendapat Tenant ID atau password sampai proses aktivasi akun selesai.' +
-
-        '</div>' +
-
-        '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap">' +
-
-        '<button class="btn btn-light" onclick="closeModal()">Batal</button>' +
-
-        '<button class="btn btn-success" onclick="confirmApproval(\'' +
-        encodeURIComponent(
-            id
-        ) +
-        '\')">Setujui & Tetapkan</button>' +
-
-        '</div>';
-
-
-    openModal(
-        "Setujui Pendaftaran",
-        body
-    );
-
-}
-
-
-async function confirmApproval(
-    encoded
-){
-
-    const id =
-        decodeURIComponent(
-            encoded
-        );
-
-
-    const select =
-        document.getElementById(
-            "finalRoomSelect"
-        );
-
-
-    const finalRoom =
-        select
-            ? select.value.trim()
-            : "";
-
-
-    if(
-        !finalRoom
-    ){
-
-        alert(
-            "Silakan pilih kamar final terlebih dahulu."
-        );
-
-        return;
-
-    }
-
-
     if(
         !confirm(
-            "Tetapkan kamar " +
-            finalRoom +
-            " sebagai kamar final?"
+            "Setujui pendaftaran " +
+            id +
+            "?"
         )
     ){
 
@@ -3437,33 +3162,41 @@ async function confirmApproval(
                 {
 
                     registrationId:
-                        id,
-
-                    finalRoom:
-                        finalRoom
+                        id
 
                 }
             );
 
 
-        closeModal();
-
-
         alert(
-            "Pendaftaran disetujui.\n\n" +
-            "Nama: " +
-            (result.nama || "—") +
-            "\nKamar final: " +
-            (result.finalRoom || "—") +
-            "\nHarga: " +
-            money(result.price || 0) +
-            " / bulan\n\nStatus: MENUNGGU AKTIVASI AKUN"
+
+            "Pendaftaran berhasil disetujui.\n\n" +
+
+            "Tenant ID: " +
+            (
+                result.tenantId ||
+                "—"
+            ) +
+
+            "\nKontrak ID: " +
+            (
+                result.kontrakId ||
+                "—"
+            ) +
+
+            "\nKamar: " +
+            (
+                result.room ||
+                "—"
+            )
+
         );
 
 
         await loadRegistrations();
 
         await loadDashboard();
+
 
     }catch(error){
 
@@ -3940,26 +3673,149 @@ async function resetTenantPassword(
             );
 
 
-        alert(
-
-            "RESET PASSWORD BERHASIL\n\n" +
-
-            "Tenant ID: " +
-            tenantId +
-
-            "\n\nPassword sementara:\n" +
-
-            (
+        const temporaryPassword =
+            String(
                 result.temporaryPassword ||
-                "—"
-            )
+                ""
+            );
 
+        openModal(
+            "Reset Password Berhasil",
+
+            '<div class="detail-box">' +
+
+            '<strong>Tenant ID</strong>' +
+
+            '<span class="small">' +
+            escapeHtml(tenantId) +
+            '</span>' +
+
+            '</div>' +
+
+            '<div style="margin-top:14px;">' +
+            '<strong>Password sementara</strong>' +
+            '</div>' +
+
+            '<div style="display:flex;gap:10px;align-items:center;margin-top:7px;">' +
+
+            '<div ' +
+            'id="masterResetPasswordValue" ' +
+            'style="flex:1;background:#f4f6fa;border:1px solid #e6e9f0;border-radius:12px;padding:13px 15px;font-weight:900;letter-spacing:.03em;"' +
+            '>' +
+
+            escapeHtml(temporaryPassword) +
+
+            '</div>' +
+
+            '<button ' +
+            'type="button" ' +
+            'class="btn btn-secondary" ' +
+            'onclick="copyMasterPassword(this)"' +
+            '>' +
+            'Copy Password' +
+            '</button>' +
+
+            '</div>' +
+
+            '<p class="small" style="margin-top:12px;">Password sementara harus diberikan kepada tenant dan diganti setelah login.</p>'
         );
 
     }catch(error){
 
         alert(
             error.message
+        );
+
+    }
+
+}
+
+
+async function copyMasterPassword(button){
+
+    const valueElement =
+        document.getElementById(
+            "masterResetPasswordValue"
+        );
+
+    const value =
+        valueElement
+            ? valueElement.textContent.trim()
+            : "";
+
+    if(!value){
+
+        return;
+
+    }
+
+    try{
+
+        if(
+            navigator.clipboard &&
+            navigator.clipboard.writeText
+        ){
+
+            await navigator.clipboard.writeText(
+                value
+            );
+
+        }else{
+
+            const area =
+                document.createElement(
+                    "textarea"
+                );
+
+            area.value =
+                value;
+
+            area.style.position =
+                "fixed";
+
+            area.style.opacity =
+                "0";
+
+            document.body.appendChild(
+                area
+            );
+
+            area.select();
+
+            document.execCommand(
+                "copy"
+            );
+
+            area.remove();
+
+        }
+
+        const oldText =
+            button.textContent;
+
+        button.textContent =
+            "Tersalin";
+
+        button.disabled =
+            true;
+
+        setTimeout(
+            function(){
+
+                button.textContent =
+                    oldText;
+
+                button.disabled =
+                    false;
+
+            },
+            1500
+        );
+
+    }catch(error){
+
+        alert(
+            "Tidak dapat menyalin. Silakan salin manual."
         );
 
     }

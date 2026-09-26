@@ -68,6 +68,10 @@ input[readonly]{background:#f4f6fa}
 .preview{margin-top:7px;font-size:12px;color:var(--muted);padding:9px 11px;background:#f8fafc;border:1px solid var(--line);border-radius:10px}
 .credentials{background:var(--navy);color:#fff;border-radius:18px;padding:24px;margin-top:18px}
 .credential{background:rgba(255,255,255,.09);padding:13px 15px;border-radius:12px;margin-top:7px;font-size:18px;font-weight:900;letter-spacing:.03em}
+.copy-row{display:flex;gap:10px;align-items:center;margin-top:7px}
+.copy-row .credential{margin-top:0;flex:1;min-width:0}
+.copy-btn{background:#fff;color:#17213b;border:0;border-radius:10px;padding:10px 13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.copy-btn.copied{background:#d8f3e2;color:#146c37}
 .hidden{display:none !important}
 .footer{margin-top:40px;background:var(--navy);color:#fff;padding:34px 0}
 .footer small{color:#aeb7ca}
@@ -309,6 +313,41 @@ let signatureCtx = null;
 let drawing = false;
 let lastX = 0;
 let lastY = 0;
+
+async function copyValue(button,value){
+  const text = String(value == null ? "" : value);
+
+  if(!text){
+    return;
+  }
+
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      await navigator.clipboard.writeText(text);
+    }else{
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+    }
+
+    const oldText = button.textContent;
+    button.textContent = "Tersalin";
+    button.classList.add("copied");
+
+    setTimeout(function(){
+      button.textContent = oldText;
+      button.classList.remove("copied");
+    },1500);
+
+  }catch(error){
+    alert("Tidak dapat menyalin. Silakan salin manual.");
+  }
+}
 
 function esc(value){
   return String(value == null ? "" : value)
@@ -664,7 +703,10 @@ async function submitActivation(){
       <div style="margin-top:14px">Kontrak ID</div>
       <div class="credential">${esc(result.kontrakId)}</div>
       <div style="margin-top:14px">Password Sementara</div>
-      <div class="credential">${esc(result.temporaryPassword)}</div>
+      <div class="copy-row">
+        <div class="credential" id="generatedTemporaryPassword">${esc(result.temporaryPassword)}</div>
+        <button type="button" class="copy-btn" onclick="copyValue(this,'${esc(result.temporaryPassword)}')">Copy Password</button>
+      </div>
       <p style="color:#d6dbe5;margin:16px 0 0">Simpan informasi ini. Password sementara wajib diganti setelah login pertama.</p>
       <a href="login.html" class="btn btn-light" style="margin-top:18px">Masuk ke Login Tenant</a>
     `;
