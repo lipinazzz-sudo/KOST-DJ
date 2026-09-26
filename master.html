@@ -103,38 +103,6 @@ button{
     border:1px solid #dfe4ec;
 }
 
-.announcement-filters{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:14px;
-}
-
-.announcement-actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:7px;
-}
-
-.announcement-status{
-    display:inline-flex;
-    align-items:center;
-    padding:5px 9px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:800;
-}
-
-.announcement-status.active{
-    background:#ecfdf3;
-    color:#027a48;
-}
-
-.announcement-status.inactive{
-    background:#f2f4f7;
-    color:#667085;
-}
-
 
 /* =========================================================
    LOGIN
@@ -1587,41 +1555,9 @@ button{
 
 
                     <div
-                        class="announcement-filters"
-                        id="announcementFilters"
-                    >
-
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-announcement-filter="ALL"
-                        >
-                            Semua
-                        </button>
-
-                        <button
-                            type="button"
-                            class="btn btn-light"
-                            data-announcement-filter="AKTIF"
-                        >
-                            Aktif
-                        </button>
-
-                        <button
-                            type="button"
-                            class="btn btn-light"
-                            data-announcement-filter="NONAKTIF"
-                        >
-                            Nonaktif
-                        </button>
-
-                    </div>
-
-
-                    <div
                         id="announcementsBox"
                         class="card table-wrap"
-                        style="margin-top:0;"
+                        style="margin-top:18px;"
                     ></div>
 
                 </section>
@@ -1739,9 +1675,9 @@ let tenantItems = [];
 
 let registrationItems = [];
 
-let announcementItems = [];
+let registrationAvailableRooms = [];
 
-let announcementFilter = "ALL";
+let announcementItems = [];
 
 let paymentFilter = "ALL";
 
@@ -3039,7 +2975,16 @@ async function loadRegistrations(){
             : [];
 
 
-    registrationItems =
+    registrationAvailableRooms =
+        Array.isArray(
+            data &&
+            data.availableRooms
+        )
+            ? data.availableRooms
+            : [];
+
+
+    const visibleItems =
         registrationItems.filter(
             function(item){
 
@@ -3048,6 +2993,7 @@ async function loadRegistrations(){
                         item.status ||
                         ""
                     )
+                    .trim()
                     .toUpperCase()
                     ===
                     "MENUNGGU VERIFIKASI"
@@ -3057,111 +3003,150 @@ async function loadRegistrations(){
         );
 
 
-    document
-        .getElementById(
+    const box =
+        document.getElementById(
             "registrationsBox"
-        )
-        .innerHTML =
+        );
 
-        registrationItems.length
 
-            ? (
+    if(
+        !visibleItems.length
+    ){
 
-                '<table class="data-table">' +
+        box.innerHTML =
+            '<div class="empty">Tidak ada pendaftaran yang perlu diproses.</div>';
 
-                '<thead>' +
+        return;
 
-                '<tr>' +
+    }
 
-                '<th>ID</th>' +
-                '<th>Nama</th>' +
-                '<th>Kamar</th>' +
-                '<th>WhatsApp</th>' +
-                '<th>Aksi</th>' +
 
-                '</tr>' +
+    box.innerHTML =
 
-                '</thead>' +
+        '<table class="data-table">' +
 
-                '<tbody>' +
+        '<thead>' +
 
-                registrationItems
-                    .map(
-                        function(item){
+        '<tr>' +
 
-                            return (
+        '<th>ID</th>' +
+        '<th>Nama</th>' +
+        '<th>Kamar Diminati</th>' +
+        '<th>Kamar Final</th>' +
+        '<th>WhatsApp</th>' +
+        '<th>Status</th>' +
+        '<th>Aksi</th>' +
 
-                                '<tr>' +
+        '</tr>' +
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.id
-                                ) +
-                                '</td>' +
+        '</thead>' +
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.name
-                                ) +
-                                '</td>' +
+        '<tbody>' +
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.room
-                                ) +
-                                '</td>' +
+        visibleItems
+            .map(
+                function(item){
 
-                                '<td>' +
-                                escapeHtml(
-                                    item.phone
-                                ) +
-                                '</td>' +
+                    const requestedRoom =
+                        String(
+                            item.requestedRoom ||
+                            item.room ||
+                            ""
+                        )
+                        .trim();
 
-                                '<td class="actions">' +
 
-                                '<button class="btn btn-success" onclick="approveRegistration(\'' +
+                    const finalRoom =
+                        String(
+                            item.finalRoom ||
+                            ""
+                        )
+                        .trim();
 
-                                encodeURIComponent(
-                                    item.id
-                                ) +
 
-                                '\')">' +
+                    return (
 
-                                'Setujui' +
+                        '<tr>' +
 
-                                '</button>' +
+                        '<td>' +
+                        escapeHtml(
+                            item.id
+                        ) +
+                        '</td>' +
 
-                                '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
+                        '<td>' +
+                        escapeHtml(
+                            item.name ||
+                            "—"
+                        ) +
+                        '</td>' +
 
-                                encodeURIComponent(
-                                    item.id
-                                ) +
+                        '<td>' +
+                        escapeHtml(
+                            requestedRoom ||
+                            "—"
+                        ) +
+                        '</td>' +
 
-                                '\')">' +
+                        '<td>' +
+                        escapeHtml(
+                            finalRoom ||
+                            "—"
+                        ) +
+                        '</td>' +
 
-                                'Tolak' +
+                        '<td>' +
+                        escapeHtml(
+                            item.phone ||
+                            "—"
+                        ) +
+                        '</td>' +
 
-                                '</button>' +
+                        '<td>' +
+                        '<span class="badge badge-warn">MENUNGGU VERIFIKASI</span>' +
+                        '</td>' +
 
-                                '</td>' +
+                        '<td class="actions">' +
 
-                                '</tr>'
+                        '<button class="btn btn-success" onclick="approveRegistration(\'' +
 
-                            );
+                        encodeURIComponent(
+                            item.id
+                        ) +
 
-                        }
-                    )
-                    .join("")
+                        '\')">' +
 
-                +
+                        'Setujui & Tetapkan Kamar' +
 
-                '</tbody>' +
+                        '</button>' +
 
-                '</table>'
+                        '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
 
+                        encodeURIComponent(
+                            item.id
+                        ) +
+
+                        '\')">' +
+
+                        'Tolak' +
+
+                        '</button>' +
+
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
             )
+            .join("")
 
-            : '<div class="empty">Tidak ada pendaftaran pending.</div>';
+        +
+
+        '</tbody>' +
+
+        '</table>';
 
 }
 
@@ -3176,11 +3161,287 @@ async function approveRegistration(
         );
 
 
+    const item =
+        registrationItems.find(
+            function(row){
+
+                return (
+                    String(
+                        row.id
+                    ) ===
+                    String(
+                        id
+                    )
+                );
+
+            }
+        );
+
+
+    if(
+        !item
+    ){
+
+        alert(
+            "Pendaftaran tidak ditemukan di halaman."
+        );
+
+        return;
+
+    }
+
+
+    const available =
+        registrationAvailableRooms
+            .filter(
+                function(room){
+
+                    return (
+                        String(
+                            room.status ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase()
+                        ===
+                        "KOSONG"
+
+                        &&
+
+                        Number(
+                            room.price ||
+                            0
+                        ) > 0
+                    );
+
+                }
+            );
+
+
+    if(
+        !available.length
+    ){
+
+        alert(
+            "Tidak ada kamar kosong yang dapat dipilih sebagai kamar final."
+        );
+
+        return;
+
+    }
+
+
+    const requestedRoom =
+        String(
+            item.requestedRoom ||
+            item.room ||
+            ""
+        )
+        .trim();
+
+
+    let options =
+        '<option value="">Pilih kamar final</option>';
+
+
+    available.forEach(
+        function(room){
+
+            const roomNumber =
+                String(
+                    room.number ||
+                    ""
+                )
+                .trim();
+
+
+            if(
+                !roomNumber
+            ){
+
+                return;
+
+            }
+
+
+            const selected =
+                roomNumber ===
+                requestedRoom
+                    ? " selected"
+                    : "";
+
+
+            options +=
+                '<option value="' +
+                escapeHtml(
+                    roomNumber
+                ) +
+                '"' +
+                selected +
+                '>' +
+                escapeHtml(
+                    roomNumber
+                ) +
+                ' — ' +
+                money(
+                    room.price ||
+                    0
+                ) +
+                ' / bulan' +
+                '</option>';
+
+        }
+    );
+
+
+    const body =
+
+        '<div class="detail-box">' +
+
+        '<strong>Calon Tenant</strong>' +
+
+        escapeHtml(
+            item.name ||
+            "—"
+        ) +
+
+        '<br>' +
+
+        '<span class="muted-text">' +
+
+        'WhatsApp: ' +
+
+        escapeHtml(
+            item.phone ||
+            "—"
+        ) +
+
+        '</span>' +
+
+        '</div>' +
+
+        '<div class="detail-box">' +
+
+        '<strong>Kamar yang Diminati</strong>' +
+
+        escapeHtml(
+            requestedRoom ||
+            "—"
+        ) +
+
+        '<br>' +
+
+        '<span class="muted-text">' +
+
+        'Kamar final dapat Anda ubah di bawah.' +
+
+        '</span>' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="finalRoomSelect">' +
+
+        'Kamar Final' +
+
+        '</label>' +
+
+        '<select id="finalRoomSelect">' +
+
+        options +
+
+        '</select>' +
+
+        '</div>' +
+
+        '<div class="note">' +
+
+        '<strong>Perhatikan:</strong> setelah disetujui, ' +
+
+        'kamar akan dikunci sebagai <strong>DIPESAN</strong>. ' +
+
+        'Tenant belum aktif dan belum mendapat Tenant ID atau password ' +
+
+        'sampai proses aktivasi akun selesai.' +
+
+        '</div>' +
+
+        '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap">' +
+
+        '<button class="btn btn-light" onclick="closeModal()">' +
+
+        'Batal' +
+
+        '</button>' +
+
+        '<button class="btn btn-success" onclick="confirmApproval(\'' +
+
+        encodeURIComponent(
+            id
+        ) +
+
+        '\')">' +
+
+        'Setujui & Tetapkan' +
+
+        '</button>' +
+
+        '</div>';
+
+
+    openModal(
+        "Setujui Pendaftaran",
+        body
+    );
+
+}
+
+
+async function confirmApproval(
+    encoded
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+
+    const select =
+        document.getElementById(
+            "finalRoomSelect"
+        );
+
+
+    const finalRoom =
+        select
+            ? String(
+                select.value ||
+                ""
+              )
+              .trim()
+            : "";
+
+
+    if(
+        !finalRoom
+    ){
+
+        alert(
+            "Silakan pilih kamar final terlebih dahulu."
+        );
+
+        return;
+
+    }
+
+
     if(
         !confirm(
-            "Setujui pendaftaran " +
-            id +
-            "?"
+            "Tetapkan kamar " +
+            finalRoom +
+            " sebagai kamar final?"
         )
     ){
 
@@ -3197,33 +3458,43 @@ async function approveRegistration(
                 {
 
                     registrationId:
-                        id
+                        id,
+
+                    finalRoom:
+                        finalRoom
 
                 }
             );
 
 
+        closeModal();
+
+
         alert(
 
-            "Pendaftaran berhasil disetujui.\n\n" +
+            "Pendaftaran disetujui.\n\n" +
 
-            "Tenant ID: " +
+            "Nama: " +
             (
-                result.tenantId ||
+                result.nama ||
                 "—"
             ) +
 
-            "\nKontrak ID: " +
+            "\nKamar final: " +
             (
-                result.kontrakId ||
+                result.finalRoom ||
                 "—"
             ) +
 
-            "\nKamar: " +
-            (
-                result.room ||
-                "—"
-            )
+            "\nHarga: " +
+            money(
+                result.price ||
+                0
+            ) +
+
+            " / bulan" +
+
+            "\n\nStatus: MENUNGGU AKTIVASI AKUN"
 
         );
 
@@ -3231,7 +3502,6 @@ async function approveRegistration(
         await loadRegistrations();
 
         await loadDashboard();
-
 
     }catch(error){
 
@@ -5948,677 +6218,96 @@ async function loadAnnouncements(){
             : [];
 
 
-    renderAnnouncements();
-
-}
-
-
-function renderAnnouncements(){
-
-    const box =
-        document.getElementById(
+    document
+        .getElementById(
             "announcementsBox"
-        );
-
-
-    const filtered =
-        announcementItems.filter(
-            function(item){
-
-                const status =
-                    String(
-                        item.status ||
-                        ""
-                    )
-                    .trim()
-                    .toUpperCase();
-
-
-                return (
-                    announcementFilter ===
-                    "ALL"
-                ) || (
-                    status ===
-                    announcementFilter
-                );
-
-            }
-        );
-
-
-    document
-        .querySelectorAll(
-            "[data-announcement-filter]"
         )
-        .forEach(
-            function(button){
+        .innerHTML =
 
-                const active =
-                    button.getAttribute(
-                        "data-announcement-filter"
-                    ) ===
-                    announcementFilter;
+        announcementItems.length
 
+            ? (
 
-                button.classList.toggle(
-                    "btn-primary",
-                    active
-                );
+                '<table class="data-table">' +
 
+                '<thead>' +
 
-                button.classList.toggle(
-                    "btn-light",
-                    !active
-                );
+                '<tr>' +
 
-            }
-        );
+                '<th>Judul</th>' +
+                '<th>Prioritas</th>' +
+                '<th>Isi</th>' +
+                '<th>Status</th>' +
 
+                '</tr>' +
 
-    if(!filtered.length){
+                '</thead>' +
 
-        box.innerHTML =
-            '<div class="empty">Tidak ada pengumuman pada filter ini.</div>';
+                '<tbody>' +
 
-        return;
+                announcementItems
+                    .map(
+                        function(item){
 
-    }
+                            return (
 
+                                '<tr>' +
 
-    box.innerHTML =
+                                '<td>' +
 
-        '<table class="data-table">' +
+                                escapeHtml(
+                                    item.title ||
+                                    "—"
+                                ) +
 
-        '<thead>' +
+                                '</td>' +
 
-        '<tr>' +
+                                '<td>' +
 
-        '<th>Judul</th>' +
-        '<th>Prioritas</th>' +
-        '<th>Isi</th>' +
-        '<th>Status</th>' +
-        '<th>Aksi</th>' +
+                                escapeHtml(
+                                    item.priority ||
+                                    "NORMAL"
+                                ) +
 
-        '</tr>' +
+                                '</td>' +
 
-        '</thead>' +
+                                '<td>' +
 
-        '<tbody>' +
+                                escapeHtml(
+                                    item.message ||
+                                    ""
+                                ) +
 
-        filtered
-            .map(
-                function(item){
+                                '</td>' +
 
-                    const status =
-                        String(
-                            item.status ||
-                            ""
-                        )
-                        .trim()
-                        .toUpperCase();
+                                '<td>' +
 
+                                escapeHtml(
+                                    item.status ||
+                                    "—"
+                                ) +
 
-                    const statusClass =
-                        status === "AKTIF"
-                            ? "active"
-                            : "inactive";
+                                '</td>' +
 
+                                '</tr>'
 
-                    const escapedId =
-                        escapeHtml(
-                            item.id ||
-                            ""
-                        );
-
-
-                    return (
-
-                        '<tr>' +
-
-                        '<td>' +
-
-                        escapeHtml(
-                            item.title ||
-                            "—"
-                        ) +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        escapeHtml(
-                            item.priority ||
-                            "NORMAL"
-                        ) +
-
-                        '</td>' +
-
-                        '<td style="white-space:pre-wrap;">' +
-
-                        escapeHtml(
-                            item.message ||
-                            ""
-                        ) +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        '<span class="announcement-status ' +
-                        statusClass +
-                        '">' +
-
-                        escapeHtml(
-                            status ||
-                            "—"
-                        ) +
-
-                        '</span>' +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        '<div class="announcement-actions">' +
-
-                        '<button ' +
-                        'type="button" ' +
-                        'class="btn btn-light" ' +
-                        'data-announcement-action="edit" ' +
-                        'data-announcement-id="' +
-                        escapedId +
-                        '">' +
-                        'Edit' +
-                        '</button>' +
-
-                        (
-                            status === "AKTIF"
-                                ? (
-                                    '<button ' +
-                                    'type="button" ' +
-                                    'class="btn btn-warning" ' +
-                                    'data-announcement-action="deactivate" ' +
-                                    'data-announcement-id="' +
-                                    escapedId +
-                                    '">' +
-                                    'Nonaktifkan' +
-                                    '</button>'
-                                )
-                                : (
-                                    '<button ' +
-                                    'type="button" ' +
-                                    'class="btn btn-success" ' +
-                                    'data-announcement-action="activate" ' +
-                                    'data-announcement-id="' +
-                                    escapedId +
-                                    '">' +
-                                    'Aktifkan' +
-                                    '</button>'
-                                )
-                        ) +
-
-                        '</div>' +
-
-                        '</td>' +
-
-                        '</tr>'
-
-                    );
-
-                }
-            )
-            .join("")
-
-        +
-
-        '</tbody>' +
-
-        '</table>';
-
-}
-
-
-async function updateAnnouncementStatus(
-    announcementId,
-    operation
-){
-
-    const item =
-        announcementItems.find(
-            function(candidate){
-
-                return String(
-                    candidate.id ||
-                    ""
-                ) ===
-                String(
-                    announcementId ||
-                    ""
-                );
-
-            }
-        );
-
-
-    if(!item){
-
-        throw new Error(
-            "Pengumuman tidak ditemukan di halaman."
-        );
-
-    }
-
-
-    const active =
-        String(
-            item.status ||
-            ""
-        )
-        .trim()
-        .toUpperCase() ===
-        "AKTIF";
-
-
-    const targetLabel =
-        operation === "DEACTIVATE"
-            ? "menonaktifkan"
-            : "mengaktifkan kembali";
-
-
-    const currentLabel =
-        active
-            ? "aktif"
-            : "nonaktif";
-
-
-    const confirmed =
-        window.confirm(
-            "Yakin ingin " +
-            targetLabel +
-            " pengumuman '" +
-            (item.title || "") +
-            "'?\n\nStatus saat ini: " +
-            currentLabel
-        );
-
-
-    if(!confirmed){
-
-        return;
-
-    }
-
-
-    await api(
-        "masterUpdateAnnouncement",
-        {
-
-            announcementId:
-                announcementId,
-
-            operation:
-                operation
-
-        }
-    );
-
-
-    await loadAnnouncements();
-
-}
-
-
-function openAnnouncementEdit(
-    announcementId
-){
-
-    const item =
-        announcementItems.find(
-            function(candidate){
-
-                return String(
-                    candidate.id ||
-                    ""
-                ) ===
-                String(
-                    announcementId ||
-                    ""
-                );
-
-            }
-        );
-
-
-    if(!item){
-
-        alert(
-            "Pengumuman tidak ditemukan."
-        );
-
-        return;
-
-    }
-
-
-    const title =
-        escapeHtml(
-            item.title ||
-            ""
-        );
-
-
-    const message =
-        escapeHtml(
-            item.message ||
-            ""
-        );
-
-
-    const priority =
-        String(
-            item.priority ||
-            "NORMAL"
-        )
-        .toUpperCase();
-
-
-    openModal(
-        "Edit Pengumuman",
-
-        '<div class="form-grid">' +
-
-        '<div class="field full">' +
-        '<label>Judul</label>' +
-        '<input id="editAnnouncementTitle" value="' +
-        title +
-        '" required>' +
-        '</div>' +
-
-        '<div class="field">' +
-        '<label>Prioritas</label>' +
-        '<select id="editAnnouncementPriority">' +
-        '<option value="NORMAL">Normal</option>' +
-        '<option value="PENTING">Penting</option>' +
-        '<option value="DARURAT">Darurat</option>' +
-        '</select>' +
-        '</div>' +
-
-        '<div class="field full">' +
-        '<label>Isi</label>' +
-        '<textarea id="editAnnouncementMessage" required>' +
-        message +
-        '</textarea>' +
-        '</div>' +
-
-        '</div>' +
-
-        '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px;">' +
-
-        '<button type="button" class="btn btn-secondary" id="cancelEditAnnouncement">' +
-        'Batal' +
-        '</button>' +
-
-        '<button type="button" class="btn btn-primary" id="saveEditAnnouncement">' +
-        'Simpan Perubahan' +
-        '</button>' +
-
-        '</div>'
-    );
-
-
-    const prioritySelect =
-        document.getElementById(
-            "editAnnouncementPriority"
-        );
-
-
-    prioritySelect.value =
-        (
-            [
-                "NORMAL",
-                "PENTING",
-                "DARURAT"
-            ]
-            .indexOf(priority) >= 0
-        )
-            ? priority
-            : "NORMAL";
-
-
-    document
-        .getElementById(
-            "cancelEditAnnouncement"
-        )
-        .addEventListener(
-            "click",
-            function(){
-
-                closeModal();
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "saveEditAnnouncement"
-        )
-        .addEventListener(
-            "click",
-            async function(){
-
-                const button =
-                    this;
-
-
-                const newTitle =
-                    document
-                        .getElementById(
-                            "editAnnouncementTitle"
-                        )
-                        .value
-                        .trim();
-
-
-                const newMessage =
-                    document
-                        .getElementById(
-                            "editAnnouncementMessage"
-                        )
-                        .value
-                        .trim();
-
-
-                const newPriority =
-                    document
-                        .getElementById(
-                            "editAnnouncementPriority"
-                        )
-                        .value;
-
-
-                if(!newTitle || !newMessage){
-
-                    alert(
-                        "Judul dan isi wajib diisi."
-                    );
-
-                    return;
-
-                }
-
-
-                button.disabled =
-                    true;
-
-                button.textContent =
-                    "Menyimpan...";
-
-
-                try{
-
-                    await api(
-                        "masterUpdateAnnouncement",
-                        {
-
-                            announcementId:
-                                announcementId,
-
-                            operation:
-                                "EDIT",
-
-                            title:
-                                newTitle,
-
-                            message:
-                                newMessage,
-
-                            priority:
-                                newPriority
+                            );
 
                         }
-                    );
+                    )
+                    .join("")
 
+                +
 
-                    closeModal();
+                '</tbody>' +
 
-                    await loadAnnouncements();
+                '</table>'
 
-                    alert(
-                        "Pengumuman berhasil diperbarui."
-                    );
+            )
 
-                }catch(error){
-
-                    alert(
-                        error.message
-                    );
-
-                    button.disabled =
-                        false;
-
-                    button.textContent =
-                        "Simpan Perubahan";
-
-                }
-
-            }
-        );
+            : '<div class="empty">Belum ada pengumuman.</div>';
 
 }
-
-
-document
-    .getElementById(
-        "announcementFilters"
-    )
-    .addEventListener(
-        "click",
-        function(event){
-
-            const button =
-                event.target.closest(
-                    "[data-announcement-filter]"
-                );
-
-
-            if(!button){
-
-                return;
-
-            }
-
-
-            announcementFilter =
-                button.getAttribute(
-                    "data-announcement-filter"
-                ) ||
-                "ALL";
-
-
-            renderAnnouncements();
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "announcementsBox"
-    )
-    .addEventListener(
-        "click",
-        async function(event){
-
-            const button =
-                event.target.closest(
-                    "[data-announcement-action]"
-                );
-
-
-            if(!button){
-
-                return;
-
-            }
-
-
-            const action =
-                button.getAttribute(
-                    "data-announcement-action"
-                );
-
-
-            const announcementId =
-                button.getAttribute(
-                    "data-announcement-id"
-                );
-
-
-            try{
-
-                if(action === "edit"){
-
-                    openAnnouncementEdit(
-                        announcementId
-                    );
-
-                    return;
-
-                }
-
-
-                if(action === "deactivate"){
-
-                    await updateAnnouncementStatus(
-                        announcementId,
-                        "DEACTIVATE"
-                    );
-
-                    return;
-
-                }
-
-
-                if(action === "activate"){
-
-                    await updateAnnouncementStatus(
-                        announcementId,
-                        "ACTIVATE"
-                    );
-
-                }
-
-            }catch(error){
-
-                alert(
-                    error.message
-                );
-
-            }
-
-        }
-    );
 
 
 document
