@@ -128,6 +128,85 @@
     color:#b42318;
 }
 
+/* =========================================================
+   PENGUMUMAN TENANT
+   ========================================================= */
+.tenant-announcements{
+    margin-top:30px;
+}
+
+.tenant-announcement-list{
+    display:grid;
+    gap:14px;
+    margin-top:18px;
+}
+
+.tenant-announcement-item{
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:18px 20px;
+    background:#fff;
+}
+
+.tenant-announcement-top{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    align-items:flex-start;
+}
+
+.tenant-announcement-title{
+    margin:0;
+    font-size:18px;
+    font-weight:800;
+}
+
+.tenant-announcement-priority{
+    display:inline-flex;
+    align-items:center;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#eef2ff;
+    color:#344054;
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    white-space:nowrap;
+}
+
+.tenant-announcement-message{
+    margin:10px 0 0;
+    color:#475467;
+    line-height:1.7;
+    white-space:pre-line;
+}
+
+.tenant-announcement-meta{
+    margin-top:10px;
+    color:#98a2b3;
+    font-size:13px;
+}
+
+.tenant-announcement-empty{
+    margin-top:18px;
+    padding:18px;
+    border:1px dashed #d0d5dd;
+    border-radius:16px;
+    color:#667085;
+    background:#f9fafb;
+}
+
+.tenant-announcement-alert{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+    color:#027a48;
+    font-size:14px;
+    font-weight:800;
+}
+
+
 .portal-error{
     margin-top:25px;
     padding:15px;
@@ -280,6 +359,56 @@
                         AKTIF
                     </span>
 
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PENGUMUMAN
+                 ================================================= -->
+
+            <div
+                class="card tenant-announcements"
+                id="tenantAnnouncementsCard"
+                style="padding:24px;"
+            >
+
+                <div class="portal-header">
+
+                    <div>
+                        <div class="eyebrow">
+                            INFORMASI PENGELOLA
+                        </div>
+
+                        <h3 style="margin:0;">
+                            📢 Pengumuman
+                        </h3>
+
+                        <p style="margin:8px 0 0;">
+                            Informasi terbaru dari pengelola DJ Family Kost.
+                        </p>
+                    </div>
+
+                    <div
+                        class="tenant-announcement-alert"
+                        id="tenantAnnouncementCount"
+                        style="display:none;"
+                    ></div>
+
+                </div>
+
+                <div
+                    id="tenantAnnouncementList"
+                    class="tenant-announcement-list"
+                ></div>
+
+                <div
+                    id="tenantAnnouncementEmpty"
+                    class="tenant-announcement-empty"
+                    style="display:none;"
+                >
+                    Belum ada pengumuman dari pengelola.
                 </div>
 
             </div>
@@ -698,6 +827,167 @@ function getSession(){
 
 /**
  * ============================================================
+ * RENDER PENGUMUMAN
+ * ============================================================
+ */
+function renderTenantAnnouncements(items){
+
+    const list =
+        document.getElementById(
+            "tenantAnnouncementList"
+        );
+
+    const empty =
+        document.getElementById(
+            "tenantAnnouncementEmpty"
+        );
+
+    const count =
+        document.getElementById(
+            "tenantAnnouncementCount"
+        );
+
+    if(!list || !empty || !count){
+        return;
+    }
+
+    const activeItems =
+        Array.isArray(items)
+            ? items.filter(function(item){
+                return String(
+                    item && item.status ||
+                    ''
+                ).trim().toUpperCase() === 'AKTIF';
+            })
+            : [];
+
+    list.innerHTML = "";
+
+    if(!activeItems.length){
+
+        empty.style.display = "block";
+        count.style.display = "none";
+        return;
+
+    }
+
+    empty.style.display = "none";
+    count.style.display = "inline-flex";
+    count.textContent =
+        "📢 " +
+        activeItems.length +
+        " pengumuman aktif";
+
+    activeItems.forEach(function(item){
+
+        const article =
+            document.createElement("article");
+
+        article.className =
+            "tenant-announcement-item";
+
+        const top =
+            document.createElement("div");
+
+        top.className =
+            "tenant-announcement-top";
+
+        const title =
+            document.createElement("h4");
+
+        title.className =
+            "tenant-announcement-title";
+
+        title.textContent =
+            String(
+                item && item.title ||
+                "Pengumuman"
+            );
+
+        const priority =
+            document.createElement("span");
+
+        priority.className =
+            "tenant-announcement-priority";
+
+        priority.textContent =
+            String(
+                item && item.priority ||
+                "NORMAL"
+            );
+
+        top.appendChild(title);
+        top.appendChild(priority);
+
+        const message =
+            document.createElement("p");
+
+        message.className =
+            "tenant-announcement-message";
+
+        message.textContent =
+            String(
+                item && item.message ||
+                ""
+            );
+
+        article.appendChild(top);
+        article.appendChild(message);
+
+        if(item && item.publishedAt){
+
+            const meta =
+                document.createElement("div");
+
+            meta.className =
+                "tenant-announcement-meta";
+
+            meta.textContent =
+                "Diterbitkan: " +
+                formatTenantAnnouncementDate(
+                    item.publishedAt
+                );
+
+            article.appendChild(meta);
+
+        }
+
+        list.appendChild(article);
+
+    });
+
+}
+
+
+function formatTenantAnnouncementDate(value){
+
+    if(!value){
+        return "";
+    }
+
+    const date =
+        new Date(value);
+
+    if(Number.isNaN(date.getTime())){
+        return String(value);
+    }
+
+    return date.toLocaleString(
+        "id-ID",
+        {
+            day:"2-digit",
+            month:"long",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+
+}
+
+
+/**
+ * ============================================================
  * LOAD PORTAL
  * ============================================================
  */
@@ -791,6 +1081,14 @@ async function loadPortal(){
 
         const data =
             result.data;
+
+
+        renderTenantAnnouncements(
+            data.announcements &&
+            data.announcements.items
+                ? data.announcements.items
+                : []
+        );
 
 
         /*
