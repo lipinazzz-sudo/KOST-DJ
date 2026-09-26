@@ -2949,3 +2949,92 @@ textarea:focus{
   }
 
 }
+/* ============================================================
+   DJ FAMILY KOST — HERO BACKGROUND IMAGE
+   ============================================================ */
+
+.hero{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10,18,38,.96) 0%,
+      rgba(14,25,49,.91) 42%,
+      rgba(14,25,49,.72) 68%,
+      rgba(14,25,49,.52) 100%
+    ),
+    url("./assets/dj-family-kost-hero.png")
+    center right / cover no-repeat;
+}
+
+.hero::before{
+  opacity:.28;
+}
+
+.hero::after{
+  opacity:.20;
+}
+/* ============================================================
+   DJ FAMILY KOST — BRAND LOGO
+   ============================================================ */
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+
+  background:
+    #ffffff
+    url("./assets/dj-family-kost-logo.png")
+    center / 31px 31px
+    no-repeat;
+
+  border:
+    1px solid rgba(16,24,45,.10);
+
+  box-shadow:
+    0 8px 24px rgba(16,24,45,.12),
+    inset 0 0 0 3px #fff;
+
+  flex:none;
+}
+/* ============================================================
+   DJ FAMILY KOST — HERO BRAND DETAIL
+   ============================================================ */
+
+.hero .container::after{
+  content:"";
+  position:absolute;
+  right:0;
+  bottom:-25px;
+
+  width:150px;
+  height:150px;
+
+  background:
+    url("./assets/dj-family-kost-logo.png")
+    center / contain
+    no-repeat;
+
+  opacity:.10;
+  filter:
+    drop-shadow(
+      0 10px 30px rgba(0,0,0,.25)
+    );
+
+  pointer-events:none;
+}
+
+@media(max-width:850px){
+
+  .hero .container::after{
+    right:50%;
+    transform:translateX(50%);
+    bottom:-60px;
+
+    width:120px;
+    height:120px;
+
+    opacity:.07;
+  }
+
+}
