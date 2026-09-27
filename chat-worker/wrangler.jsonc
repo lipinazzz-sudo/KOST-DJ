@@ -1,6 +1,6 @@
 {
   "name": "dj-family-kost-chat",
-  "main": "chat-worker/index.js",
+  "main": "index.js",
   "compatibility_date": "2026-09-27",
   "durable_objects": {
     "bindings": [
