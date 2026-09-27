@@ -17,6 +17,602 @@
     href="app.css"
   >
 
+  <style>
+
+    /* =========================================================
+       CAFE TENANT — UI PREVIEW / MOCKUP
+       Belum terhubung ke API. Fokus tahap ini: UI + keranjang.
+       ========================================================= */
+
+    .cafe-page{
+      padding:38px 0 110px;
+      background:#f8fafc;
+      min-height:calc(100vh - 150px);
+    }
+
+    .cafe-header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:24px;
+      flex-wrap:wrap;
+      margin-bottom:26px;
+    }
+
+    .cafe-kicker{
+      margin-bottom:8px;
+    }
+
+    .cafe-title{
+      margin:0;
+      font-size:clamp(30px,5vw,46px);
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+
+    .cafe-subtitle{
+      margin:10px 0 0;
+      color:#667085;
+      line-height:1.7;
+      max-width:700px;
+    }
+
+    .cafe-tenant-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #e4e7ec;
+      color:#344054;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:0 8px 24px rgba(16,24,40,.05);
+    }
+
+    .cafe-category-wrap{
+      position:sticky;
+      top:0;
+      z-index:20;
+      padding:10px 0 16px;
+      background:linear-gradient(
+        to bottom,
+        #f8fafc 72%,
+        rgba(248,250,252,0)
+      );
+    }
+
+    .cafe-categories{
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      padding:4px 2px 8px;
+      scrollbar-width:none;
+    }
+
+    .cafe-categories::-webkit-scrollbar{
+      display:none;
+    }
+
+    .cafe-category{
+      border:1px solid #d0d5dd;
+      background:#fff;
+      color:#344054;
+      border-radius:999px;
+      padding:11px 16px;
+      font:inherit;
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
+      cursor:pointer;
+      transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        border-color .15s ease,
+        background .15s ease;
+    }
+
+    .cafe-category:hover{
+      transform:translateY(-1px);
+    }
+
+    .cafe-category.active{
+      background:#111827;
+      color:#fff;
+      border-color:#111827;
+      box-shadow:0 8px 20px rgba(17,24,39,.16);
+    }
+
+    .cafe-section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin:12px 0 16px;
+    }
+
+    .cafe-section-head h2{
+      margin:0;
+      font-size:20px;
+    }
+
+    .cafe-section-count{
+      color:#667085;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .cafe-menu-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;
+    }
+
+    .cafe-menu-card{
+      overflow:hidden;
+      border:1px solid #e4e7ec;
+      border-radius:20px;
+      background:#fff;
+      box-shadow:0 10px 30px rgba(16,24,40,.05);
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+    }
+
+    .cafe-menu-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 16px 34px rgba(16,24,40,.09);
+    }
+
+    .cafe-photo{
+      aspect-ratio:16/10;
+      background:
+        linear-gradient(
+          135deg,
+          #eef2f6 0%,
+          #e4e7ec 52%,
+          #f4f5f7 100%
+        );
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+      box-sizing:border-box;
+    }
+
+    .cafe-photo-inner{
+      width:100%;
+      height:100%;
+      border:1.5px dashed #98a2b3;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      box-sizing:border-box;
+      color:#667085;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .cafe-menu-content{
+      padding:17px;
+    }
+
+    .cafe-menu-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .cafe-menu-name{
+      margin:0;
+      font-size:17px;
+      line-height:1.3;
+    }
+
+    .cafe-menu-price{
+      margin-top:8px;
+      font-size:15px;
+      font-weight:900;
+      color:#111827;
+    }
+
+    .cafe-menu-desc{
+      margin:8px 0 0;
+      color:#667085;
+      font-size:13px;
+      line-height:1.55;
+      min-height:40px;
+    }
+
+    .cafe-menu-actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:15px;
+    }
+
+    .cafe-stock{
+      color:#98a2b3;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .cafe-add{
+      min-width:44px;
+      min-height:44px;
+      padding:0 14px;
+      border:0;
+      border-radius:12px;
+      background:#111827;
+      color:#fff;
+      font:inherit;
+      font-weight:900;
+      cursor:pointer;
+      transition:
+        transform .15s ease,
+        opacity .15s ease;
+    }
+
+    .cafe-add:hover{
+      transform:translateY(-1px);
+    }
+
+    .cafe-add:active{
+      transform:scale(.97);
+    }
+
+    .cafe-demo-note{
+      margin-top:30px;
+      padding:15px 16px;
+      border:1px dashed #cbd5e1;
+      border-radius:16px;
+      background:#fff;
+      color:#667085;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    /* =========================================================
+       CART
+       ========================================================= */
+
+    .cafe-cart-bar{
+      position:fixed;
+      left:50%;
+      bottom:16px;
+      transform:translateX(-50%);
+      z-index:50;
+      width:min(720px,calc(100% - 28px));
+      background:#111827;
+      color:#fff;
+      border-radius:18px;
+      box-shadow:0 18px 45px rgba(15,23,42,.28);
+      padding:12px;
+      box-sizing:border-box;
+    }
+
+    .cafe-cart-main{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .cafe-cart-summary{
+      min-width:0;
+    }
+
+    .cafe-cart-count{
+      font-size:12px;
+      color:#cbd5e1;
+      font-weight:800;
+    }
+
+    .cafe-cart-total{
+      margin-top:3px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .cafe-cart-button{
+      border:0;
+      border-radius:12px;
+      background:#fff;
+      color:#111827;
+      min-height:46px;
+      padding:0 18px;
+      font:inherit;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .cafe-cart-button:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+
+    /* =========================================================
+       CART PANEL
+       ========================================================= */
+
+    .cafe-overlay{
+      position:fixed;
+      inset:0;
+      z-index:80;
+      background:rgba(15,23,42,.42);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding:18px;
+      box-sizing:border-box;
+    }
+
+    .cafe-overlay.show{
+      display:flex;
+    }
+
+    .cafe-cart-panel{
+      width:min(720px,100%);
+      max-height:min(80vh,720px);
+      overflow:auto;
+      background:#fff;
+      border-radius:22px;
+      box-shadow:0 22px 60px rgba(15,23,42,.22);
+      padding:22px;
+      box-sizing:border-box;
+    }
+
+    .cafe-cart-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .cafe-cart-head h3{
+      margin:0;
+      font-size:20px;
+    }
+
+    .cafe-cart-head p{
+      margin:6px 0 0;
+      color:#667085;
+      font-size:13px;
+    }
+
+    .cafe-close{
+      width:40px;
+      height:40px;
+      border:1px solid #e4e7ec;
+      background:#fff;
+      border-radius:12px;
+      font-size:18px;
+      cursor:pointer;
+    }
+
+    .cafe-cart-list{
+      display:grid;
+      gap:11px;
+    }
+
+    .cafe-cart-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+      border:1px solid #eaecf0;
+      border-radius:14px;
+      padding:13px 14px;
+    }
+
+    .cafe-cart-row-name{
+      font-weight:900;
+      font-size:14px;
+    }
+
+    .cafe-cart-row-meta{
+      margin-top:4px;
+      color:#667085;
+      font-size:12px;
+    }
+
+    .cafe-cart-controls{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .cafe-qty-button{
+      width:34px;
+      height:34px;
+      border:1px solid #d0d5dd;
+      border-radius:10px;
+      background:#fff;
+      cursor:pointer;
+      font-weight:900;
+    }
+
+    .cafe-qty{
+      min-width:20px;
+      text-align:center;
+      font-weight:900;
+    }
+
+    .cafe-cart-footer{
+      margin-top:18px;
+      padding-top:18px;
+      border-top:1px solid #eaecf0;
+    }
+
+    .cafe-cart-total-line{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .cafe-note-field{
+      margin-top:14px;
+    }
+
+    .cafe-note-field label{
+      display:block;
+      margin-bottom:7px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .cafe-note-field textarea{
+      width:100%;
+      min-height:92px;
+      resize:vertical;
+      box-sizing:border-box;
+      border:1px solid #d0d5dd;
+      border-radius:12px;
+      padding:12px 13px;
+      font:inherit;
+      outline:none;
+    }
+
+    .cafe-note-field textarea:focus{
+      border-color:#98a2b3;
+      box-shadow:0 0 0 3px rgba(17,24,39,.06);
+    }
+
+    .cafe-confirm{
+      width:100%;
+      margin-top:14px;
+      min-height:48px;
+      border:0;
+      border-radius:12px;
+      background:#111827;
+      color:#fff;
+      font:inherit;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .cafe-empty-cart{
+      padding:26px 8px;
+      text-align:center;
+      color:#667085;
+      line-height:1.6;
+    }
+
+    .cafe-toast{
+      position:fixed;
+      left:50%;
+      bottom:88px;
+      z-index:100;
+      transform:translate(-50%,16px);
+      opacity:0;
+      pointer-events:none;
+      background:#111827;
+      color:#fff;
+      padding:11px 14px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:800;
+      transition:
+        opacity .18s ease,
+        transform .18s ease;
+      box-shadow:0 14px 30px rgba(15,23,42,.22);
+    }
+
+    .cafe-toast.show{
+      opacity:1;
+      transform:translate(-50%,0);
+    }
+
+    @media(max-width:1050px){
+      .cafe-menu-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media(max-width:640px){
+      .cafe-page{
+        padding:26px 0 110px;
+      }
+
+      .cafe-header{
+        gap:16px;
+      }
+
+      .cafe-title{
+        font-size:31px;
+      }
+
+      .cafe-menu-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+      }
+
+      .cafe-menu-content{
+        padding:13px;
+      }
+
+      .cafe-menu-name{
+        font-size:14px;
+      }
+
+      .cafe-menu-price{
+        font-size:14px;
+      }
+
+      .cafe-menu-desc{
+        font-size:12px;
+        min-height:0;
+      }
+
+      .cafe-menu-actions{
+        margin-top:12px;
+      }
+
+      .cafe-stock{
+        font-size:11px;
+      }
+
+      .cafe-add{
+        min-width:42px;
+        min-height:42px;
+        padding:0 12px;
+      }
+
+      .cafe-cart-bar{
+        bottom:10px;
+        width:calc(100% - 18px);
+      }
+
+      .cafe-overlay{
+        padding:10px;
+      }
+
+      .cafe-cart-panel{
+        border-radius:18px;
+        padding:17px;
+      }
+    }
+
+    @media(max-width:390px){
+      .cafe-menu-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+  </style>
+
 </head>
 
 
@@ -30,11 +626,8 @@
       class="brand"
       href="portal.html"
     >
-
       <span class="brand-mark"></span>
-
       DJ FAMILY KOST · TENANT
-
     </a>
 
 
@@ -56,7 +649,10 @@
         Check-in/out
       </a>
 
-      <a href="cafe.html">
+      <a
+        href="cafe.html"
+        aria-current="page"
+      >
         Cafe
       </a>
 
@@ -79,56 +675,259 @@
 </header>
 
 
-<main class="soon">
+<main class="cafe-page">
 
   <div class="container">
 
-    <div class="card">
+    <section class="cafe-header">
 
-      <div class="eyebrow">
-        TENANT SERVICE · CAFE
-      </div>
+      <div>
 
+        <div class="eyebrow cafe-kicker">
+          TENANT SERVICE · CAFE
+        </div>
 
-      <h1>
-        Coming Soon
-      </h1>
+        <h1 class="cafe-title">
+          Pesan dari Kamar
+        </h1>
 
-
-      <p class="lead">
-
-        Layanan Cafe
-        DJ Family Kost
-        sedang dipersiapkan.
-
-      </p>
-
-
-      <div style="margin-top:25px">
-
-        <a
-          class="btn btn-primary"
-          href="portal.html"
-        >
-          Kembali ke Portal
-        </a>
+        <p class="cafe-subtitle">
+          Pilih makanan atau minuman yang tersedia, masukkan ke keranjang,
+          lalu konfirmasi pesanan. Pada tahap preview ini data belum dikirim
+          ke Master — kita sedang mengecek tampilan dan alur pesan terlebih dahulu.
+        </p>
 
       </div>
+
+
+      <div
+        class="cafe-tenant-badge"
+        id="tenantBadge"
+      >
+        👤 Tenant · —
+      </div>
+
+    </section>
+
+
+    <div class="cafe-category-wrap">
+
+      <div
+        class="cafe-categories"
+        id="categoryList"
+      ></div>
 
     </div>
+
+
+    <section>
+
+      <div class="cafe-section-head">
+
+        <h2 id="categoryTitle">
+          Semua Menu
+        </h2>
+
+        <div
+          class="cafe-section-count"
+          id="menuCount"
+        >
+          0 menu
+        </div>
+
+      </div>
+
+
+      <div
+        class="cafe-menu-grid"
+        id="menuGrid"
+      ></div>
+
+
+      <div class="cafe-demo-note">
+
+        <strong>Preview UI.</strong>
+        Kotak abu-abu pada setiap kartu sengaja dikosongkan untuk sementara.
+        Nanti area tersebut akan diisi foto makanan/minuman asli dari menu DJ Family Kost.
+
+      </div>
+
+    </section>
 
   </div>
 
 </main>
 
 
+<div
+  class="cafe-cart-bar"
+  id="cartBar"
+>
+
+  <div class="cafe-cart-main">
+
+    <div class="cafe-cart-summary">
+
+      <div
+        class="cafe-cart-count"
+        id="cartCount"
+      >
+        0 item
+      </div>
+
+      <div
+        class="cafe-cart-total"
+        id="cartTotal"
+      >
+        Rp0
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="cafe-cart-button"
+      id="openCartButton"
+      disabled
+    >
+      Lihat Keranjang
+    </button>
+
+  </div>
+
+</div>
+
+
+<div
+  class="cafe-overlay"
+  id="cartOverlay"
+  aria-hidden="true"
+>
+
+  <div
+    class="cafe-cart-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cartTitle"
+  >
+
+    <div class="cafe-cart-head">
+
+      <div>
+
+        <h3 id="cartTitle">
+          Keranjang Pesanan
+        </h3>
+
+        <p id="cartTenantMeta">
+          Kamar —
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="cafe-close"
+        id="closeCartButton"
+        aria-label="Tutup keranjang"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      id="cartList"
+      class="cafe-cart-list"
+    ></div>
+
+
+    <div
+      class="cafe-empty-cart"
+      id="emptyCart"
+      style="display:none;"
+    >
+      Keranjang masih kosong.<br>
+      Pilih menu terlebih dahulu.
+    </div>
+
+
+    <div
+      class="cafe-cart-footer"
+      id="cartFooter"
+      style="display:none;"
+    >
+
+      <div class="cafe-cart-total-line">
+
+        <span>
+          Total
+        </span>
+
+        <span id="cartPanelTotal">
+          Rp0
+        </span>
+
+      </div>
+
+
+      <div class="cafe-note-field">
+
+        <label for="orderNote">
+          Catatan untuk pesanan
+        </label>
+
+        <textarea
+          id="orderNote"
+          placeholder="Contoh: tidak terlalu pedas, es dipisah, dll."
+        ></textarea>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="cafe-confirm"
+        id="confirmOrderButton"
+      >
+        Konfirmasi Pesanan
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div
+  class="cafe-toast"
+  id="cafeToast"
+  role="status"
+  aria-live="polite"
+></div>
+
+
 <footer class="footer">
 
   <div class="container footer-inner">
 
-    <strong>
-      DJ FAMILY KOST
-    </strong>
+    <div>
+
+      <strong>
+        DJ FAMILY KOST
+      </strong>
+
+      <br>
+
+      <small>
+        Hunian yang tertib, nyaman, dan terkelola.
+      </small>
+
+    </div>
 
     <small>
       © 2026 DJ Family Kost
@@ -137,6 +936,883 @@
   </div>
 
 </footer>
+
+
+<script>
+
+  /* =========================================================
+     MOCK MENU — khusus untuk melihat UI.
+     Nanti array ini akan diganti dengan data dari API / Sheet.
+     ========================================================= */
+
+  const DEMO_MENU = [
+
+    {
+      id: "DEMO-001",
+      category: "Makanan",
+      name: "Nasi Goreng",
+      price: 18000,
+      description: "Foto menu akan ditempatkan di area atas.",
+      stock: "Tersedia"
+    },
+
+    {
+      id: "DEMO-002",
+      category: "Makanan",
+      name: "Mie Goreng",
+      price: 17000,
+      description: "Placeholder sementara untuk preview kartu.",
+      stock: "Tersedia"
+    },
+
+    {
+      id: "DEMO-003",
+      category: "Minuman",
+      name: "Es Teh",
+      price: 6000,
+      description: "Ukuran dan foto bisa disesuaikan nanti.",
+      stock: "Tersedia"
+    },
+
+    {
+      id: "DEMO-004",
+      category: "Minuman",
+      name: "Kopi Susu",
+      price: 12000,
+      description: "Area foto sengaja masih kosong.",
+      stock: "Tersedia"
+    },
+
+    {
+      id: "DEMO-005",
+      category: "Snack",
+      name: "Kentang Goreng",
+      price: 15000,
+      description: "Contoh item snack untuk melihat layout.",
+      stock: "Tersedia"
+    },
+
+    {
+      id: "DEMO-006",
+      category: "Snack",
+      name: "Kerupuk",
+      price: 5000,
+      description: "Contoh item kecil dengan harga ringan.",
+      stock: "Tersedia"
+    },
+
+    {
+      id: "DEMO-007",
+      category: "Dessert",
+      name: "Pisang Cokelat",
+      price: 12000,
+      description: "Nanti dapat diganti menu dessert sebenarnya.",
+      stock: "Tersedia"
+    },
+
+    {
+      id: "DEMO-008",
+      category: "Dessert",
+      name: "Roti Bakar",
+      price: 14000,
+      description: "Placeholder visual untuk pengujian.",
+      stock: "Tersedia"
+    }
+
+  ];
+
+
+  let activeCategory = "Semua";
+  let cart = [];
+
+
+  function formatMoney(value){
+
+    return (
+      "Rp" +
+      Number(value || 0).toLocaleString("id-ID")
+    );
+
+  }
+
+
+  function getSession(){
+
+    const raw =
+      sessionStorage.getItem("djTenantSession");
+
+    if(!raw){
+      return null;
+    }
+
+    try{
+
+      return JSON.parse(raw);
+
+    }catch(error){
+
+      sessionStorage.removeItem("djTenantSession");
+      return null;
+
+    }
+
+  }
+
+
+  function getTenantContext(){
+
+    const session =
+      getSession();
+
+    if(!session){
+
+      return {
+        tenantId: "DEMO-TENANT",
+        tenantName: "Tenant Preview",
+        room: "101"
+      };
+
+    }
+
+    return {
+
+      tenantId:
+        session.tenantId || "—",
+
+      tenantName:
+        session.tenantName ||
+        session.name ||
+        "Tenant",
+
+      room:
+        session.room ||
+        session.noKamar ||
+        session.kamar ||
+        "—"
+
+    };
+
+  }
+
+
+  function renderTenantBadge(){
+
+    const tenant =
+      getTenantContext();
+
+    const badge =
+      document.getElementById("tenantBadge");
+
+    const meta =
+      document.getElementById("cartTenantMeta");
+
+    badge.textContent =
+      "👤 " +
+      tenant.tenantName +
+      " · Kamar " +
+      tenant.room;
+
+    meta.textContent =
+      "Tenant " +
+      tenant.tenantId +
+      " · Kamar " +
+      tenant.room;
+
+  }
+
+
+  function categories(){
+
+    return [
+      "Semua",
+      "Makanan",
+      "Minuman",
+      "Snack",
+      "Dessert"
+    ];
+
+  }
+
+
+  function renderCategories(){
+
+    const list =
+      document.getElementById("categoryList");
+
+    list.innerHTML = "";
+
+    categories().forEach(function(category){
+
+      const button =
+        document.createElement("button");
+
+      button.type = "button";
+      button.className =
+        "cafe-category" +
+        (
+          category === activeCategory
+            ? " active"
+            : ""
+        );
+
+      button.textContent =
+        category;
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          activeCategory = category;
+
+          renderCategories();
+          renderMenu();
+
+        }
+      );
+
+      list.appendChild(button);
+
+    });
+
+  }
+
+
+  function filteredMenu(){
+
+    if(activeCategory === "Semua"){
+      return DEMO_MENU;
+    }
+
+    return DEMO_MENU.filter(function(item){
+
+      return item.category === activeCategory;
+
+    });
+
+  }
+
+
+  function renderMenu(){
+
+    const grid =
+      document.getElementById("menuGrid");
+
+    const title =
+      document.getElementById("categoryTitle");
+
+    const count =
+      document.getElementById("menuCount");
+
+    const items =
+      filteredMenu();
+
+    title.textContent =
+      activeCategory === "Semua"
+        ? "Semua Menu"
+        : activeCategory;
+
+    count.textContent =
+      items.length +
+      (
+        items.length === 1
+          ? " menu"
+          : " menu"
+      );
+
+    grid.innerHTML = "";
+
+    items.forEach(function(item){
+
+      const card =
+        document.createElement("article");
+
+      card.className =
+        "cafe-menu-card";
+
+      card.innerHTML = `
+        <div class="cafe-photo">
+          <div class="cafe-photo-inner">
+            FOTO MENU<br>
+            DIISI NANTI
+          </div>
+        </div>
+
+        <div class="cafe-menu-content">
+
+          <div class="cafe-menu-top">
+
+            <div>
+
+              <h3 class="cafe-menu-name">
+                ${item.name}
+              </h3>
+
+              <div class="cafe-menu-price">
+                ${formatMoney(item.price)}
+              </div>
+
+            </div>
+
+          </div>
+
+          <p class="cafe-menu-desc">
+            ${item.description}
+          </p>
+
+          <div class="cafe-menu-actions">
+
+            <span class="cafe-stock">
+              ${item.stock}
+            </span>
+
+            <button
+              type="button"
+              class="cafe-add"
+              data-item-id="${item.id}"
+              aria-label="Tambah ${item.name}"
+            >
+              + Tambah
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+      const addButton =
+        card.querySelector(".cafe-add");
+
+      addButton.addEventListener(
+        "click",
+        function(){
+
+          addToCart(item.id);
+
+        }
+      );
+
+      grid.appendChild(card);
+
+    });
+
+  }
+
+
+  function addToCart(itemId){
+
+    const item =
+      DEMO_MENU.find(function(menuItem){
+
+        return menuItem.id === itemId;
+
+      });
+
+    if(!item){
+      return;
+    }
+
+
+    const existing =
+      cart.find(function(row){
+
+        return row.id === itemId;
+
+      });
+
+
+    if(existing){
+
+      existing.qty += 1;
+
+    }else{
+
+      cart.push({
+
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        qty: 1
+
+      });
+
+    }
+
+
+    updateCartUI();
+
+    showToast(
+      item.name +
+      " ditambahkan ke keranjang."
+    );
+
+  }
+
+
+  function changeQuantity(
+    itemId,
+    delta
+  ){
+
+    const item =
+      cart.find(function(row){
+
+        return row.id === itemId;
+
+      });
+
+    if(!item){
+      return;
+    }
+
+
+    item.qty += delta;
+
+    if(item.qty <= 0){
+
+      cart =
+        cart.filter(function(row){
+
+          return row.id !== itemId;
+
+        });
+
+    }
+
+
+    updateCartUI();
+
+    renderCartPanel();
+
+  }
+
+
+  function getCartCount(){
+
+    return cart.reduce(
+      function(total,item){
+
+        return total + item.qty;
+
+      },
+      0
+    );
+
+  }
+
+
+  function getCartTotal(){
+
+    return cart.reduce(
+      function(total,item){
+
+        return (
+          total +
+          (
+            item.price *
+            item.qty
+          )
+        );
+
+      },
+      0
+    );
+
+  }
+
+
+  function updateCartUI(){
+
+    const count =
+      document.getElementById("cartCount");
+
+    const total =
+      document.getElementById("cartTotal");
+
+    const openButton =
+      document.getElementById("openCartButton");
+
+    const itemCount =
+      getCartCount();
+
+    count.textContent =
+      itemCount +
+      (
+        itemCount === 1
+          ? " item"
+          : " item"
+      );
+
+    total.textContent =
+      formatMoney(
+        getCartTotal()
+      );
+
+    openButton.disabled =
+      itemCount === 0;
+
+    if(
+      document.getElementById("cartOverlay")
+        .classList.contains("show")
+    ){
+
+      renderCartPanel();
+
+    }
+
+  }
+
+
+  function openCart(){
+
+    document
+      .getElementById("cartOverlay")
+      .classList.add("show");
+
+    document
+      .getElementById("cartOverlay")
+      .setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+    renderCartPanel();
+
+  }
+
+
+  function closeCart(){
+
+    document
+      .getElementById("cartOverlay")
+      .classList.remove("show");
+
+    document
+      .getElementById("cartOverlay")
+      .setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+  }
+
+
+  function renderCartPanel(){
+
+    const list =
+      document.getElementById("cartList");
+
+    const empty =
+      document.getElementById("emptyCart");
+
+    const footer =
+      document.getElementById("cartFooter");
+
+    const panelTotal =
+      document.getElementById("cartPanelTotal");
+
+    list.innerHTML = "";
+
+    if(cart.length === 0){
+
+      empty.style.display = "block";
+      footer.style.display = "none";
+      return;
+
+    }
+
+    empty.style.display = "none";
+    footer.style.display = "block";
+
+    cart.forEach(function(item){
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "cafe-cart-row";
+
+      row.innerHTML = `
+        <div>
+
+          <div class="cafe-cart-row-name">
+            ${item.name}
+          </div>
+
+          <div class="cafe-cart-row-meta">
+            ${formatMoney(item.price)} × ${item.qty}
+            = ${formatMoney(item.price * item.qty)}
+          </div>
+
+        </div>
+
+        <div class="cafe-cart-controls">
+
+          <button
+            type="button"
+            class="cafe-qty-button"
+            data-action="minus"
+            data-item-id="${item.id}"
+            aria-label="Kurangi"
+          >
+            −
+          </button>
+
+          <span class="cafe-qty">
+            ${item.qty}
+          </span>
+
+          <button
+            type="button"
+            class="cafe-qty-button"
+            data-action="plus"
+            data-item-id="${item.id}"
+            aria-label="Tambah"
+          >
+            +
+          </button>
+
+        </div>
+      `;
+
+      row
+        .querySelectorAll(".cafe-qty-button")
+        .forEach(function(button){
+
+          button.addEventListener(
+            "click",
+            function(){
+
+              const delta =
+                button.dataset.action === "plus"
+                  ? 1
+                  : -1;
+
+              changeQuantity(
+                button.dataset.itemId,
+                delta
+              );
+
+            }
+          );
+
+        });
+
+      list.appendChild(row);
+
+    });
+
+
+    panelTotal.textContent =
+      formatMoney(
+        getCartTotal()
+      );
+
+  }
+
+
+  function confirmOrder(){
+
+    if(cart.length === 0){
+      return;
+    }
+
+    const tenant =
+      getTenantContext();
+
+    const note =
+      document
+        .getElementById("orderNote")
+        .value
+        .trim();
+
+    const orderCode =
+      "DEMO-" +
+      Date.now()
+        .toString()
+        .slice(-6);
+
+    showToast(
+      "Preview: pesanan " +
+      orderCode +
+      " siap dikirim untuk Kamar " +
+      tenant.room +
+      "."
+    );
+
+    console.log(
+      "CAFE ORDER PREVIEW",
+      {
+        orderId: orderCode,
+        tenantId: tenant.tenantId,
+        tenantName: tenant.tenantName,
+        room: tenant.room,
+        items: cart,
+        total: getCartTotal(),
+        note: note,
+        status: "PREVIEW — BELUM DIKIRIM KE MASTER"
+      }
+    );
+
+    setTimeout(
+      function(){
+
+        closeCart();
+
+      },
+      450
+    );
+
+  }
+
+
+  let toastTimer = null;
+
+
+  function showToast(message){
+
+    const toast =
+      document.getElementById("cafeToast");
+
+    toast.textContent =
+      message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+      setTimeout(
+        function(){
+
+          toast.classList.remove("show");
+
+        },
+        2200
+      );
+
+  }
+
+
+  document
+    .getElementById("openCartButton")
+    .addEventListener(
+      "click",
+      openCart
+    );
+
+
+  document
+    .getElementById("closeCartButton")
+    .addEventListener(
+      "click",
+      closeCart
+    );
+
+
+  document
+    .getElementById("confirmOrderButton")
+    .addEventListener(
+      "click",
+      confirmOrder
+    );
+
+
+  document
+    .getElementById("cartOverlay")
+    .addEventListener(
+      "click",
+      function(event){
+
+        if(
+          event.target ===
+          this
+        ){
+
+          closeCart();
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById("logoutTop")
+    .addEventListener(
+      "click",
+      async function(event){
+
+        event.preventDefault();
+
+        const session =
+          getSession();
+
+        /*
+         * Untuk preview, logout mengikuti pola tenant lain.
+         * Tidak gagal total bila API sedang tidak tersedia.
+         */
+
+        if(session){
+
+          const apiUrl =
+            "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
+          try{
+
+            await fetch(
+              apiUrl,
+              {
+
+                method:"POST",
+
+                headers:{
+                  "Content-Type":
+                    "text/plain;charset=utf-8"
+                },
+
+                body:JSON.stringify({
+
+                  action:"logout",
+
+                  tenantId:
+                    session.tenantId,
+
+                  sessionToken:
+                    session.sessionToken
+
+                })
+
+              }
+            );
+
+          }catch(error){
+
+            console.warn(
+              "Logout API gagal:",
+              error
+            );
+
+          }
+
+        }
+
+        sessionStorage.removeItem(
+          "djTenantSession"
+        );
+
+        window.location.href =
+          "login.html";
+
+      }
+    );
+
+
+  renderTenantBadge();
+  renderCategories();
+  renderMenu();
+  updateCartUI();
+
+</script>
 
 
 <script src="dj-kost.js"></script>
