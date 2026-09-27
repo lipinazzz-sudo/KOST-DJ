@@ -1356,7 +1356,11 @@ document
 
 
                 showMessage(
-                    result.message,
+                    (
+                        result.message ||
+                        "Pembayaran berhasil dikirim."
+                    ) +
+                    "\n\nAnda akan kembali ke Portal Tenant dalam 5 detik.",
                     "success"
                 );
 
@@ -1378,8 +1382,13 @@ document
 
 
                 setTimeout(
-                    load,
-                    700
+                    function(){
+
+                        window.location.href =
+                            "portal.html";
+
+                    },
+                    5000
                 );
 
 
