@@ -2052,3 +2052,2193 @@ textarea:focus{
   }
 
 }
+
+
+/* ============================================================
+   DJ FAMILY KOST — FINAL MASTER LUXURY DESIGN PASS
+   ============================================================
+   FINAL VISUAL SYSTEM
+   ------------------------------------------------------------
+   Scope:
+   - visual design only
+   - no HTML changes
+   - no JavaScript changes
+   - no API / routing changes
+   - no database changes
+   - no existing class/id dependency removed
+   - designed to work across the public + tenant pages
+   ============================================================ */
+
+
+/* ============================================================
+   01. DESIGN TOKENS
+   ============================================================ */
+
+:root{
+  --lux-navy:#0b1428;
+  --lux-navy-2:#172540;
+  --lux-navy-3:#243758;
+
+  --lux-gold:#c9974a;
+  --lux-gold-2:#e1ba73;
+  --lux-gold-3:#f1d6a0;
+
+  --lux-green:#178b4c;
+  --lux-red:#b73a3a;
+
+  --lux-ink:#131d34;
+  --lux-text:#1a2742;
+  --lux-muted:#66738a;
+
+  --lux-paper:#ffffff;
+  --lux-paper-2:#f8fafc;
+  --lux-surface:#f0f3f7;
+  --lux-line:#dfe5ec;
+
+  --lux-shadow-1:
+    0 8px 26px rgba(11,20,40,.055);
+
+  --lux-shadow-2:
+    0 18px 46px rgba(11,20,40,.085);
+
+  --lux-shadow-3:
+    0 30px 80px rgba(11,20,40,.14);
+
+  --lux-radius-sm:14px;
+  --lux-radius-md:20px;
+  --lux-radius-lg:28px;
+}
+
+
+/* ============================================================
+   02. GLOBAL BACKDROP
+   ============================================================ */
+
+body{
+  color:var(--lux-text);
+
+  background:
+    radial-gradient(
+      780px 480px at -10% -5%,
+      rgba(201,151,74,.115),
+      transparent 62%
+    ),
+    radial-gradient(
+      760px 540px at 110% 12%,
+      rgba(25,168,90,.055),
+      transparent 63%
+    ),
+    linear-gradient(
+      180deg,
+      #fcfdfe 0%,
+      #f2f5f9 52%,
+      #fafbfd 100%
+    );
+}
+
+body::before{
+  content:"";
+
+  width:520px;
+  height:520px;
+
+  top:40px;
+  right:-330px;
+
+  border-color:
+    rgba(201,151,74,.12);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.025),
+      transparent 68%
+    );
+
+  box-shadow:
+    0 0 0 30px rgba(201,151,74,.024),
+    0 0 0 66px rgba(201,151,74,.014);
+}
+
+body::after{
+  content:"";
+
+  width:620px;
+  height:620px;
+
+  left:-400px;
+  bottom:-430px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(36,55,88,.045),
+      transparent 70%
+    );
+}
+
+
+/* ============================================================
+   03. GLOBAL TYPOGRAPHIC RHYTHM
+   ============================================================ */
+
+body,
+button,
+input,
+select,
+textarea{
+  letter-spacing:.002em;
+}
+
+h1,
+h2,
+h3{
+  color:var(--lux-ink);
+  text-wrap:balance;
+}
+
+h1,
+h2{
+  font-feature-settings:
+    "ss01" 1,
+    "liga" 1;
+}
+
+
+/* ============================================================
+   04. NAVBAR — BOUTIQUE PROPERTY BRAND
+   ============================================================ */
+
+.nav{
+  min-height:82px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.985),
+      rgba(248,250,253,.94)
+    );
+
+  border-bottom:
+    1px solid rgba(11,20,40,.08);
+
+  box-shadow:
+    0 10px 34px rgba(11,20,40,.065);
+}
+
+.nav-inner{
+  min-height:82px;
+}
+
+.brand{
+  gap:12px;
+
+  color:
+    var(--lux-ink);
+
+  font-size:15px;
+
+  font-weight:950;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+.brand-mark{
+  width:42px;
+  height:42px;
+
+  border-radius:
+    13px;
+
+  background-color:#fff;
+
+  background-image:
+    url("https://lipinazzz-sudo.github.io/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("./assets/dj-family-kost-logo.png");
+
+  background-position:
+    center,
+    center,
+    center;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat;
+
+  background-size:
+    33px 33px,
+    33px 33px,
+    33px 33px;
+
+  border:
+    1px solid rgba(11,20,40,.10);
+
+  box-shadow:
+    0 10px 28px rgba(11,20,40,.10),
+    inset 0 0 0 3px #fff;
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease;
+}
+
+.brand:hover .brand-mark{
+  transform:
+    translateY(-2px)
+    rotate(-2deg)
+    scale(1.035);
+
+  box-shadow:
+    0 15px 34px rgba(11,20,40,.15),
+    inset 0 0 0 3px #fff;
+}
+
+.nav-links{
+  gap:4px;
+}
+
+.nav-links a{
+  color:#5b6880;
+  font-size:12px;
+  font-weight:850;
+
+  padding:
+    10px 12px;
+
+  border-radius:
+    11px;
+}
+
+.nav-links a:not(.login-top):hover{
+  color:var(--lux-ink);
+
+  background:
+    rgba(11,20,40,.045);
+
+  transform:
+    translateY(-1px);
+}
+
+.login-top{
+  padding:
+    12px 18px !important;
+
+  border-radius:
+    13px !important;
+
+  color:#fff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0c1429,
+      #263758
+    );
+
+  box-shadow:
+    0 11px 28px rgba(11,20,40,.18);
+
+  border:
+    1px solid rgba(255,255,255,.06);
+}
+
+
+/* ============================================================
+   05. HERO — SIGNATURE DJ FAMILY KOST
+   ============================================================ */
+
+.hero{
+  min-height:
+    600px;
+
+  display:flex;
+  align-items:center;
+
+  position:relative;
+  isolation:isolate;
+
+  overflow:hidden;
+
+  padding:
+    112px 0
+    94px;
+
+  text-align:left;
+
+  color:#fff;
+
+  background-color:
+    var(--lux-navy);
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(5,12,27,.985) 0%,
+      rgba(7,14,31,.95) 29%,
+      rgba(8,17,36,.72) 54%,
+      rgba(8,17,36,.27) 78%,
+      rgba(8,17,36,.08) 100%
+    ),
+    url("https://lipinazzz-sudo.github.io/KOST-DJ/assets/dj-family-kost-hero.png"),
+    url("/KOST-DJ/assets/dj-family-kost-hero.png"),
+    url("./assets/dj-family-kost-hero.png");
+
+  background-position:
+    center,
+    center right,
+    center right,
+    center right;
+
+  background-size:
+    cover,
+    cover,
+    cover,
+    cover;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat,
+    no-repeat;
+}
+
+.hero::before{
+  width:720px;
+  height:720px;
+
+  left:-370px;
+  top:-400px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.20),
+      transparent 70%
+    );
+
+  opacity:1;
+}
+
+.hero::after{
+  width:760px;
+  height:760px;
+
+  right:-360px;
+  bottom:-500px;
+
+  border:
+    1px solid rgba(225,186,115,.15);
+
+  box-shadow:
+    0 0 0 30px rgba(255,255,255,.024),
+    0 0 0 62px rgba(255,255,255,.014),
+    0 0 0 94px rgba(255,255,255,.008);
+}
+
+.hero .container{
+  position:relative;
+  z-index:3;
+}
+
+.hero .eyebrow{
+  padding:
+    10px 16px;
+
+  color:
+    var(--lux-gold-3);
+
+  border:
+    1px solid rgba(225,186,115,.42);
+
+  background:
+    rgba(201,151,74,.08);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.18);
+}
+
+.hero h1{
+  max-width:
+    920px;
+
+  margin:
+    23px 0
+    25px;
+
+  font-size:
+    clamp(50px,6.5vw,90px);
+
+  line-height:
+    .97;
+
+  letter-spacing:
+    -.065em;
+
+  color:#fff;
+
+  text-shadow:
+    0 20px 50px rgba(0,0,0,.28);
+}
+
+.hero h1::after{
+  width:
+    110px;
+
+  height:
+    4px;
+
+  margin-top:
+    28px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--lux-gold),
+      var(--lux-gold-2),
+      transparent
+    );
+}
+
+.hero .lead{
+  max-width:
+    720px;
+
+  margin:
+    0;
+
+  color:
+    rgba(240,244,250,.80);
+
+  font-size:
+    18px;
+
+  line-height:
+    1.8;
+}
+
+.hero-actions{
+  margin-top:
+    35px;
+
+  gap:
+    12px;
+}
+
+.hero-actions .btn-primary{
+  background:
+    linear-gradient(
+      135deg,
+      #d8a957,
+      #b87822
+    );
+
+  border:
+    1px solid rgba(255,255,255,.14);
+
+  box-shadow:
+    0 14px 32px rgba(0,0,0,.24);
+}
+
+.hero-actions .btn-primary:hover:not(:disabled){
+  background:
+    linear-gradient(
+      135deg,
+      #e0b568,
+      #c48634
+    );
+
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.28);
+}
+
+.hero-actions .btn-light{
+  background:
+    rgba(255,255,255,.065);
+
+  color:#fff;
+
+  border:
+    1px solid rgba(255,255,255,.23);
+}
+
+.hero-actions .btn-light:hover:not(:disabled){
+  background:
+    rgba(255,255,255,.13);
+
+  border-color:
+    rgba(255,255,255,.34);
+}
+
+
+/* ============================================================
+   06. SECTION SYSTEM — VISUAL SEPARATION
+   ============================================================ */
+
+.section{
+  position:relative;
+  isolation:isolate;
+
+  overflow:hidden;
+
+  padding:
+    84px 0;
+}
+
+.section:nth-of-type(even){
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.82),
+      rgba(245,247,250,.62)
+    );
+}
+
+.section-head{
+  position:relative;
+
+  padding-left:
+    20px;
+
+  margin-bottom:
+    34px;
+}
+
+.section-head::before{
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  top:2px;
+
+  width:4px;
+  height:62px;
+
+  border-radius:
+    999px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--lux-gold),
+      rgba(201,151,74,.08)
+    );
+
+  box-shadow:
+    0 0 20px rgba(201,151,74,.08);
+}
+
+.section-head .eyebrow,
+.menu-title .eyebrow,
+.tenant-menu .eyebrow{
+  font-size:
+    10px;
+
+  letter-spacing:
+    .22em;
+
+  color:
+    #b27d2c;
+}
+
+.section-head h2,
+.menu-title h2{
+  margin-top:
+    7px;
+
+  font-size:
+    clamp(31px,3.5vw,45px);
+
+  letter-spacing:
+    -.045em;
+}
+
+.section-head p{
+  color:
+    #69758a;
+
+  max-width:
+    800px;
+}
+
+
+/* ============================================================
+   07. ROOM CATALOG — SHOWROOM FEEL
+   ============================================================ */
+
+#kamar.section{
+  background:
+    linear-gradient(
+      180deg,
+      #f7f9fb 0%,
+      #edf1f6 52%,
+      #fafbfd 100%
+    );
+}
+
+#kamar.section::before{
+  width:
+    760px;
+  height:
+    760px;
+
+  top:
+    -440px;
+  right:
+    -300px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,151,74,.10),
+      transparent 68%
+    );
+}
+
+#kamar.section::after{
+  width:
+    620px;
+  height:
+    620px;
+
+  left:
+    -370px;
+  bottom:
+    -420px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(23,139,76,.055),
+      transparent 70%
+    );
+}
+
+.room-summary{
+  gap:
+    18px;
+
+  margin-bottom:
+    36px;
+}
+
+.stat-card{
+  min-height:
+    152px;
+
+  padding:
+    27px;
+
+  border-radius:
+    23px;
+
+  border:
+    1px solid rgba(11,20,40,.085);
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff 0%,
+      #f4f7fa 100%
+    );
+
+  box-shadow:
+    var(--lux-shadow-2);
+
+  transition:
+    transform .20s ease,
+    box-shadow .20s ease,
+    border-color .20s ease;
+}
+
+.stat-card:nth-child(1){
+  border-top:
+    5px solid var(--lux-navy-2);
+}
+
+.stat-card:nth-child(2){
+  border-top:
+    5px solid var(--lux-green);
+}
+
+.stat-card:nth-child(3){
+  border-top:
+    5px solid var(--lux-gold);
+}
+
+.stat-card:hover{
+  transform:
+    translateY(-6px);
+
+  border-color:
+    rgba(11,20,40,.12);
+
+  box-shadow:
+    var(--lux-shadow-3);
+}
+
+.stat-number{
+  font-size:
+    43px;
+
+  letter-spacing:
+    -.055em;
+}
+
+
+/* 2 x 2 on desktop */
+
+.floor-list{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:
+    24px;
+}
+
+.floor-card{
+  border-radius:
+    25px;
+
+  border:
+    1px solid rgba(11,20,40,.085);
+
+  box-shadow:
+    var(--lux-shadow-2);
+
+  background:
+    #fff;
+
+  transition:
+    transform .20s ease,
+    box-shadow .20s ease;
+}
+
+.floor-card:hover{
+  transform:
+    translateY(-5px);
+
+  box-shadow:
+    var(--lux-shadow-3);
+}
+
+.floor-head{
+  min-height:
+    88px;
+
+  padding:
+    22px 24px;
+
+  color:
+    #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b1428,
+      #253758
+    );
+}
+
+.floor-head::before{
+  width:
+    5px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f1d49a,
+      #a57022
+    );
+}
+
+.floor-head::after{
+  width:
+    220px;
+  height:
+    220px;
+
+  right:
+    -135px;
+  top:
+    -140px;
+
+  border:
+    1px solid rgba(255,255,255,.09);
+
+  box-shadow:
+    0 0 0 20px rgba(255,255,255,.018),
+    0 0 0 40px rgba(255,255,255,.010);
+}
+
+.floor-meta{
+  color:
+    rgba(255,255,255,.66);
+}
+
+.floor-card:nth-child(4) .floor-head{
+  background:
+    linear-gradient(
+      135deg,
+      #8d6320,
+      #c2913d
+    );
+}
+
+.floor-rooms{
+  padding:
+    18px;
+
+  gap:
+    11px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fafbfd,
+      #f1f4f8
+    );
+}
+
+.room-card{
+  min-height:
+    96px;
+
+  border-radius:
+    16px;
+
+  border:
+    1px solid #dfe5ec;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #f7f9fb
+    );
+
+  box-shadow:
+    0 8px 20px rgba(11,20,40,.045);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
+}
+
+.room-card:hover{
+  transform:
+    translateY(-4px);
+
+  box-shadow:
+    0 16px 34px rgba(11,20,40,.10);
+}
+
+.room-number{
+  font-size:
+    22px;
+
+  letter-spacing:
+    -.03em;
+}
+
+.room-price{
+  font-size:
+    10px;
+}
+
+
+/* ============================================================
+   08. ROOM AVAILABILITY STATES
+   ============================================================ */
+
+.room-card.is-kosong{
+  border-color:
+    rgba(23,139,76,.27);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #effaf4
+    );
+}
+
+.room-card.is-kosong:hover{
+  border-color:
+    rgba(23,139,76,.42);
+
+  box-shadow:
+    0 18px 36px rgba(23,139,76,.11);
+}
+
+.room-card.is-terisi{
+  border-color:
+    rgba(183,58,58,.17);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #fbf3f3
+    );
+}
+
+.room-card.is-segera{
+  border-color:
+    rgba(201,151,74,.30);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #fff8eb
+    );
+}
+
+
+/* ============================================================
+   09. PUBLIC SERVICE CARDS
+   ============================================================ */
+
+.menu-grid{
+  gap:
+    19px;
+}
+
+.menu-card{
+  min-height:
+    235px;
+
+  padding:
+    26px;
+
+  border-radius:
+    23px;
+
+  border:
+    1px solid rgba(11,20,40,.085);
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff,
+      #f7f9fc
+    );
+
+  box-shadow:
+    0 14px 36px rgba(11,20,40,.07);
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.menu-card::before{
+  height:
+    5px;
+
+  opacity:
+    .95;
+
+  transform:
+    scaleX(.38);
+
+  transition:
+    transform .24s ease;
+}
+
+.menu-card:hover{
+  transform:
+    translateY(-8px);
+
+  border-color:
+    rgba(11,20,40,.14);
+
+  box-shadow:
+    0 30px 68px rgba(11,20,40,.14);
+}
+
+.menu-card:hover::before{
+  transform:
+    scaleX(1);
+}
+
+.menu-icon{
+  width:
+    62px;
+  height:
+    62px;
+
+  margin-bottom:
+    18px;
+
+  border-radius:
+    18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eef2f7,
+      #e5eaf1
+    );
+
+  border:
+    1px solid rgba(11,20,40,.06);
+
+  box-shadow:
+    0 12px 26px rgba(11,20,40,.09);
+
+  font-size:
+    18px;
+
+  transition:
+    transform .20s ease,
+    box-shadow .20s ease;
+}
+
+.menu-card:hover .menu-icon{
+  transform:
+    translateY(-4px)
+    scale(1.045);
+
+  box-shadow:
+    0 16px 32px rgba(11,20,40,.13);
+}
+
+.menu-card h3{
+  font-size:
+    22px;
+
+  letter-spacing:
+    -.025em;
+}
+
+.menu-card p{
+  max-width:
+    330px;
+
+  color:
+    #68758a;
+}
+
+
+/* ============================================================
+   10. TENANT SERVICE ZONE
+   ============================================================ */
+
+.tenant-menu{
+  position:relative;
+
+  margin-top:
+    64px;
+
+  padding-top:
+    50px;
+}
+
+.tenant-menu::before{
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  right:0;
+  top:0;
+
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(201,151,74,.62),
+      transparent
+    );
+}
+
+.tenant-menu .menu-card{
+  background:
+    linear-gradient(
+      145deg,
+      #fff,
+      #f3f6f9
+    );
+}
+
+
+/* ============================================================
+   11. FORMS — TRUSTED APPLICATION LOOK
+   ============================================================ */
+
+.form-card{
+  max-width:
+    920px;
+
+  padding:
+    36px;
+
+  border-radius:
+    27px;
+
+  border:
+    1px solid rgba(11,20,40,.10);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.995),
+      rgba(246,248,251,.985)
+    );
+
+  box-shadow:
+    0 30px 80px rgba(11,20,40,.12);
+}
+
+.form-card::before{
+  height:
+    6px;
+
+  border-radius:
+    27px 27px 0 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0b1428,
+      #c9974a 44%,
+      #e1ba73 55%,
+      #178b4c
+    );
+}
+
+.form-grid{
+  gap:
+    18px;
+}
+
+label{
+  color:
+    #3b475d;
+
+  font-size:
+    13px;
+}
+
+input,
+select,
+textarea{
+  min-height:
+    49px;
+
+  border-radius:
+    14px;
+
+  border:
+    1px solid #d4dbe4;
+
+  background:
+    rgba(255,255,255,.97);
+
+  box-shadow:
+    0 4px 12px rgba(11,20,40,.025);
+}
+
+input:hover,
+select:hover,
+textarea:hover{
+  border-color:
+    #c7d0dc;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  transform:
+    translateY(-1px);
+
+  border-color:
+    var(--lux-gold);
+
+  box-shadow:
+    0 0 0 4px rgba(201,151,74,.095),
+    0 15px 34px rgba(11,20,40,.075);
+}
+
+textarea{
+  min-height:
+    140px;
+}
+
+.note{
+  padding:
+    18px 18px 18px 21px;
+
+  border-radius:
+    16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #eef2f6
+    );
+
+  border:
+    1px solid #dde3ea;
+
+  box-shadow:
+    0 9px 24px rgba(11,20,40,.045);
+}
+
+
+/* ============================================================
+   12. RULES PAGE — PREMIUM DOCUMENT
+   ============================================================ */
+
+.rule{
+  position:relative;
+
+  padding:
+    27px
+    14px
+    27px
+    72px;
+
+  border-bottom:
+    1px solid #e1e6ec;
+
+  counter-increment:
+    dj-kost-rule;
+}
+
+.rule:first-child{
+  counter-reset:
+    dj-kost-rule;
+}
+
+.rule::before{
+  content:
+    counter(dj-kost-rule);
+
+  position:absolute;
+
+  left:
+    20px;
+
+  top:
+    25px;
+
+  width:
+    34px;
+
+  height:
+    34px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:
+    50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f7ead1,
+      #ecd3a2
+    );
+
+  color:
+    #80591b;
+
+  font-size:
+    11px;
+
+  font-weight:
+    950;
+
+  box-shadow:
+    0 8px 18px rgba(201,151,74,.14);
+}
+
+.rule h3{
+  margin-bottom:
+    10px;
+
+  font-size:
+    16px;
+}
+
+.rule ul{
+  margin-top:
+    11px;
+}
+
+.rule li{
+  margin:
+    7px 0;
+}
+
+
+/* ============================================================
+   13. DATA / HISTORY TABLES
+   ============================================================ */
+
+.history{
+  border-collapse:
+    separate;
+
+  border-spacing:
+    0;
+
+  border-radius:
+    18px;
+
+  overflow:
+    hidden;
+
+  box-shadow:
+    0 12px 30px rgba(11,20,40,.05);
+}
+
+.history th{
+  padding:
+    13px 11px;
+
+  background:
+    #111b31;
+
+  color:
+    rgba(255,255,255,.86);
+
+  border-bottom:
+    0;
+
+  letter-spacing:
+    .09em;
+}
+
+.history td{
+  background:
+    rgba(255,255,255,.92);
+}
+
+.history tbody tr:hover td{
+  background:
+    #fff;
+}
+
+
+/* ============================================================
+   14. GENERIC PROFILE / KPI
+   ============================================================ */
+
+.profile-card,
+.kpi-card,
+.stat-card{
+  border:
+    1px solid rgba(11,20,40,.085);
+}
+
+.profile-card,
+.kpi-card{
+  box-shadow:
+    var(--lux-shadow-2);
+}
+
+.profile-card{
+  padding:
+    32px;
+}
+
+.kpi-card{
+  padding:
+    25px;
+}
+
+
+/* ============================================================
+   15. INFO BANNER
+   ============================================================ */
+
+.info-banner{
+  padding:
+    24px 26px;
+
+  border-radius:
+    21px;
+
+  background:
+    radial-gradient(
+      circle at 89% 15%,
+      rgba(201,151,74,.21),
+      transparent 26%
+    ),
+    linear-gradient(
+      135deg,
+      #0b1428,
+      #263758
+    );
+
+  box-shadow:
+    0 28px 64px rgba(11,20,40,.18);
+}
+
+
+/* ============================================================
+   16. STATUS BADGES
+   ============================================================ */
+
+.status{
+  min-height:
+    28px;
+
+  padding:
+    7px 12px;
+
+  border-radius:
+    999px;
+
+  letter-spacing:
+    .025em;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.5),
+    0 5px 11px rgba(11,20,40,.03);
+}
+
+.status-kosong{
+  background:
+    #eaf8ef;
+
+  color:
+    #147541;
+}
+
+.status-terisi{
+  background:
+    #faeded;
+
+  color:
+    #a52929;
+}
+
+.status-segera{
+  background:
+    #fff5df;
+
+  color:
+    #986a00;
+}
+
+
+/* ============================================================
+   17. BUTTON SYSTEM
+   ============================================================ */
+
+.btn{
+  min-height:
+    46px;
+
+  border-radius:
+    13px;
+
+  padding:
+    12px 19px;
+
+  font-weight:
+    850;
+}
+
+.btn-primary{
+  background:
+    linear-gradient(
+      135deg,
+      #0c1429,
+      #263758
+    );
+
+  box-shadow:
+    0 10px 28px rgba(11,20,40,.15);
+}
+
+.btn-primary:hover:not(:disabled){
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 16px 36px rgba(11,20,40,.21);
+}
+
+.btn-light{
+  background:
+    rgba(255,255,255,.96);
+
+  border:
+    1px solid #dfe5ec;
+
+  color:
+    var(--lux-ink);
+
+  box-shadow:
+    0 7px 18px rgba(11,20,40,.045);
+}
+
+.btn-light:hover:not(:disabled){
+  background:
+    #fff;
+
+  border-color:
+    #d0d8e2;
+
+  box-shadow:
+    0 12px 26px rgba(11,20,40,.08);
+}
+
+.btn-gold{
+  background:
+    linear-gradient(
+      135deg,
+      #c9974a,
+      #b77d27
+    );
+
+  color:#fff;
+
+  box-shadow:
+    0 11px 27px rgba(201,151,74,.25);
+}
+
+.btn-gold:hover:not(:disabled){
+  box-shadow:
+    0 17px 36px rgba(201,151,74,.31);
+}
+
+.btn-danger{
+  background:
+    linear-gradient(
+      135deg,
+      #bd4141,
+      #a72e2e
+    );
+
+  color:#fff;
+}
+
+
+/* ============================================================
+   18. DASHBOARD-LIKE PAGE HEADERS
+   ============================================================ */
+
+body:not(:has(.hero)) h1{
+  letter-spacing:
+    -.055em;
+
+  text-shadow:
+    0 12px 34px rgba(11,20,40,.055);
+}
+
+body:not(:has(.hero)) h2{
+  letter-spacing:
+    -.045em;
+}
+
+
+/* ============================================================
+   19. GENERIC PAGE PANEL
+   ============================================================ */
+
+body:not(:has(.hero)) .section{
+  min-height:
+    52vh;
+}
+
+body:not(:has(.hero)) .section-head{
+  margin-bottom:
+    36px;
+}
+
+
+/* ============================================================
+   20. EMPTY / SOON STATES
+   ============================================================ */
+
+.loading{
+  min-height:
+    180px;
+
+  border:
+    1px dashed #d2d9e2;
+
+  border-radius:
+    22px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(201,151,74,.065),
+      transparent 45%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.92),
+      rgba(243,246,249,.92)
+    );
+
+  box-shadow:
+    0 12px 30px rgba(11,20,40,.045);
+}
+
+.soon{
+  min-height:
+    64vh;
+}
+
+.soon .card{
+  max-width:
+    720px;
+
+  padding:
+    64px;
+
+  border-radius:
+    28px;
+
+  box-shadow:
+    0 30px 78px rgba(11,20,40,.12);
+}
+
+
+/* ============================================================
+   21. FOOTER — DARK SIGNATURE
+   ============================================================ */
+
+.footer{
+  position:relative;
+
+  overflow:hidden;
+
+  margin-top:
+    0;
+
+  padding:
+    56px 0;
+
+  color:#fff;
+
+  background:
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(201,151,74,.17),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #080f20,
+      #192743
+    );
+
+  border-top:
+    1px solid rgba(255,255,255,.06);
+}
+
+.footer::before{
+  content:"";
+
+  position:absolute;
+
+  width:
+    300px;
+
+  height:
+    300px;
+
+  left:
+    -160px;
+
+  bottom:
+    -190px;
+
+  border-radius:
+    50%;
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+    0 0 0 28px rgba(255,255,255,.012),
+    0 0 0 56px rgba(255,255,255,.007);
+
+  pointer-events:none;
+}
+
+.footer-inner{
+  position:
+    relative;
+
+  z-index:
+    2;
+}
+
+
+/* ============================================================
+   22. ACCESSIBILITY / FOCUS
+   ============================================================ */
+
+:focus-visible{
+  outline:
+    3px solid rgba(201,151,74,.24);
+
+  outline-offset:
+    3px;
+}
+
+
+/* ============================================================
+   23. RESPONSIVE MASTER RULES
+   ============================================================ */
+
+@media(max-width:1100px){
+
+  .hero{
+    min-height:
+      540px;
+  }
+
+  .hero h1{
+    max-width:
+      780px;
+  }
+
+  .floor-list{
+    gap:
+      18px;
+  }
+
+}
+
+@media(max-width:850px){
+
+  .container{
+    width:
+      min(
+        100% - 32px,
+        1240px
+      );
+  }
+
+  .nav,
+  .nav-inner{
+    min-height:
+      70px;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+  .hero{
+    min-height:
+      510px;
+
+    padding:
+      76px
+      0
+      64px;
+
+    text-align:
+      center;
+
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(5,12,27,.95) 0%,
+        rgba(7,14,31,.88) 54%,
+        rgba(8,17,36,.64) 100%
+      ),
+      url("https://lipinazzz-sudo.github.io/KOST-DJ/assets/dj-family-kost-hero.png"),
+      url("/KOST-DJ/assets/dj-family-kost-hero.png"),
+      url("./assets/dj-family-kost-hero.png");
+
+    background-position:
+      center,
+      center,
+      center,
+      center;
+
+    background-size:
+      cover,
+      cover,
+      cover,
+      cover;
+  }
+
+  .hero h1{
+    max-width:
+      700px;
+
+    margin-left:
+      auto;
+
+    margin-right:
+      auto;
+
+    font-size:
+      clamp(
+        42px,
+        8.5vw,
+        66px
+      );
+  }
+
+  .hero h1::after{
+    margin-left:
+      auto;
+
+    margin-right:
+      auto;
+  }
+
+  .hero .lead{
+    margin-left:
+      auto;
+
+    margin-right:
+      auto;
+
+    font-size:
+      16px;
+  }
+
+  .hero-actions{
+    justify-content:
+      center;
+  }
+
+  .floor-list{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:
+      15px;
+  }
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+
+    padding:
+      13px;
+
+    gap:
+      8px;
+  }
+
+  .room-card{
+    min-height:
+      84px;
+  }
+
+  .menu-grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .form-card{
+    padding:
+      28px;
+  }
+
+  .form-grid{
+    grid-template-columns:
+      1fr;
+  }
+
+  .field.full{
+    grid-column:
+      auto;
+  }
+
+  .dashboard-top{
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+@media(max-width:620px){
+
+  .container{
+    width:
+      calc(100% - 26px);
+  }
+
+  .nav,
+  .nav-inner{
+    min-height:
+      62px;
+  }
+
+  .brand{
+    font-size:
+      12px;
+
+    letter-spacing:
+      .055em;
+  }
+
+  .brand-mark{
+    width:
+      35px;
+
+    height:
+      35px;
+
+    border-radius:
+      11px;
+
+    background-size:
+      27px 27px,
+      27px 27px,
+      27px 27px;
+  }
+
+  .hero{
+    min-height:
+      475px;
+
+    padding:
+      58px
+      0
+      50px;
+  }
+
+  .hero h1{
+    font-size:
+      clamp(
+        38px,
+        11vw,
+        56px
+      );
+  }
+
+  .hero .lead{
+    font-size:
+      15px;
+
+    line-height:
+      1.7;
+  }
+
+  .section{
+    padding:
+      58px 0;
+  }
+
+  .section-head{
+    padding-left:
+      15px;
+  }
+
+  .section-head::before{
+    height:
+      50px;
+  }
+
+  .section-head h2,
+  .menu-title h2{
+    font-size:
+      clamp(
+        28px,
+        8vw,
+        37px
+      );
+  }
+
+  .room-summary{
+    grid-template-columns:
+      1fr;
+  }
+
+  .floor-list{
+    grid-template-columns:
+      1fr;
+  }
+
+  .floor-card{
+    border-radius:
+      20px;
+  }
+
+  .floor-head{
+    min-height:
+      72px;
+
+    padding:
+      17px
+      18px;
+  }
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+
+    gap:
+      8px;
+
+    padding:
+      12px;
+  }
+
+  .room-card{
+    min-height:
+      82px;
+  }
+
+  .room-number{
+    font-size:
+      18px;
+  }
+
+  .room-price{
+    font-size:
+      9px;
+  }
+
+  .menu-grid{
+    grid-template-columns:
+      1fr;
+  }
+
+  .menu-card{
+    min-height:
+      205px;
+  }
+
+  .form-card{
+    padding:
+      22px;
+
+    border-radius:
+      21px;
+  }
+
+  .soon .card{
+    padding:
+      40px
+      24px;
+  }
+
+  .tenant-menu{
+    margin-top:
+      48px;
+
+    padding-top:
+      38px;
+  }
+
+}
+
+@media(max-width:420px){
+
+  .container{
+    width:
+      calc(100% - 22px);
+  }
+
+  .hero{
+    min-height:
+      455px;
+
+    padding:
+      52px
+      0
+      44px;
+  }
+
+  .hero-actions{
+    width:
+      100%;
+
+    flex-direction:
+      column;
+  }
+
+  .hero-actions .btn{
+    width:
+      100%;
+  }
+
+  .floor-rooms{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .room-card{
+    min-height:
+      84px;
+  }
+
+  .room-card.is-kosong::after,
+  .room-card.is-terisi::after,
+  .room-card.is-segera::after{
+    left:
+      6px;
+
+    top:
+      6px;
+
+    font-size:
+      6px;
+
+    padding:
+      2px 4px;
+  }
+
+  .rule{
+    padding:
+      22px
+      8px
+      22px
+      58px;
+  }
+
+  .rule::before{
+    left:
+      13px;
+  }
+
+}
+
+
+/* ============================================================
+   24. REDUCED MOTION
+   ============================================================ */
+
+@media(prefers-reduced-motion:reduce){
+
+  html{
+    scroll-behavior:auto;
+  }
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:
+      .001ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      .001ms !important;
+  }
+
+}
