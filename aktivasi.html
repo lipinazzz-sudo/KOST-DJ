@@ -124,11 +124,12 @@ input[readonly]{background:#f4f6fa}
     <div class="card" style="margin-top:24px">
       <h2>2. Informasi Sewa Yang Disetujui</h2>
       <div id="tenantSummary"></div>
-      <p class="note" style="margin-top:16px">Kamar final tidak dapat diubah oleh tenant pada halaman ini. Perubahan kamar hanya dilakukan oleh Master.</p>
+      <p class="note" style="margin-top:16px">Periksa nama, kamar final, harga sewa, dan deposit yang tampil. Pastikan seluruh informasi sudah sesuai sebelum melanjutkan.</p>
     </div>
 
     <div class="card" style="margin-top:24px">
       <h2>3. Lengkapi Data Tenant</h2>
+      <p class="note">Lengkapi kolom yang masih dapat diedit, terutama nama panggilan, email, pekerjaan, alamat, dan kontak darurat.</p>
       <div class="grid-2" style="margin-top:16px">
         <div class="field">
           <label>Nama Lengkap</label>
@@ -188,13 +189,13 @@ input[readonly]{background:#f4f6fa}
         <input id="ktpFile" type="file" accept="image/*">
         <div id="ktpPreview" class="preview">Belum ada foto.</div>
       </div>
-      <p class="note" style="margin-top:14px">Foto akan diproses dan dikirim langsung melalui website. Tidak perlu membuka Google Drive.</p>
+      <p class="note" style="margin-top:14px">Pilih foto KTP yang jelas dan seluruh bagian KTP terlihat. Pastikan file benar sebelum melanjutkan.</p>
     </div>
 
     
     <div class="card" style="margin-top:24px">
       <h2>5. Baca dan Pahami Perjanjian Sewa</h2>
-      <p class="note">Dokumen yang harus dibaca adalah <strong>PERJANJIAN SEWA KAMAR | FINAL V1.0</strong> (versi sistem: <strong>${esc(lookupData.perjanjianVersi || "PERJANJIAN-SEWA-2026-V1.0")}</strong>). Gulir kotak perjanjian sampai benar-benar mencapai bagian paling bawah. Setelah itu Anda wajib menyatakan bahwa perjanjian telah dibaca, dipahami, dan disetujui.</p>
+      <p class="note">Baca seluruh perjanjian sampai bagian paling bawah. Setelah selesai, centang kedua pernyataan persetujuan.</p>
       <div id="agreementBox" class="rules agreement-box">
         <div class="rule">
           <h3>DJ FAMILY KOST</h3>
@@ -350,18 +351,18 @@ input[readonly]{background:#f4f6fa}
 
     <div class="card" style="margin-top:24px">
       <h2>6. Upload Perjanjian Sewa yang Sudah Ditandatangani</h2>
-      <p class="note">Setelah perjanjian ditandatangani secara fisik oleh para pihak, unggah foto/scan perjanjian yang sudah ditandatangani. Anda dapat mengunggah <strong>JPG, PNG, WEBP, atau PDF</strong>. Dokumen ini akan disimpan sebagai arsip tenant dan menjadi syarat aktivasi akun.</p>
+      <p class="note">Unggah foto/scan perjanjian yang sudah ditandatangani secara fisik. Gunakan JPG, PNG, WEBP, atau PDF dan pastikan dokumen dapat dibaca dengan jelas.</p>
       <div class="field" style="margin-top:16px">
         <label for="agreementFile">Perjanjian Sewa yang Sudah Ditandatangani *</label>
         <input id="agreementFile" type="file" accept="image/*,.pdf,application/pdf">
         <div id="agreementPreview" class="preview">Belum ada dokumen.</div>
       </div>
-      <p class="note" style="margin-top:14px">Sistem memeriksa bahwa file tersedia dan dapat disimpan. Pemeriksaan manual atas tanda tangan fisik tetap dilakukan oleh pengelola.</p>
+      <p class="note" style="margin-top:14px">Pastikan seluruh halaman yang diperlukan ikut terunggah. Pemeriksaan tanda tangan fisik dilakukan oleh pengelola.</p>
     </div>
 
 <div class="card" style="margin-top:24px">
       <h2>7. Baca dan Setujui Aturan</h2>
-      <p class="note">Versi aturan yang direkam sebagai dasar persetujuan: <strong>ATURAN-2026-V1</strong>. Gulir kotak aturan sampai benar-benar mencapai bagian paling bawah.</p>
+      <p class="note">Baca seluruh aturan sampai bagian paling bawah. Setelah selesai, centang kedua pernyataan persetujuan.</p>
       <div id="rulesBox" class="rules">
 <div class="rule"><h3>1. Kedisiplinan Pembayaran</h3><ul>
 <li>Pembayaran sewa dilakukan sesuai jadwal dan ketentuan yang disepakati.</li>
@@ -445,8 +446,7 @@ input[readonly]{background:#f4f6fa}
 
     <div class="card" style="margin-top:24px">
       <h2>8. Tanda Tangan Digital</h2>
-      <p class="note">Tanda tangan digital di bawah tetap disimpan sebagai konfirmasi tambahan. Aktivasi sekarang juga mewajibkan arsip perjanjian fisik yang sudah ditandatangani.</p>
-      <p class="note">Buat tanda tangan langsung pada area di bawah dengan mouse, trackpad, atau layar sentuh.</p>
+      <p class="note">Buat tanda tangan digital pada area di bawah menggunakan mouse, trackpad, atau layar sentuh.</p>
       <div class="signature-wrap">
         <canvas id="signatureCanvas" width="1400" height="440"></canvas>
         <button id="clearSignatureBtn" type="button" class="btn btn-light" style="margin-top:10px">Bersihkan Tanda Tangan</button>
