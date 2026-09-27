@@ -94,7 +94,11 @@ async function validateSession(env, auth) {
   const data = result.data || {};
 
   if (role === "tenant") {
+    const tenantData =
+      data.tenant || {};
+
     const room =
+      cleanText(tenantData.room) ||
       cleanText(data.kamar) ||
       cleanText(data.kamarFinal) ||
       cleanText(data.room) ||
@@ -319,7 +323,7 @@ export class ChatRoom extends DurableObject {
     }
 
     if (payload.type === "send") {
-      await this.handleTenantMessage(
+      await this.handleSendMessage(
         ws,
         session,
         payload
@@ -369,27 +373,28 @@ export class ChatRoom extends DurableObject {
     }
   }
 
-  async handleTenantMessage(ws, session, payload) {
-    if (session.role !== "tenant") {
-      this.safeSend(ws, {
-        type: "error",
-        message: "Hanya tenant yang dapat mengirim pesan tenant."
-      });
+  async handleSendMessage(ws, session, payload) {
+    if (
+      session.role !== "tenant" &&
+      session.role !== "master"
+    ) {
       return;
     }
 
-    const muted = this.isMuted(
-      session.tenantId
-    );
+    if (session.role === "tenant") {
+      const muted = this.isMuted(
+        session.tenantId
+      );
 
-    if (muted) {
-      this.safeSend(ws, {
-        type: "muted",
-        muted: true,
-        message:
-          "Chat Anda sementara dinonaktifkan oleh Master."
-      });
-      return;
+      if (muted) {
+        this.safeSend(ws, {
+          type: "muted",
+          muted: true,
+          message:
+            "Chat Anda sementara dinonaktifkan oleh Master."
+        });
+        return;
+      }
     }
 
     const now = Date.now();
@@ -445,8 +450,10 @@ export class ChatRoom extends DurableObject {
         VALUES (?, ?, ?, ?, ?, 0, '')
       `,
       now,
-      session.tenantId,
-      "tenant",
+      session.role === "master"
+        ? session.masterId
+        : session.tenantId,
+      session.role,
       session.displayName,
       text
     );
