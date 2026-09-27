@@ -57,6 +57,8 @@ input[readonly]{background:#f4f6fa}
 .summary-label{font-size:12px;color:var(--muted);font-weight:750}
 .summary-value{font-size:20px;font-weight:900;margin-top:4px}
 .rules{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:16px;padding:0 22px;background:#fff}
+.agreement-box{max-height:620px}
+.agreement-box .rule p{margin:8px 0;color:#424d63}
 .rule{padding:22px 0;border-bottom:1px solid var(--line)}
 .rule:last-child{border-bottom:0}
 .rule ul{margin:10px 0 0 20px}
@@ -189,8 +191,176 @@ input[readonly]{background:#f4f6fa}
       <p class="note" style="margin-top:14px">Foto akan diproses dan dikirim langsung melalui website. Tidak perlu membuka Google Drive.</p>
     </div>
 
+    
     <div class="card" style="margin-top:24px">
-      <h2>5. Baca dan Setujui Aturan</h2>
+      <h2>5. Baca dan Pahami Perjanjian Sewa</h2>
+      <p class="note">Dokumen yang harus dibaca adalah <strong>PERJANJIAN SEWA KAMAR | FINAL V1.0</strong> (versi sistem: <strong>${esc(lookupData.perjanjianVersi || "PERJANJIAN-SEWA-2026-V1.0")}</strong>). Gulir kotak perjanjian sampai benar-benar mencapai bagian paling bawah. Setelah itu Anda wajib menyatakan bahwa perjanjian telah dibaca, dipahami, dan disetujui.</p>
+      <div id="agreementBox" class="rules agreement-box">
+        <div class="rule">
+          <h3>DJ FAMILY KOST</h3>
+          <h3>PERJANJIAN SEWA KAMAR | FINAL V1.0</h3>
+          <p>Dokumen ini digunakan sebagai perjanjian sewa kamar antara pemilik/pengelola dan penghuni DJ Family Kost. Harap dibaca dan dipahami sebelum ditandatangani.</p>
+        </div>
+        <div class="rule">
+<p>Dokumen ini digunakan sebagai perjanjian sewa kamar antara pemilik/pengelola dan penghuni DJ Family Kost. Harap dibaca dan dipahami sebelum ditandatangani.</p>
+</div>
+<div class="rule">
+<h3>PASAL 1<br>OBJEK SEWA</h3>
+<p>PIHAK PERTAMA menyewakan 1 (satu) kamar kepada PIHAK KEDUA untuk digunakan sebagai tempat tinggal.</p>
+<p>Kamar hanya boleh digunakan oleh penghuni yang tercantum dalam perjanjian ini.</p>
+<p>Pengalihan kamar kepada orang lain, baik untuk disewa kembali maupun ditempati secara tetap, tidak diperbolehkan tanpa persetujuan PIHAK PERTAMA.</p>
+<p>PIHAK KEDUA wajib menggunakan kamar dan fasilitas secara wajar serta menjaga ketertiban lingkungan DJ Family Kost.</p>
+</div>
+<div class="rule">
+<h3>PASAL 2<br>HARGA SEWA DAN JATUH TEMPO</h3>
+<p>Harga sewa kamar adalah sebesar Rp1.400.000 (satu juta empat ratus ribu rupiah) per bulan.</p>
+<p>Pembayaran sewa jatuh tempo setiap tanggal 1.</p>
+<p>Pembayaran dilakukan melalui metode pembayaran resmi yang ditentukan oleh PIHAK PERTAMA.</p>
+<p>PIHAK KEDUA wajib menyimpan bukti pembayaran sampai pembayaran tercatat oleh pengelola.</p>
+<p>Keterlambatan pembayaran mengikuti prosedur penagihan dan ketentuan sanksi yang ditetapkan oleh DJ Family Kost.</p>
+</div>
+<div class="rule">
+<h3>PASAL 3<br>DEPOSIT/JAMINAN</h3>
+<p>PIHAK KEDUA menyerahkan deposit sebesar Rp300.000 (tiga ratus ribu rupiah) pada saat mulai menempati kamar.</p>
+<p>Deposit bukan merupakan pembayaran sewa bulan terakhir.</p>
+<p>Pada saat PIHAK KEDUA melakukan check-out, pengelola akan melakukan pemeriksaan kondisi kamar dan fasilitas.</p>
+<p>Apabila seluruh kewajiban PIHAK KEDUA telah diselesaikan dan tidak terdapat kerusakan atau kewajiban lain yang menjadi tanggung jawab PIHAK KEDUA, deposit dikembalikan paling lambat 7 (tujuh) hari kalender setelah check-out.</p>
+<p>Deposit dapat digunakan untuk memenuhi kewajiban PIHAK KEDUA berdasarkan perjanjian ini, termasuk kerusakan, kehilangan fasilitas, tunggakan, atau kewajiban lain yang dapat dipertanggungjawabkan.</p>
+<p>Apabila nilai kewajiban melebihi jumlah deposit, PIHAK KEDUA tetap bertanggung jawab atas selisihnya.</p>
+<p>Untuk pelanggaran yang termasuk kategori Sangat Berat, deposit dapat diperhitungkan terhadap kewajiban dan konsekuensi kontraktual yang sah sesuai perjanjian.</p>
+</div>
+<div class="rule">
+<h3>PASAL 4<br>FASILITAS</h3>
+<p>Fasilitas yang termasuk dalam harga sewa: AC; kasur; lemari; WiFi; air; dan cleaning khusus area hall/area bersama sesuai jadwal pengelola.</p>
+<p>Fasilitas yang tidak termasuk dalam harga sewa: listrik kamar yang menggunakan sistem token; laundry; dan fasilitas atau layanan tambahan lain yang secara khusus dikenakan biaya.</p>
+</div>
+<div class="rule">
+<h3>PASAL 5<br>PENGGUNAAN KAMAR</h3>
+<p>Kamar hanya digunakan sebagai tempat tinggal.</p>
+<p>PIHAK KEDUA wajib menjaga kebersihan kamar.</p>
+<p>Sampah tidak boleh dibuang sembarangan.</p>
+<p>PIHAK KEDUA tidak diperbolehkan melakukan perubahan permanen terhadap kamar tanpa persetujuan pengelola.</p>
+<p>Setiap kerusakan fasilitas wajib segera dilaporkan kepada pengelola.</p>
+<p>Kerusakan akibat pemakaian normal ditangani sesuai tanggung jawab pengelola.</p>
+<p>Kerusakan atau kehilangan akibat kelalaian atau tindakan PIHAK KEDUA menjadi tanggung jawab PIHAK KEDUA.</p>
+<p>Segala kegiatan yang melanggar hukum dilarang keras.</p>
+</div>
+<div class="rule">
+<h3>PASAL 6<br>TAMU DAN JAM BERTAMU</h3>
+<p>Tamu diperbolehkan berkunjung ke kamar.</p>
+<p>Jam bertamu adalah pukul 08.00 sampai dengan 21.00 WIB.</p>
+<p>Tamu wajib meninggalkan area kos paling lambat pukul 21.00 WIB.</p>
+<p>Tamu dilarang menginap, baik dengan izin maupun tanpa izin, kecuali terdapat persetujuan tertulis khusus dari PIHAK PERTAMA.</p>
+<p>Penghuni bertanggung jawab atas perilaku tamunya selama berada di lingkungan DJ Family Kost.</p>
+<p>Membawa tamu untuk menginap tanpa persetujuan merupakan pelanggaran terhadap tata tertib.</p>
+<p>Pelanggaran ketentuan tamu dikenakan sanksi berdasarkan kategori pelanggaran yang berlaku.</p>
+<p>Ketentuan registrasi tamu dan prosedur akses tamu diatur dalam Tata Tertib DJ Family Kost.</p>
+</div>
+<div class="rule">
+<h3>PASAL 7<br>KEBERSIHAN</h3>
+<p>PIHAK KEDUA wajib menjaga kebersihan kamar masing-masing.</p>
+<p>Sampah wajib dibuang pada tempat yang telah disediakan.</p>
+<p>Dilarang membuang sampah di lorong, tangga, halaman, saluran air, area parkir, atau area bersama lainnya.</p>
+<p>Pengelola bertanggung jawab atas cleaning area hall/area bersama sesuai jadwal.</p>
+<p>Kebersihan kamar pribadi tetap menjadi tanggung jawab penghuni.</p>
+</div>
+<div class="rule">
+<h3>PASAL 8<br>LARANGAN MEROKOK</h3>
+<p>Merokok di dalam kamar dilarang.</p>
+<p>PIHAK KEDUA wajib merokok hanya pada area yang diperbolehkan oleh pengelola, apabila tersedia.</p>
+<p>Puntung rokok tidak boleh dibuang sembarangan.</p>
+<p>Pelanggaran terhadap larangan merokok dikenakan sanksi berdasarkan kategori pelanggaran.</p>
+</div>
+<div class="rule">
+<h3>PASAL 9<br>KETENANGAN DAN KENYAMANAN</h3>
+<p>PIHAK KEDUA wajib menghormati penghuni lainnya.</p>
+<p>Dilarang membuat keributan, kebisingan berlebihan, atau aktivitas lain yang mengganggu penghuni.</p>
+<p>Jam tenang ditetapkan pada pukul 21.00–06.00 WIB.</p>
+<p>Musik, televisi, percakapan, atau aktivitas lain wajib dijaga agar tidak mengganggu kamar di sekitarnya.</p>
+</div>
+<div class="rule">
+<h3>PASAL 10<br>KEAMANAN DAN BARANG PRIBADI</h3>
+<p>PIHAK KEDUA wajib menjaga barang pribadi miliknya.</p>
+<p>PIHAK KEDUA wajib mengunci kamar ketika meninggalkan kamar.</p>
+<p>PIHAK KEDUA dilarang memberikan kunci, kartu akses, password, atau sarana akses lainnya kepada orang yang tidak berhak.</p>
+<p>PIHAK KEDUA bertanggung jawab atas penggunaan akses kamar yang diberikan kepadanya.</p>
+<p>Pengelola tidak bertanggung jawab atas kehilangan barang pribadi akibat kelalaian PIHAK KEDUA, sepanjang tidak terdapat kesalahan atau kelalaian dari pengelola.</p>
+</div>
+<div class="rule">
+<h3>PASAL 11<br>PEMELIHARAAN DAN PERBAIKAN</h3>
+<p>Kerusakan fasilitas wajib dilaporkan kepada pengelola sesegera mungkin.</p>
+<p>PIHAK KEDUA dilarang melakukan perubahan atau perbaikan terhadap instalasi listrik, AC, plumbing, jaringan internet, atau fasilitas utama tanpa persetujuan pengelola.</p>
+<p>Pengelola berhak memasuki kamar untuk melakukan perbaikan atau pemeriksaan dengan pemberitahuan sebelumnya, kecuali dalam keadaan darurat.</p>
+<p>PIHAK KEDUA wajib memberikan akses yang wajar apabila terdapat perbaikan fasilitas yang diperlukan.</p>
+</div>
+<div class="rule">
+<h3>PASAL 12<br>MASA SEWA DAN CHECK-OUT</h3>
+<p>Masa sewa dimulai pada tanggal __________ dan berakhir pada tanggal __________.</p>
+<p>Perpanjangan sewa dilakukan berdasarkan kesepakatan para pihak.</p>
+<p>PIHAK KEDUA yang akan mengakhiri masa tinggal wajib mengikuti prosedur pemberitahuan check-out yang ditetapkan pengelola.</p>
+<p>Pada saat check-out, PIHAK KEDUA wajib: mengosongkan seluruh barang pribadi; mengembalikan kunci atau akses kamar; menyelesaikan seluruh tagihan; dan mengikuti pemeriksaan kondisi kamar dan fasilitas.</p>
+<p>Pengembalian deposit dilakukan sesuai Pasal 3.</p>
+</div>
+<div class="rule">
+<h3>PASAL 13<br>KATEGORI PELANGGARAN DAN SANKSI</h3>
+<p>A. Pelanggaran Ringan:  Contoh: membuang sampah tidak pada tempatnya; kelalaian ringan menjaga kebersihan; pelanggaran kecil terhadap ketertiban. Sanksi: teguran. Pelanggaran yang sama apabila berulang dapat dinaikkan menjadi kategori sedang.</p>
+<p>B. Pelanggaran Sedang:  Contoh: merokok di dalam kamar; melanggar jam bertamu; membuat kebisingan yang mengganggu; pelanggaran kebersihan yang berulang; pelanggaran ringan yang sudah ditegur tetapi diulangi. Sanksi: teguran tertulis dan/atau denda sesuai Tabel Denda DJ Family Kost.</p>
+<p>C. Pelanggaran Berat:  Contoh: menginapkan orang lain secara berulang; mengulangi pelanggaran setelah peringatan tertulis; menimbulkan gangguan serius terhadap penghuni lain; merusak fasilitas karena kesengajaan atau kelalaian serius; menyalahgunakan fasilitas kos. Sanksi: denda + peringatan tertulis + perjanjian tertulis untuk tidak mengulangi.</p>
+<p>D. Pelanggaran Sangat Berat:  Contoh: kekerasan fisik; ancaman serius; aktivitas yang melanggar hukum; perusakan properti secara sengaja dan serius; tindakan yang membahayakan keselamatan penghuni atau bangunan; penggunaan kamar untuk kegiatan ilegal; atau tindakan lain yang dikategorikan sangat berat. Sanksi: pengelola dapat mengakhiri hubungan sewa dan meminta penghuni mengosongkan kamar melalui prosedur yang sah. Deposit dapat diperhitungkan terhadap kewajiban yang sah berdasarkan perjanjian.</p>
+</div>
+<div class="rule">
+<h3>PASAL 14<br>KESERAGAMAN PENERAPAN SANKSI</h3>
+<p>Sanksi diterapkan berdasarkan jenis pelanggaran dan bukti yang tersedia.</p>
+<p>Pengelola dapat mempertimbangkan tingkat dampak dan pengulangan pelanggaran.</p>
+<p>Untuk pelanggaran dengan kondisi yang sebanding, standar sanksi diterapkan secara konsisten.</p>
+<p>Pelanggaran berat dan sangat berat wajib dicatat dalam administrasi DJ Family Kost.</p>
+</div>
+<div class="rule">
+<h3>PASAL 15<br>TATA TERTIB SEBAGAI BAGIAN PERJANJIAN</h3>
+<p>PIHAK KEDUA menyatakan telah menerima, membaca, memahami, dan menyetujui Tata Tertib DJ Family Kost.</p>
+<p>Tata Tertib merupakan bagian yang tidak terpisahkan dari Perjanjian Sewa Kamar.</p>
+<p>PIHAK KEDUA wajib mematuhi Tata Tertib selama tinggal di DJ Family Kost.</p>
+</div>
+<div class="rule">
+<h3>PASAL 16<br>PENYELESAIAN PERMASALAHAN</h3>
+<p>Setiap permasalahan diupayakan terlebih dahulu untuk diselesaikan melalui komunikasi dan musyawarah.</p>
+<p>Apabila terdapat pelanggaran terhadap perjanjian, pengelola dapat menjalankan mekanisme sanksi sesuai perjanjian dan Tata Tertib.</p>
+<p>Apabila terjadi perselisihan yang tidak dapat diselesaikan secara musyawarah, para pihak dapat menempuh mekanisme penyelesaian sesuai ketentuan hukum yang berlaku.</p>
+</div>
+<div class="rule">
+<h3>PASAL 17<br>PENUTUP</h3>
+<p>Perjanjian ini dibuat dalam keadaan sadar dan tanpa paksaan.</p>
+<p>PIHAK KEDUA menyatakan telah membaca dan memahami seluruh ketentuan.</p>
+<p>Perjanjian berlaku sejak ditandatangani kedua belah pihak.</p>
+<p>Jakarta, __________________ 20____</p>
+</div>
+      </div>
+      <div id="agreementEnd" class="note center hidden" style="margin-top:12px">Bagian akhir perjanjian sudah dibaca. Checkbox persetujuan sekarang dapat digunakan.</div>
+
+      <label class="check-row">
+        <input id="agreeAgreementRead" type="checkbox" disabled>
+        <span>Saya telah membaca dan memahami seluruh isi Perjanjian Sewa Kamar.</span>
+      </label>
+
+      <label class="check-row">
+        <input id="agreeAgreement" type="checkbox" disabled>
+        <span>Saya menyetujui seluruh ketentuan Perjanjian Sewa Kamar tersebut.</span>
+      </label>
+    </div>
+
+    <div class="card" style="margin-top:24px">
+      <h2>6. Upload Perjanjian Sewa yang Sudah Ditandatangani</h2>
+      <p class="note">Setelah perjanjian ditandatangani secara fisik oleh para pihak, unggah foto/scan perjanjian yang sudah ditandatangani. Anda dapat mengunggah <strong>JPG, PNG, WEBP, atau PDF</strong>. Dokumen ini akan disimpan sebagai arsip tenant dan menjadi syarat aktivasi akun.</p>
+      <div class="field" style="margin-top:16px">
+        <label for="agreementFile">Perjanjian Sewa yang Sudah Ditandatangani *</label>
+        <input id="agreementFile" type="file" accept="image/*,.pdf,application/pdf">
+        <div id="agreementPreview" class="preview">Belum ada dokumen.</div>
+      </div>
+      <p class="note" style="margin-top:14px">Sistem memeriksa bahwa file tersedia dan dapat disimpan. Pemeriksaan manual atas tanda tangan fisik tetap dilakukan oleh pengelola.</p>
+    </div>
+
+<div class="card" style="margin-top:24px">
+      <h2>7. Baca dan Setujui Aturan</h2>
       <p class="note">Versi aturan yang direkam sebagai dasar persetujuan: <strong>ATURAN-2026-V1</strong>. Gulir kotak aturan sampai benar-benar mencapai bagian paling bawah.</p>
       <div id="rulesBox" class="rules">
 <div class="rule"><h3>1. Kedisiplinan Pembayaran</h3><ul>
@@ -274,7 +444,8 @@ input[readonly]{background:#f4f6fa}
     </div>
 
     <div class="card" style="margin-top:24px">
-      <h2>6. Tanda Tangan</h2>
+      <h2>8. Tanda Tangan Digital</h2>
+      <p class="note">Tanda tangan digital di bawah tetap disimpan sebagai konfirmasi tambahan. Aktivasi sekarang juga mewajibkan arsip perjanjian fisik yang sudah ditandatangani.</p>
       <p class="note">Buat tanda tangan langsung pada area di bawah dengan mouse, trackpad, atau layar sentuh.</p>
       <div class="signature-wrap">
         <canvas id="signatureCanvas" width="1400" height="440"></canvas>
@@ -283,8 +454,8 @@ input[readonly]{background:#f4f6fa}
     </div>
 
     <div class="card" style="margin-top:24px">
-      <h2>7. Buat Akun Tenant</h2>
-      <p class="note">Setelah semua data, KTP, persetujuan aturan, dan tanda tangan dinyatakan lengkap, sistem akan membuat Tenant ID, Kontrak ID, dan password sementara.</p>
+      <h2>9. Buat Akun Tenant</h2>
+      <p class="note">Setelah semua data, KTP, perjanjian yang sudah ditandatangani, persetujuan perjanjian, persetujuan aturan, dan tanda tangan digital dinyatakan lengkap, sistem akan membuat Tenant ID, Kontrak ID, dan password sementara.</p>
       <button id="submitBtn" type="button" class="btn btn-green" style="width:100%;margin-top:18px">Saya Setuju &amp; Buat Akun</button>
       <div id="submitAlert" class="alert"></div>
       <div id="credentials" class="credentials hidden"></div>
@@ -423,6 +594,7 @@ async function lookupActivation(){
     document.getElementById("lookupCard").classList.add("hidden");
     document.getElementById("activationArea").classList.remove("hidden");
 
+    initAgreementRead();
     initRules();
     initSignature();
     window.scrollTo({top:0,behavior:"smooth"});
@@ -451,6 +623,79 @@ function initRules(){
 
   box.addEventListener("scroll",checkBottom,{passive:true});
   setTimeout(checkBottom,150);
+}
+
+function initAgreementRead(){
+  const box = document.getElementById("agreementBox");
+  const end = document.getElementById("agreementEnd");
+  const agreeRead = document.getElementById("agreeAgreementRead");
+  const agreeAgreement = document.getElementById("agreeAgreement");
+
+  function checkBottom(){
+    const reached = box.scrollTop + box.clientHeight >= box.scrollHeight - 10;
+    if(reached){
+      end.classList.remove("hidden");
+      agreeRead.disabled = false;
+      agreeAgreement.disabled = false;
+    }
+  }
+
+  box.addEventListener("scroll",checkBottom,{passive:true});
+  setTimeout(checkBottom,150);
+}
+
+function fileToBase64Payload(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const value = String(reader.result || "");
+      const comma = value.indexOf(",");
+      resolve(comma >= 0 ? value.slice(comma+1) : value);
+    };
+    reader.onerror = ()=>reject(new Error("Dokumen tidak dapat dibaca."));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function getAgreementPayload(){
+  const input = document.getElementById("agreementFile");
+  const preview = document.getElementById("agreementPreview");
+  const original = input.files[0];
+
+  if(!original){
+    throw new Error("Perjanjian sewa yang sudah ditandatangani wajib diunggah.");
+  }
+
+  const type = String(original.type || "").toLowerCase();
+
+  if(type === "application/pdf" || /\.pdf$/i.test(original.name || "")){
+    if(original.size > 8 * 1024 * 1024){
+      throw new Error("File perjanjian terlalu besar. Maksimal 8 MB.");
+    }
+
+    const base64 = await fileToBase64Payload(original);
+    preview.textContent = (original.name || "Perjanjian.pdf") + " siap dikirim.";
+
+    return {
+      base64,
+      mimeType:"application/pdf",
+      originalName:original.name || "perjanjian-sewa.pdf"
+    };
+  }
+
+  if(!type.startsWith("image/")){
+    throw new Error("File perjanjian harus berupa JPG, PNG, WEBP, atau PDF.");
+  }
+
+  const processed = await prepareImage(original);
+  const base64 = await fileToBase64Payload(processed);
+  preview.textContent = (original.name || "Perjanjian") + " siap dikirim.";
+
+  return {
+    base64,
+    mimeType:"image/jpeg",
+    originalName:processed.name
+  };
 }
 
 function initSignature(){
@@ -613,6 +858,16 @@ async function submitActivation(){
     return;
   }
 
+  if(!document.getElementById("agreeAgreementRead").checked){
+    alertBox(alert,"error","Anda harus menyatakan bahwa Perjanjian Sewa Kamar sudah dibaca dan dipahami.");
+    return;
+  }
+
+  if(!document.getElementById("agreeAgreement").checked){
+    alertBox(alert,"error","Anda harus menyetujui Perjanjian Sewa Kamar.");
+    return;
+  }
+
   if(!signatureHasInk){
     alertBox(alert,"error","Tanda tangan wajib diisi.");
     return;
@@ -632,6 +887,7 @@ async function submitActivation(){
 
   try{
     const ktp = await getKtpPayload();
+    const agreement = await getAgreementPayload();
     const signatureDataUrl = signatureCanvas.toDataURL("image/png");
 
     const result = await post("submitactivation",{
@@ -650,10 +906,16 @@ async function submitActivation(){
       noHPKontakDarurat:emergencyPhone,
       agreeRead:true,
       agreeRules:true,
+      agreeAgreementRead:true,
+      agreeAgreement:true,
+      agreementVersion:(lookupData.perjanjianVersi || "PERJANJIAN-SEWA-2026-V1.0"),
       signatureBase64:signatureDataUrl,
       ktpBase64:ktp.base64,
       ktpMimeType:ktp.mimeType,
-      ktpOriginalName:ktp.originalName
+      ktpOriginalName:ktp.originalName,
+      agreementBase64:agreement.base64,
+      agreementMimeType:agreement.mimeType,
+      agreementOriginalName:agreement.originalName
     });
 
     alertBox(alert,"success","Aktivasi akun berhasil diselesaikan.");
