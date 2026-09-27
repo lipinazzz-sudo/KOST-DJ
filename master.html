@@ -3654,19 +3654,90 @@ async function resetTenantPassword(
             );
 
 
-        alert(
+        const temporaryPassword =
+            String(
+                result &&
+                result.temporaryPassword
+                    ? result.temporaryPassword
+                    : ""
+            );
 
-            "RESET PASSWORD BERHASIL\n\n" +
 
-            "Tenant ID: " +
-            tenantId +
+        if(
+            !temporaryPassword
+        ){
 
-            "\n\nPassword sementara:\n" +
+            throw new Error(
+                "Password sementara tidak diterima dari server."
+            );
 
-            (
-                result.temporaryPassword ||
-                "—"
-            )
+        }
+
+
+        openModal(
+
+            "Password Tenant — " +
+            tenantId,
+
+            '<div class="detail-box">' +
+
+            '<strong>' +
+            'Reset Password Berhasil' +
+            '</strong>' +
+
+            '<span class="small">' +
+            'Gunakan Tenant ID dan password sementara di halaman Login Tenant.' +
+            '</span>' +
+
+            '</div>' +
+
+            '<div style="margin-bottom:14px;">' +
+
+            '<label style="display:block;margin-bottom:7px;font-weight:800;">Tenant ID</label>' +
+
+            '<div style="display:flex;gap:8px;align-items:stretch;">' +
+
+            '<input id="resetTenantIdValue" readonly value="' +
+            escapeHtml(tenantId) +
+            '" style="flex:1;">' +
+
+            '<button class="btn btn-secondary" type="button" onclick="copyResetCredential(\'resetTenantIdValue\', this)">Copy</button>' +
+
+            '</div>' +
+
+            '</div>' +
+
+            '<div style="margin-bottom:16px;">' +
+
+            '<label style="display:block;margin-bottom:7px;font-weight:800;">Password sementara</label>' +
+
+            '<div style="display:flex;gap:8px;align-items:stretch;">' +
+
+            '<input id="resetPasswordValue" readonly value="' +
+            escapeHtml(temporaryPassword) +
+            '" style="flex:1;font-weight:800;">' +
+
+            '<button class="btn btn-secondary" type="button" onclick="copyResetCredential(\'resetPasswordValue\', this)">Copy</button>' +
+
+            '</div>' +
+
+            '</div>' +
+
+            '<div class="detail-box">' +
+
+            '<strong>Login Tenant</strong>' +
+
+            '<span class="small">Buka halaman login tenant, lalu masukkan Tenant ID dan password sementara di atas.</span>' +
+
+            '</div>' +
+
+            '<div class="actions" style="justify-content:flex-end;">' +
+
+            '<a class="btn btn-success" href="login.html">Buka Login Tenant</a>' +
+
+            '<button class="btn btn-light" type="button" onclick="closeModal()">Tutup</button>' +
+
+            '</div>'
 
         );
 
@@ -3677,6 +3748,146 @@ async function resetTenantPassword(
         );
 
     }
+
+}
+
+function copyResetCredential(
+    elementId,
+    button
+){
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    if(
+        !element
+    ){
+
+        return;
+
+    }
+
+
+    const value =
+        String(
+            element.value ||
+            element.textContent ||
+            ""
+        );
+
+
+    const success =
+        function(){
+
+            if(
+                button
+            ){
+
+                const oldText =
+                    button.textContent;
+
+                button.textContent =
+                    "Tersalin";
+
+                setTimeout(
+                    function(){
+
+                        button.textContent =
+                            oldText;
+
+                    },
+                    1200
+                );
+
+            }
+
+        };
+
+
+    if(
+        navigator.clipboard &&
+        window.isSecureContext
+    ){
+
+        navigator.clipboard
+            .writeText(
+                value
+            )
+            .then(
+                success
+            )
+            .catch(
+                function(){
+
+                    fallbackCopyResetCredential(
+                        value,
+                        success
+                    );
+
+                }
+            );
+
+        return;
+
+    }
+
+
+    fallbackCopyResetCredential(
+        value,
+        success
+    );
+
+}
+
+
+function fallbackCopyResetCredential(
+    value,
+    success
+){
+
+    const textarea =
+        document.createElement(
+            "textarea"
+        );
+
+
+    textarea.value =
+        value;
+
+
+    textarea.style.position =
+        "fixed";
+
+    textarea.style.left =
+        "-9999px";
+
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.select();
+
+
+    try{
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        success();
+
+    }catch(error){}
+
+    
+    document.body.removeChild(
+        textarea
+    );
 
 }
 
