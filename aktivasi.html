@@ -1121,6 +1121,440 @@ async function submitActivation(){
   }
 }
 
+/*
+ * ============================================================
+ * ACTIVATION FORM UX
+ * Menandai bagian wajib yang belum lengkap sebelum
+ * fungsi aktivasi utama dijalankan.
+ * ============================================================
+ */
+
+function activationUxFirstMissing(){
+
+  const ids = [
+
+    ["registrationId","Pendaftaran ID"],
+    ["lookupPhone","No. WhatsApp"],
+    ["namaPanggilan","Nama Panggilan"],
+    ["email","Email"],
+    ["nik","NIK KTP"],
+    ["kontakDarurat","Kontak Darurat"],
+    ["hubunganKontakDarurat","Hubungan Kontak Darurat"],
+    ["noHPKontakDarurat","No. HP Kontak Darurat"],
+    ["ktpFile","Foto KTP"],
+    ["agreementFile","Perjanjian Sewa yang sudah ditandatangani"]
+
+  ];
+
+  const missing = [];
+
+  ids.forEach(
+    function(entry){
+
+      const el =
+        document.getElementById(
+          entry[0]
+        );
+
+      if(!el){
+        return;
+      }
+
+      if(
+        entry[0] === "registrationId" ||
+        entry[0] === "lookupPhone"
+      ){
+
+        if(!String(el.value || "").trim()){
+          missing.push(el);
+        }
+
+        return;
+
+      }
+
+      if(
+        el.type === "file"
+      ){
+
+        if(
+          !el.files ||
+          !el.files.length
+        ){
+          missing.push(el);
+        }
+
+        return;
+
+      }
+
+      if(!String(el.value || "").trim()){
+        missing.push(el);
+      }
+
+    }
+  );
+
+
+  const checks = [
+
+    ["agreeRead","Anda harus menyatakan aturan sudah dibaca."],
+    ["agreeRules","Anda harus menyetujui aturan DJ Family Kost."],
+    ["agreeAgreementRead","Anda harus menyatakan perjanjian sudah dibaca."],
+    ["agreeAgreement","Anda harus menyetujui Perjanjian Sewa."]
+
+  ];
+
+
+  checks.forEach(
+    function(entry){
+
+      const el =
+        document.getElementById(
+          entry[0]
+        );
+
+      if(
+        el &&
+        !el.checked
+      ){
+        missing.push(el);
+      }
+
+    }
+  );
+
+
+  if(!signatureHasInk){
+
+    const canvas =
+      document.getElementById(
+        "signatureCanvas"
+      );
+
+    if(canvas){
+      canvas.classList.add(
+        "form-ux-invalid"
+      );
+    }
+
+    missing.push(
+      canvas
+    );
+
+  }
+
+
+  return missing.filter(Boolean);
+
+}
+
+
+function activationUxClearIfValid(control){
+
+  if(!control){
+    return;
+  }
+
+  if(
+    control.id === "signatureCanvas"
+  ){
+
+    if(signatureHasInk){
+      control.classList.remove(
+        "form-ux-invalid"
+      );
+    }
+
+    return;
+
+  }
+
+  if(
+    control.type === "checkbox"
+  ){
+
+    if(control.checked){
+      control.classList.remove(
+        "form-ux-invalid"
+      );
+    }
+
+    return;
+
+  }
+
+  if(
+    control.type === "file"
+  ){
+
+    if(
+      control.files &&
+      control.files.length
+    ){
+      control.classList.remove(
+        "form-ux-invalid"
+      );
+
+      const container =
+        control.closest(
+          ".field"
+        );
+
+      if(container){
+        container.classList.remove(
+          "field-required-missing"
+        );
+      }
+
+    }
+
+    return;
+
+  }
+
+  if(String(control.value || "").trim()){
+
+    if(
+      control.type === "email" &&
+      !control.checkValidity()
+    ){
+      return;
+    }
+
+    control.classList.remove(
+      "form-ux-invalid"
+    );
+
+    const container =
+      control.closest(
+        ".field"
+      );
+
+    if(container){
+      container.classList.remove(
+        "field-required-missing"
+      );
+    }
+
+  }
+
+}
+
+
+function activationUxMarkMissing(missing){
+
+  missing.forEach(
+    function(control){
+
+      if(!control){
+        return;
+      }
+
+      control.classList.add(
+        "form-ux-invalid"
+      );
+
+      const container =
+        control.closest(
+          ".field"
+        );
+
+      if(container){
+        container.classList.add(
+          "field-required-missing"
+        );
+      }
+
+    }
+  );
+
+}
+
+
+document
+  .getElementById("lookupBtn")
+  .addEventListener(
+    "click",
+    function(event){
+
+      const id =
+        document.getElementById(
+          "registrationId"
+        );
+
+      const phone =
+        document.getElementById(
+          "lookupPhone"
+        );
+
+      const missing =
+        [];
+
+      [id,phone].forEach(
+        function(control){
+
+          if(
+            control &&
+            !String(
+              control.value || ""
+            ).trim()
+          ){
+            missing.push(
+              control
+            );
+          }
+
+        }
+      );
+
+      if(missing.length){
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        activationUxMarkMissing(
+          missing
+        );
+
+        const first =
+          missing[0];
+
+        first.scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
+
+        setTimeout(
+          function(){
+            first.focus({
+              preventScroll:true
+            });
+          },
+          250
+        );
+
+      }
+
+    },
+    true
+  );
+
+
+document
+  .getElementById("submitBtn")
+  .addEventListener(
+    "click",
+    function(event){
+
+      if(
+        !lookupData ||
+        !activationToken
+      ){
+        return;
+      }
+
+      const missing =
+        activationUxFirstMissing();
+
+      if(missing.length){
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        activationUxMarkMissing(
+          missing
+        );
+
+        const alert =
+          document.getElementById(
+            "submitAlert"
+          );
+
+        alertBox(
+          alert,
+          "error",
+          "Form belum lengkap. Bagian yang wajib diisi ditandai dengan border merah."
+        );
+
+        const first =
+          missing[0];
+
+        if(first){
+
+          first.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+          });
+
+          setTimeout(
+            function(){
+
+              try{
+
+                first.focus({
+                  preventScroll:true
+                });
+
+              }catch(error){}
+
+            },
+            250
+          );
+
+        }
+
+      }
+
+    },
+    true
+  );
+
+
+document.addEventListener(
+  "input",
+  function(event){
+    activationUxClearIfValid(
+      event.target
+    );
+  }
+);
+
+
+document.addEventListener(
+  "change",
+  function(event){
+    activationUxClearIfValid(
+      event.target
+    );
+  }
+);
+
+
+window.addEventListener(
+  "resize",
+  function(){
+    if(
+      signatureCanvas &&
+      signatureCanvas.classList.contains(
+        "form-ux-invalid"
+      ) &&
+      signatureHasInk
+    ){
+      signatureCanvas.classList.remove(
+        "form-ux-invalid"
+      );
+    }
+  }
+);
+
+
+/* =========================================================
+ * END ACTIVATION FORM UX
+ * form-ux-v1-activation
+ * =========================================================
+ */
+
 document.getElementById("lookupBtn").addEventListener("click",lookupActivation);
 document.getElementById("submitBtn").addEventListener("click",submitActivation);
 prefillFromUrl();
