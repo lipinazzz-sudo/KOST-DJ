@@ -3059,6 +3059,12 @@ async function loadRegistrations(){
                                     item.id
                                 ) +
 
+                                '\',\'' +
+
+                                encodeURIComponent(
+                                    item.room || ''
+                                ) +
+
                                 '\')">' +
 
                                 'Setujui' +
@@ -3101,13 +3107,19 @@ async function loadRegistrations(){
 
 
 async function approveRegistration(
-    encoded
+    encoded,
+    encodedRoom
 ){
 
     const id =
         decodeURIComponent(
             encoded
         );
+
+    const finalRoom =
+        decodeURIComponent(
+            encodedRoom || ''
+        ).trim();
 
 
     if(
@@ -3131,7 +3143,10 @@ async function approveRegistration(
                 {
 
                     registrationId:
-                        id
+                        id,
+
+                    finalRoom:
+                        finalRoom
 
                 }
             );
