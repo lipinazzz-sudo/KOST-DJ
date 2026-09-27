@@ -5340,11 +5340,28 @@ async function saveMaintenance(
         !pic
     ){
 
+        const picField =
+            document.getElementById(
+                "maintenancePIC"
+            );
+
+        if(
+            window.formUxMarkRequired
+        ){
+            window.formUxMarkRequired(
+                picField
+            );
+        }
+
         alert(
             "PIC wajib diisi untuk status " +
             status +
             "."
         );
+
+        if(picField){
+            picField.focus();
+        }
 
         return;
 
@@ -5367,9 +5384,26 @@ async function saveMaintenance(
         )
     ){
 
+        const photoField =
+            document.getElementById(
+                "maintenanceAfterPhoto"
+            );
+
+        if(
+            window.formUxMarkRequired
+        ){
+            window.formUxMarkRequired(
+                photoField
+            );
+        }
+
         alert(
             "Upload foto setelah perbaikan sebelum status dibuat SELESAI."
         );
+
+        if(photoField){
+            photoField.focus();
+        }
 
         return;
 
