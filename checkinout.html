@@ -266,11 +266,28 @@ async function submitCheckIn(event){
       agreement:"YA"
     });
 
-    showResult("checkinResult","success",result.message || `Check-in berhasil. ID: ${result.checkInOutId || "—"}`);
+    showResult(
+      "checkinResult",
+      "success",
+      (
+        result.message ||
+        `Check-in berhasil. ID: ${result.checkInOutId || "—"}`
+      ) +
+      "\n\nAnda akan kembali ke Portal Tenant dalam 5 detik."
+    );
+
     document.getElementById("checkinForm").reset();
     document.getElementById("checkinDate").value = dateToday();
     document.getElementById("checkinKeyCount").value = "1";
-    await loadHistory();
+
+    setTimeout(
+      function(){
+        window.location.href =
+          "portal.html";
+      },
+      5000
+    );
+
   }catch(err){
     showResult("checkinResult","danger",err.message);
   }finally{
@@ -330,12 +347,21 @@ async function submitCheckOut(event){
 
     button.textContent = "Check-out Selesai";
 
+    showResult(
+      "checkoutResult",
+      "success",
+      (
+        `${result.message || "Check-out berhasil."}\nPengembalian deposit: Rp${Number(result.refund || 0).toLocaleString("id-ID")}\nID: ${result.checkInOutId || "—"}\n\nAkun tenant sekarang NONAKTIF dan sesi telah ditutup.`
+      ) +
+      "\n\nAnda akan diarahkan ke halaman Login Tenant dalam 5 detik."
+    );
+
     setTimeout(
       function(){
         window.location.href =
           "login.html?checkout=1";
       },
-      1800
+      5000
     );
 
     return;
