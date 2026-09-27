@@ -711,20 +711,31 @@
     }
 
     if (role === "master") {
-      input.disabled = true;
+      input.disabled =
+        !authenticated ||
+        !connected;
+
       input.placeholder =
-        "Master menggunakan aksi moderasi di atas.";
-      button.disabled = true;
+        connected
+          ? "Tulis pesan sebagai Master..."
+          : "Menghubungkan...";
+
+      button.disabled =
+        !authenticated ||
+        !connected ||
+        !input.value.trim();
     }
   }
 
   function sendMessage() {
     if (
-      role !== "tenant" ||
       !socket ||
       socket.readyState !== WebSocket.OPEN ||
       !authenticated ||
-      muted
+      (
+        role === "tenant" &&
+        muted
+      )
     ) {
       return;
     }
@@ -1098,14 +1109,12 @@
 
     connect();
 
-    if (role === "tenant") {
-      document
-        .getElementById("djChatInput")
-        .addEventListener(
-          "input",
-          setComposerState
-        );
-    }
+    document
+      .getElementById("djChatInput")
+      .addEventListener(
+        "input",
+        setComposerState
+      );
   }
 
   if (
