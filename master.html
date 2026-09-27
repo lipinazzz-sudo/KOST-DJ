@@ -3156,23 +3156,24 @@ async function approveRegistration(
 
             "Pendaftaran berhasil disetujui.\n\n" +
 
-            "Tenant ID: " +
-            (
-                result.tenantId ||
-                "—"
-            ) +
-
-            "\nKontrak ID: " +
-            (
-                result.kontrakId ||
-                "—"
-            ) +
-
-            "\nKamar: " +
+            "Kamar final: " +
             (
                 result.room ||
                 "—"
-            )
+            ) +
+
+            "\nStatus: MENUNGGU AKTIVASI AKUN" +
+
+            "\nEmail aktivasi: " +
+            (
+                result.emailSent === true
+                    ? "TERKIRIM"
+                    : "BELUM TERKIRIM / PERIKSA"
+            ) +
+
+            "\n\nTenant belum aktif. " +
+            "Tenant ID, Kontrak ID, dan password baru " +
+            "dibuat setelah tenant menyelesaikan proses aktivasi."
 
         );
 
