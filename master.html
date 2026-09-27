@@ -1656,6 +1656,20 @@ button{
 const API_URL =
     "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
 
+/*
+ * ============================================================
+ * TEKNISI MAINTENANCE
+ * ============================================================
+ * Semua laporan Maintenance dari Master diarahkan
+ * ke satu nomor WhatsApp teknisi.
+ *
+ * Format internasional untuk wa.me:
+ * 081383838358 -> 6281383838358
+ * ============================================================
+ */
+const MAINTENANCE_TECHNICIAN_WA =
+    "6281383838358";
+
 
 /* ============================================================
    GLOBAL STATE
@@ -4725,6 +4739,20 @@ async function loadMaintenance(){
 
                         '<td>' +
 
+                        '<div class="actions">' +
+
+                        '<button class="btn btn-success" onclick="sendMaintenanceWhatsApp(\'' +
+
+                        encodeURIComponent(
+                            item.id
+                        ) +
+
+                        '\')">' +
+
+                        '💬 WA Teknisi' +
+
+                        '</button>' +
+
                         '<button class="btn btn-primary" onclick="editMaintenance(\'' +
 
                         encodeURIComponent(
@@ -4736,6 +4764,8 @@ async function loadMaintenance(){
                         'Kelola' +
 
                         '</button>' +
+
+                        '</div>' +
 
                         '</td>' +
 
@@ -4752,6 +4782,165 @@ async function loadMaintenance(){
         '</tbody>' +
 
         '</table>';
+
+}
+
+
+function buildMaintenanceWhatsAppMessage(
+    item
+){
+
+    const lines = [
+
+        "🔧 DJ FAMILY KOST",
+
+        "LAPORAN MAINTENANCE",
+
+        "",
+
+        "Maintenance ID : " +
+        String(
+            item.id ||
+            "—"
+        ),
+
+        "Kamar          : " +
+        String(
+            item.room ||
+            "—"
+        ),
+
+        "Tenant         : " +
+        String(
+            item.name ||
+            item.tenantId ||
+            "—"
+        ),
+
+        "Masalah        : " +
+        String(
+            item.problem ||
+            "—"
+        ),
+
+        "Lokasi         : " +
+        String(
+            item.location ||
+            "—"
+        ),
+
+        "Urgensi        : " +
+        String(
+            item.urgency ||
+            "—"
+        ),
+
+        "",
+
+        "Deskripsi:",
+
+        String(
+            item.description ||
+            "—"
+        ),
+
+        "",
+
+        "Izin masuk     : " +
+        String(
+            item.allowEntry ||
+            "—"
+        ),
+
+        "Waktu nyaman   : " +
+        String(
+            item.comfortableTime ||
+            "—"
+        ),
+
+        "",
+
+        "Foto kerusakan:",
+
+        String(
+            item.damagePhotoUrl ||
+            "Tidak tersedia"
+        ),
+
+        "",
+
+        "Mohon dibantu dicek dan ditindaklanjuti.",
+
+        "",
+
+        "DJ Family Kost"
+
+    ];
+
+    return lines.join(
+        "\n"
+    );
+
+}
+
+
+function sendMaintenanceWhatsApp(
+    encoded
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+    const item =
+        maintenanceItems.find(
+            function(row){
+
+                return (
+                    String(
+                        row.id
+                    ) ===
+                    String(
+                        id
+                    )
+                );
+
+            }
+        );
+
+
+    if(!item){
+
+        alert(
+            "Maintenance tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+
+    const message =
+        buildMaintenanceWhatsAppMessage(
+            item
+        );
+
+
+    const url =
+        "https://wa.me/" +
+        MAINTENANCE_TECHNICIAN_WA +
+        "?text=" +
+        encodeURIComponent(
+            message
+        );
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
 
 }
 
