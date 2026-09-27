@@ -6092,6 +6092,232 @@ async function loadWhatsApp(){
    ANNOUNCEMENTS
    ============================================================ */
 
+async function editAnnouncement(
+    encoded
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+    const item =
+        announcementItems.find(
+            function(entry){
+
+                return String(
+                    entry.id ||
+                    ""
+                ) ===
+                String(
+                    id
+                );
+
+            }
+        );
+
+    if(!item){
+
+        alert(
+            "Pengumuman tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    openModal(
+        "Edit Pengumuman",
+
+        '<div class="field">' +
+        '<label>Judul</label>' +
+        '<input id="editAnnouncementTitle" value="' +
+        escapeHtml(
+            item.title ||
+            ""
+        ) +
+        '">' +
+        '</div>' +
+
+        '<div class="field" style="margin-top:14px;">' +
+        '<label>Prioritas</label>' +
+        '<select id="editAnnouncementPriority">' +
+        '<option value="NORMAL">Normal</option>' +
+        '<option value="PENTING">Penting</option>' +
+        '<option value="DARURAT">Darurat</option>' +
+        '</select>' +
+        '</div>' +
+
+        '<div class="field" style="margin-top:14px;">' +
+        '<label>Isi</label>' +
+        '<textarea id="editAnnouncementMessage">' +
+        escapeHtml(
+            item.message ||
+            ""
+        ) +
+        '</textarea>' +
+        '</div>' +
+
+        '<div class="actions" style="justify-content:flex-end;margin-top:18px;">' +
+        '<button class="btn btn-light" type="button" onclick="closeModal()">Batal</button>' +
+        '<button class="btn btn-primary" type="button" onclick="saveEditedAnnouncement(\'' +
+        encodeURIComponent(id) +
+        '\')">Simpan Perubahan</button>' +
+        '</div>'
+    );
+
+    document
+        .getElementById(
+            "editAnnouncementPriority"
+        )
+        .value =
+            String(
+                item.priority ||
+                "NORMAL"
+            )
+            .trim()
+            .toUpperCase();
+
+}
+
+async function saveEditedAnnouncement(
+    encoded
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+    const title =
+        document
+            .getElementById(
+                "editAnnouncementTitle"
+            )
+            .value
+            .trim();
+
+    const message =
+        document
+            .getElementById(
+                "editAnnouncementMessage"
+            )
+            .value
+            .trim();
+
+    const priority =
+        document
+            .getElementById(
+                "editAnnouncementPriority"
+            )
+            .value;
+
+    if(
+        !title ||
+        !message
+    ){
+
+        alert(
+            "Judul dan isi wajib diisi."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        await api(
+            "masterUpdateAnnouncement",
+            {
+                announcementId:
+                    id,
+
+                operation:
+                    "EDIT",
+
+                title:
+                    title,
+
+                message:
+                    message,
+
+                priority:
+                    priority
+
+            }
+        );
+
+        closeModal();
+
+        await loadAnnouncements();
+
+        alert(
+            "Pengumuman berhasil diperbarui."
+        );
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+async function setAnnouncementStatus(
+    encoded,
+    operation
+){
+
+    const id =
+        decodeURIComponent(
+            encoded
+        );
+
+    const actionLabel =
+        operation === "DEACTIVATE"
+            ? "Nonaktifkan"
+            : "Aktifkan";
+
+    if(
+        !confirm(
+            actionLabel +
+            " pengumuman ini?"
+        )
+    ){
+
+        return;
+
+    }
+
+    try{
+
+        await api(
+            "masterUpdateAnnouncement",
+            {
+                announcementId:
+                    id,
+
+                operation:
+                    operation
+
+            }
+        );
+
+        await loadAnnouncements();
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
 async function loadAnnouncements(){
 
     const data =
@@ -6129,6 +6355,7 @@ async function loadAnnouncements(){
                 '<th>Prioritas</th>' +
                 '<th>Isi</th>' +
                 '<th>Status</th>' +
+                '<th>Aksi</th>' +
 
                 '</tr>' +
 
@@ -6139,6 +6366,20 @@ async function loadAnnouncements(){
                 announcementItems
                     .map(
                         function(item){
+
+                            const status =
+                                String(
+                                    item.status ||
+                                    ""
+                                )
+                                .trim()
+                                .toUpperCase();
+
+                            const id =
+                                encodeURIComponent(
+                                    item.id ||
+                                    ""
+                                );
 
                             return (
 
@@ -6162,7 +6403,7 @@ async function loadAnnouncements(){
 
                                 '</td>' +
 
-                                '<td>' +
+                                '<td style="white-space:pre-wrap;">' +
 
                                 escapeHtml(
                                     item.message ||
@@ -6174,9 +6415,37 @@ async function loadAnnouncements(){
                                 '<td>' +
 
                                 escapeHtml(
-                                    item.status ||
+                                    status ||
                                     "—"
                                 ) +
+
+                                '</td>' +
+
+                                '<td>' +
+
+                                '<div class="actions">' +
+
+                                '<button class="btn btn-secondary" onclick="editAnnouncement(\'' +
+                                id +
+                                '\')">Edit</button>' +
+
+                                (
+                                    status === "AKTIF"
+
+                                        ? (
+                                            '<button class="btn btn-warning" onclick="setAnnouncementStatus(\'' +
+                                            id +
+                                            '\',\'DEACTIVATE\')">Nonaktifkan</button>'
+                                          )
+
+                                        : (
+                                            '<button class="btn btn-success" onclick="setAnnouncementStatus(\'' +
+                                            id +
+                                            '\',\'ACTIVATE\')">Aktifkan</button>'
+                                          )
+                                ) +
+
+                                '</div>' +
 
                                 '</td>' +
 
