@@ -1345,7 +1345,31 @@ document
                         "none";
 
 
-                await loadHistory();
+                button.textContent =
+                    "Laporan Terkirim";
+
+
+                showResult(
+                    (
+                        result &&
+                        result.message
+                            ? result.message
+                            : "Laporan maintenance berhasil dikirim."
+                    ) +
+                    "\n\nAnda akan kembali ke Portal Tenant dalam 5 detik.",
+                    "success"
+                );
+
+
+                setTimeout(
+                    function(){
+
+                        window.location.href =
+                            "portal.html";
+
+                    },
+                    5000
+                );
 
 
             }catch(error){
