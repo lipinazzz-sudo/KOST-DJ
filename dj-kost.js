@@ -389,10 +389,6 @@ async function initIndex() {
                   LANTAI ${floor}
                 </div>
 
-                <h3>
-                  Lantai ${floor}
-                </h3>
-
                 <div class="floor-meta">
                   ${floors[floor].length} kamar
                 </div>

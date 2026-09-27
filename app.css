@@ -4242,3 +4242,413 @@ body:not(:has(.hero)) .section-head{
   }
 
 }
+
+
+/* ============================================================
+   25. FINAL VISUAL REFINEMENT
+   Intent: premium residential / boutique hospitality finish.
+   No functional behavior is changed by this block.
+   ============================================================ */
+
+:root{
+  --lux-ink:#101a31;
+  --lux-ink-2:#223252;
+  --lux-gold:#c9974a;
+  --lux-gold-soft:#f6ead4;
+  --lux-surface:#ffffff;
+  --lux-surface-2:#f7f9fc;
+  --lux-line:#e3e8ef;
+  --lux-muted:#68758a;
+  --lux-radius:22px;
+  --lux-shadow-1:0 14px 34px rgba(16,24,45,.065);
+  --lux-shadow-2:0 24px 58px rgba(16,24,45,.105);
+}
+
+body{
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+.container{
+  width:min(1240px,calc(100% - 56px));
+}
+
+.section{
+  padding-top:82px;
+  padding-bottom:82px;
+}
+
+.section-head,
+.menu-title{
+  margin-bottom:30px;
+}
+
+.section-head h2,
+.menu-title h2{
+  max-width:820px;
+}
+
+.section-head p,
+.menu-title p{
+  margin-top:9px;
+  line-height:1.72;
+}
+
+.nav{
+  min-height:74px;
+  border-bottom-color:rgba(16,24,45,.09);
+  box-shadow:0 8px 28px rgba(16,24,45,.055);
+}
+
+.nav-inner{
+  min-height:74px;
+}
+
+.brand{
+  letter-spacing:.065em;
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background-color:#fff;
+  background-image:
+    url("https://lipinazzz-sudo.github.io/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("./assets/dj-family-kost-logo.png");
+  background-position:center,center,center;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  background-size:31px 31px,31px 31px,31px 31px;
+  box-shadow:
+    0 8px 20px rgba(16,24,45,.08),
+    inset 0 0 0 3px #fff;
+}
+
+.nav-links{
+  gap:6px;
+}
+
+.nav-links a{
+  padding:9px 11px;
+}
+
+.nav-links .login-top{
+  margin-left:5px;
+}
+
+.card,
+.form-card,
+.profile-card,
+.kpi-card,
+.stat-card,
+.floor-card{
+  border-color:rgba(16,24,45,.085);
+}
+
+.card{
+  border-radius:var(--lux-radius);
+  box-shadow:var(--lux-shadow-1);
+}
+
+.form-card{
+  border-radius:24px;
+  padding:32px;
+  box-shadow:var(--lux-shadow-2);
+}
+
+.field{
+  gap:8px;
+}
+
+input,
+select,
+textarea{
+  min-height:46px;
+  border-color:#d4dce7;
+  border-radius:13px;
+  box-shadow:0 3px 10px rgba(16,24,45,.025);
+}
+
+textarea{
+  min-height:124px;
+}
+
+label{
+  letter-spacing:.005em;
+}
+
+.btn{
+  min-height:46px;
+  border-radius:13px;
+}
+
+body:not(:has(.hero)) h1{
+  text-wrap:balance;
+}
+
+.eyebrow{
+  letter-spacing:.18em;
+}
+
+.back{
+  margin-bottom:23px;
+}
+
+.floor-list{
+  gap:24px;
+}
+
+.floor-card{
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:var(--lux-shadow-1);
+  background:#fff;
+}
+
+.floor-head{
+  min-height:88px;
+  padding:19px 23px;
+  background:
+    radial-gradient(circle at 92% 8%,rgba(255,255,255,.10),transparent 24%),
+    linear-gradient(135deg,#0d162b,#263758);
+}
+
+.floor-head > div{
+  width:100%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.floor-head .eyebrow{
+  color:#e5bd75;
+  font-size:10px;
+  line-height:1.2;
+  margin:0;
+  letter-spacing:.18em;
+}
+
+.floor-head h3{
+  display:none;
+}
+
+.floor-meta{
+  color:rgba(255,255,255,.74);
+  font-size:11px;
+  font-weight:750;
+  white-space:nowrap;
+}
+
+.floor-card:nth-child(4) .floor-head{
+  background:
+    radial-gradient(circle at 92% 8%,rgba(255,255,255,.12),transparent 24%),
+    linear-gradient(135deg,#9a6b24,#c4933f);
+}
+
+.floor-rooms{
+  gap:10px;
+  padding:17px;
+  background:
+    linear-gradient(180deg,#f8fafc,#f3f6f9);
+}
+
+.room-card{
+  min-height:88px;
+  border-radius:15px;
+  border-color:#dce3eb;
+  box-shadow:0 7px 18px rgba(16,24,45,.045);
+}
+
+.room-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 13px 27px rgba(16,24,45,.09);
+}
+
+.room-number{
+  font-size:21px;
+  letter-spacing:-.035em;
+}
+
+.room-price{
+  font-size:10px;
+}
+
+.status{
+  font-size:10px;
+}
+
+.rule{
+  position:relative;
+  padding:27px 22px 27px 72px;
+  border-bottom:1px solid #e2e7ee;
+}
+
+.rule::before{
+  left:18px;
+  top:25px;
+  width:34px;
+  height:34px;
+  background:linear-gradient(145deg,#f8edd8,#ecd2a2);
+  color:#805819;
+  box-shadow:0 7px 17px rgba(201,151,74,.13);
+}
+
+.rule h3{
+  margin:0 0 10px;
+  font-size:16px;
+  line-height:1.35;
+  letter-spacing:-.012em;
+}
+
+.rule ul{
+  margin:0 0 0 18px;
+  padding:0;
+}
+
+.rule li{
+  margin:7px 0;
+  color:#334057;
+  line-height:1.68;
+}
+
+.rule:last-child{
+  padding-bottom:27px;
+}
+
+.menu-grid{
+  gap:20px;
+}
+
+.menu-card{
+  min-height:224px;
+  padding:26px;
+  border-radius:21px;
+  box-shadow:var(--lux-shadow-1);
+}
+
+.menu-card:hover{
+  transform:translateY(-5px);
+  box-shadow:var(--lux-shadow-2);
+}
+
+.menu-icon{
+  width:50px;
+  height:50px;
+  border-radius:15px;
+  margin-bottom:17px;
+  box-shadow:0 8px 20px rgba(16,24,45,.06);
+}
+
+.menu-card h3{
+  font-size:19px;
+  letter-spacing:-.02em;
+}
+
+.menu-card p{
+  max-width:32rem;
+  line-height:1.68;
+}
+
+.note{
+  border-color:#dde4ec;
+  background:linear-gradient(135deg,#f8fafc,#f0f4f8);
+}
+
+.info-banner{
+  border-radius:21px;
+  padding:25px 27px;
+}
+
+.footer{
+  padding:50px 0;
+}
+
+.footer-inner{
+  gap:24px;
+}
+
+@media(max-width:850px){
+
+  .container{
+    width:min(100% - 32px,1240px);
+  }
+
+  .section{
+    padding-top:68px;
+    padding-bottom:68px;
+  }
+
+  .floor-list{
+    gap:16px;
+  }
+
+  .floor-head{
+    min-height:80px;
+    padding:17px 18px;
+  }
+
+  .floor-rooms{
+    padding:13px;
+  }
+
+  .form-card{
+    padding:28px;
+  }
+
+}
+
+@media(max-width:620px){
+
+  .container{
+    width:calc(100% - 26px);
+  }
+
+  .section{
+    padding-top:56px;
+    padding-bottom:56px;
+  }
+
+  .brand-mark{
+    width:36px;
+    height:36px;
+    background-size:28px 28px,28px 28px,28px 28px;
+  }
+
+  .floor-head > div{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:7px;
+  }
+
+  .floor-meta{
+    font-size:10px;
+  }
+
+  .rule{
+    padding:23px 10px 23px 60px;
+  }
+
+  .rule::before{
+    left:12px;
+    top:22px;
+  }
+
+  .menu-card{
+    min-height:210px;
+  }
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  .card,
+  .menu-card,
+  .room-card,
+  .btn,
+  .back{
+    transition:none !important;
+  }
+
+}
