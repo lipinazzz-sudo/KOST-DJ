@@ -70,6 +70,9 @@ input[readonly]{background:#f4f6fa}
 .preview{margin-top:7px;font-size:12px;color:var(--muted);padding:9px 11px;background:#f8fafc;border:1px solid var(--line);border-radius:10px}
 .credentials{background:var(--navy);color:#fff;border-radius:18px;padding:24px;margin-top:18px}
 .credential{background:rgba(255,255,255,.09);padding:13px 15px;border-radius:12px;margin-top:7px;font-size:18px;font-weight:900;letter-spacing:.03em}
+.credential-row{display:flex;gap:8px;align-items:stretch;margin-top:7px}
+.credential-row .credential{flex:1;margin-top:0;word-break:break-all}
+.credential-copy{flex:0 0 auto;min-width:72px;white-space:nowrap}
 .hidden{display:none !important}
 .footer{margin-top:40px;background:var(--navy);color:#fff;padding:34px 0}
 .footer small{color:#aeb7ca}
@@ -490,6 +493,164 @@ function esc(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+}
+
+
+function copyCredential(
+  elementId,
+  button
+){
+  const element =
+    document.getElementById(
+      elementId
+    );
+
+  if(!element){
+    return;
+  }
+
+  const value =
+    String(
+      element.textContent || ""
+    ).trim();
+
+  const done =
+    function(){
+      if(button){
+        const oldText =
+          button.textContent;
+        button.textContent =
+          "Tersalin";
+        setTimeout(
+          function(){
+            button.textContent =
+              oldText;
+          },
+          1200
+        );
+      }
+    };
+
+  if(
+    navigator.clipboard &&
+    window.isSecureContext
+  ){
+    navigator.clipboard
+      .writeText(value)
+      .then(done)
+      .catch(
+        function(){
+          fallbackCopyCredential(
+            value,
+            done
+          );
+        }
+      );
+    return;
+  }
+
+  fallbackCopyCredential(
+    value,
+    done
+  );
+}
+
+function fallbackCopyCredential(
+  value,
+  done
+){
+  const textarea =
+    document.createElement(
+      "textarea"
+    );
+
+  textarea.value =
+    value;
+
+  textarea.style.position =
+    "fixed";
+  textarea.style.left =
+    "-9999px";
+  textarea.style.top =
+    "0";
+
+  document.body.appendChild(
+    textarea
+  );
+
+  textarea.focus();
+  textarea.select();
+
+  try{
+    document.execCommand("copy");
+    done();
+  }catch(error){
+  }
+
+  document.body.removeChild(
+    textarea
+  );
+}
+
+function copyAllCredentials(){
+  const tenantId =
+    document.getElementById(
+      "createdTenantId"
+    )?.textContent?.trim() || "";
+
+  const contractId =
+    document.getElementById(
+      "createdContractId"
+    )?.textContent?.trim() || "";
+
+  const password =
+    document.getElementById(
+      "createdTemporaryPassword"
+    )?.textContent?.trim() || "";
+
+  const text =
+    [
+      "Tenant ID: " + tenantId,
+      "Kontrak ID: " + contractId,
+      "Password Sementara: " + password
+    ].join("\n");
+
+  if(
+    navigator.clipboard &&
+    window.isSecureContext
+  ){
+    navigator.clipboard
+      .writeText(text)
+      .then(
+        function(){
+          alert(
+            "Data login berhasil disalin."
+          );
+        }
+      )
+      .catch(
+        function(){
+          fallbackCopyCredential(
+            text,
+            function(){
+              alert(
+                "Data login berhasil disalin."
+              );
+            }
+          );
+        }
+      );
+    return;
+  }
+
+  fallbackCopyCredential(
+    text,
+    function(){
+      alert(
+        "Data login berhasil disalin."
+      );
+    }
+  );
 }
 
 function alertBox(element,type,html){
@@ -923,14 +1084,31 @@ async function submitActivation(){
     credentials.classList.remove("hidden");
     credentials.innerHTML = `
       <h2 style="color:#fff;margin:0 0 14px">Akun Tenant Berhasil Dibuat</h2>
+
       <div>Tenant ID</div>
-      <div class="credential">${esc(result.tenantId)}</div>
+      <div class="credential-row">
+        <div class="credential" id="createdTenantId">${esc(result.tenantId)}</div>
+        <button type="button" class="btn btn-light credential-copy" onclick="copyCredential('createdTenantId',this)">Salin</button>
+      </div>
+
       <div style="margin-top:14px">Kontrak ID</div>
-      <div class="credential">${esc(result.kontrakId)}</div>
+      <div class="credential-row">
+        <div class="credential" id="createdContractId">${esc(result.kontrakId)}</div>
+        <button type="button" class="btn btn-light credential-copy" onclick="copyCredential('createdContractId',this)">Salin</button>
+      </div>
+
       <div style="margin-top:14px">Password Sementara</div>
-      <div class="credential">${esc(result.temporaryPassword)}</div>
+      <div class="credential-row">
+        <div class="credential" id="createdTemporaryPassword">${esc(result.temporaryPassword)}</div>
+        <button type="button" class="btn btn-light credential-copy" onclick="copyCredential('createdTemporaryPassword',this)">Salin</button>
+      </div>
+
       <p style="color:#d6dbe5;margin:16px 0 0">Simpan informasi ini. Password sementara wajib diganti setelah login pertama.</p>
-      <a href="login.html" class="btn btn-light" style="margin-top:18px">Masuk ke Login Tenant</a>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+        <a href="login.html" class="btn btn-light">Masuk ke Login Tenant</a>
+        <button type="button" class="btn btn-light" onclick="copyAllCredentials()">Salin Semua Data Login</button>
+      </div>
     `;
 
     button.disabled = true;
