@@ -1633,12 +1633,6 @@ form.addEventListener(
         result;
 
 
-      const registrationId =
-        data.pendaftaranId ||
-        data.id ||
-        "—";
-
-
       const room =
         data.kamar ||
         payload.kamar;
@@ -1647,13 +1641,19 @@ form.addEventListener(
       setMessage(
         "success",
 
-        "<strong>Pendaftaran berhasil dikirim.</strong><br>" +
+        "<strong>Pendaftaran diterima.</strong><br>" +
 
-        "Pendaftaran ID: <strong>" +
-        escapeHtml(
-          registrationId
-        ) +
-        "</strong><br>" +
+        "Terima kasih. Data pendaftaran Anda telah " +
+        "tercatat dan akan segera diproses oleh pengelola." +
+
+        "<br><br>" +
+
+        "<strong>Jangan menunggu di halaman ini.</strong> " +
+        "Setelah pendaftaran disetujui oleh Master, " +
+        "instruksi aktivasi akun akan dikirim ke alamat " +
+        "email yang Anda daftarkan." +
+
+        "<br><br>" +
 
         "Kamar yang diminati: <strong>" +
         escapeHtml(
@@ -1661,13 +1661,7 @@ form.addEventListener(
         ) +
         "</strong><br>" +
 
-        "Status: <strong>MENUNGGU VERIFIKASI</strong><br><br>" +
-
-        "Pendaftaran Anda akan diperiksa oleh Master. " +
-
-        "Setelah disetujui, Anda akan melanjutkan " +
-
-        "ke proses aktivasi akun tenant."
+        "Status: <strong>MENUNGGU VERIFIKASI</strong>"
 
       );
 
