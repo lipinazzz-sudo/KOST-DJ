@@ -61,6 +61,7 @@
      */
     [
       "djTenantAuth",
+      "djTenantData",
       "djTenantId",
       "djTenantName",
       "djTenantRoom",
