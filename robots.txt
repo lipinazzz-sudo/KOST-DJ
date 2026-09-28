@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+Disallow: /login.html
+Disallow: /portal.html
+Disallow: /pembayaran.html
+Disallow: /maintenance.html
+Disallow: /checkinout.html
+Disallow: /cafe.html
+Disallow: /laundry.html
+Disallow: /ganti-password.html
+Disallow: /aktivasi.html
+Disallow: /master.html
+
+Sitemap: https://djkost.mahjongjong.workers.dev/sitemap.xml
