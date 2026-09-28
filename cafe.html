@@ -613,6 +613,7 @@
 
   </style>
 
+  <script src="tenant-guard.js?v=20260928-guard-v1"></script>
 </head>
 
 
@@ -1066,10 +1067,14 @@
 
     if(!session){
 
+      window.location.replace(
+        "login.html?required=1"
+      );
+
       return {
-        tenantId: "DEMO-TENANT",
-        tenantName: "Tenant Preview",
-        room: "101"
+        tenantId: "—",
+        tenantName: "Tenant",
+        room: "—"
       };
 
     }
