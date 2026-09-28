@@ -43,11 +43,19 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Organization",
+        "@type": "LodgingBusiness",
         "@id": "https://djkost.mahjongjong.workers.dev/#organization",
         "name": "DJ Family Kost",
         "url": "https://djkost.mahjongjong.workers.dev/",
-        "description": "Informasi dan layanan DJ Family Kost untuk calon tenant dan penghuni."
+        "description": "Informasi dan layanan DJ Family Kost untuk calon tenant dan penghuni.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Jl. Sukajaya 1 No.5c, RT.1/RW.5, Jelambar Baru",
+          "addressLocality": "Jakarta Barat",
+          "addressRegion": "Daerah Khusus Ibukota Jakarta",
+          "postalCode": "11460",
+          "addressCountry": "ID"
+        }
       },
       {
         "@type": "WebSite",
