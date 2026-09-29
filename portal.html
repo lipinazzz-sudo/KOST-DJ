@@ -1325,6 +1325,34 @@ async function loadPortal(){
 
 
         /*
+         * TENANT CONTACT
+         *
+         * Email dan No. WhatsApp diambil dari response
+         * tenant dashboard agar tenant dapat memeriksa
+         * data kontak yang tersimpan.
+         */
+
+        document
+            .getElementById(
+                "tenantPhone"
+            )
+            .textContent =
+                data.tenant.phone ||
+                data.tenant.no_hp ||
+                data.tenant.whatsapp ||
+                "—";
+
+
+        document
+            .getElementById(
+                "tenantEmail"
+            )
+            .textContent =
+                data.tenant.email ||
+                "—";
+
+
+        /*
          * ROOM
          */
 
