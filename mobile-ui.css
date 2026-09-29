@@ -493,3 +493,129 @@
   }
 
 }
+
+
+/* ============================================================
+   MOBILE PAGE SECTIONS — VISUAL HIERARCHY
+   ============================================================ */
+
+@media(max-width:800px){
+
+  body.mobile-ui-page .card > h2,
+  body.mobile-ui-page .card > h3,
+  body.mobile-ui-page .billing-card > h3,
+  body.mobile-ui-page .payment-card > h3,
+  body.mobile-ui-page .security-card > h3{
+    margin-top:0;
+    margin-bottom:16px;
+    padding:11px 12px 11px 14px;
+    border-left:4px solid #c9974a;
+    border-radius:0 12px 12px 0;
+    background:linear-gradient(135deg,#fffdf8,#f7f8fa);
+    color:#10182d;
+  }
+
+  body.mobile-ui-page .portal-card > h3{
+    padding:0;
+    margin-bottom:8px;
+    border-left:0;
+    border-radius:0;
+    background:transparent;
+  }
+
+  body.mobile-ui-page .note{
+    border-radius:14px;
+    line-height:1.6;
+  }
+
+  body.mobile-ui-page .profile{
+    padding:15px !important;
+  }
+
+  body.mobile-ui-page .profile-item{
+    padding:12px 0;
+    border-bottom:1px solid #edf0f4;
+  }
+
+  body.mobile-ui-page .profile-item:last-child{
+    border-bottom:0;
+  }
+
+  /* Activation uses numbered h2 cards already; make them
+     visibly distinct without touching their content. */
+  body.mobile-ui-public .agreement-box{
+    max-height:58vh;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  body.mobile-ui-public .rules .rule{
+    padding:14px 0;
+  }
+
+  /* Password page has no shared .section wrapper. */
+  body.mobile-ui-password > .container{
+    width:calc(100% - 20px);
+    padding:96px 0 106px;
+    margin:0 auto;
+  }
+
+  body.mobile-ui-password > .container > h1{
+    margin-top:10px;
+    font-size:clamp(35px,10.5vw,50px);
+  }
+
+  body.mobile-ui-password > .container > .lead{
+    font-size:14px;
+    line-height:1.68;
+  }
+
+  body.mobile-ui-password > .container > .card{
+    margin-top:22px;
+    padding:17px !important;
+    border-radius:20px;
+    box-shadow:0 18px 44px rgba(16,24,45,.09);
+  }
+
+  body.mobile-ui-password .identity{
+    display:grid;
+    grid-template-columns:1fr !important;
+    gap:10px;
+  }
+
+  body.mobile-ui-password .identity .box{
+    min-width:0;
+  }
+
+  body.mobile-ui-password .field{
+    margin-top:16px;
+  }
+
+  body.mobile-ui-password .field label{
+    display:block;
+    margin-bottom:7px;
+    font-size:12px;
+    font-weight:800;
+  }
+
+  body.mobile-ui-password #changeButton{
+    width:100%;
+    min-height:50px;
+    margin-top:18px;
+    border:0;
+    border-radius:13px;
+    background:#10182d;
+    color:#fff;
+    font:inherit;
+    font-size:14px;
+    font-weight:850;
+  }
+
+  body.mobile-ui-password .alert{
+    margin-top:14px;
+    border-radius:13px;
+    font-size:12px;
+    line-height:1.55;
+  }
+
+}
