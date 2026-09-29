@@ -95,80 +95,7 @@
     .menu-title .eyebrow{
       margin-bottom:8px;
     }
-
-    .menu-grid{
-      display:grid;
-      grid-template-columns:
-        repeat(3,minmax(0,1fr));
-      gap:18px;
-    }
-
-    .menu-card{
-      display:flex;
-      flex-direction:column;
-      min-height:210px;
-      padding:24px;
-      transition:
-        transform .18s ease,
-        box-shadow .18s ease;
-    }
-
-    .menu-card:hover{
-      transform:translateY(-4px);
-      box-shadow:
-        0 24px 60px rgba(16,24,45,.14);
-    }
-
-    .menu-icon{
-      width:50px;
-      height:50px;
-      display:grid;
-      place-items:center;
-      border-radius:15px;
-      background:#eef1f7;
-      font-weight:900;
-      font-size:18px;
-      margin-bottom:16px;
-    }
-
-    .menu-card h3{
-      margin:0 0 8px;
-      font-size:20px;
-    }
-
-    .menu-card p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .menu-card .btn{
-      margin-top:auto;
-      align-self:flex-start;
-    }
-
-    .tenant-menu{
-      margin-top:42px;
-    }
-
-    .tenant-menu .menu-icon{
-      background:#f1eefb;
-    }
-
-    .public-menu .menu-icon{
-      background:#eef8f1;
-    }
-
-    @media(max-width:850px){
-
-      .menu-grid{
-        grid-template-columns:1fr;
-      }
-
-    }
-
-  </style>
+</style>
 
 </head>
 
@@ -532,208 +459,115 @@
 
   <div class="container">
 
-    <div class="menu-title">
+    <div class="action-section-head">
 
       <div class="eyebrow">
-        INFORMASI & PENDAFTARAN
+        INFORMASI &amp; PENDAFTARAN
       </div>
 
       <h2>
         Menu DJ Family Kost
       </h2>
 
-      <p class="lead"
-         style="margin:0;max-width:760px">
-
-        Semua kebutuhan calon tenant
-        dapat diakses langsung dari
-        menu berikut.
-
+      <p>
+        Semua kebutuhan calon tenant dapat diakses langsung dari menu berikut.
       </p>
 
     </div>
 
 
-    <div
-      class="menu-grid public-menu"
-    >
-
-      <!-- Pendaftaran -->
+    <div class="action-list public-menu">
 
       <a
-        class="card menu-card"
+        class="action-row"
         href="./pendaftaran.html"
       >
+        <span class="action-row-icon">+</span>
 
-        <div class="menu-icon">
-          +
-        </div>
-
-        <h3>
-          Pendaftaran Tenant
-        </h3>
-
-        <p>
-          Ajukan pendaftaran untuk
-          kamar yang tersedia.
-        </p>
-
-        <span
-          class="btn btn-light"
-        >
-          Daftar Tenant
+        <span class="action-row-copy">
+          <strong>Pendaftaran Tenant</strong>
+          <small>Ajukan pendaftaran untuk kamar yang tersedia.</small>
         </span>
 
+        <span class="action-row-arrow">→</span>
       </a>
 
 
-      <!-- Kunjungan -->
-
       <a
-        class="card menu-card"
+        class="action-row"
         href="./kunjungan.html"
       >
+        <span class="action-row-icon">→</span>
 
-        <div class="menu-icon">
-          →
-        </div>
-
-        <h3>
-          Ajukan Kunjungan
-        </h3>
-
-        <p>
-          Tentukan kamar, tanggal,
-          dan waktu kunjungan.
-        </p>
-
-        <span
-          class="btn btn-light"
-        >
-          Ajukan Kunjungan
+        <span class="action-row-copy">
+          <strong>Ajukan Kunjungan</strong>
+          <small>Tentukan kamar, tanggal, dan waktu kunjungan.</small>
         </span>
 
+        <span class="action-row-arrow">→</span>
       </a>
 
 
-      <!-- Aturan -->
-
       <a
-        class="card menu-card"
+        class="action-row"
         href="./aturan.html"
       >
+        <span class="action-row-icon">i</span>
 
-        <div class="menu-icon">
-          i
-        </div>
-
-        <h3>
-          Aturan Kost
-        </h3>
-
-        <p>
-          Baca tata tertib,
-          ketentuan penghuni,
-          dan prosedur yang berlaku.
-        </p>
-
-        <span
-          class="btn btn-light"
-        >
-          Lihat Aturan
+        <span class="action-row-copy">
+          <strong>Aturan Kost</strong>
+          <small>Baca tata tertib, ketentuan penghuni, dan prosedur.</small>
         </span>
 
+        <span class="action-row-arrow">→</span>
       </a>
 
 
-      <!-- Hubungi -->
-
       <a
-        class="card menu-card"
+        class="action-row"
         href="./hubungi.html"
       >
+        <span class="action-row-icon">WA</span>
 
-        <div class="menu-icon">
-          WA
-        </div>
-
-        <h3>
-          Hubungi Kami
-        </h3>
-
-        <p>
-          Informasi kontak dan
-          layanan pengelola.
-        </p>
-
-        <span
-          class="btn btn-light"
-        >
-          Hubungi
+        <span class="action-row-copy">
+          <strong>Hubungi Kami</strong>
+          <small>Informasi kontak dan layanan pengelola.</small>
         </span>
 
+        <span class="action-row-arrow">→</span>
       </a>
 
 
-      <!-- Kamar -->
-
       <a
-        class="card menu-card"
+        class="action-row"
         href="#kamar"
       >
+        <span class="action-row-icon">□</span>
 
-        <div class="menu-icon">
-          □
-        </div>
-
-        <h3>
-          Daftar Kamar
-        </h3>
-
-        <p>
-          Lihat seluruh 39 kamar
-          beserta status dan harga.
-        </p>
-
-        <span
-          class="btn btn-light"
-        >
-          Lihat Kamar
+        <span class="action-row-copy">
+          <strong>Daftar Kamar</strong>
+          <small>Lihat seluruh 39 kamar beserta status dan harga.</small>
         </span>
 
+        <span class="action-row-arrow">→</span>
       </a>
 
 
-      <!-- Login -->
-
       <a
-        class="card menu-card"
+        class="action-row is-primary"
         href="./login.html"
       >
+        <span class="action-row-icon">🔒</span>
 
-        <div class="menu-icon">
-          🔒
-        </div>
-
-        <h3>
-          Login Tenant
-        </h3>
-
-        <p>
-          Masuk ke portal tenant
-          menggunakan akun Anda.
-        </p>
-
-        <span
-          class="btn btn-primary"
-        >
-          Login Tenant
+        <span class="action-row-copy">
+          <strong>Login Tenant</strong>
+          <small>Masuk ke portal tenant menggunakan akun Anda.</small>
         </span>
 
+        <span class="action-row-arrow">→</span>
       </a>
 
     </div>
-
 
 
     <!-- ==================================================
@@ -742,7 +576,7 @@
 
     <div class="tenant-menu">
 
-      <div class="menu-title">
+      <div class="action-section-head">
 
         <div class="eyebrow">
           KHUSUS TENANT
@@ -752,196 +586,102 @@
           Layanan Tenant
         </h2>
 
-        <p class="lead"
-           style="margin:0;max-width:760px">
-
-          Layanan berikut membutuhkan
-          login tenant. Jika belum login,
-          sistem akan mengarahkan Anda
-          ke halaman login.
-
+        <p>
+          Layanan berikut membutuhkan login tenant.
         </p>
 
       </div>
 
 
-      <div
-        class="menu-grid"
-      >
-
-        <!-- Portal -->
+      <div class="action-list tenant-action-list">
 
         <a
-          class="card menu-card"
+          class="action-row is-featured"
           href="./portal.html"
         >
+          <span class="action-row-icon">⌂</span>
 
-          <div class="menu-icon">
-            🏠
-          </div>
-
-          <h3>
-            Portal Tenant
-          </h3>
-
-          <p>
-            Dashboard pribadi,
-            profil, tagihan,
-            dan layanan tenant.
-          </p>
-
-          <span
-            class="btn btn-primary"
-          >
-            Buka Portal
+          <span class="action-row-copy">
+            <strong>Portal Tenant</strong>
+            <small>Dashboard pribadi, profil, tagihan, dan layanan tenant.</small>
           </span>
 
+          <span class="action-row-arrow">→</span>
         </a>
 
 
-        <!-- Pembayaran -->
-
         <a
-          class="card menu-card"
+          class="action-row"
           href="./pembayaran.html"
         >
+          <span class="action-row-icon">Rp</span>
 
-          <div class="menu-icon">
-            Rp
-          </div>
-
-          <h3>
-            Pembayaran
-          </h3>
-
-          <p>
-            Lihat tagihan dan
-            kirim data pembayaran.
-          </p>
-
-          <span
-            class="btn btn-light"
-          >
-            Pembayaran
+          <span class="action-row-copy">
+            <strong>Pembayaran</strong>
+            <small>Lihat tagihan dan kirim data pembayaran.</small>
           </span>
 
+          <span class="action-row-arrow">→</span>
         </a>
 
 
-        <!-- Maintenance -->
-
         <a
-          class="card menu-card"
+          class="action-row"
           href="./maintenance.html"
         >
+          <span class="action-row-icon">M</span>
 
-          <div class="menu-icon">
-            M
-          </div>
-
-          <h3>
-            Maintenance
-          </h3>
-
-          <p>
-            Laporkan kerusakan
-            atau masalah fasilitas.
-          </p>
-
-          <span
-            class="btn btn-light"
-          >
-            Maintenance
+          <span class="action-row-copy">
+            <strong>Maintenance</strong>
+            <small>Laporkan kerusakan atau masalah fasilitas.</small>
           </span>
 
+          <span class="action-row-arrow">→</span>
         </a>
 
 
-        <!-- Check-in/out -->
-
         <a
-          class="card menu-card"
+          class="action-row"
           href="./checkinout.html"
         >
+          <span class="action-row-icon">↔</span>
 
-          <div class="menu-icon">
-            ↔
-          </div>
-
-          <h3>
-            Check-in / Check-out
-          </h3>
-
-          <p>
-            Serah-terima kamar,
-            kondisi fasilitas,
-            dan akses.
-          </p>
-
-          <span
-            class="btn btn-light"
-          >
-            Check-in / Check-out
+          <span class="action-row-copy">
+            <strong>Check-in / Check-out</strong>
+            <small>Serah-terima kamar, kondisi fasilitas, dan akses.</small>
           </span>
 
+          <span class="action-row-arrow">→</span>
         </a>
 
 
-        <!-- Cafe -->
-
         <a
-          class="card menu-card"
+          class="action-row"
           href="./cafe.html"
         >
+          <span class="action-row-icon">C</span>
 
-          <div class="menu-icon">
-            C
-          </div>
-
-          <h3>
-            Cafe
-          </h3>
-
-          <p>
-            Akses layanan Cafe
-            untuk tenant.
-          </p>
-
-          <span
-            class="btn btn-light"
-          >
-            Buka Cafe
+          <span class="action-row-copy">
+            <strong>Cafe</strong>
+            <small>Akses layanan Cafe untuk tenant.</small>
           </span>
 
+          <span class="action-row-arrow">→</span>
         </a>
 
 
-        <!-- Laundry -->
-
         <a
-          class="card menu-card"
+          class="action-row"
           href="./laundry.html"
         >
+          <span class="action-row-icon">L</span>
 
-          <div class="menu-icon">
-            L
-          </div>
-
-          <h3>
-            Laundry
-          </h3>
-
-          <p>
-            Akses layanan Laundry
-            untuk tenant.
-          </p>
-
-          <span
-            class="btn btn-light"
-          >
-            Buka Laundry
+          <span class="action-row-copy">
+            <strong>Laundry</strong>
+            <small>Akses layanan Laundry untuk tenant.</small>
           </span>
 
+          <span class="action-row-arrow">→</span>
         </a>
 
       </div>
