@@ -6190,29 +6190,42 @@ body[data-page="pendaftaran"] .registration-bottom-nav{
     grid-column:auto;
   }
 
+  /* ----------------------------------------------------------
+     PENDAFTARAN MOBILE — SECTION HIERARCHY
+     ---------------------------------------------------------- */
   body[data-page="pendaftaran"] .mobile-form-section-label{
+    position:relative;
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:11px;
     grid-column:1/-1;
-    margin-top:5px;
-    padding:11px 12px;
-    border:1px solid #e1e7ee;
+    margin:12px 0 2px;
+    padding:13px 13px 13px 15px;
+    border:1px solid #dfe5ec;
+    border-left:4px solid var(--lux-gold);
     border-radius:14px;
-    background:linear-gradient(135deg,#f8fafc,#eef2f6);
+    background:
+      linear-gradient(135deg,#ffffff 0%,#f5f7fa 100%);
+    box-shadow:0 7px 18px rgba(16,24,45,.06);
+  }
+
+  body[data-page="pendaftaran"] .mobile-form-section-label:first-child{
+    margin-top:4px;
   }
 
   body[data-page="pendaftaran"] .mobile-form-section-label span{
-    flex:0 0 29px;
-    width:29px;
-    height:29px;
+    flex:0 0 31px;
+    width:31px;
+    height:31px;
     display:grid;
     place-items:center;
-    border-radius:50%;
-    background:#f7ead4;
-    color:#805819;
+    border-radius:10px;
+    background:var(--lux-navy);
+    color:#fff;
     font-size:10px;
     font-weight:950;
+    letter-spacing:.02em;
+    box-shadow:0 4px 10px rgba(16,24,45,.12);
   }
 
   body[data-page="pendaftaran"] .mobile-form-section-label strong,
@@ -6222,15 +6235,36 @@ body[data-page="pendaftaran"] .registration-bottom-nav{
 
   body[data-page="pendaftaran"] .mobile-form-section-label strong{
     color:var(--lux-navy);
-    font-size:13px;
+    font-size:14px;
     line-height:1.3;
+    letter-spacing:-.01em;
   }
 
   body[data-page="pendaftaran"] .mobile-form-section-label small{
-    margin-top:2px;
-    color:#728096;
-    font-size:9.5px;
-    line-height:1.35;
+    margin-top:3px;
+    color:#68758a;
+    font-size:10px;
+    line-height:1.4;
+  }
+
+  body[data-page="pendaftaran"] .mobile-process-label{
+    margin-top:24px;
+    border-left-color:#c9974a;
+    background:
+      linear-gradient(135deg,#fffdf8 0%,#f7f8fa 100%);
+  }
+
+  /* ----------------------------------------------------------
+     PENDAFTARAN MOBILE — SUBMIT ACTION MUST NOT COVER CONTENT
+     ---------------------------------------------------------- */
+  body[data-page="pendaftaran"] .form-actions{
+    position:static;
+    margin:20px 0 0;
+    padding:8px;
+    border:1px solid #dfe5ec;
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 10px 24px rgba(16,24,45,.08);
   }
 
   body[data-page="pendaftaran"] label{
