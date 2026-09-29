@@ -1003,6 +1003,16 @@ function renderTenantData() {
     tenantRoom:
       tenant.no_kamar,
 
+    tenantPhone:
+      tenant.phone ||
+      tenant.no_hp ||
+      tenant.whatsapp ||
+      '',
+
+    tenantEmail:
+      tenant.email ||
+      '',
+
     paymentTenant:
       tenant.nama_lengkap,
 
