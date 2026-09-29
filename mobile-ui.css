@@ -1739,3 +1739,209 @@
   }
 
 }
+
+
+/* ============================================================
+   TENANT STATUS — COMPACT CHECKLIST
+   ============================================================ */
+
+.tenant-status-summary-icon{
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9px;
+  background:#eaf8f0;
+  color:#178553;
+  border:1px solid #c8e9d7;
+  font-size:14px;
+  font-weight:950;
+}
+
+.tenant-status-summary-badge{
+  flex:0 0 auto;
+  padding:5px 8px;
+  border-radius:999px;
+  background:#eaf8f0;
+  color:#178553;
+  border:1px solid #c8e9d7;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.07em;
+}
+
+.tenant-status-panel{
+  padding:0 15px 15px;
+  border-top:1px solid #edf0f4;
+}
+
+.tenant-status-section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:13px 0 7px;
+  color:#a8772e;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.14em;
+}
+
+.tenant-status-section-title em{
+  color:#178553;
+  font-style:normal;
+  letter-spacing:.02em;
+  text-transform:none;
+}
+
+.tenant-status-list{
+  overflow:hidden;
+  border:1px solid #e7ebf0;
+  border-radius:12px;
+  background:#fff;
+}
+
+.tenant-status-row{
+  min-height:39px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 11px;
+  box-sizing:border-box;
+  border-bottom:1px solid #edf0f4;
+}
+
+.tenant-status-row:last-child{
+  border-bottom:0;
+}
+
+.tenant-status-label{
+  min-width:0;
+  color:#566176;
+  font-size:10.5px;
+  line-height:1.3;
+}
+
+.tenant-status-value{
+  min-width:0;
+  color:#17213b;
+  font-size:11px;
+  line-height:1.3;
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+
+.tenant-status-check{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  color:#178553;
+  font-size:10px;
+  font-weight:850;
+  white-space:nowrap;
+}
+
+.tenant-status-check i{
+  width:17px;
+  height:17px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#eaf8f0;
+  border:1px solid #c8e9d7;
+  color:#178553;
+  font-size:10px;
+  font-style:normal;
+  font-weight:950;
+}
+
+@media(max-width:800px){
+
+  .tenant-info-summary{
+    min-height:58px;
+    padding:9px 10px;
+    gap:8px;
+  }
+
+  .tenant-info-summary-icon,
+  .tenant-status-summary-icon{
+    width:31px;
+    height:31px;
+    flex-basis:31px;
+    border-radius:10px;
+  }
+
+  .tenant-status-summary-badge{
+    font-size:7.5px;
+    padding:4px 7px;
+  }
+
+  .tenant-info-summary-text strong{
+    font-size:12px;
+  }
+
+  .tenant-info-summary-text small{
+    font-size:8.5px;
+  }
+
+  .tenant-status-panel{
+    padding:0 9px 9px;
+  }
+
+  .tenant-status-section-title{
+    margin:11px 0 6px;
+    font-size:7.5px;
+  }
+
+  .tenant-status-row{
+    min-height:37px;
+    padding:7px 9px;
+    gap:8px;
+  }
+
+  .tenant-status-label{
+    font-size:10px;
+  }
+
+  .tenant-status-value,
+  .tenant-status-check{
+    font-size:9.5px;
+  }
+
+  .tenant-status-check i{
+    width:16px;
+    height:16px;
+    font-size:9px;
+  }
+
+}
+
+@media(max-width:430px){
+
+  .tenant-info-summary-text small{
+    max-width:150px;
+  }
+
+  .tenant-status-summary-badge{
+    display:none;
+  }
+
+  .tenant-status-row{
+    min-height:36px;
+  }
+
+  .tenant-status-label{
+    font-size:9.5px;
+  }
+
+  .tenant-status-value,
+  .tenant-status-check{
+    font-size:9px;
+  }
+
+}
