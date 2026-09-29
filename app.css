@@ -5832,3 +5832,483 @@ body[data-page="index"] .tenant-action-list .is-featured .action-row-copy small{
   }
 
 }
+
+
+/* ============================================================
+   PENDAFTARAN — MOBILE-FIRST PILOT
+   Existing form fields and API behavior remain unchanged.
+   ============================================================ */
+
+body[data-page="pendaftaran"] .nav-inner{
+  min-height:86px;
+}
+
+body[data-page="pendaftaran"] .brand{
+  font-size:16px;
+  letter-spacing:.07em;
+  gap:13px;
+}
+
+body[data-page="pendaftaran"] .brand-mark{
+  width:50px;
+  height:50px;
+  border-radius:15px;
+  background-color:#fff;
+  background-image:
+    url("https://lipinazzz-sudo.github.io/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("./assets/dj-family-kost-logo.png");
+  background-position:center,center,center;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  background-size:38px 38px,38px 38px,38px 38px;
+}
+
+body[data-page="pendaftaran"] .mobile-registration-kicker,
+body[data-page="pendaftaran"] .mobile-registration-steps,
+body[data-page="pendaftaran"] .mobile-form-section-label,
+body[data-page="pendaftaran"] .registration-menu-toggle,
+body[data-page="pendaftaran"] .registration-drawer,
+body[data-page="pendaftaran"] .registration-drawer-backdrop,
+body[data-page="pendaftaran"] .registration-bottom-nav{
+  display:none;
+}
+
+@media(max-width:800px){
+
+  body[data-page="pendaftaran"] .nav{
+    background:var(--lux-navy);
+    border-bottom-color:rgba(255,255,255,.08);
+    box-shadow:0 10px 28px rgba(0,0,0,.18);
+  }
+
+  body[data-page="pendaftaran"] .nav-inner{
+    min-height:70px;
+    padding:12px 16px;
+  }
+
+  body[data-page="pendaftaran"] .brand{
+    color:#fff;
+    font-size:13px;
+  }
+
+  body[data-page="pendaftaran"] .brand-mark{
+    width:44px;
+    height:44px;
+    background-size:33px 33px,33px 33px,33px 33px;
+    border-color:rgba(255,255,255,.16);
+  }
+
+  body[data-page="pendaftaran"] .nav-links{
+    display:none;
+  }
+
+  body[data-page="pendaftaran"] .registration-menu-toggle{
+    display:flex;
+    width:42px;
+    height:42px;
+    margin-left:auto;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:5px;
+    padding:0;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:13px;
+    background:rgba(255,255,255,.06);
+  }
+
+  body[data-page="pendaftaran"] .registration-menu-toggle span{
+    display:block;
+    width:20px;
+    height:2px;
+    border-radius:999px;
+    background:#fff;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:190;
+    display:block;
+    background:rgba(3,8,18,.56);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s ease;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-backdrop.is-open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer{
+    position:fixed;
+    inset:0 0 0 auto;
+    z-index:200;
+    width:min(88vw,360px);
+    display:block;
+    padding:18px;
+    overflow:auto;
+    color:#fff;
+    background:
+      radial-gradient(circle at 90% 4%,rgba(201,151,74,.12),transparent 30%),
+      linear-gradient(180deg,#0b1428,#111d35);
+    box-shadow:-20px 0 55px rgba(0,0,0,.24);
+    transform:translateX(102%);
+    transition:transform .24s ease;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer.is-open{
+    transform:translateX(0);
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-head{
+    min-height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,255,255,.10);
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+    letter-spacing:.07em;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-brand .brand-mark{
+    width:38px;
+    height:38px;
+    background-size:29px 29px,29px 29px,29px 29px;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-close{
+    width:40px;
+    height:40px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    font-size:28px;
+    line-height:1;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-links{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding-top:18px;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-links a{
+    min-height:48px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:0 14px;
+    border-radius:13px;
+    color:rgba(255,255,255,.88);
+    font-size:14px;
+    font-weight:800;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-links a span{
+    width:22px;
+    text-align:center;
+    color:#e1b970;
+    font-size:17px;
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-links a.is-active{
+    color:#fff;
+    background:rgba(255,255,255,.09);
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-links a.is-login{
+    margin-top:8px;
+    color:#121a2d;
+    background:linear-gradient(135deg,#d7a95a,#b97f2e);
+  }
+
+  body[data-page="pendaftaran"] .registration-drawer-links a.is-login span{
+    color:#121a2d;
+  }
+
+  body[data-page="pendaftaran"] .registration-bottom-nav{
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    z-index:150;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+    padding:6px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    background:rgba(10,18,36,.95);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:0 18px 40px rgba(0,0,0,.23);
+  }
+
+  body[data-page="pendaftaran"] .registration-bottom-nav a{
+    min-height:52px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    border-radius:13px;
+    color:rgba(255,255,255,.68);
+    font-size:10px;
+    font-weight:850;
+  }
+
+  body[data-page="pendaftaran"] .registration-bottom-nav a span{
+    color:#e3bb74;
+    font-size:18px;
+    line-height:1;
+  }
+
+  body[data-page="pendaftaran"] .registration-bottom-nav a.is-active{
+    color:#fff;
+    background:rgba(255,255,255,.09);
+  }
+
+  body[data-page="pendaftaran"] .section{
+    padding:36px 0 106px;
+  }
+
+  body[data-page="pendaftaran"] .container{
+    width:calc(100% - 20px);
+    padding:0;
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-kicker{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:#b47f2f;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.17em;
+    text-transform:uppercase;
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-kicker span{
+    width:30px;
+    height:30px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#f7ead4;
+    color:#805819;
+    letter-spacing:0;
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+    margin:17px 0 20px;
+    padding:7px;
+    border:1px solid rgba(16,24,45,.08);
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 9px 22px rgba(16,24,45,.05);
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-steps div{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    color:#7a8598;
+    font-size:8.5px;
+    font-weight:800;
+    text-align:center;
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-steps span{
+    width:25px;
+    height:25px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    border:1px solid #dbe1e9;
+    background:#f8fafc;
+    color:#66738a;
+    font-size:10px;
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-steps .is-current{
+    color:var(--lux-navy);
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-steps .is-current span{
+    color:#fff;
+    border-color:var(--lux-navy);
+    background:var(--lux-navy);
+  }
+
+  body[data-page="pendaftaran"] .back{
+    margin-bottom:15px;
+    font-size:12px;
+  }
+
+  body[data-page="pendaftaran"] h1{
+    font-size:clamp(35px,10.5vw,50px);
+    line-height:1.03;
+    margin:10px 0 14px;
+  }
+
+  body[data-page="pendaftaran"] .lead{
+    font-size:14px;
+    line-height:1.68;
+  }
+
+  body[data-page="pendaftaran"] .form-card{
+    max-width:none;
+    margin-top:22px;
+    padding:16px !important;
+    border-radius:20px;
+    box-shadow:0 18px 44px rgba(16,24,45,.09);
+  }
+
+  body[data-page="pendaftaran"] .form-grid{
+    grid-template-columns:1fr !important;
+    gap:15px;
+  }
+
+  body[data-page="pendaftaran"] .field.full{
+    grid-column:auto;
+  }
+
+  body[data-page="pendaftaran"] .mobile-form-section-label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    grid-column:1/-1;
+    margin-top:5px;
+    padding:11px 12px;
+    border:1px solid #e1e7ee;
+    border-radius:14px;
+    background:linear-gradient(135deg,#f8fafc,#eef2f6);
+  }
+
+  body[data-page="pendaftaran"] .mobile-form-section-label span{
+    flex:0 0 29px;
+    width:29px;
+    height:29px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#f7ead4;
+    color:#805819;
+    font-size:10px;
+    font-weight:950;
+  }
+
+  body[data-page="pendaftaran"] .mobile-form-section-label strong,
+  body[data-page="pendaftaran"] .mobile-form-section-label small{
+    display:block;
+  }
+
+  body[data-page="pendaftaran"] .mobile-form-section-label strong{
+    color:var(--lux-navy);
+    font-size:13px;
+    line-height:1.3;
+  }
+
+  body[data-page="pendaftaran"] .mobile-form-section-label small{
+    margin-top:2px;
+    color:#728096;
+    font-size:9.5px;
+    line-height:1.35;
+  }
+
+  body[data-page="pendaftaran"] label{
+    font-size:12px;
+  }
+
+  body[data-page="pendaftaran"] input,
+  body[data-page="pendaftaran"] select,
+  body[data-page="pendaftaran"] textarea{
+    min-height:48px;
+    padding:12px 13px;
+    border-radius:13px;
+    font-size:16px;
+  }
+
+  body[data-page="pendaftaran"] textarea{
+    min-height:112px;
+  }
+
+  body[data-page="pendaftaran"] .room-status{
+    font-size:10px;
+  }
+
+  body[data-page="pendaftaran"] .room-note,
+  body[data-page="pendaftaran"] .note{
+    font-size:11px;
+    line-height:1.55;
+  }
+
+  body[data-page="pendaftaran"] .mobile-process-label{
+    margin-top:17px;
+  }
+
+  body[data-page="pendaftaran"] .form-actions{
+    position:sticky;
+    bottom:73px;
+    z-index:40;
+    margin:18px -2px 0;
+    padding:8px;
+    border:1px solid rgba(16,24,45,.08);
+    border-radius:16px;
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 12px 28px rgba(16,24,45,.12);
+  }
+
+  body[data-page="pendaftaran"] .form-actions .btn{
+    min-height:48px;
+    font-size:14px;
+  }
+
+  body[data-page="pendaftaran"] .submit-message{
+    font-size:12px;
+  }
+
+}
+
+@media(max-width:430px){
+
+  body[data-page="pendaftaran"] .registration-bottom-nav{
+    left:7px;
+    right:7px;
+    bottom:7px;
+  }
+
+  body[data-page="pendaftaran"] .registration-bottom-nav a{
+    min-height:49px;
+    font-size:9px;
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-steps{
+    gap:3px;
+    padding:6px;
+  }
+
+  body[data-page="pendaftaran"] .mobile-registration-steps div{
+    font-size:8px;
+  }
+
+}
