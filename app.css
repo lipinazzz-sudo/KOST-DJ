@@ -6295,21 +6295,17 @@ body[data-page="pendaftaran"] .registration-bottom-nav{
   }
 
   body[data-page="pendaftaran"] .mobile-process-label{
-    margin-top:17px;
+    margin-top:24px;
   }
 
   body[data-page="pendaftaran"] .form-actions{
-    position:sticky;
-    bottom:73px;
-    z-index:40;
-    margin:18px -2px 0;
+    position:static;
+    margin:20px 0 0;
     padding:8px;
-    border:1px solid rgba(16,24,45,.08);
+    border:1px solid #dfe5ec;
     border-radius:16px;
-    background:rgba(255,255,255,.93);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 12px 28px rgba(16,24,45,.12);
+    background:#fff;
+    box-shadow:0 10px 24px rgba(16,24,45,.08);
   }
 
   body[data-page="pendaftaran"] .form-actions .btn{
