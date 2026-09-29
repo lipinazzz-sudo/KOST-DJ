@@ -243,7 +243,7 @@
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
   <script src="tenant-guard.js?v=20260928-guard-v1"></script>
-  <link rel="stylesheet" href="mobile-ui.css?v=20260929-mobile-v1">
+  <link rel="stylesheet" href="mobile-ui.css?v=20260929-mobile-v2">
 </head>
 
 <body data-chat-role="tenant">
@@ -549,55 +549,61 @@
                  LAYANAN
                  ================================================= -->
 
-            <div
-                class="card"
-                style="margin-top:30px;padding:24px;"
-            >
+            <div class="card tenant-services-card">
 
-                <h3>
-                    Layanan Tenant
-                </h3>
+                <div class="tenant-services-heading">
+                    <div>
+                        <div class="eyebrow">LAYANAN TENANT</div>
+                        <h3>Layanan Tenant</h3>
+                        <p>Akses cepat ke seluruh layanan yang tersedia untuk Anda.</p>
+                    </div>
+                </div>
 
-                <p>
-                    Gunakan menu di atas untuk pembayaran,
-                    maintenance, check-in/check-out, dan Cafe.
-                </p>
+                <div class="tenant-services-grid">
 
-                <div
-                    style="
-                        display:flex;
-                        flex-wrap:wrap;
-                        gap:10px;
-                        margin-top:18px;
-                    "
-                >
-
-                    <a
-                        class="btn btn-primary"
-                        href="pembayaran.html"
-                    >
-                        Pembayaran
+                    <a class="tenant-service-btn is-primary" href="pembayaran.html">
+                        <span class="tenant-service-icon">Rp</span>
+                        <span class="tenant-service-text">
+                            <strong>Pembayaran</strong>
+                            <small>Lihat tagihan &amp; kirim pembayaran</small>
+                        </span>
+                        <span class="tenant-service-arrow">→</span>
                     </a>
 
-                    <a
-                        class="btn btn-outline"
-                        href="./maintenance.html?v=20260926-maintenance-route-fix-01"
-                    >
-                        Ajukan Maintenance
+                    <a class="tenant-service-btn" href="./maintenance.html?v=20260926-maintenance-route-fix-01">
+                        <span class="tenant-service-icon">M</span>
+                        <span class="tenant-service-text">
+                            <strong>Maintenance</strong>
+                            <small>Laporkan kerusakan fasilitas</small>
+                        </span>
+                        <span class="tenant-service-arrow">→</span>
                     </a>
 
-                    <a
-                        class="btn btn-outline"
-                        href="checkinout.html"
-                    >
-                        Check-in / Check-out
+                    <a class="tenant-service-btn" href="checkinout.html">
+                        <span class="tenant-service-icon">↔</span>
+                        <span class="tenant-service-text">
+                            <strong>Check-in / Check-out</strong>
+                            <small>Serah-terima kamar &amp; akses</small>
+                        </span>
+                        <span class="tenant-service-arrow">→</span>
                     </a>
 
-                    <a
-                        class="btn btn-outline"
-                        href="cafe.html"
-                    >
-                        🍜 Cafe
+                    <a class="tenant-service-btn" href="cafe.html">
+                        <span class="tenant-service-icon">C</span>
+                        <span class="tenant-service-text">
+                            <strong>Cafe</strong>
+                            <small>Akses layanan Cafe tenant</small>
+                        </span>
+                        <span class="tenant-service-arrow">→</span>
+                    </a>
+
+                    <a class="tenant-service-btn" href="laundry.html">
+                        <span class="tenant-service-icon">L</span>
+                        <span class="tenant-service-text">
+                            <strong>Laundry</strong>
+                            <small>Akses layanan Laundry tenant</small>
+                        </span>
+                        <span class="tenant-service-arrow">→</span>
                     </a>
 
                 </div>
