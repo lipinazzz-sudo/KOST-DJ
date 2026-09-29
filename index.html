@@ -173,7 +173,7 @@
 </head>
 
 
-<body data-page="index">
+<body id="top" data-page="index">
 
 
 <!-- ========================================================
@@ -196,6 +196,19 @@
     </a>
 
 
+    <button
+      class="mobile-menu-toggle"
+      type="button"
+      aria-label="Buka menu"
+      aria-controls="mobileDrawer"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+
     <nav class="nav-links">
 
       <a href="#kamar">
@@ -208,10 +221,6 @@
 
       <a href="./kunjungan.html">
         Kunjungan
-      </a>
-
-      <a href="./pendaftaran.html">
-        Pendaftaran
       </a>
 
       <a href="./hubungi.html">
@@ -230,6 +239,70 @@
   </div>
 
 </header>
+
+
+<!-- ========================================================
+     MOBILE NAVIGATION
+======================================================== -->
+
+<div
+  id="mobileDrawerBackdrop"
+  class="mobile-drawer-backdrop"
+  aria-hidden="true"
+></div>
+
+<aside
+  id="mobileDrawer"
+  class="mobile-drawer"
+  aria-hidden="true"
+>
+  <div class="mobile-drawer-head">
+    <div class="mobile-drawer-brand">
+      <span class="brand-mark"></span>
+      <strong>DJ FAMILY KOST</strong>
+    </div>
+
+    <button
+      class="mobile-drawer-close"
+      type="button"
+      aria-label="Tutup menu"
+    >
+      ×
+    </button>
+  </div>
+
+  <nav class="mobile-drawer-links" aria-label="Menu mobile">
+    <a href="#top"><span>⌂</span>Beranda</a>
+    <a href="#kamar"><span>▣</span>Kamar</a>
+    <a href="./aturan.html"><span>◈</span>Aturan Kost</a>
+    <a href="./kunjungan.html"><span>◌</span>Kunjungan</a>
+    <a href="./pendaftaran.html"><span>＋</span>Pendaftaran</a>
+    <a href="./hubungi.html"><span>☎</span>Hubungi Kami</a>
+    <a class="mobile-drawer-login" href="./login.html"><span>🔒</span>Login Tenant</a>
+  </nav>
+</aside>
+
+<nav class="mobile-bottom-nav" aria-label="Navigasi utama mobile">
+  <a href="#top" class="is-active">
+    <span class="mobile-bottom-icon">⌂</span>
+    <span>Beranda</span>
+  </a>
+
+  <a href="#kamar">
+    <span class="mobile-bottom-icon">▣</span>
+    <span>Kamar</span>
+  </a>
+
+  <a href="./pendaftaran.html">
+    <span class="mobile-bottom-icon">＋</span>
+    <span>Daftar</span>
+  </a>
+
+  <a href="./login.html">
+    <span class="mobile-bottom-icon">◯</span>
+    <span>Akun</span>
+  </a>
+</nav>
 
 
 
@@ -277,9 +350,9 @@
 
       <a
         class="btn btn-light"
-        href="./aturan.html"
+        href="./pendaftaran.html"
       >
-        Aturan Kost
+        Daftar Sekarang
       </a>
 
     </div>
@@ -315,6 +388,11 @@
         Data kamar diambil langsung
         dari database DJ Family Kost.
       </p>
+
+      <div class="room-select-hint">
+        Pilih lantai untuk melihat kamar.
+        Detail kamar dibuka saat Anda memilih lantai.
+      </div>
 
     </div>
 
@@ -857,6 +935,147 @@
 ======================================================== -->
 
 <script src="./dj-kost.js?v=20260925-02"></script>
+
+<script>
+(function(){
+
+  const drawer =
+    document.getElementById('mobileDrawer');
+
+  const backdrop =
+    document.getElementById('mobileDrawerBackdrop');
+
+  const toggle =
+    document.querySelector('.mobile-menu-toggle');
+
+  const closeButton =
+    document.querySelector('.mobile-drawer-close');
+
+  function setDrawer(open){
+
+    if(!drawer || !backdrop || !toggle){
+      return;
+    }
+
+    drawer.classList.toggle('is-open', open);
+    backdrop.classList.toggle('is-open', open);
+
+    drawer.setAttribute(
+      'aria-hidden',
+      open ? 'false' : 'true'
+    );
+
+    backdrop.setAttribute(
+      'aria-hidden',
+      open ? 'false' : 'true'
+    );
+
+    toggle.setAttribute(
+      'aria-expanded',
+      open ? 'true' : 'false'
+    );
+
+    document.body.classList.toggle(
+      'mobile-menu-open',
+      open
+    );
+
+  }
+
+  if(toggle){
+    toggle.addEventListener('click', function(){
+      setDrawer(
+        !drawer.classList.contains('is-open')
+      );
+    });
+  }
+
+  if(closeButton){
+    closeButton.addEventListener('click', function(){
+      setDrawer(false);
+    });
+  }
+
+  if(backdrop){
+    backdrop.addEventListener('click', function(){
+      setDrawer(false);
+    });
+  }
+
+  document
+    .querySelectorAll('.mobile-drawer-links a')
+    .forEach(function(link){
+      link.addEventListener('click', function(){
+        setDrawer(false);
+      });
+    });
+
+  document.addEventListener('keydown', function(event){
+
+    if(event.key === 'Escape'){
+      setDrawer(false);
+    }
+
+    const floorHead =
+      event.target.closest(
+        '#roomCatalog .floor-head'
+      );
+
+    if(
+      floorHead &&
+      (event.key === 'Enter' || event.key === ' ')
+    ){
+      event.preventDefault();
+      floorHead.click();
+    }
+
+  });
+
+  document.addEventListener('click', function(event){
+
+    const floorHead =
+      event.target.closest(
+        '#roomCatalog .floor-head'
+      );
+
+    if(!floorHead){
+      return;
+    }
+
+    const floorCard =
+      floorHead.closest('.floor-card');
+
+    if(!floorCard){
+      return;
+    }
+
+    const willOpen =
+      !floorCard.classList.contains('is-open');
+
+    floorCard.classList.toggle(
+      'is-open',
+      willOpen
+    );
+
+    floorHead.setAttribute(
+      'role',
+      'button'
+    );
+
+    floorHead.setAttribute(
+      'tabindex',
+      '0'
+    );
+
+    floorHead.setAttribute(
+      'aria-expanded',
+      willOpen ? 'true' : 'false'
+    );
+
+  });
+
+})();
+</script>
 
 </body>
 
