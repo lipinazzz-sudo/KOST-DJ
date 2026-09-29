@@ -420,138 +420,245 @@
             <details class="tenant-info-details">
 
                 <summary class="tenant-info-summary">
-                    <span class="tenant-info-summary-icon">i</span>
+                    <span class="tenant-status-summary-icon">✓</span>
+
                     <span class="tenant-info-summary-text">
-                        <strong>Info Tenant</strong>
-                        <small>Data kamar, tagihan, pembayaran, dan deposit</small>
+                        <strong>Status Tenant</strong>
+                        <small>Kelengkapan data dan administrasi tenant</small>
                     </span>
+
+                    <span class="tenant-status-summary-badge">
+                        LENGKAP
+                    </span>
+
                     <span class="tenant-info-summary-arrow">+</span>
                 </summary>
 
-                <div class="portal-grid">
 
+                <div class="tenant-status-panel">
 
-                <div class="portal-card">
-
-                    <h3>
-                        Tenant ID
-                    </h3>
-
-                    <div
-                        class="portal-value"
-                        id="tenantId"
-                    >
-                        —
+                    <div class="tenant-status-section-title">
+                        <span>DATA TENANT</span>
                     </div>
 
-                </div>
+                    <div class="tenant-status-list">
 
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Tenant ID
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="tenantId"
+                            >
+                                —
+                            </strong>
+                        </div>
 
-                <div class="portal-card">
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Kamar
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="tenantRoom"
+                            >
+                                —
+                            </strong>
+                        </div>
 
-                    <h3>
-                        Kamar
-                    </h3>
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Harga Sewa
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="rentAmount"
+                            >
+                                —
+                            </strong>
+                        </div>
 
-                    <div
-                        class="portal-value"
-                        id="tenantRoom"
-                    >
-                        —
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                No. WhatsApp
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Terdaftar
+                            </span>
+                        </div>
+
                     </div>
 
-                    <p id="roomStatus">
-                        —
-                    </p>
 
-                </div>
-
-
-                <div class="portal-card">
-
-                    <h3>
-                        Harga Sewa
-                    </h3>
-
-                    <div
-                        class="portal-value"
-                        id="rentAmount"
-                    >
-                        —
+                    <div class="tenant-status-section-title">
+                        <span>KELENGKAPAN ADMINISTRASI</span>
+                        <em>9 / 9 lengkap</em>
                     </div>
 
-                    <p>
-                        per bulan
-                    </p>
+                    <div class="tenant-status-list">
 
-                </div>
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Data Identitas
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Lengkap
+                            </span>
+                        </div>
 
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Foto KTP
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Sudah ada
+                            </span>
+                        </div>
 
-                <div class="portal-card">
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Foto Kamar
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Sudah ada
+                            </span>
+                        </div>
 
-                    <h3>
-                        Periode Tagihan
-                    </h3>
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Persetujuan Aturan
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Disetujui
+                            </span>
+                        </div>
 
-                    <div
-                        class="portal-value"
-                        id="billingPeriod"
-                    >
-                        —
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Tanda Tangan
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Sudah diberikan
+                            </span>
+                        </div>
+
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Aktivasi Akun
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Selesai
+                            </span>
+                        </div>
+
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Profil Tenant
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Lengkap
+                            </span>
+                        </div>
+
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Data Kamar
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Lengkap
+                            </span>
+                        </div>
+
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Dokumen Persetujuan
+                            </span>
+                            <span class="tenant-status-check">
+                                <i>✓</i>
+                                Lengkap
+                            </span>
+                        </div>
+
                     </div>
 
-                    <p>
-                        Jatuh tempo:
-                        <strong id="billingDue">
-                            —
-                        </strong>
-                    </p>
 
-                </div>
-
-
-                <div class="portal-card">
-
-                    <h3>
-                        Status Pembayaran
-                    </h3>
-
-                    <div
-                        class="portal-value"
-                        id="billingStatus"
-                    >
-                        —
+                    <div class="tenant-status-section-title">
+                        <span>INFORMASI TAGIHAN</span>
                     </div>
 
-                    <p>
-                        Total tagihan:
-                        <strong id="billingTotal">
-                            —
-                        </strong>
-                    </p>
+                    <div class="tenant-status-list">
 
-                </div>
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Periode Tagihan
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="billingPeriod"
+                            >
+                                —
+                            </strong>
+                        </div>
 
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Jatuh Tempo
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="billingDue"
+                            >
+                                —
+                            </strong>
+                        </div>
 
-                <div class="portal-card">
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Status Pembayaran
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="billingStatus"
+                            >
+                                —
+                            </strong>
+                        </div>
 
-                    <h3>
-                        Deposit
-                    </h3>
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Total Tagihan
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="billingTotal"
+                            >
+                                —
+                            </strong>
+                        </div>
 
-                    <div
-                        class="portal-value"
-                        id="depositAmount"
-                    >
-                        —
+                        <div class="tenant-status-row">
+                            <span class="tenant-status-label">
+                                Deposit
+                            </span>
+                            <strong
+                                class="tenant-status-value"
+                                id="depositAmount"
+                            >
+                                —
+                            </strong>
+                        </div>
+
                     </div>
-
-                    <p>
-                        Deposit jaminan
-                    </p>
-
-                </div>
-
 
                 </div>
 
