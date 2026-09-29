@@ -352,7 +352,7 @@ textarea{
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
 </head>
 
-<body>
+<body data-page="pendaftaran">
 
 <header class="nav">
 
@@ -365,6 +365,19 @@ textarea{
       <span class="brand-mark"></span>
       DJ FAMILY KOST
     </a>
+
+    <button
+      id="registrationMenuToggle"
+      class="registration-menu-toggle"
+      type="button"
+      aria-label="Buka menu"
+      aria-controls="registrationDrawer"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
     <nav class="nav-links">
 
@@ -403,9 +416,68 @@ textarea{
 </header>
 
 
+<div
+  id="registrationDrawerBackdrop"
+  class="registration-drawer-backdrop"
+  aria-hidden="true"
+></div>
+
+<aside
+  id="registrationDrawer"
+  class="registration-drawer"
+  aria-hidden="true"
+>
+  <div class="registration-drawer-head">
+    <div class="registration-drawer-brand">
+      <span class="brand-mark"></span>
+      <strong>DJ FAMILY KOST</strong>
+    </div>
+
+    <button
+      id="registrationDrawerClose"
+      class="registration-drawer-close"
+      type="button"
+      aria-label="Tutup menu"
+    >
+      ×
+    </button>
+  </div>
+
+  <nav class="registration-drawer-links" aria-label="Menu mobile">
+    <a href="index.html"><span>⌂</span>Beranda</a>
+    <a href="index.html#kamar"><span>▣</span>Kamar</a>
+    <a href="pendaftaran.html" class="is-active"><span>＋</span>Pendaftaran</a>
+    <a href="kunjungan.html"><span>◌</span>Kunjungan</a>
+    <a href="aturan.html"><span>ℹ</span>Aturan Kost</a>
+    <a href="hubungi.html"><span>☎</span>Hubungi Kami</a>
+    <a href="login.html" class="is-login"><span>🔒</span>Login Tenant</a>
+  </nav>
+</aside>
+
+<nav class="registration-bottom-nav" aria-label="Navigasi utama mobile">
+  <a href="index.html"><span>⌂</span>Beranda</a>
+  <a href="index.html#kamar"><span>▣</span>Kamar</a>
+  <a href="pendaftaran.html" class="is-active"><span>＋</span>Daftar</a>
+  <a href="login.html"><span>◯</span>Akun</a>
+</nav>
+
+
 <section class="section">
 
   <div class="container">
+
+    <div class="mobile-registration-kicker">
+      <span>01</span>
+      Pendaftaran Tenant
+    </div>
+
+    <div class="mobile-registration-steps">
+      <div class="is-current"><span>1</span>Data Diri</div>
+      <div><span>2</span>Kamar</div>
+      <div><span>3</span>Detail</div>
+      <div><span>4</span>Review</div>
+    </div>
+
 
     <a
       class="back"
@@ -444,6 +516,14 @@ textarea{
           <!-- =============================================
                DATA DASAR
                ============================================= -->
+
+          <div class="mobile-form-section-label">
+            <span>01</span>
+            <div>
+              <strong>Data Diri</strong>
+              <small>Isi informasi dasar Anda.</small>
+            </div>
+          </div>
 
           <div class="field">
 
@@ -604,6 +684,14 @@ textarea{
                KAMAR
                ============================================= -->
 
+          <div class="mobile-form-section-label">
+            <span>02</span>
+            <div>
+              <strong>Pilih Kamar</strong>
+              <small>Pilih kamar yang Anda minati.</small>
+            </div>
+          </div>
+
           <div class="field">
 
             <label for="kamar">
@@ -659,6 +747,14 @@ textarea{
           </div>
 
 
+          <div class="mobile-form-section-label">
+            <span>03</span>
+            <div>
+              <strong>Informasi Tambahan</strong>
+              <small>Tambahkan catatan bila diperlukan.</small>
+            </div>
+          </div>
+
           <div class="field full">
 
             <label for="catatan">
@@ -679,6 +775,14 @@ textarea{
         <!-- =============================================
              INFORMASI PROSES
              ============================================= -->
+
+        <div class="mobile-form-section-label mobile-process-label">
+          <span>04</span>
+          <div>
+            <strong>Review Sebelum Dikirim</strong>
+            <small>Periksa kembali data Anda sebelum mengirim.</small>
+          </div>
+        </div>
 
         <div
           class="note"
@@ -1731,6 +1835,99 @@ form.addEventListener(
 
 loadRooms();
 
+</script>
+
+<script>
+(function(){
+
+  const toggle = document.getElementById("registrationMenuToggle");
+  const drawer = document.getElementById("registrationDrawer");
+  const backdrop = document.getElementById("registrationDrawerBackdrop");
+  const closeButton = document.getElementById("registrationDrawerClose");
+
+  function setDrawer(open){
+
+    if(!toggle || !drawer || !backdrop){
+      return;
+    }
+
+    drawer.classList.toggle("is-open", open);
+    backdrop.classList.toggle("is-open", open);
+
+    drawer.setAttribute(
+      "aria-hidden",
+      open ? "false" : "true"
+    );
+
+    backdrop.setAttribute(
+      "aria-hidden",
+      open ? "false" : "true"
+    );
+
+    toggle.setAttribute(
+      "aria-expanded",
+      open ? "true" : "false"
+    );
+
+    document.body.classList.toggle(
+      "registration-menu-open",
+      open
+    );
+
+  }
+
+  if(toggle){
+    toggle.addEventListener(
+      "click",
+      function(){
+        setDrawer(
+          !drawer.classList.contains("is-open")
+        );
+      }
+    );
+  }
+
+  if(closeButton){
+    closeButton.addEventListener(
+      "click",
+      function(){
+        setDrawer(false);
+      }
+    );
+  }
+
+  if(backdrop){
+    backdrop.addEventListener(
+      "click",
+      function(){
+        setDrawer(false);
+      }
+    );
+  }
+
+  document
+    .querySelectorAll(".registration-drawer-links a")
+    .forEach(
+      function(link){
+        link.addEventListener(
+          "click",
+          function(){
+            setDrawer(false);
+          }
+        );
+      }
+    );
+
+  document.addEventListener(
+    "keydown",
+    function(event){
+      if(event.key === "Escape"){
+        setDrawer(false);
+      }
+    }
+  );
+
+})();
 </script>
 
 <script src="form-ux.js?v=20260928-formux-v1"></script>
