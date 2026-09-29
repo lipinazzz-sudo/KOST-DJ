@@ -1454,3 +1454,288 @@
   }
 
 }
+
+
+/* ============================================================
+   TENANT PORTAL — ANNOUNCEMENT PRIORITY + COLLAPSED INFO
+   ============================================================ */
+
+.tenant-announcements{
+  position:relative;
+  border:1px solid #e3e7ee !important;
+  border-top:4px solid #c9974a !important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(201,151,74,.10),transparent 32%),
+    linear-gradient(145deg,#fff,#fafbfd) !important;
+  box-shadow:0 16px 38px rgba(16,24,45,.085);
+}
+
+.tenant-announcements::after{
+  content:"";
+  position:absolute;
+  right:16px;
+  top:14px;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#c9974a;
+  box-shadow:0 0 0 5px rgba(201,151,74,.12);
+}
+
+.tenant-announcements .eyebrow{
+  color:#b27b2f;
+  font-weight:900;
+}
+
+.tenant-announcements h3{
+  color:#10182d;
+}
+
+.tenant-announcement-alert{
+  padding:7px 11px;
+  border-radius:999px;
+  background:#edf8f2;
+  color:#18794e;
+  border:1px solid #cce8d8;
+}
+
+.tenant-announcement-item{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #e1e6ee;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(16,24,45,.045);
+}
+
+.tenant-announcement-item::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:#c9974a;
+}
+
+.tenant-announcement-title{
+  color:#17213b;
+}
+
+.tenant-announcement-message{
+  color:#465268;
+}
+
+.tenant-announcement-priority{
+  background:#f3f5f9;
+  border:1px solid #e2e6ed;
+}
+
+.tenant-info-details,
+.tenant-security-details{
+  margin-top:18px;
+  border:1px solid #e0e5ec;
+  border-radius:18px;
+  background:linear-gradient(145deg,#fff,#fafbfd);
+  box-shadow:0 10px 28px rgba(16,24,45,.055);
+  overflow:hidden;
+}
+
+.tenant-info-summary,
+.tenant-security-summary{
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 15px;
+  box-sizing:border-box;
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+}
+
+.tenant-info-summary::-webkit-details-marker,
+.tenant-security-summary::-webkit-details-marker{
+  display:none;
+}
+
+.tenant-info-summary::marker,
+.tenant-security-summary::marker{
+  display:none;
+}
+
+.tenant-info-summary-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:#eef2f7;
+  color:#17213b;
+  font-size:15px;
+  font-weight:900;
+}
+
+.tenant-info-summary-text{
+  min-width:0;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.tenant-info-summary-text strong{
+  color:#17213b;
+  font-size:14px;
+  line-height:1.25;
+}
+
+.tenant-info-summary-text small{
+  color:#7a8597;
+  font-size:10.5px;
+  line-height:1.35;
+}
+
+.tenant-info-summary-arrow{
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background:#f4f6f9;
+  color:#a8772e;
+  font-size:20px;
+  line-height:1;
+  font-weight:500;
+  transition:transform .18s ease,background .18s ease;
+}
+
+.tenant-info-details[open] .tenant-info-summary-arrow,
+.tenant-security-details[open] .tenant-info-summary-arrow{
+  transform:rotate(45deg);
+  background:#10182d;
+  color:#fff;
+}
+
+.tenant-info-details > .portal-grid{
+  margin-top:0;
+  padding:0 12px 12px;
+}
+
+.tenant-security-details{
+  margin-top:18px;
+}
+
+.tenant-security-details .security-card{
+  margin-top:0;
+  border:0;
+  border-top:1px solid #edf0f4;
+  border-radius:0;
+  box-shadow:none;
+}
+
+@media(max-width:800px){
+
+  .tenant-announcements{
+    margin-top:17px;
+    padding:14px !important;
+    border-radius:18px;
+    border-top-width:4px !important;
+    box-shadow:0 15px 32px rgba(16,24,45,.08);
+  }
+
+  .tenant-announcements::after{
+    right:13px;
+    top:12px;
+    width:7px;
+    height:7px;
+  }
+
+  .tenant-announcements .portal-header{
+    padding-right:14px;
+  }
+
+  .tenant-announcements h3{
+    font-size:17px !important;
+    font-weight:900;
+  }
+
+  .tenant-announcements p{
+    font-size:10.5px;
+  }
+
+  .tenant-announcement-alert{
+    padding:5px 8px;
+    font-size:9px;
+  }
+
+  .tenant-announcement-item{
+    border-radius:14px;
+    padding:13px 13px 13px 15px;
+  }
+
+  .tenant-announcement-item::before{
+    width:4px;
+  }
+
+  .tenant-info-details,
+  .tenant-security-details{
+    margin-top:12px;
+    border-radius:16px;
+  }
+
+  .tenant-info-summary,
+  .tenant-security-summary{
+    min-height:61px;
+    padding:9px 11px;
+    gap:9px;
+  }
+
+  .tenant-info-summary-icon{
+    width:36px;
+    height:36px;
+    flex-basis:36px;
+    border-radius:11px;
+    font-size:13px;
+  }
+
+  .tenant-info-summary-text strong{
+    font-size:12px;
+  }
+
+  .tenant-info-summary-text small{
+    font-size:9px;
+  }
+
+  .tenant-info-summary-arrow{
+    width:27px;
+    height:27px;
+    flex-basis:27px;
+    border-radius:9px;
+    font-size:18px;
+  }
+
+  .tenant-info-details > .portal-grid{
+    padding:0 9px 9px;
+  }
+
+  .tenant-security-details .security-card{
+    padding:15px !important;
+  }
+
+}
+
+@media(max-width:430px){
+
+  .tenant-announcements .tenant-announcement-message{
+    font-size:10.5px;
+  }
+
+  .tenant-info-summary-text small{
+    font-size:8.5px;
+  }
+
+}
