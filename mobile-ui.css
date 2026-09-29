@@ -1,0 +1,495 @@
+/*
+ * DJ FAMILY KOST — SHARED MOBILE APP SHELL
+ * Mobile-only layer for secondary pages.
+ * Desktop is intentionally left untouched.
+ */
+
+.mobile-ui-toggle,
+.mobile-ui-drawer,
+.mobile-ui-backdrop,
+.mobile-ui-bottom{
+  display:none;
+}
+
+@media(max-width:800px){
+
+  body.mobile-ui-page{
+    padding-bottom:0;
+  }
+
+  body.mobile-ui-page .nav{
+    background:#10182d;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    box-shadow:0 10px 28px rgba(0,0,0,.18);
+  }
+
+  body.mobile-ui-page .nav-inner{
+    min-height:70px;
+    padding:12px 16px;
+    display:flex;
+    align-items:center;
+  }
+
+  body.mobile-ui-page .brand{
+    color:#fff;
+    font-size:13px;
+    line-height:1.15;
+    letter-spacing:.07em;
+    gap:10px;
+  }
+
+  body.mobile-ui-page .brand-mark{
+    width:44px;
+    height:44px;
+    flex:0 0 44px;
+    border-radius:13px;
+    background-color:#fff;
+    border-color:rgba(255,255,255,.18);
+    box-shadow:0 8px 22px rgba(0,0,0,.20),inset 0 0 0 2px #fff;
+  }
+
+  body.mobile-ui-page .nav-links{
+    display:none !important;
+  }
+
+  body.mobile-ui-page .mobile-ui-toggle{
+    display:flex;
+    width:42px;
+    height:42px;
+    margin-left:auto;
+    padding:0;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:5px;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:13px;
+    background:rgba(255,255,255,.06);
+    color:#fff;
+  }
+
+  body.mobile-ui-page .mobile-ui-toggle span{
+    display:block;
+    width:20px;
+    height:2px;
+    border-radius:999px;
+    background:#fff;
+  }
+
+  body.mobile-ui-page .mobile-ui-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:190;
+    display:block;
+    background:rgba(3,8,18,.56);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s ease;
+  }
+
+  body.mobile-ui-page .mobile-ui-backdrop.is-open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer{
+    position:fixed;
+    inset:0 0 0 auto;
+    z-index:200;
+    width:min(88vw,360px);
+    display:block;
+    padding:18px;
+    overflow:auto;
+    color:#fff;
+    background:
+      radial-gradient(circle at 90% 4%,rgba(201,151,74,.12),transparent 30%),
+      linear-gradient(180deg,#0b1428 0%,#111d35 100%);
+    box-shadow:-20px 0 55px rgba(0,0,0,.24);
+    transform:translateX(102%);
+    transition:transform .24s ease;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer.is-open{
+    transform:translateX(0);
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-head{
+    min-height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,255,255,.10);
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+    letter-spacing:.07em;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-brand .brand-mark{
+    width:38px;
+    height:38px;
+    flex-basis:38px;
+    border-radius:11px;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-close{
+    width:40px;
+    height:40px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    font-size:28px;
+    line-height:1;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-links{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding-top:18px;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-links a{
+    min-height:48px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:0 14px;
+    border-radius:13px;
+    color:rgba(255,255,255,.88);
+    font-size:14px;
+    font-weight:800;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-links a.is-active{
+    color:#fff;
+    background:rgba(255,255,255,.09);
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-links a.is-login{
+    margin-top:8px;
+    color:#121a2d;
+    background:linear-gradient(135deg,#d7a95a,#b97f2e);
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-links a.is-login span{
+    color:#121a2d;
+  }
+
+  body.mobile-ui-page .mobile-ui-drawer-links a span{
+    width:22px;
+    text-align:center;
+    color:#e1b970;
+    font-size:17px;
+  }
+
+  body.mobile-ui-page .mobile-ui-bottom{
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    z-index:150;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+    padding:6px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    background:rgba(10,18,36,.95);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:0 18px 40px rgba(0,0,0,.23);
+  }
+
+  body.mobile-ui-page .mobile-ui-bottom a{
+    min-height:52px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    border-radius:13px;
+    color:rgba(255,255,255,.68);
+    font-size:10px;
+    font-weight:850;
+    text-align:center;
+  }
+
+  body.mobile-ui-page .mobile-ui-bottom a.is-active{
+    color:#fff;
+    background:rgba(255,255,255,.09);
+  }
+
+  body.mobile-ui-page .mobile-ui-bottom a span{
+    color:#e3bb74;
+    font-size:18px;
+    line-height:1;
+  }
+
+  body.mobile-ui-page .section{
+    padding:36px 0 106px;
+  }
+
+  body.mobile-ui-page .container{
+    width:calc(100% - 20px);
+    padding:0;
+  }
+
+  body.mobile-ui-page .back{
+    font-size:12px;
+    margin-bottom:16px;
+  }
+
+  body.mobile-ui-page h1{
+    font-size:clamp(34px,10vw,50px);
+    line-height:1.03;
+    margin:10px 0 13px;
+  }
+
+  body.mobile-ui-page h2{
+    font-size:clamp(22px,7vw,32px);
+    line-height:1.08;
+  }
+
+  body.mobile-ui-page .lead{
+    font-size:14px;
+    line-height:1.68;
+  }
+
+  body.mobile-ui-page .card{
+    border-radius:19px;
+  }
+
+  body.mobile-ui-page .grid-2,
+  body.mobile-ui-page .grid.grid-2,
+  body.mobile-ui-page .grid-3,
+  body.mobile-ui-page .grid.grid-3,
+  body.mobile-ui-page .form-grid,
+  body.mobile-ui-page .billing-grid,
+  body.mobile-ui-page .security-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  body.mobile-ui-page .field.full{
+    grid-column:auto;
+  }
+
+  body.mobile-ui-page input,
+  body.mobile-ui-page select,
+  body.mobile-ui-page textarea{
+    min-height:48px;
+    max-width:100%;
+    font-size:16px;
+    border-radius:13px;
+    box-sizing:border-box;
+  }
+
+  body.mobile-ui-page textarea{
+    min-height:112px;
+  }
+
+  body.mobile-ui-page .btn{
+    min-height:48px;
+    font-size:14px;
+  }
+
+  body.mobile-ui-page .footer{
+    padding:30px 0 98px;
+  }
+
+  body.mobile-ui-page .footer-inner{
+    align-items:flex-start;
+  }
+
+  body.mobile-ui-public .rule{
+    padding:16px 0;
+  }
+
+  body.mobile-ui-public .rule h3{
+    font-size:17px;
+    line-height:1.3;
+  }
+
+  body.mobile-ui-public .rule li{
+    font-size:13px;
+    line-height:1.65;
+  }
+
+  body.mobile-ui-visit .form-card{
+    margin-top:20px;
+    padding:16px !important;
+    border-radius:20px;
+    box-shadow:0 18px 44px rgba(16,24,45,.09);
+  }
+
+  body.mobile-ui-visit .form-grid{
+    gap:15px;
+  }
+
+  body.mobile-ui-visit label{
+    font-size:12px;
+  }
+
+  body.mobile-ui-visit .message{
+    font-size:12px;
+    line-height:1.55;
+  }
+
+  body.mobile-ui-contact .action-card{
+    padding:18px !important;
+  }
+
+  body.mobile-ui-contact .action-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+  }
+
+  body.mobile-ui-tenant .portal-wrap{
+    padding:30px 0 106px;
+  }
+
+  body.mobile-ui-tenant .portal-header{
+    gap:14px;
+  }
+
+  body.mobile-ui-tenant .portal-header h1{
+    margin-bottom:8px;
+  }
+
+  body.mobile-ui-tenant .portal-grid{
+    grid-template-columns:1fr !important;
+    gap:10px;
+    margin-top:20px;
+  }
+
+  body.mobile-ui-tenant .portal-card{
+    padding:17px;
+    border-radius:17px;
+  }
+
+  body.mobile-ui-tenant .portal-value{
+    font-size:25px;
+  }
+
+  body.mobile-ui-tenant .tenant-announcements{
+    margin-top:20px;
+    padding:17px !important;
+    border-radius:18px;
+  }
+
+  body.mobile-ui-tenant .tenant-announcement-top{
+    flex-direction:column;
+  }
+
+  body.mobile-ui-tenant .security-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  body.mobile-ui-payment .payment-wrap{
+    padding:30px 0 106px;
+  }
+
+  body.mobile-ui-payment .payment-summary{
+    grid-template-columns:1fr !important;
+    gap:9px;
+  }
+
+  body.mobile-ui-payment .summary-card,
+  body.mobile-ui-payment .billing-card,
+  body.mobile-ui-payment .payment-card{
+    border-radius:18px;
+  }
+
+  body.mobile-ui-payment .billing-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  body.mobile-ui-maintenance .maintenance-wrap{
+    padding:30px 0 106px;
+  }
+
+  body.mobile-ui-maintenance .maintenance-card,
+  body.mobile-ui-maintenance .history-card{
+    border-radius:18px;
+  }
+
+  body.mobile-ui-checkin .tabs{
+    position:sticky;
+    top:70px;
+    z-index:30;
+    padding:6px;
+    border-radius:15px;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 20px rgba(16,24,45,.08);
+  }
+
+  body.mobile-ui-checkin .tab{
+    min-height:44px;
+    font-size:11px;
+  }
+
+  body.mobile-ui-checkin .profile{
+    border-radius:18px;
+  }
+
+  body.mobile-ui-cafe .cafe-page{
+    padding-bottom:150px !important;
+  }
+
+  body.mobile-ui-cafe .mobile-ui-bottom{
+    bottom:82px;
+  }
+
+  body.mobile-ui-password{
+    background:#f6f7fb;
+  }
+
+  body.mobile-ui-password .mobile-ui-password-main{
+    padding:36px 0 106px;
+  }
+
+  body.mobile-ui-password .mobile-ui-password-card{
+    margin-top:22px;
+    padding:17px !important;
+    border-radius:20px;
+  }
+
+  body.mobile-ui-password .identity{
+    grid-template-columns:1fr !important;
+  }
+
+  body.mobile-ui-password input{
+    min-height:48px;
+    font-size:16px;
+  }
+
+}
+
+@media(max-width:430px){
+
+  body.mobile-ui-page .mobile-ui-bottom{
+    left:7px;
+    right:7px;
+    bottom:7px;
+  }
+
+  body.mobile-ui-page .mobile-ui-bottom a{
+    min-height:49px;
+    font-size:9px;
+  }
+
+  body.mobile-ui-cafe .mobile-ui-bottom{
+    bottom:78px;
+  }
+
+}
