@@ -341,7 +341,7 @@ input::placeholder{
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
 </head>
 
-<body>
+<body data-page="login">
 
 <header class="nav">
   <div class="nav-inner">
@@ -349,6 +349,19 @@ input::placeholder{
       <span class="brand-mark"></span>
       DJ FAMILY KOST
     </a>
+
+    <button
+      id="loginMenuToggle"
+      class="login-menu-toggle"
+      type="button"
+      aria-label="Buka menu"
+      aria-controls="loginDrawer"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
     <nav class="nav-links">
       <a href="index.html#kamar">Kamar</a>
@@ -363,8 +376,80 @@ input::placeholder{
   </div>
 </header>
 
+
+<div
+  id="loginDrawerBackdrop"
+  class="login-drawer-backdrop"
+  aria-hidden="true"
+></div>
+
+<aside
+  id="loginDrawer"
+  class="login-drawer"
+  aria-hidden="true"
+>
+  <div class="login-drawer-head">
+    <div class="login-drawer-brand">
+      <span class="brand-mark"></span>
+      <strong>DJ FAMILY KOST</strong>
+    </div>
+
+    <button
+      id="loginDrawerClose"
+      class="login-drawer-close"
+      type="button"
+      aria-label="Tutup menu"
+    >
+      ×
+    </button>
+  </div>
+
+  <nav class="login-drawer-links" aria-label="Menu mobile">
+    <a href="index.html"><span>⌂</span>Beranda</a>
+    <a href="index.html#kamar"><span>▣</span>Kamar</a>
+    <a href="pendaftaran.html"><span>＋</span>Pendaftaran</a>
+    <a href="kunjungan.html"><span>◌</span>Kunjungan</a>
+    <a href="aturan.html"><span>ℹ</span>Aturan Kost</a>
+    <a href="hubungi.html"><span>☎</span>Hubungi Kami</a>
+    <a href="login.html" class="is-active"><span>🔒</span>Login Tenant</a>
+  </nav>
+</aside>
+
+<nav class="login-bottom-nav" aria-label="Navigasi utama mobile">
+  <a href="index.html">
+    <span>⌂</span>
+    Beranda
+  </a>
+
+  <a href="index.html#kamar">
+    <span>▣</span>
+    Kamar
+  </a>
+
+  <a href="pendaftaran.html">
+    <span>＋</span>
+    Daftar
+  </a>
+
+  <a href="login.html" class="is-active">
+    <span>◯</span>
+    Akun
+  </a>
+</nav>
+
+
 <section class="section">
   <div class="container login-shell">
+
+    <div class="mobile-login-kicker">
+      <span>04</span>
+      Akses Tenant
+    </div>
+
+    <div class="mobile-login-note">
+      Gunakan akun yang telah diberikan setelah aktivasi tenant selesai.
+    </div>
+
 
     <a class="back" href="index.html">
       ← Kembali ke beranda
@@ -810,6 +895,99 @@ document
 
     }
   );
+</script>
+
+<script>
+(function(){
+
+  const toggle = document.getElementById("loginMenuToggle");
+  const drawer = document.getElementById("loginDrawer");
+  const backdrop = document.getElementById("loginDrawerBackdrop");
+  const closeButton = document.getElementById("loginDrawerClose");
+
+  function setDrawer(open){
+
+    if(!toggle || !drawer || !backdrop){
+      return;
+    }
+
+    drawer.classList.toggle("is-open",open);
+    backdrop.classList.toggle("is-open",open);
+
+    drawer.setAttribute(
+      "aria-hidden",
+      open ? "false" : "true"
+    );
+
+    backdrop.setAttribute(
+      "aria-hidden",
+      open ? "false" : "true"
+    );
+
+    toggle.setAttribute(
+      "aria-expanded",
+      open ? "true" : "false"
+    );
+
+    document.body.classList.toggle(
+      "login-menu-open",
+      open
+    );
+
+  }
+
+  if(toggle){
+    toggle.addEventListener(
+      "click",
+      function(){
+        setDrawer(
+          !drawer.classList.contains("is-open")
+        );
+      }
+    );
+  }
+
+  if(closeButton){
+    closeButton.addEventListener(
+      "click",
+      function(){
+        setDrawer(false);
+      }
+    );
+  }
+
+  if(backdrop){
+    backdrop.addEventListener(
+      "click",
+      function(){
+        setDrawer(false);
+      }
+    );
+  }
+
+  document
+    .querySelectorAll(".login-drawer-links a")
+    .forEach(
+      function(link){
+        link.addEventListener(
+          "click",
+          function(){
+            setDrawer(false);
+          }
+        );
+      }
+    );
+
+  document.addEventListener(
+    "keydown",
+    function(event){
+      if(event.key === "Escape"){
+        setDrawer(false);
+      }
+    }
+  );
+
+})();
 </script>
 
 <script src="form-ux.js?v=20260928-formux-v1"></script>
