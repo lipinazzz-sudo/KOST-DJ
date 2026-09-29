@@ -215,12 +215,61 @@
   }
 
   Array.from(bottom.querySelectorAll("a")).forEach(function(a){
+
     const href = a.getAttribute("href") || "";
+    const label = String(a.textContent || "")
+      .replace(/\s+/g," ")
+      .trim()
+      .toLowerCase();
+
+    let active = false;
 
     if(
-      href.indexOf(file)>=0 &&
-      file!=="aktivasi.html"
+      !isTenant &&
+      file === "aktivasi.html" &&
+      label === "daftar"
     ){
+      active = true;
+    }
+
+    if(
+      isTenant &&
+      file === "portal.html" &&
+      label === "portal"
+    ){
+      active = true;
+    }
+
+    if(
+      isTenant &&
+      file === "pembayaran.html" &&
+      label === "bayar"
+    ){
+      active = true;
+    }
+
+    if(
+      isTenant &&
+      [
+        "maintenance.html",
+        "checkinout.html",
+        "cafe.html",
+        "laundry.html"
+      ].includes(file) &&
+      label === "layanan"
+    ){
+      active = true;
+    }
+
+    if(
+      isTenant &&
+      file === "ganti-password.html" &&
+      label === "akun"
+    ){
+      active = true;
+    }
+
+    if(active){
       a.classList.add("is-active");
     }
   });
