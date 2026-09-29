@@ -330,4 +330,104 @@
     }
   });
 
+
+  /* ==========================================================
+     MOBILE FILE CONTROL
+     Keep the native input for existing page logic, but present
+     a compact mobile-friendly "Ambil Foto" control.
+     ========================================================== */
+
+  function enhanceMobileFileInputs(){
+
+    const inputs =
+      document.querySelectorAll(
+        'input[type="file"]'
+      );
+
+    inputs.forEach(function(input){
+
+      if(
+        input.closest(".mobile-file-control")
+      ){
+        return;
+      }
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "mobile-file-control";
+
+      const button =
+        document.createElement("span");
+
+      button.className =
+        "mobile-file-button";
+
+      button.textContent =
+        "Ambil Foto";
+
+      const name =
+        document.createElement("span");
+
+      name.className =
+        "mobile-file-name";
+
+      name.textContent =
+        "Belum ada foto dipilih";
+
+      const parent =
+        input.parentNode;
+
+      if(!parent) return;
+
+      parent.insertBefore(
+        wrapper,
+        input
+      );
+
+      wrapper.appendChild(
+        button
+      );
+
+      wrapper.appendChild(
+        name
+      );
+
+      wrapper.appendChild(
+        input
+      );
+
+      function refreshName(){
+
+        const file =
+          input.files &&
+          input.files[0];
+
+        name.textContent =
+          file
+            ? file.name
+            : "Belum ada foto dipilih";
+
+        button.textContent =
+          file
+            ? "Ganti Foto"
+            : "Ambil Foto";
+
+      }
+
+      input.addEventListener(
+        "change",
+        refreshName
+      );
+
+      refreshName();
+
+    });
+
+  }
+
+  enhanceMobileFileInputs();
+
+
 })();
