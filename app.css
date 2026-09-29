@@ -6342,3 +6342,393 @@ body[data-page="pendaftaran"] .registration-bottom-nav{
   }
 
 }
+
+
+
+/* ============================================================
+   LOGIN — MOBILE-FIRST PILOT
+   Existing authentication logic unchanged.
+   ============================================================ */
+
+body[data-page="login"] .nav-inner{
+  min-height:86px;
+}
+
+body[data-page="login"] .brand{
+  font-size:16px;
+  letter-spacing:.07em;
+  gap:13px;
+}
+
+body[data-page="login"] .brand-mark{
+  width:50px;
+  height:50px;
+  border-radius:15px;
+  background-color:#fff;
+  background-image:
+    url("https://lipinazzz-sudo.github.io/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("/KOST-DJ/assets/dj-family-kost-logo.png"),
+    url("./assets/dj-family-kost-logo.png");
+  background-position:center,center,center;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  background-size:38px 38px,38px 38px,38px 38px;
+}
+
+body[data-page="login"] .login-shell{
+  max-width:680px;
+}
+
+body[data-page="login"] .login-head{
+  margin-bottom:24px;
+}
+
+body[data-page="login"] .form-card{
+  max-width:620px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+body[data-page="login"] .mobile-login-kicker,
+body[data-page="login"] .mobile-login-note,
+body[data-page="login"] .login-menu-toggle,
+body[data-page="login"] .login-drawer,
+body[data-page="login"] .login-drawer-backdrop,
+body[data-page="login"] .login-bottom-nav{
+  display:none;
+}
+
+@media(max-width:800px){
+
+  body[data-page="login"] .nav{
+    background:var(--lux-navy);
+    border-bottom-color:rgba(255,255,255,.08);
+    box-shadow:0 10px 28px rgba(0,0,0,.18);
+  }
+
+  body[data-page="login"] .nav-inner{
+    min-height:70px;
+    padding:12px 16px;
+  }
+
+  body[data-page="login"] .brand{
+    color:#fff;
+    font-size:13px;
+  }
+
+  body[data-page="login"] .brand-mark{
+    width:44px;
+    height:44px;
+    background-size:33px 33px,33px 33px,33px 33px;
+    border-color:rgba(255,255,255,.16);
+  }
+
+  body[data-page="login"] .nav-links{
+    display:none;
+  }
+
+  body[data-page="login"] .login-menu-toggle{
+    display:flex;
+    width:42px;
+    height:42px;
+    margin-left:auto;
+    padding:0;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:5px;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:13px;
+    background:rgba(255,255,255,.06);
+  }
+
+  body[data-page="login"] .login-menu-toggle span{
+    display:block;
+    width:20px;
+    height:2px;
+    border-radius:999px;
+    background:#fff;
+  }
+
+  body[data-page="login"] .login-drawer-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:190;
+    display:block;
+    background:rgba(3,8,18,.56);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s ease;
+  }
+
+  body[data-page="login"] .login-drawer-backdrop.is-open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  body[data-page="login"] .login-drawer{
+    position:fixed;
+    inset:0 0 0 auto;
+    z-index:200;
+    width:min(88vw,360px);
+    display:block;
+    padding:18px;
+    overflow:auto;
+    color:#fff;
+    background:
+      radial-gradient(circle at 90% 4%,rgba(201,151,74,.12),transparent 30%),
+      linear-gradient(180deg,#0b1428,#111d35);
+    box-shadow:-20px 0 55px rgba(0,0,0,.24);
+    transform:translateX(102%);
+    transition:transform .24s ease;
+  }
+
+  body[data-page="login"] .login-drawer.is-open{
+    transform:translateX(0);
+  }
+
+  body[data-page="login"] .login-drawer-head{
+    min-height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,255,255,.10);
+  }
+
+  body[data-page="login"] .login-drawer-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+    letter-spacing:.07em;
+  }
+
+  body[data-page="login"] .login-drawer-brand .brand-mark{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    background-size:29px 29px,29px 29px,29px 29px;
+  }
+
+  body[data-page="login"] .login-drawer-close{
+    width:40px;
+    height:40px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    font-size:28px;
+    line-height:1;
+  }
+
+  body[data-page="login"] .login-drawer-links{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding-top:18px;
+  }
+
+  body[data-page="login"] .login-drawer-links a{
+    min-height:48px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:0 14px;
+    border-radius:13px;
+    color:rgba(255,255,255,.88);
+    font-size:14px;
+    font-weight:800;
+  }
+
+  body[data-page="login"] .login-drawer-links a span{
+    width:22px;
+    text-align:center;
+    color:#e1b970;
+    font-size:17px;
+  }
+
+  body[data-page="login"] .login-drawer-links a.is-active{
+    color:#fff;
+    background:rgba(255,255,255,.09);
+  }
+
+  body[data-page="login"] .login-bottom-nav{
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    z-index:150;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+    padding:6px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    background:rgba(10,18,36,.95);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:0 18px 40px rgba(0,0,0,.23);
+  }
+
+  body[data-page="login"] .login-bottom-nav a{
+    min-height:52px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    border-radius:13px;
+    color:rgba(255,255,255,.68);
+    font-size:10px;
+    font-weight:850;
+  }
+
+  body[data-page="login"] .login-bottom-nav a span{
+    color:#e3bb74;
+    font-size:18px;
+    line-height:1;
+  }
+
+  body[data-page="login"] .login-bottom-nav a.is-active{
+    color:#fff;
+    background:rgba(255,255,255,.09);
+  }
+
+  body[data-page="login"] .section{
+    padding:36px 0 106px;
+  }
+
+  body[data-page="login"] .container{
+    width:calc(100% - 20px);
+    padding:0;
+  }
+
+  body[data-page="login"] .mobile-login-kicker{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:#b47f2f;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.17em;
+    text-transform:uppercase;
+  }
+
+  body[data-page="login"] .mobile-login-kicker span{
+    width:30px;
+    height:30px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#f7ead4;
+    color:#805819;
+    font-size:10px;
+    letter-spacing:0;
+  }
+
+  body[data-page="login"] .mobile-login-note{
+    display:block;
+    margin:12px 0 16px;
+    padding:11px 13px;
+    border:1px solid #e1e7ee;
+    border-left:4px solid var(--lux-gold);
+    border-radius:13px;
+    background:#fff;
+    color:#68758a;
+    font-size:11px;
+    line-height:1.5;
+  }
+
+  body[data-page="login"] .back{
+    margin-bottom:14px;
+    font-size:12px;
+  }
+
+  body[data-page="login"] .login-head{
+    margin-bottom:18px;
+    text-align:left;
+  }
+
+  body[data-page="login"] .eyebrow{
+    font-size:10px;
+  }
+
+  body[data-page="login"] h1{
+    font-size:clamp(36px,10.5vw,50px);
+    line-height:1.03;
+    margin:9px 0 12px;
+  }
+
+  body[data-page="login"] .lead{
+    font-size:14px;
+    line-height:1.65;
+  }
+
+  body[data-page="login"] .form-card{
+    max-width:none;
+    padding:17px !important;
+    border-radius:20px;
+    box-shadow:0 18px 44px rgba(16,24,45,.09);
+  }
+
+  body[data-page="login"] .field + .field{
+    margin-top:17px;
+  }
+
+  body[data-page="login"] label{
+    font-size:12px;
+  }
+
+  body[data-page="login"] input{
+    min-height:48px;
+    padding:12px 13px;
+    border-radius:13px;
+    font-size:16px;
+  }
+
+  body[data-page="login"] .action-stack{
+    margin-top:20px;
+  }
+
+  body[data-page="login"] .action-stack .btn{
+    min-height:50px;
+    font-size:15px;
+  }
+
+  body[data-page="login"] .activation-help{
+    font-size:10.5px;
+    line-height:1.55;
+  }
+
+  body[data-page="login"] .form-note{
+    margin-top:16px;
+    padding:13px;
+    font-size:11px;
+    line-height:1.55;
+  }
+
+  body[data-page="login"] .footer{
+    padding:30px 0 96px;
+  }
+
+  body.login-menu-open{
+    overflow:hidden;
+  }
+
+}
+
+@media(max-width:430px){
+
+  body[data-page="login"] .login-bottom-nav{
+    left:7px;
+    right:7px;
+    bottom:7px;
+  }
+
+  body[data-page="login"] .login-bottom-nav a{
+    min-height:49px;
+    font-size:9px;
+  }
+
+}
