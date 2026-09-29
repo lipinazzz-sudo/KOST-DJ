@@ -619,3 +619,244 @@
   }
 
 }
+
+
+/* ============================================================
+   MOBILE FORM POLISH — iOS / SMALL SCREENS
+   ============================================================ */
+
+@media(max-width:800px){
+
+  /* Keep every form control strictly inside its card.
+     iOS Safari has had width-calculation issues on date/month
+     inputs when padding is applied. */
+  body.mobile-ui-page .field,
+  body.mobile-ui-page .field.full{
+    min-width:0;
+    max-width:100%;
+  }
+
+  body.mobile-ui-page .field input,
+  body.mobile-ui-page .field select,
+  body.mobile-ui-page .field textarea{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+  }
+
+  body.mobile-ui-page .field input[type="date"],
+  body.mobile-ui-page .field input[type="month"],
+  body.mobile-ui-page .field input[type="datetime-local"]{
+    display:block;
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    height:54px;
+    min-height:54px;
+    padding:0 14px;
+    overflow:hidden;
+    text-align:left;
+    -webkit-appearance:none;
+    appearance:none;
+    border-radius:14px;
+    background:#fff;
+    color:#17213b;
+    font-size:16px;
+    line-height:54px;
+  }
+
+  body.mobile-ui-page .field input[type="date"]::-webkit-date-and-time-value,
+  body.mobile-ui-page .field input[type="month"]::-webkit-date-and-time-value,
+  body.mobile-ui-page .field input[type="datetime-local"]::-webkit-date-and-time-value{
+    height:1.5em;
+    text-align:left;
+  }
+
+  /* Make form cards feel like deliberate sections rather than
+     one long plain sheet. */
+  body.mobile-ui-page form.card,
+  body.mobile-ui-page .payment-card,
+  body.mobile-ui-page .maintenance-card{
+    position:relative;
+    overflow:hidden;
+    border:1px solid #e3e7ee;
+    box-shadow:0 14px 36px rgba(16,24,45,.075);
+  }
+
+  body.mobile-ui-page form.card::before,
+  body.mobile-ui-page .payment-card::before,
+  body.mobile-ui-page .maintenance-card::before{
+    content:"";
+    display:block;
+    height:4px;
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    background:linear-gradient(90deg,#c9974a 0%,#e5c98e 48%,rgba(229,201,142,0) 100%);
+  }
+
+  body.mobile-ui-page .field label{
+    color:#344054;
+    font-size:13px;
+    line-height:1.35;
+    letter-spacing:.005em;
+  }
+
+  body.mobile-ui-page .field + .field{
+    margin-top:0;
+  }
+
+  /* Compact native file control. The real input remains functional;
+     mobile-ui.js adds the visual button + filename row. */
+  body.mobile-ui-page .mobile-file-control{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:52px;
+    padding:6px;
+    border:1px dashed #c9d1dd;
+    border-radius:15px;
+    background:linear-gradient(180deg,#fbfcfe,#f5f7fa);
+    box-sizing:border-box;
+    overflow:hidden;
+  }
+
+  body.mobile-ui-page .mobile-file-button{
+    flex:0 0 auto;
+    min-height:40px;
+    padding:0 14px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    background:#10182d;
+    color:#fff;
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.01em;
+    box-shadow:0 6px 14px rgba(16,24,45,.13);
+  }
+
+  body.mobile-ui-page .mobile-file-name{
+    min-width:0;
+    flex:1;
+    color:#667085;
+    font-size:12px;
+    line-height:1.35;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  body.mobile-ui-page .mobile-file-control > input[type="file"]{
+    position:absolute !important;
+    inset:0 !important;
+    z-index:5;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    opacity:0 !important;
+    cursor:pointer;
+  }
+
+  body.mobile-ui-page .photo-box{
+    padding:10px;
+    border-radius:16px;
+    background:linear-gradient(180deg,#fbfcfe,#f7f8fa);
+  }
+
+  body.mobile-ui-page .photo-box .help{
+    margin:9px 4px 2px;
+    font-size:11px;
+    line-height:1.5;
+  }
+
+  body.mobile-ui-page .preview{
+    margin-top:10px;
+  }
+
+  body.mobile-ui-page .preview img,
+  body.mobile-ui-page .preview-image{
+    max-height:220px;
+    border-radius:14px;
+  }
+
+  /* Check-in / check-out: tabs and forms become more intentional. */
+  body.mobile-ui-checkin .form-section.active{
+    animation:mobileSectionIn .18s ease-out;
+  }
+
+  body.mobile-ui-checkin .form-section .card{
+    margin-top:14px !important;
+  }
+
+  body.mobile-ui-checkin .note{
+    padding:14px 15px;
+    border-left:4px solid #c9974a;
+    background:linear-gradient(135deg,#fffdf8,#f7f8fa);
+    box-shadow:0 8px 22px rgba(16,24,45,.055);
+  }
+
+  @keyframes mobileSectionIn{
+    from{opacity:.65;transform:translateY(4px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  /* Payment / maintenance hierarchy */
+  body.mobile-ui-payment .summary-card,
+  body.mobile-ui-payment .billing-card,
+  body.mobile-ui-maintenance .history-card{
+    box-shadow:0 10px 28px rgba(16,24,45,.055);
+  }
+
+  body.mobile-ui-payment .summary-card{
+    padding:16px;
+  }
+
+  body.mobile-ui-payment .billing-item{
+    padding:13px;
+  }
+
+  body.mobile-ui-payment .billing-item strong{
+    font-size:16px;
+  }
+
+  body.mobile-ui-payment .payment-card{
+    padding:18px !important;
+  }
+
+  body.mobile-ui-maintenance .maintenance-card{
+    padding:18px !important;
+  }
+
+}
+
+@media(max-width:430px){
+
+  body.mobile-ui-page .field input[type="date"],
+  body.mobile-ui-page .field input[type="month"],
+  body.mobile-ui-page .field input[type="datetime-local"]{
+    height:52px;
+    min-height:52px;
+    line-height:52px;
+    padding-left:13px;
+    padding-right:10px;
+  }
+
+  body.mobile-ui-page .mobile-file-button{
+    min-height:38px;
+    padding:0 12px;
+    font-size:11px;
+  }
+
+  body.mobile-ui-page .mobile-file-name{
+    font-size:11px;
+  }
+
+}
