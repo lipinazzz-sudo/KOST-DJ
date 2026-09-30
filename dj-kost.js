@@ -2221,6 +2221,255 @@ document.addEventListener(
 
 
 /* ============================================================
+   TENANT COMPLETENESS STATUS
+============================================================ */
+
+function renderTenantCompleteness(
+  completeness
+) {
+
+  const list =
+    document.getElementById(
+      'tenantCompletenessList'
+    );
+
+  const count =
+    document.getElementById(
+      'tenantCompletenessCount'
+    );
+
+  const summaryIcon =
+    document.getElementById(
+      'tenantStatusSummaryIcon'
+    );
+
+  const summaryBadge =
+    document.getElementById(
+      'tenantStatusSummaryBadge'
+    );
+
+
+  if (
+    !list
+  ) {
+
+    return;
+
+  }
+
+
+  const items =
+    completeness &&
+    Array.isArray(
+      completeness.items
+    )
+      ? completeness.items
+      : [];
+
+
+  const total =
+    completeness &&
+    Number.isFinite(
+      Number(
+        completeness.total
+      )
+    )
+      ? Number(
+          completeness.total
+        )
+      : items.length;
+
+
+  const complete =
+    completeness &&
+    Number.isFinite(
+      Number(
+        completeness.complete
+      )
+    )
+      ? Number(
+          completeness.complete
+        )
+      : items.filter(
+          function(item) {
+
+            return (
+              item &&
+              item.ok === true
+            );
+
+          }
+        ).length;
+
+
+  const allComplete =
+    total > 0 &&
+    complete === total;
+
+
+  if (
+    count
+  ) {
+
+    count.textContent =
+      complete +
+      ' / ' +
+      total +
+      ' lengkap';
+
+    count.className =
+      allComplete
+        ? ''
+        : 'is-incomplete';
+
+  }
+
+
+  if (
+    summaryIcon
+  ) {
+
+    summaryIcon.textContent =
+      allComplete
+        ? '✓'
+        : '!';
+
+    summaryIcon.classList.toggle(
+      'is-incomplete',
+      !allComplete
+    );
+
+  }
+
+
+  if (
+    summaryBadge
+  ) {
+
+    summaryBadge.textContent =
+      allComplete
+        ? 'LENGKAP'
+        : 'PERLU DILENGKAPI';
+
+    summaryBadge.classList.toggle(
+      'is-incomplete',
+      !allComplete
+    );
+
+  }
+
+
+  if (
+    !items.length
+  ) {
+
+    list.innerHTML =
+      '<div class="tenant-status-row">' +
+
+      '<span class="tenant-status-label">' +
+      'Status kelengkapan belum tersedia.' +
+      '</span>' +
+
+      '<span class="tenant-status-check is-incomplete">' +
+      '<i>!</i>' +
+      'Periksa kembali' +
+      '</span>' +
+
+      '</div>';
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    items
+      .map(
+        function(item) {
+
+          const ok =
+            item &&
+            item.ok === true;
+
+          const missing =
+            Array.isArray(
+              item &&
+              item.missingFields
+            )
+              ? item.missingFields
+              : [];
+
+          const missingText =
+            missing.length
+              ? (
+                  '<small class="tenant-status-missing">' +
+                  djEscape(
+                    'Belum ada: ' +
+                    missing.join(', ')
+                  ) +
+                  '</small>'
+                )
+              : '';
+
+          return (
+
+            '<div class="tenant-status-row">' +
+
+              '<span class="tenant-status-label-wrap">' +
+
+                '<span class="tenant-status-label">' +
+                  djEscape(
+                    item.label ||
+                    'Data'
+                  ) +
+                '</span>' +
+
+                missingText +
+
+              '</span>' +
+
+              '<span class="tenant-status-check ' +
+                (
+                  ok
+                    ? 'is-ok'
+                    : 'is-incomplete'
+                ) +
+              '">' +
+
+                '<i>' +
+                  (
+                    ok
+                      ? '✓'
+                      : '!'
+                  ) +
+                '</i>' +
+
+                (
+                  ok
+                    ? djEscape(
+                        item.okText ||
+                        'Lengkap'
+                      )
+                    : djEscape(
+                        item.missingText ||
+                        'Belum lengkap'
+                      )
+                ) +
+
+              '</span>' +
+
+            '</div>'
+
+          );
+
+        }
+      )
+      .join('');
+
+}
+
+
+/* ============================================================
    PORTAL
 ============================================================ */
 
@@ -2294,6 +2543,11 @@ async function initPortal() {
     const portal =
       data.data ||
       {};
+
+
+    renderTenantCompleteness(
+      portal.completeness
+    );
 
 
     if (
