@@ -6732,3 +6732,75 @@ body[data-page="login"] .login-bottom-nav{
   }
 
 }
+
+
+/* ============================================================
+   PUBLIC WHATSAPP CONTACT
+   ============================================================ */
+
+.dj-public-whatsapp{
+  position:fixed;
+  right:24px;
+  bottom:calc(24px + env(safe-area-inset-bottom));
+  z-index:9999;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:50px;
+  padding:0 16px 0 13px;
+  border-radius:999px;
+  background:#25D366;
+  color:#fff;
+  text-decoration:none;
+  box-shadow:0 10px 28px rgba(0,0,0,.18);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.01em;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.dj-public-whatsapp:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 32px rgba(0,0,0,.22);
+  filter:brightness(.97);
+}
+
+.dj-public-whatsapp:focus-visible{
+  outline:3px solid rgba(37,211,102,.35);
+  outline-offset:3px;
+}
+
+.dj-public-whatsapp-icon{
+  width:26px;
+  height:26px;
+  display:grid;
+  place-items:center;
+  flex:0 0 26px;
+}
+
+.dj-public-whatsapp-icon svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.dj-public-whatsapp-label{
+  white-space:nowrap;
+}
+
+@media (max-width:640px){
+  .dj-public-whatsapp{
+    right:16px;
+    bottom:calc(86px + env(safe-area-inset-bottom));
+    width:54px;
+    height:54px;
+    min-height:54px;
+    padding:0;
+    border-radius:50%;
+    justify-content:center;
+  }
+
+  .dj-public-whatsapp-label{
+    display:none;
+  }
+}
