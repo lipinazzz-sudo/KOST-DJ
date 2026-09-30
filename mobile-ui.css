@@ -2023,3 +2023,60 @@
   }
 
 }
+
+
+/* ============================================================
+   TENANT COMPLETENESS — LIVE STATUS
+   ============================================================ */
+
+.tenant-status-summary-icon.is-incomplete{
+  background:#fff4e6;
+  border-color:#f0d2a1;
+  color:#a66b16;
+}
+
+.tenant-status-summary-badge.is-incomplete{
+  background:#fff4e6;
+  border-color:#f0d2a1;
+  color:#a66b16;
+}
+
+.tenant-status-section-title em.is-incomplete{
+  color:#a66b16;
+}
+
+.tenant-status-label-wrap{
+  min-width:0;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.tenant-status-missing{
+  color:#a66b16;
+  font-size:8.5px;
+  line-height:1.3;
+}
+
+.tenant-status-check.is-ok{
+  color:#178553;
+}
+
+.tenant-status-check.is-incomplete{
+  color:#a66b16;
+}
+
+.tenant-status-check.is-incomplete i{
+  background:#fff4e6;
+  border-color:#f0d2a1;
+  color:#a66b16;
+}
+
+@media(max-width:430px){
+
+  .tenant-status-missing{
+    font-size:8px;
+  }
+
+}
