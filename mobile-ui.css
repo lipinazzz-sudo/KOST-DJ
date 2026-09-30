@@ -1945,3 +1945,81 @@
   }
 
 }
+
+
+/* ============================================================
+   MOBILE DATE FIELDS — FINAL IOS WIDTH FIX
+   Only affects payment / maintenance date controls.
+   ============================================================ */
+
+@media(max-width:800px){
+
+  body.mobile-ui-payment .field:has(#period),
+  body.mobile-ui-payment .field:has(#paymentDate),
+  body.mobile-ui-maintenance .field:has(#comfortableTime){
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+
+  body.mobile-ui-payment #period,
+  body.mobile-ui-payment #paymentDate,
+  body.mobile-ui-maintenance #comfortableTime{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+
+    /* Keep the visible value comfortably inside the card. */
+    padding-left:10px !important;
+    padding-right:10px !important;
+
+    font-size:14px !important;
+    line-height:1.2 !important;
+    letter-spacing:-0.02em !important;
+
+    overflow:hidden !important;
+    text-overflow:clip !important;
+    white-space:nowrap !important;
+  }
+
+  body.mobile-ui-payment #period::-webkit-date-and-time-value,
+  body.mobile-ui-payment #paymentDate::-webkit-date-and-time-value,
+  body.mobile-ui-maintenance #comfortableTime::-webkit-date-and-time-value{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+  }
+
+}
+
+@media(max-width:430px){
+
+  body.mobile-ui-payment #period,
+  body.mobile-ui-payment #paymentDate,
+  body.mobile-ui-maintenance #comfortableTime{
+    height:50px !important;
+    min-height:50px !important;
+    padding-left:8px !important;
+    padding-right:8px !important;
+    font-size:13px !important;
+  }
+
+  body.mobile-ui-payment #period::-webkit-date-and-time-value,
+  body.mobile-ui-payment #paymentDate::-webkit-date-and-time-value,
+  body.mobile-ui-maintenance #comfortableTime::-webkit-date-and-time-value{
+    font-size:13px !important;
+    text-align:center !important;
+  }
+
+}
