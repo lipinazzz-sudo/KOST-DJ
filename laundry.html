@@ -19,6 +19,236 @@
 
   <script src="tenant-guard.js?v=20260928-guard-v1"></script>
   <link rel="stylesheet" href="mobile-ui.css?v=20260929-mobile-v1">
+
+  <style>
+
+    .laundry-page{
+      padding:42px 0 90px;
+      min-height:calc(100vh - 150px);
+      background:#f8fafc;
+    }
+
+    .laundry-header{
+      margin-bottom:24px;
+    }
+
+    .laundry-title{
+      margin:0;
+      font-size:clamp(30px,5vw,46px);
+      line-height:1.05;
+    }
+
+    .laundry-subtitle{
+      margin:10px 0 0;
+      color:#667085;
+      line-height:1.7;
+      max-width:760px;
+    }
+
+    .laundry-tenant{
+      display:inline-flex;
+      margin-top:16px;
+      padding:9px 13px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #e4e7ec;
+      color:#344054;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .laundry-service-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+      margin-top:24px;
+    }
+
+    .laundry-service{
+      background:#fff;
+      border:1px solid #e2e6ee;
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 8px 24px rgba(16,24,40,.04);
+    }
+
+    .laundry-service h2{
+      margin:0;
+      font-size:19px;
+    }
+
+    .laundry-service-price{
+      margin-top:9px;
+      font-size:15px;
+      font-weight:900;
+      color:#111827;
+    }
+
+    .laundry-service-description{
+      margin-top:8px;
+      min-height:42px;
+      color:#667085;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .laundry-service button{
+      width:100%;
+      margin-top:17px;
+      min-height:45px;
+      border:0;
+      border-radius:12px;
+      background:#111827;
+      color:#fff;
+      font:inherit;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .laundry-form-card{
+      display:none;
+      margin-top:24px;
+      max-width:820px;
+    }
+
+    .laundry-form-card.show{
+      display:block;
+    }
+
+    .laundry-selected{
+      padding:14px 15px;
+      border:1px solid #e2e6ee;
+      border-radius:13px;
+      background:#f8fafc;
+      margin-bottom:18px;
+    }
+
+    .laundry-selected strong{
+      display:block;
+      font-size:15px;
+    }
+
+    .laundry-selected span{
+      display:block;
+      margin-top:4px;
+      color:#667085;
+      font-size:12px;
+    }
+
+    .laundry-form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:15px;
+    }
+
+    .laundry-form-field{
+      margin-bottom:2px;
+    }
+
+    .laundry-form-field.full{
+      grid-column:1 / -1;
+    }
+
+    .laundry-form-field label{
+      display:block;
+      margin-bottom:7px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .laundry-form-field input,
+    .laundry-form-field textarea{
+      width:100%;
+      box-sizing:border-box;
+      border:1px solid #d9dee8;
+      border-radius:11px;
+      padding:12px 13px;
+      font:inherit;
+      outline:none;
+      background:#fff;
+      color:#17213a;
+    }
+
+    .laundry-form-field input[readonly]{
+      background:#f4f6fa;
+      color:#667085;
+    }
+
+    .laundry-form-field textarea{
+      min-height:105px;
+      resize:vertical;
+    }
+
+    .laundry-actions{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .laundry-actions button{
+      min-height:46px;
+      border-radius:11px;
+      padding:0 16px;
+      border:0;
+      font:inherit;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .laundry-submit{
+      background:#111827;
+      color:#fff;
+      flex:1;
+    }
+
+    .laundry-cancel{
+      background:#edf1f6;
+      color:#344054;
+    }
+
+    .laundry-result{
+      display:none;
+      margin-top:16px;
+      padding:13px 14px;
+      border-radius:12px;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .laundry-result.success{
+      display:block;
+      background:#ecfdf3;
+      border:1px solid #b7ebc6;
+      color:#027a48;
+    }
+
+    .laundry-result.error{
+      display:block;
+      background:#fff1f2;
+      border:1px solid #fecdd3;
+      color:#b42318;
+    }
+
+    @media(max-width:850px){
+      .laundry-service-grid{
+        grid-template-columns:1fr;
+      }
+
+      .laundry-form-grid{
+        grid-template-columns:1fr;
+      }
+
+      .laundry-form-field.full{
+        grid-column:auto;
+      }
+
+      .laundry-actions{
+        flex-direction:column;
+      }
+    }
+
+  </style>
+
 </head>
 
 
@@ -62,7 +292,10 @@
         Cafe
       </a>
 
-      <a href="laundry.html">
+      <a
+        href="laundry.html"
+        aria-current="page"
+      >
         Laundry
       </a>
 
@@ -81,43 +314,235 @@
 </header>
 
 
-<main class="soon">
+<main class="laundry-page">
 
   <div class="container">
 
-    <div class="card">
+    <section class="laundry-header">
 
       <div class="eyebrow">
         TENANT SERVICE · LAUNDRY
       </div>
 
-
-      <h1>
-        Coming Soon
+      <h1 class="laundry-title">
+        Laundry
       </h1>
 
+      <p class="laundry-subtitle">
+        Pilih layanan laundry. Data nama tenant dan nomor kamar
+        diambil otomatis dari akun yang sedang login.
+      </p>
 
-      <p class="lead">
+      <div
+        class="laundry-tenant"
+        id="laundryTenant"
+      >
+        Memuat tenant...
+      </div>
 
-        Layanan Laundry
-        DJ Family Kost
-        sedang dipersiapkan.
+    </section>
 
+
+    <section
+      class="laundry-service-grid"
+      aria-label="Pilihan layanan laundry"
+    >
+
+      <article class="laundry-service">
+
+        <h2>
+          Cuci
+        </h2>
+
+        <div class="laundry-service-price">
+          Harga per kg — belum ditentukan
+        </div>
+
+        <div class="laundry-service-description">
+          Pencucian pakaian tanpa layanan setrika.
+        </div>
+
+        <button
+          type="button"
+          data-service="Cuci"
+        >
+          Pilih
+        </button>
+
+      </article>
+
+
+      <article class="laundry-service">
+
+        <h2>
+          Cuci + Setrika
+        </h2>
+
+        <div class="laundry-service-price">
+          Harga per kg — belum ditentukan
+        </div>
+
+        <div class="laundry-service-description">
+          Pencucian dan penyetrikaan pakaian.
+        </div>
+
+        <button
+          type="button"
+          data-service="Cuci + Setrika"
+        >
+          Pilih
+        </button>
+
+      </article>
+
+
+      <article class="laundry-service">
+
+        <h2>
+          Setrika
+        </h2>
+
+        <div class="laundry-service-price">
+          Harga per kg — belum ditentukan
+        </div>
+
+        <div class="laundry-service-description">
+          Layanan setrika untuk pakaian yang sudah dicuci.
+        </div>
+
+        <button
+          type="button"
+          data-service="Setrika"
+        >
+          Pilih
+        </button>
+
+      </article>
+
+    </section>
+
+
+    <section
+      class="card laundry-form-card"
+      id="laundryFormCard"
+      style="padding:22px;"
+    >
+
+      <div class="eyebrow">
+        ORDER LAUNDRY
+      </div>
+
+      <h2 style="margin:0 0 8px;">
+        Detail Penjemputan
+      </h2>
+
+      <p
+        class="laundry-subtitle"
+        style="margin-top:0;"
+      >
+        Tenant dan kamar diambil otomatis dari sesi login.
       </p>
 
 
-      <div style="margin-top:25px">
-
-        <a
-          class="btn btn-primary"
-          href="portal.html"
-        >
-          Kembali ke Portal
-        </a>
-
+      <div
+        class="laundry-selected"
+        id="laundrySelected"
+      >
       </div>
 
-    </div>
+
+      <form id="laundryOrderForm">
+
+        <div class="laundry-form-grid">
+
+          <div class="laundry-form-field">
+
+            <label for="laundryTenantName">
+              Atas Nama
+            </label>
+
+            <input
+              id="laundryTenantName"
+              readonly
+            >
+
+          </div>
+
+
+          <div class="laundry-form-field">
+
+            <label for="laundryRoom">
+              No. Kamar
+            </label>
+
+            <input
+              id="laundryRoom"
+              readonly
+            >
+
+          </div>
+
+
+          <div class="laundry-form-field full">
+
+            <label for="laundryPickupLocation">
+              Lokasi Penjemputan Cucian
+            </label>
+
+            <input
+              id="laundryPickupLocation"
+              required
+              placeholder="Contoh: Depan kamar 203 / lobby lantai 2"
+            >
+
+          </div>
+
+
+          <div class="laundry-form-field full">
+
+            <label for="laundryNote">
+              Catatan
+            </label>
+
+            <textarea
+              id="laundryNote"
+              placeholder="Catatan tambahan untuk laundry."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+
+        <div class="laundry-actions">
+
+          <button
+            type="button"
+            class="laundry-cancel"
+            id="laundryCancel"
+          >
+            Batal
+          </button>
+
+          <button
+            type="submit"
+            class="laundry-submit"
+            id="laundrySubmit"
+          >
+            Kirim Pesanan
+          </button>
+
+        </div>
+
+
+        <div
+          id="laundryResult"
+          class="laundry-result"
+        ></div>
+
+      </form>
+
+    </section>
 
   </div>
 
@@ -128,9 +553,17 @@
 
   <div class="container footer-inner">
 
-    <strong>
-      DJ FAMILY KOST
-    </strong>
+    <div>
+      <strong>
+        DJ FAMILY KOST
+      </strong>
+
+      <br>
+
+      <small>
+        Hunian yang tertib, nyaman, dan terkelola.
+      </small>
+    </div>
 
     <small>
       © 2026 DJ Family Kost
@@ -141,8 +574,404 @@
 </footer>
 
 
-<script src="dj-kost.js"></script>
+<script>
 
-  <script src="mobile-ui.js?v=20260929-mobile-v1"></script>
+  const TENANT_API_URL =
+    "https://script.google.com/macros/s/AKfycbyZWhxliQiNuRYOjDTfgxcs-6SItWb1m7UD01-cC4E_6sU3p10mNKqmE6y0jPyqISKy_g/exec";
+
+
+  let selectedService = "";
+
+
+  function getSession(){
+
+    const raw =
+      sessionStorage.getItem(
+        "djTenantSession"
+      );
+
+    if(!raw){
+
+      window.location.replace(
+        "login.html?required=1"
+      );
+
+      return null;
+
+    }
+
+    try{
+
+      return JSON.parse(raw);
+
+    }catch(error){
+
+      sessionStorage.removeItem(
+        "djTenantSession"
+      );
+
+      window.location.replace(
+        "login.html?required=1"
+      );
+
+      return null;
+
+    }
+
+  }
+
+
+  function getTenantContext(){
+
+    const session =
+      getSession();
+
+    if(!session){
+      return null;
+    }
+
+    return {
+
+      tenantId:
+        session.tenantId ||
+        "",
+
+      tenantName:
+        session.nama ||
+        session.name ||
+        session.tenantName ||
+        "Tenant",
+
+      room:
+        session.kamar ||
+        session.room ||
+        session.noKamar ||
+        ""
+
+    };
+
+  }
+
+
+  const tenant =
+    getTenantContext();
+
+
+  if(tenant){
+
+    document
+      .getElementById("laundryTenant")
+      .textContent =
+        tenant.tenantName +
+        " · Kamar " +
+        tenant.room;
+
+    document
+      .getElementById("laundryTenantName")
+      .value =
+        tenant.tenantName;
+
+    document
+      .getElementById("laundryRoom")
+      .value =
+        tenant.room;
+
+  }
+
+
+  function openLaundryForm(service){
+
+    selectedService =
+      String(service || "").trim();
+
+    document
+      .getElementById("laundrySelected")
+      .innerHTML =
+        "<strong>" +
+        selectedService +
+        "</strong>" +
+        "<span>Order akan dikirim ke Master setelah formulir dikirim.</span>";
+
+    document
+      .getElementById("laundryFormCard")
+      .classList.add("show");
+
+    document
+      .getElementById("laundryPickupLocation")
+      .focus();
+
+    window.scrollTo({
+      top:
+        document
+          .getElementById("laundryFormCard")
+          .offsetTop - 20,
+      behavior:"smooth"
+    });
+
+  }
+
+
+  function closeLaundryForm(){
+
+    selectedService =
+      "";
+
+    document
+      .getElementById("laundryFormCard")
+      .classList.remove("show");
+
+    document
+      .getElementById("laundryPickupLocation")
+      .value =
+        "";
+
+    document
+      .getElementById("laundryNote")
+      .value =
+        "";
+
+    const result =
+      document
+        .getElementById("laundryResult");
+
+    result.className =
+      "laundry-result";
+
+    result.textContent =
+      "";
+
+  }
+
+
+  async function submitLaundryOrder(event){
+
+    event.preventDefault();
+
+    const session =
+      getSession();
+
+    if(!session || !selectedService){
+      return;
+    }
+
+    const pickupLocation =
+      document
+        .getElementById("laundryPickupLocation")
+        .value
+        .trim();
+
+    const note =
+      document
+        .getElementById("laundryNote")
+        .value
+        .trim();
+
+    const submit =
+      document
+        .getElementById("laundrySubmit");
+
+    const resultBox =
+      document
+        .getElementById("laundryResult");
+
+    if(!pickupLocation){
+
+      resultBox.className =
+        "laundry-result error";
+
+      resultBox.textContent =
+        "Lokasi penjemputan wajib diisi.";
+
+      return;
+
+    }
+
+    submit.disabled =
+      true;
+
+    submit.textContent =
+      "Mengirim...";
+
+    resultBox.className =
+      "laundry-result";
+
+    resultBox.textContent =
+      "";
+
+    try{
+
+      const response =
+        await fetch(
+          TENANT_API_URL,
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
+            body:
+              JSON.stringify({
+                action:
+                  "submitLaundryOrder",
+                tenantId:
+                  session.tenantId,
+                sessionToken:
+                  session.sessionToken,
+                service:
+                  selectedService,
+                pickupLocation:
+                  pickupLocation,
+                note:
+                  note
+              })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if(
+        !data ||
+        data.ok !== true
+      ){
+
+        throw new Error(
+          data && data.error
+            ? data.error
+            : "Pesanan laundry gagal dikirim."
+        );
+
+      }
+
+      resultBox.className =
+        "laundry-result success";
+
+      resultBox.textContent =
+        (
+          data.data &&
+          data.data.message
+        ) ||
+        "Pesanan laundry berhasil dikirim ke Master.";
+
+      submit.textContent =
+        "Terkirim";
+
+      setTimeout(
+        closeLaundryForm,
+        1200
+      );
+
+    }catch(error){
+
+      resultBox.className =
+        "laundry-result error";
+
+      resultBox.textContent =
+        error.message ||
+        "Pesanan laundry gagal dikirim.";
+
+      submit.disabled =
+        false;
+
+      submit.textContent =
+        "Kirim Pesanan";
+
+    }
+
+  }
+
+
+  document
+    .querySelectorAll(
+      "[data-service]"
+    )
+    .forEach(function(button){
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          openLaundryForm(
+            button.getAttribute(
+              "data-service"
+            )
+          );
+
+        }
+      );
+
+    });
+
+
+  document
+    .getElementById("laundryCancel")
+    .addEventListener(
+      "click",
+      closeLaundryForm
+    );
+
+
+  document
+    .getElementById("laundryOrderForm")
+    .addEventListener(
+      "submit",
+      submitLaundryOrder
+    );
+
+
+  document
+    .getElementById("logoutTop")
+    .addEventListener(
+      "click",
+      async function(event){
+
+        event.preventDefault();
+
+        const session =
+          getSession();
+
+        if(session){
+
+          try{
+
+            await fetch(
+              TENANT_API_URL,
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "text/plain;charset=utf-8"
+                },
+                body:
+                  JSON.stringify({
+                    action:"logout",
+                    tenantId:
+                      session.tenantId,
+                    sessionToken:
+                      session.sessionToken
+                  })
+              }
+            );
+
+          }catch(error){}
+
+        }
+
+        sessionStorage.removeItem(
+          "djTenantSession"
+        );
+
+        window.location.href =
+          "login.html";
+
+      }
+    );
+
+</script>
+
+
+<script src="dj-kost.js"></script>
+<script src="mobile-ui.js?v=20260929-mobile-v1"></script>
+
 </body>
 </html>
