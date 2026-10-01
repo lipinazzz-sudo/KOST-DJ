@@ -5400,15 +5400,15 @@ async function loadMaintenance(){
                 '<td>' +
                 '<div class="actions">' +
 
-                '<button class="btn btn-success" onclick="sendMaintenanceWhatsApp(\\'' +
+                '<button class="btn btn-success" onclick="sendMaintenanceWhatsApp(\'' +
                 encodeURIComponent(item.id) +
-                '\\')">' +
+                '\')">' +
                 '💬 Kirim WA' +
                 '</button>' +
 
-                '<button class="btn btn-primary" onclick="finishMaintenance(\\'' +
+                '<button class="btn btn-primary" onclick="finishMaintenance(\'' +
                 encodeURIComponent(item.id) +
-                '\\')">' +
+                '\')">' +
                 'Selesai' +
                 '</button>' +
 
@@ -5503,9 +5503,9 @@ function finishMaintenance(encoded){
 
         '</div>' +
 
-        '<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="saveMaintenance(\\'' +
+        '<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="saveMaintenance(\'' +
         encodeURIComponent(id) +
-        '\\')">' +
+        '\')">' +
         'Tandai Selesai' +
         '</button>'
     );
@@ -6319,12 +6319,12 @@ async function loadLaundry(){
                 '<td><span class="badge badge-warn">TERKIRIM</span></td>' +
                 '<td>' +
                 '<div class="actions">' +
-                '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\\'' +
+                '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\'' +
                 encodeURIComponent(item.id) +
-                '\\')">💬 Kirim WA</button>' +
-                '<button class="btn btn-primary" onclick="completeLaundry(\\'' +
+                '\')">💬 Kirim WA</button>' +
+                '<button class="btn btn-primary" onclick="completeLaundry(\'' +
                 encodeURIComponent(item.id) +
-                '\\')">Selesai</button>' +
+                '\')">Selesai</button>' +
                 '</div>' +
                 '</td>' +
                 '</tr>'
@@ -6526,9 +6526,9 @@ function renderHistoryFilters(){
                             ? "active"
                             : ""
                     ) +
-                    '" onclick="setHistoryFilter(\\'' +
+                    '" onclick="setHistoryFilter(\'' +
                     encodeURIComponent(item[0]) +
-                    '\\')">' +
+                    '\')">' +
                     escapeHtml(item[1]) +
                     '</button>'
                 );
