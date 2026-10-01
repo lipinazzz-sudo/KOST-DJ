@@ -2956,6 +2956,24 @@ function renderAttention(){
             ? dashboardData.maintenance
             : []
     )
+    .filter(
+        function(item){
+
+            const status =
+                String(
+                    item && item.status ||
+                    "OPEN"
+                )
+                .trim()
+                .toUpperCase();
+
+            return (
+                status !== "SELESAI" &&
+                status !== "BATAL"
+            );
+
+        }
+    )
     .forEach(
         function(item){
 
@@ -2986,14 +3004,7 @@ function renderAttention(){
 
                 '<td>' +
 
-                '<span class="badge badge-warn">' +
-
-                escapeHtml(
-                    item.status ||
-                    "OPEN"
-                ) +
-
-                '</span>' +
+                '<span class="badge badge-warn">TERKIRIM</span>' +
 
                 '</td>' +
 
@@ -3011,7 +3022,6 @@ function renderAttention(){
 
         }
     );
-
 
     document
         .getElementById(
