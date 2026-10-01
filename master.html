@@ -3324,6 +3324,7 @@ async function loadTenants(){
                 '<th>WhatsApp</th>' +
                 '<th>Status</th>' +
                 '<th>Dokumen</th>' +
+                '<th>Data</th>' +
                 '<th>Aksi</th>' +
 
                 '</tr>' +
@@ -3417,6 +3418,22 @@ async function loadTenants(){
 
                                 documentCount +
                                 ' file' +
+
+                                '</td>' +
+
+                                '<td>' +
+
+                                '<button class="btn btn-secondary" onclick="showTenantDataEditor(\'' +
+
+                                encodeURIComponent(
+                                    item.tenantId
+                                ) +
+
+                                '\')">' +
+
+                                'Kelola Data' +
+
+                                '</button>' +
 
                                 '</td>' +
 
@@ -3628,6 +3645,544 @@ function showTenantDocuments(
         '</div>'
 
     );
+
+}
+
+
+async function showTenantDataEditor(
+    encoded
+){
+
+    const tenantId =
+        decodeURIComponent(
+            encoded
+        );
+
+
+    try{
+
+        const data =
+            await api(
+                "masterTenantDetail",
+                {
+                    tenantId:
+                        tenantId
+                }
+            );
+
+
+        const fields =
+            Array.isArray(
+                data &&
+                data.fields
+            )
+                ? data.fields
+                : [];
+
+
+        const tenant =
+            data &&
+            data.tenant
+                ? data.tenant
+                : {};
+
+
+        if(!fields.length){
+
+            openModal(
+                "Data Tenant — " +
+                (
+                    tenant.name ||
+                    tenantId
+                ),
+
+                '<div class="detail-box">' +
+                '<strong>' +
+                escapeHtml(
+                    tenant.name ||
+                    "Tenant"
+                ) +
+                '</strong>' +
+                '<span class="small">' +
+                escapeHtml(
+                    tenantId
+                ) +
+                ' · Kamar ' +
+                escapeHtml(
+                    tenant.room ||
+                    "—"
+                ) +
+                '</span>' +
+                '</div>' +
+
+                '<div class="empty">' +
+                'Belum ada field data yang dapat dikelola.' +
+                '</div>'
+            );
+
+            return;
+
+        }
+
+
+        openModal(
+
+            "Kelola Data — " +
+            (
+                tenant.name ||
+                tenantId
+            ),
+
+            '<div class="detail-box">' +
+
+            '<strong>' +
+            escapeHtml(
+                tenant.name ||
+                "Tenant"
+            ) +
+            '</strong>' +
+
+            '<span class="small">' +
+            escapeHtml(
+                tenantId
+            ) +
+            ' · Kamar ' +
+            escapeHtml(
+                tenant.room ||
+                "—"
+            ) +
+            '</span>' +
+
+            '</div>' +
+
+            fields
+                .map(
+                    function(field){
+
+                        const status =
+                            String(
+                                field.status ||
+                                "LENGKAP"
+                            )
+                            .toUpperCase();
+
+                        const statusClass =
+                            status ===
+                            "PERLU DIPERBAIKI"
+                                ? "badge badge-warning"
+                                : status ===
+                                  "MENUNGGU VERIFIKASI"
+                                    ? "badge"
+                                    : "badge badge-ok";
+
+                        const action =
+                            field.pendingRevision
+                                ? (
+                                    '<div class="actions" style="margin-top:9px;">' +
+
+                                    '<button class="btn btn-primary" onclick="reviewTenantRevision(\'' +
+
+                                    encodeURIComponent(
+                                        field.pendingRevision.revisionId
+                                    ) +
+
+                                    '\')">' +
+
+                                    'Periksa Perubahan' +
+
+                                    '</button>' +
+
+                                    '</div>'
+                                  )
+                                : (
+                                    field.editableByTenant
+                                        ? (
+                                            '<div class="actions" style="margin-top:9px;">' +
+
+                                            '<button class="btn btn-secondary" onclick="requestTenantRevision(\'' +
+
+                                            encodeURIComponent(
+                                                tenantId
+                                            ) +
+
+                                            '\',\'' +
+
+                                            encodeURIComponent(
+                                                field.key
+                                            ) +
+
+                                            '\')">' +
+
+                                            'Minta Perbaikan' +
+
+                                            '</button>' +
+
+                                            '</div>'
+                                          )
+                                        : ""
+                                  );
+
+                        return (
+
+                            '<div class="detail-box" style="margin-bottom:10px;">' +
+
+                            '<strong>' +
+                            escapeHtml(
+                                field.label ||
+                                field.key
+                            ) +
+                            '</strong>' +
+
+                            '<div style="margin-top:5px;">' +
+                            escapeHtml(
+                                field.displayValue ||
+                                field.value ||
+                                "Belum diisi"
+                            ) +
+                            '</div>' +
+
+                            '<div style="margin-top:7px;">' +
+                            '<span class="' +
+                            statusClass +
+                            '">' +
+                            escapeHtml(
+                                status
+                            ) +
+                            '</span>' +
+                            '</div>' +
+
+                            (
+                                field.reason
+                                    ? '<div class="small" style="margin-top:7px;color:#b54708;">Alasan: ' +
+                                      escapeHtml(field.reason) +
+                                      '</div>'
+                                    : ""
+                            ) +
+
+                            action +
+
+                            '</div>'
+                        );
+
+                    }
+                )
+                .join("")
+
+        );
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+async function requestTenantRevision(
+    encodedTenantId,
+    encodedField
+){
+
+    const tenantId =
+        decodeURIComponent(
+            encodedTenantId
+        );
+
+    const field =
+        decodeURIComponent(
+            encodedField
+        );
+
+    const reason =
+        prompt(
+            "Alasan perbaikan untuk " +
+            field +
+            ":",
+            ""
+        );
+
+
+    if(
+        reason ===
+        null
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !reason.trim()
+    ){
+
+        alert(
+            "Alasan perbaikan wajib diisi."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        await api(
+            "masterRequestRevision",
+            {
+
+                tenantId:
+                    tenantId,
+
+                field:
+                    field,
+
+                reason:
+                    reason
+
+            }
+        );
+
+
+        await showTenantDataEditor(
+            encodeURIComponent(
+                tenantId
+            )
+        );
+
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+async function reviewTenantRevision(
+    encodedRevisionId
+){
+
+    const revisionId =
+        decodeURIComponent(
+            encodedRevisionId
+        );
+
+
+    try{
+
+        const data =
+            await api(
+                "masterTenantRevisionDetail",
+                {
+                    revisionId:
+                        revisionId
+                }
+            );
+
+
+        const revision =
+            data &&
+            data.revision
+                ? data.revision
+                : null;
+
+
+        if(!revision){
+
+            throw new Error(
+                "Permintaan perubahan tidak ditemukan."
+            );
+
+        }
+
+
+        const body =
+            '<div class="detail-box">' +
+
+            '<strong>' +
+            escapeHtml(
+                revision.tenantName ||
+                revision.tenantId
+            ) +
+            '</strong>' +
+
+            '<span class="small">' +
+            escapeHtml(
+                revision.tenantId
+            ) +
+            ' · ' +
+            escapeHtml(
+                revision.label ||
+                revision.field
+            ) +
+            '</span>' +
+
+            '</div>' +
+
+            '<div class="detail-box">' +
+
+            '<strong>Data Lama</strong>' +
+
+            '<div style="margin-top:6px;">' +
+            escapeHtml(
+                revision.oldDisplay ||
+                revision.oldValue ||
+                "Belum diisi"
+            ) +
+            '</div>' +
+
+            '</div>' +
+
+            '<div class="detail-box">' +
+
+            '<strong>Data Baru</strong>' +
+
+            '<div style="margin-top:6px;">' +
+            escapeHtml(
+                revision.newDisplay ||
+                revision.newValue ||
+                "File baru"
+            ) +
+            '</div>' +
+
+            '</div>' +
+
+            (
+                revision.note
+                    ? '<div class="detail-box">' +
+                      '<strong>Keterangan Tenant</strong>' +
+                      '<div style="margin-top:6px;">' +
+                      escapeHtml(revision.note) +
+                      '</div>' +
+                      '</div>'
+                    : ""
+            ) +
+
+            '<div class="actions">' +
+
+            '<button class="btn btn-primary" onclick="reviewTenantRevisionAction(\'' +
+            encodeURIComponent(revisionId) +
+            '\',\'DISETUJUI\')">' +
+            'Setujui' +
+            '</button>' +
+
+            '<button class="btn btn-warning" onclick="reviewTenantRevisionAction(\'' +
+            encodeURIComponent(revisionId) +
+            '\',\'PERLU DIPERBAIKI\')">' +
+            'Minta Perbaikan' +
+            '</button>' +
+
+            '</div>';
+
+        openModal(
+            "Review Perubahan Data",
+            body
+        );
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+async function reviewTenantRevisionAction(
+    encodedRevisionId,
+    decision
+){
+
+    const revisionId =
+        decodeURIComponent(
+            encodedRevisionId
+        );
+
+    let reason = "";
+
+    if(
+        decision ===
+        "PERLU DIPERBAIKI"
+    ){
+
+        reason =
+            prompt(
+                "Alasan perbaikan:",
+                ""
+            );
+
+
+        if(reason === null){
+            return;
+        }
+
+
+        if(!reason.trim()){
+
+            alert(
+                "Alasan perbaikan wajib diisi."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    if(
+        !confirm(
+            decision ===
+            "DISETUJUI"
+                ? "Setujui perubahan data ini?"
+                : "Kirim kembali untuk perbaikan?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        await api(
+            "masterReviewRevision",
+            {
+
+                revisionId:
+                    revisionId,
+
+                decision:
+                    decision,
+
+                reason:
+                    reason
+
+            }
+        );
+
+
+        closeModal();
+
+        await loadTenants();
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
 
 }
 
