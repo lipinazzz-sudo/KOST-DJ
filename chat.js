@@ -556,11 +556,23 @@
   }
 
   function chatMetaStyle(item){
-    const theme = chatVisual(item);
+    const isMaster =
+      item &&
+      String(item.role || "").toLowerCase() === "master";
+
+    /*
+     * Bubble Master tetap hitam pekat,
+     * tetapi nama + waktu di atas bubble harus
+     * tetap terbaca pada background chat yang terang.
+     */
+    const color =
+      isMaster
+        ? "#17213b"
+        : chatVisual(item).color;
 
     return (
       ' style="color:' +
-      esc(theme.color) +
+      esc(color) +
       ';"'
     );
   }
