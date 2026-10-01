@@ -3775,8 +3775,15 @@ async function showTenantDataEditor(
                                     ? "badge"
                                     : "badge badge-ok";
 
+                        const pendingStatus =
+                            field.pendingRevision &&
+                            String(
+                                field.pendingRevision.status ||
+                                ""
+                            ).toUpperCase();
+
                         const action =
-                            field.pendingRevision
+                            pendingStatus === "MENUNGGU VERIFIKASI"
                                 ? (
                                     '<div class="actions" style="margin-top:9px;">' +
 
@@ -3794,7 +3801,13 @@ async function showTenantDataEditor(
 
                                     '</div>'
                                   )
-                                : (
+                                : pendingStatus === "PERLU DIPERBAIKI"
+                                    ? (
+                                        '<div class="small" style="margin-top:9px;color:#b54708;">' +
+                                        'Menunggu tenant memperbaiki data.' +
+                                        '</div>'
+                                      )
+                                    : (
                                     field.editableByTenant
                                         ? (
                                             '<div class="actions" style="margin-top:9px;">' +
