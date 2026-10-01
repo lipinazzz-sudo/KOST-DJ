@@ -1,6 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 
-const ALLOWED_ORIGIN = "https://lipinazzz-sudo.github.io";
+const ALLOWED_ORIGIN = "https://djkost.mahjongjong.workers.dev";
 const ROOM_NAME = "global";
 const MAX_MESSAGE_LENGTH = 500;
 const RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
