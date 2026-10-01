@@ -2138,6 +2138,24 @@ const API_URL =
 const MAINTENANCE_TECHNICIAN_WA =
     "6281383838358";
 
+/*
+ * Nomor WhatsApp operasional.
+ *
+ * Ubah nomor di bagian ini saja jika kontak berubah.
+ * Format internasional tanpa tanda +, spasi, atau 0 di depan.
+ *
+ * Contoh:
+ * 081234567890 -> 6281234567890
+ */
+const LAUNDRY_WHATSAPP_WA =
+    "";
+
+const CAFE_WHATSAPP_WA =
+    "";
+
+const GENERAL_WHATSAPP_WA =
+    "6285196888766";
+
 
 /* ============================================================
    GLOBAL STATE
@@ -7277,7 +7295,7 @@ function sendLaundryWhatsApp(encoded){
     }
 
     const number =
-        window.DJ_LAUNDRY_WA_NUMBER || "";
+        LAUNDRY_WHATSAPP_WA || "";
 
     if(!number){
         alert(
@@ -8623,11 +8641,13 @@ const WHATSAPP_STATIC_CONTACTS = [
         category:
             "LAUNDRY",
         phone:
-            "",
+            LAUNDRY_WHATSAPP_WA,
         room:
             "",
         note:
-            "Nomor WhatsApp Laundry belum dikonfigurasi"
+            LAUNDRY_WHATSAPP_WA
+                ? "Kontak laundry"
+                : "Nomor WhatsApp Laundry belum dikonfigurasi"
     },
 
     {
@@ -8638,11 +8658,13 @@ const WHATSAPP_STATIC_CONTACTS = [
         category:
             "CAFE",
         phone:
-            "",
+            CAFE_WHATSAPP_WA,
         room:
             "",
         note:
-            "Kontak Cafe belum dikonfigurasi"
+            CAFE_WHATSAPP_WA
+                ? "Kontak cafe"
+                : "Kontak Cafe belum dikonfigurasi"
     },
 
     {
@@ -8653,7 +8675,7 @@ const WHATSAPP_STATIC_CONTACTS = [
         category:
             "UMUM",
         phone:
-            "6285196888766",
+            GENERAL_WHATSAPP_WA,
         room:
             "",
         note:
