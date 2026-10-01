@@ -13,10 +13,280 @@
 
 <link
     rel="stylesheet"
-    href="app.css?v=20260925-tenant-portal-02"
+    href="app.css?v=20260925-tenant-portal-02&rev=20261001-01"
 >
 
 <style>
+
+/* =========================================================
+   TENANT REVISION V1
+   ========================================================= */
+
+.tenant-editable-section{
+    margin-top:22px;
+}
+
+.tenant-editable-list{
+    display:grid;
+    gap:10px;
+}
+
+.tenant-editable-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:12px;
+    align-items:center;
+    padding:12px 0;
+    border-top:1px solid #eef1f5;
+}
+
+.tenant-editable-row:first-child{
+    border-top:0;
+}
+
+.tenant-editable-copy{
+    min-width:0;
+}
+
+.tenant-editable-label{
+    display:block;
+    font-size:12px;
+    color:#667085;
+    margin-bottom:4px;
+}
+
+.tenant-editable-value{
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    color:#1d2939;
+    overflow-wrap:anywhere;
+}
+
+.tenant-editable-status{
+    display:inline-flex;
+    margin-top:5px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.tenant-editable-action{
+    flex:0 0 auto;
+    border:1px solid #dfe4ec;
+    background:#fff;
+    color:#344054;
+    border-radius:9px;
+    padding:7px 10px;
+    font:inherit;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.tenant-editable-action:hover{
+    background:#f8fafc;
+}
+
+.tenant-editable-action.is-pending{
+    color:#175cd3;
+    border-color:#bfd3f7;
+    background:#eff8ff;
+}
+
+.tenant-editable-action.is-fix{
+    color:#b54708;
+    border-color:#fedf89;
+    background:#fffaeb;
+}
+
+.tenant-editable-empty{
+    padding:14px;
+    border:1px dashed #d0d5dd;
+    border-radius:12px;
+    color:#667085;
+    font-size:13px;
+    background:#f9fafb;
+}
+
+.tenant-editable-status.is-complete{
+    color:#027a48;
+}
+
+.tenant-editable-status.is-incomplete{
+    color:#667085;
+}
+
+.tenant-editable-status.is-fix{
+    color:#b54708;
+}
+
+.tenant-editable-status.is-pending{
+    color:#175cd3;
+}
+
+.tenant-revision-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+}
+
+.tenant-revision-modal.is-open{
+    display:flex;
+}
+
+.tenant-revision-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(15,23,42,.62);
+}
+
+.tenant-revision-box{
+    position:relative;
+    width:min(100%,560px);
+    max-height:92vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 24px 60px rgba(15,23,42,.25);
+}
+
+.tenant-revision-head{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    align-items:flex-start;
+    margin-bottom:18px;
+}
+
+.tenant-revision-head h3{
+    margin:5px 0 0;
+}
+
+.tenant-revision-close{
+    width:36px;
+    height:36px;
+    border:0;
+    border-radius:10px;
+    background:#f2f4f7;
+    color:#344054;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.tenant-revision-field{
+    margin-top:16px;
+}
+
+.tenant-revision-field label{
+    display:block;
+    margin-bottom:7px;
+    font-size:13px;
+    font-weight:700;
+    color:#344054;
+}
+
+.tenant-revision-field input,
+.tenant-revision-field textarea{
+    width:100%;
+    box-sizing:border-box;
+    padding:12px 13px;
+    border:1px solid #dfe3eb;
+    border-radius:12px;
+    font:inherit;
+    outline:none;
+    background:#fff;
+}
+
+.tenant-revision-field textarea{
+    min-height:92px;
+    resize:vertical;
+}
+
+.tenant-revision-field input:focus,
+.tenant-revision-field textarea:focus{
+    border-color:#8a96a8;
+    box-shadow:0 0 0 3px rgba(23,33,59,.06);
+}
+
+.tenant-revision-current{
+    padding:11px 12px;
+    border-radius:11px;
+    background:#f8fafc;
+    border:1px solid #eaecf0;
+    color:#475467;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.tenant-revision-alert{
+    padding:12px 13px;
+    border-radius:12px;
+    background:#fffaeb;
+    border:1px solid #fedf89;
+    color:#92400e;
+    font-size:13px;
+    line-height:1.55;
+    margin-bottom:14px;
+}
+
+.tenant-revision-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:20px;
+}
+
+.tenant-revision-message{
+    display:none;
+    margin-top:14px;
+    padding:11px 12px;
+    border-radius:11px;
+    font-size:13px;
+}
+
+.tenant-revision-message.success{
+    display:block;
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.tenant-revision-message.error{
+    display:block;
+    background:#fff1f2;
+    color:#b42318;
+}
+
+@media(max-width:640px){
+    .tenant-editable-row{
+        grid-template-columns:1fr;
+    }
+
+    .tenant-editable-action{
+        justify-self:start;
+    }
+
+    .tenant-revision-box{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .tenant-revision-actions{
+        flex-direction:column-reverse;
+    }
+
+    .tenant-revision-actions .btn{
+        width:100%;
+    }
+}
+
+/* =========================================================
+   TENANT ORIGINAL STYLES
+   ========================================================= */
 
 .portal-wrap{
     padding:55px 0;
@@ -519,6 +789,25 @@
                     </div>
 
 
+                    <div
+                        class="tenant-editable-section"
+                        id="tenantEditableSection"
+                    >
+                        <div class="tenant-status-section-title">
+                            <span>DATA YANG DAPAT DIUBAH</span>
+                        </div>
+
+                        <div
+                            class="tenant-editable-list"
+                            id="tenantEditableFields"
+                        >
+                            <div class="tenant-editable-empty">
+                                Memuat pengaturan data tenant...
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="tenant-status-section-title">
                         <span>KELENGKAPAN ADMINISTRASI</span>
                         <em id="tenantCompletenessCount">Memeriksa...</em>
@@ -795,6 +1084,78 @@
 </section>
 
 </main>
+
+
+<!-- =========================================================
+     MODAL PERUBAHAN DATA TENANT
+     ========================================================= -->
+
+<div
+    id="tenantRevisionModal"
+    class="tenant-revision-modal"
+    aria-hidden="true"
+>
+    <div
+        class="tenant-revision-backdrop"
+        data-tenant-revision-close="true"
+    ></div>
+
+    <div
+        class="tenant-revision-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tenantRevisionTitle"
+    >
+        <div class="tenant-revision-head">
+            <div>
+                <div class="eyebrow">PENGATURAN DATA TENANT</div>
+                <h3 id="tenantRevisionTitle">Ganti Data</h3>
+            </div>
+
+            <button
+                type="button"
+                class="tenant-revision-close"
+                id="tenantRevisionClose"
+                aria-label="Tutup"
+            >
+                ×
+            </button>
+        </div>
+
+        <div
+            id="tenantRevisionReasonBox"
+            class="tenant-revision-alert"
+            style="display:none;"
+        ></div>
+
+        <form id="tenantRevisionForm">
+            <div id="tenantRevisionFields"></div>
+
+            <div class="tenant-revision-actions">
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    id="tenantRevisionCancel"
+                >
+                    Batal
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="tenantRevisionSubmit"
+                >
+                    Ajukan Perubahan
+                </button>
+            </div>
+
+            <div
+                id="tenantRevisionMessage"
+                class="tenant-revision-message"
+            ></div>
+        </form>
+    </div>
+</div>
 
 
 <footer class="footer">
@@ -1085,6 +1446,577 @@ function formatTenantAnnouncementDate(value){
 
 /**
  * ============================================================
+ * TENANT DATA REVISION
+ * ============================================================
+ */
+let tenantRevisionFields = [];
+let activeTenantRevisionField = null;
+
+
+function tenantRevisionSession(){
+    return getSession();
+}
+
+
+function tenantRevisionEscape(value){
+    return String(value == null ? "" : value)
+        .replace(/[&<>"']/g,function(char){
+            return {
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+            }[char];
+        });
+}
+
+
+function tenantRevisionStatusClass(status){
+    const normalized =
+        String(status || "").trim().toUpperCase();
+
+    if(normalized === "PERLU DIPERBAIKI"){
+        return "is-fix";
+    }
+
+    if(normalized === "MENUNGGU VERIFIKASI"){
+        return "is-pending";
+    }
+
+    if(normalized === "LENGKAP"){
+        return "is-complete";
+    }
+
+    return "is-incomplete";
+}
+
+
+function renderTenantEditableFields(fields){
+    const box =
+        document.getElementById("tenantEditableFields");
+
+    if(!box){
+        return;
+    }
+
+    tenantRevisionFields =
+        Array.isArray(fields)
+            ? fields
+            : [];
+
+    if(!tenantRevisionFields.length){
+        box.innerHTML =
+            '<div class="tenant-editable-empty">' +
+            'Belum ada data yang dapat diubah melalui portal.' +
+            '</div>';
+        return;
+    }
+
+    box.innerHTML =
+        tenantRevisionFields.map(function(field){
+
+            const status =
+                String(
+                    field && field.status ||
+                    "BELUM LENGKAP"
+                ).toUpperCase();
+
+            const cls =
+                tenantRevisionStatusClass(status);
+
+            const buttonDisabled =
+                status === "MENUNGGU VERIFIKASI";
+
+            let buttonText = "Ganti";
+
+            if(status === "PERLU DIPERBAIKI"){
+                buttonText = "Perbaiki";
+            }else if(buttonDisabled){
+                buttonText = "Menunggu";
+            }
+
+            const reason =
+                field && field.reason
+                    ? '<small style="display:block;margin-top:4px;color:#b54708;">' +
+                      tenantRevisionEscape(field.reason) +
+                      '</small>'
+                    : "";
+
+            return (
+                '<div class="tenant-editable-row">' +
+
+                '<div class="tenant-editable-copy">' +
+
+                '<span class="tenant-editable-label">' +
+                tenantRevisionEscape(field.label || field.key) +
+                '</span>' +
+
+                '<span class="tenant-editable-value">' +
+                tenantRevisionEscape(
+                    field.displayValue ||
+                    field.value ||
+                    "Belum diisi"
+                ) +
+                '</span>' +
+
+                '<span class="tenant-editable-status ' +
+                cls +
+                '">' +
+                tenantRevisionEscape(status) +
+                '</span>' +
+
+                reason +
+
+                '</div>' +
+
+                '<button' +
+                ' type="button"' +
+                ' class="tenant-editable-action ' +
+                (status === "PERLU DIPERBAIKI" ? "is-fix" : "") +
+                (buttonDisabled ? " is-pending" : "") +
+                '"' +
+                (buttonDisabled ? " disabled" : "") +
+                ' data-tenant-field="' +
+                tenantRevisionEscape(field.key) +
+                '">' +
+                buttonText +
+                '</button>' +
+
+                '</div>'
+            );
+
+        }).join("");
+
+    box.querySelectorAll(
+        "[data-tenant-field]"
+    ).forEach(function(button){
+
+        button.addEventListener(
+            "click",
+            function(){
+                openTenantRevisionModal(
+                    button.getAttribute("data-tenant-field")
+                );
+            }
+        );
+
+    });
+}
+
+
+function openTenantRevisionModal(fieldKey){
+
+    const field =
+        tenantRevisionFields.find(function(item){
+            return String(item.key) === String(fieldKey);
+        });
+
+    if(!field){
+        return;
+    }
+
+    activeTenantRevisionField =
+        field;
+
+    const modal =
+        document.getElementById("tenantRevisionModal");
+
+    const title =
+        document.getElementById("tenantRevisionTitle");
+
+    const fieldsBox =
+        document.getElementById("tenantRevisionFields");
+
+    const reasonBox =
+        document.getElementById("tenantRevisionReasonBox");
+
+    const message =
+        document.getElementById("tenantRevisionMessage");
+
+    const submit =
+        document.getElementById("tenantRevisionSubmit");
+
+    if(!modal || !title || !fieldsBox || !reasonBox || !message || !submit){
+        return;
+    }
+
+    title.textContent =
+        String(field.label || "Ganti Data");
+
+    fieldsBox.innerHTML =
+        '<div class="tenant-revision-field">' +
+
+        '<label>Data Saat Ini</label>' +
+
+        '<div class="tenant-revision-current">' +
+        tenantRevisionEscape(
+            field.displayValue ||
+            field.value ||
+            "Belum diisi"
+        ) +
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="tenant-revision-field">' +
+
+        '<label for="tenantRevisionNewValue">' +
+        tenantRevisionEscape(field.inputLabel || "Data Baru") +
+        '</label>' +
+
+        (
+            String(field.type || "text") === "file"
+
+                ? (
+                    '<input' +
+                    ' id="tenantRevisionFile"' +
+                    ' type="file"' +
+                    ' accept="image/jpeg,image/png,image/webp,application/pdf"' +
+                    ' required' +
+                    '>'
+                  )
+
+                : (
+                    '<input' +
+                    ' id="tenantRevisionNewValue"' +
+                    ' type="' +
+                    (
+                        String(field.type || "text") === "email"
+                            ? "email"
+                            : "text"
+                    ) +
+                    '"' +
+                    ' value="' +
+                    tenantRevisionEscape(
+                        field.value || ""
+                    ) +
+                    '"' +
+                    ' required' +
+                    '>'
+                  )
+        ) +
+
+        '</div>' +
+
+        '<div class="tenant-revision-field">' +
+
+        '<label for="tenantRevisionNote">' +
+        'Keterangan' +
+        '</label>' +
+
+        '<textarea' +
+        ' id="tenantRevisionNote"' +
+        ' placeholder="Jelaskan perubahan data (opsional)"' +
+        '></textarea>' +
+
+        '</div>';
+
+    if(field.reason){
+        reasonBox.style.display = "block";
+        reasonBox.textContent =
+            "Alasan dari pengelola: " +
+            String(field.reason);
+    }else{
+        reasonBox.style.display = "none";
+        reasonBox.textContent = "";
+    }
+
+    message.className =
+        "tenant-revision-message";
+
+    message.textContent =
+        "";
+
+    submit.disabled =
+        false;
+
+    submit.textContent =
+        "Ajukan Perubahan";
+
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden","false");
+
+    setTimeout(function(){
+        const first =
+            document.getElementById(
+                String(field.type || "text") === "file"
+                    ? "tenantRevisionFile"
+                    : "tenantRevisionNewValue"
+            );
+
+        if(first){
+            first.focus();
+        }
+    },20);
+}
+
+
+function closeTenantRevisionModal(){
+    const modal =
+        document.getElementById("tenantRevisionModal");
+
+    if(!modal){
+        return;
+    }
+
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden","true");
+    activeTenantRevisionField =
+        null;
+}
+
+
+async function submitTenantRevisionForm(event){
+    event.preventDefault();
+
+    const session =
+        tenantRevisionSession();
+
+    if(!session || !activeTenantRevisionField){
+        window.location.href = "login.html";
+        return;
+    }
+
+    const field =
+        activeTenantRevisionField;
+
+    const submit =
+        document.getElementById("tenantRevisionSubmit");
+
+    const message =
+        document.getElementById("tenantRevisionMessage");
+
+    const newValueInput =
+        document.getElementById("tenantRevisionNewValue");
+
+    const noteInput =
+        document.getElementById("tenantRevisionNote");
+
+    let payload = {
+        action:"submitTenantRevision",
+        tenantId:session.tenantId,
+        sessionToken:session.sessionToken,
+        field:String(field.key),
+        note:noteInput ? noteInput.value.trim() : ""
+    };
+
+    if(String(field.type || "text") === "file"){
+
+        const fileInput =
+            document.getElementById("tenantRevisionFile");
+
+        const file =
+            fileInput &&
+            fileInput.files &&
+            fileInput.files[0];
+
+        if(!file){
+            message.className =
+                "tenant-revision-message error";
+            message.textContent =
+                "File baru wajib dipilih.";
+            return;
+        }
+
+        if(file.size > 8 * 1024 * 1024){
+            message.className =
+                "tenant-revision-message error";
+            message.textContent =
+                "File terlalu besar. Maksimal 8 MB.";
+            return;
+        }
+
+        const reader =
+            new FileReader();
+
+        reader.onload =
+            async function(){
+
+                await submitTenantRevisionRequest({
+                    payload:payload,
+                    base64:String(reader.result || "").split(",")[1] || "",
+                    mimeType:file.type,
+                    originalName:file.name
+                });
+
+            };
+
+        reader.onerror =
+            function(){
+                message.className =
+                    "tenant-revision-message error";
+                message.textContent =
+                    "File gagal dibaca.";
+            };
+
+        reader.readAsDataURL(file);
+        return;
+
+    }
+
+    payload.newValue =
+        newValueInput
+            ? newValueInput.value.trim()
+            : "";
+
+    await submitTenantRevisionRequest({
+        payload:payload
+    });
+}
+
+
+async function submitTenantRevisionRequest(options){
+
+    const submit =
+        document.getElementById("tenantRevisionSubmit");
+
+    const message =
+        document.getElementById("tenantRevisionMessage");
+
+    const payload =
+        options.payload;
+
+    if(options.base64){
+        payload.fileBase64 =
+            options.base64;
+        payload.fileMimeType =
+            options.mimeType;
+        payload.fileOriginalName =
+            options.originalName;
+    }
+
+    if(!payload.newValue && !payload.fileBase64){
+        message.className =
+            "tenant-revision-message error";
+        message.textContent =
+            "Data baru wajib diisi.";
+        return;
+    }
+
+    submit.disabled =
+        true;
+
+    submit.textContent =
+        "Mengirim...";
+
+    message.className =
+        "tenant-revision-message";
+
+    message.textContent =
+        "";
+
+    try{
+
+        const response =
+            await fetch(
+                TENANT_API_URL,
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+                    body:JSON.stringify(payload)
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if(
+            !result ||
+            result.ok !== true
+        ){
+            throw new Error(
+                result && result.error
+                    ? result.error
+                    : "Perubahan data gagal diajukan."
+            );
+        }
+
+        message.className =
+            "tenant-revision-message success";
+
+        message.textContent =
+            (
+                result.data &&
+                result.data.message
+            ) ||
+            "Perubahan data berhasil diajukan dan menunggu verifikasi.";
+
+        await loadPortal();
+
+        setTimeout(
+            closeTenantRevisionModal,
+            900
+        );
+
+    }catch(error){
+
+        message.className =
+            "tenant-revision-message error";
+
+        message.textContent =
+            error.message ||
+            "Perubahan data gagal diajukan.";
+
+    }finally{
+
+        submit.disabled =
+            false;
+
+        submit.textContent =
+            "Ajukan Perubahan";
+
+    }
+}
+
+
+document
+    .getElementById("tenantRevisionForm")
+    .addEventListener(
+        "submit",
+        submitTenantRevisionForm
+    );
+
+document
+    .getElementById("tenantRevisionClose")
+    .addEventListener(
+        "click",
+        closeTenantRevisionModal
+    );
+
+document
+    .getElementById("tenantRevisionCancel")
+    .addEventListener(
+        "click",
+        closeTenantRevisionModal
+    );
+
+document
+    .querySelectorAll(
+        "[data-tenant-revision-close='true']"
+    )
+    .forEach(function(element){
+        element.addEventListener(
+            "click",
+            closeTenantRevisionModal
+        );
+    });
+
+document.addEventListener(
+    "keydown",
+    function(event){
+        if(event.key === "Escape"){
+            closeTenantRevisionModal();
+        }
+    }
+);
+
+
+/**
+ * ============================================================
  * LOAD PORTAL
  * ============================================================
  */
@@ -1185,6 +2117,12 @@ async function loadPortal(){
             data.announcements.items
                 ? data.announcements.items
                 : []
+        );
+
+        renderTenantEditableFields(
+            data.profileFields ||
+            data.editableFields ||
+            []
         );
 
 
