@@ -503,9 +503,13 @@
       };
     }
 
+    /*
+     * Sebarkan 39 kamar dengan golden-angle agar warna
+     * antar-kamar tidak berkumpul pada warna yang berdekatan.
+     */
     const hue =
       Math.round(
-        (360 / DJ_CHAT_ROOMS.length) * index
+        (index * 137.508) % 360
       );
 
     return {
