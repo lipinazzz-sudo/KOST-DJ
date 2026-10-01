@@ -356,7 +356,7 @@ input[readonly]{background:#f4f6fa}
 
     <div class="card" style="margin-top:24px">
       <h2>6. Upload Perjanjian Sewa yang Sudah Ditandatangani</h2>
-      <p class="note">Unggah foto/scan perjanjian yang sudah ditandatangani secara fisik. Gunakan JPG, PNG, WEBP, atau PDF dan pastikan dokumen dapat dibaca dengan jelas.</p>
+      <p class="note">Unggah foto/scan <strong>perjanjian fisik yang sudah ditandatangani</strong>. File ini menjadi arsip kontrak fisik. Kontrak digital arsip dibuat otomatis oleh sistem dari data aktivasi dan tanda tangan digital.</p>
       <div class="field" style="margin-top:16px">
         <label for="agreementFile">Perjanjian Sewa yang Sudah Ditandatangani *</label>
         <input id="agreementFile" type="file" accept="image/*,.pdf,application/pdf">
@@ -1072,6 +1072,7 @@ async function submitActivation(){
       agreeAgreementRead:true,
       agreeAgreement:true,
       agreementVersion:(lookupData.perjanjianVersi || "PERJANJIAN-SEWA-2026-V1.0"),
+      agreementHtml:document.getElementById("agreementBox").innerHTML,
       signatureBase64:signatureDataUrl,
       ktpBase64:ktp.base64,
       ktpMimeType:ktp.mimeType,
@@ -1086,6 +1087,11 @@ async function submitActivation(){
     credentials.classList.remove("hidden");
     credentials.innerHTML = `
       <h2 style="color:#fff;margin:0 0 14px">Akun Tenant Berhasil Dibuat</h2>
+      <div class="note" style="margin-bottom:16px;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#d6dbe5">
+        <strong style="color:#fff">Arsip Kontrak Digital:</strong>
+        ${result.digitalContractFileUrl ? "berhasil dibuat dan disimpan." : "status arsip tidak diterima dari server."}
+        Arsip ini untuk backup dan penyimpanan dokumen; kontrak fisik bertanda tangan tetap menjadi arsip fisik utama.
+      </div>
 
       <div>Tenant ID</div>
       <div class="credential-row">
