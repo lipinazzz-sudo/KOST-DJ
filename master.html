@@ -6899,6 +6899,8 @@ function renderHistoryRoomFilters(){
             /*
              * Saat user mengetik manual, dropdown
              * mengikuti angka yang sudah lengkap.
+             * Jangan rebuild toolbar di setiap karakter
+             * agar cursor/focus input tidak hilang.
              */
             historyRoomFilter =
                 HISTORY_ROOM_LIST
@@ -6909,7 +6911,16 @@ function renderHistoryRoomFilters(){
                         ? historyRoomSearch
                         : "ALL";
 
-            renderHistoryRoomFilters();
+            const select =
+                document.getElementById(
+                    "historyRoomSelect"
+                );
+
+            if(select){
+                select.value =
+                    historyRoomFilter;
+            }
+
             renderHistory();
 
         }
