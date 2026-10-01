@@ -776,6 +776,99 @@ button{
 
 
 /* =========================================================
+   LAUNDRY / CAFE / HISTORY
+   ========================================================= */
+
+.master-service-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+    margin-top:18px;
+}
+
+.master-service-card{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    padding:17px;
+}
+
+.master-service-card h3{
+    margin:0 0 6px;
+    font-size:17px;
+}
+
+.master-service-card p{
+    margin:0;
+    color:#667085;
+    font-size:12px;
+    line-height:1.55;
+}
+
+.master-service-meta{
+    margin-top:12px;
+    color:#475467;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.master-history-list{
+    display:grid;
+    gap:10px;
+    margin-top:16px;
+}
+
+.master-history-item{
+    padding:14px 16px;
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+}
+
+.master-history-top{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.master-history-type{
+    font-size:11px;
+    font-weight:900;
+    color:#475467;
+}
+
+.master-history-time{
+    color:#98a2b3;
+    font-size:11px;
+    white-space:nowrap;
+}
+
+.master-history-message{
+    margin-top:6px;
+    color:#17213a;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.master-history-empty{
+    padding:30px;
+    text-align:center;
+    color:#667085;
+}
+
+@media(max-width:700px){
+    .master-service-grid{
+        grid-template-columns:1fr;
+    }
+
+    .master-history-top{
+        flex-direction:column;
+        gap:4px;
+    }
+}
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 
@@ -1079,9 +1172,27 @@ button{
                 </button>
 
                 <button
+                    data-panel="laundry"
+                >
+                    Laundry
+                </button>
+
+                <button
+                    data-panel="cafe"
+                >
+                    Cafe
+                </button>
+
+                <button
                     data-panel="rooms"
                 >
                     Kamar
+                </button>
+
+                <button
+                    data-panel="history"
+                >
+                    History
                 </button>
 
                 <button
@@ -1361,7 +1472,7 @@ button{
                     </h2>
 
                     <p class="section-subtitle">
-                        Kelola seluruh laporan kerusakan tenant.
+                        Kelola laporan maintenance yang masih menunggu penyelesaian.
                     </p>
 
 
@@ -1369,6 +1480,74 @@ button{
                         id="maintenanceBox"
                         class="card table-wrap"
                     ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     LAUNDRY
+                     ========================================== -->
+
+                <section
+                    id="panel-laundry"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Laundry
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Order laundry tenant yang belum selesai.
+                    </p>
+
+
+                    <div
+                        id="laundryBox"
+                        class="card table-wrap"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     CAFE
+                     ========================================== -->
+
+                <section
+                    id="panel-cafe"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Cafe
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Pusat order Cafe. Workflow order akan memakai pola kirim dan selesai.
+                    </p>
+
+
+                    <div class="master-service-grid">
+
+                        <div class="master-service-card">
+
+                            <h3>
+                                Cafe
+                            </h3>
+
+                            <p>
+                                Panel Master sudah disiapkan.
+                                Menu dan order Cafe belum disambungkan ke backend.
+                            </p>
+
+                            <div class="master-service-meta">
+                                Belum ada order Cafe aktif.
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </section>
 
@@ -1394,6 +1573,38 @@ button{
                     <div
                         id="roomsBox"
                         class="room-grid"
+                    ></div>
+
+                </section>
+
+
+                <!-- ==========================================
+                     HISTORY
+                     ========================================== -->
+
+                <section
+                    id="panel-history"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        History
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Riwayat pekerjaan operasional yang sudah selesai atau tercatat oleh sistem.
+                    </p>
+
+
+                    <div
+                        id="historyFilters"
+                        class="filters"
+                    ></div>
+
+
+                    <div
+                        id="historyBox"
+                        class="master-history-list"
                     ></div>
 
                 </section>
@@ -1692,9 +1903,15 @@ let registrationItems = [];
 
 let announcementItems = [];
 
+let laundryItems = [];
+
+let historyItems = [];
+
 let paymentFilter = "ALL";
 
 let mediaFilter = "ALL";
+
+let historyFilter = "ALL";
 
 
 /* ============================================================
@@ -2416,6 +2633,27 @@ async function loadPanel(
     ){
 
         await loadMaintenance();
+
+    }else if(
+        panelName ===
+        "laundry"
+    ){
+
+        await loadLaundry();
+
+    }else if(
+        panelName ===
+        "cafe"
+    ){
+
+        return;
+
+    }else if(
+        panelName ===
+        "history"
+    ){
+
+        await loadHistory();
 
     }else if(
         panelName ===
@@ -5053,315 +5291,224 @@ async function loadMaintenance(){
             "maintenanceBox"
         );
 
-
     box.innerHTML =
         '<div class="loading">Memuat maintenance...</div>';
-
 
     const data =
         await api(
             "masterMaintenance"
         );
 
-
-    /*
-     * Variabel global SELALU dibuat.
-     * Tidak ada lagi maintenanceItems is not defined.
-     */
-
     maintenanceItems =
         Array.isArray(
             data &&
             data.items
         )
-
             ? data.items.filter(
                 function(item){
 
-                    /*
-                     * Hanya ID maintenance resmi.
-                     *
-                     * Baris Column 15,
-                     * Column 19, dll
-                     * tidak pernah ditampilkan.
-                     */
-
-                    return /^MNT-/i.test(
+                    const id =
                         String(
                             item.id ||
                             ""
-                        ).trim()
-                    );
-
-                }
-              )
-
-            : [];
-
-
-    maintenanceItems.sort(
-        function(a,b){
-
-            const order = {
-
-                OPEN:1,
-
-                PROSES:2,
-
-                SELESAI:3,
-
-                BATAL:4
-
-            };
-
-
-            const aStatus =
-                String(
-                    a.status ||
-                    "OPEN"
-                )
-                .toUpperCase();
-
-
-            const bStatus =
-                String(
-                    b.status ||
-                    "OPEN"
-                )
-                .toUpperCase();
-
-
-            return (
-
-                (
-                    order[aStatus] ||
-                    99
-                )
-
-                -
-
-                (
-                    order[bStatus] ||
-                    99
-                )
-
-            );
-
-        }
-    );
-
-
-    if(
-        !maintenanceItems.length
-    ){
-
-        box.innerHTML =
-            '<div class="empty">' +
-            'Belum ada laporan maintenance.' +
-            '</div>';
-
-        return;
-
-    }
-
-
-    box.innerHTML =
-
-        '<table class="data-table">' +
-
-        '<thead>' +
-
-        '<tr>' +
-
-        '<th>ID</th>' +
-        '<th>Tenant</th>' +
-        '<th>Kamar</th>' +
-        '<th>Masalah</th>' +
-        '<th>Status</th>' +
-        '<th>Aksi</th>' +
-
-        '</tr>' +
-
-        '</thead>' +
-
-        '<tbody>' +
-
-        maintenanceItems
-            .map(
-                function(item){
+                        ).trim();
 
                     const status =
                         String(
                             item.status ||
                             "OPEN"
                         )
+                        .trim()
                         .toUpperCase();
 
-
-                    let badge =
-                        "badge-warn";
-
-
-                    if(
-                        status ===
-                        "PROSES"
-                    ){
-
-                        badge =
-                            "badge-info";
-
-                    }else if(
-                        status ===
-                        "SELESAI"
-                    ){
-
-                        badge =
-                            "badge-ok";
-
-                    }else if(
-                        status ===
-                        "BATAL"
-                    ){
-
-                        badge =
-                            "badge-danger";
-
-                    }
-
-
                     return (
-
-                        '<tr>' +
-
-                        '<td>' +
-
-                        '<strong>' +
-
-                        escapeHtml(
-                            item.id
-                        ) +
-
-                        '</strong>' +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        escapeHtml(
-                            item.name ||
-                            item.tenantId ||
-                            "—"
-                        ) +
-
-                        (
-                            item.tenantId
-
-                                ? (
-                                    '<br><span class="small">' +
-                                    escapeHtml(
-                                        item.tenantId
-                                    ) +
-                                    '</span>'
-                                  )
-
-                                : ""
-
-                        ) +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        escapeHtml(
-                            item.room ||
-                            "—"
-                        ) +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        escapeHtml(
-                            item.problem ||
-                            "—"
-                        ) +
-
-                        (
-                            item.description
-
-                                ? (
-                                    '<br><span class="small">' +
-                                    escapeHtml(
-                                        item.description
-                                    ) +
-                                    '</span>'
-                                  )
-
-                                : ""
-
-                        ) +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        '<span class="badge ' +
-                        badge +
-                        '">' +
-
-                        escapeHtml(
-                            status
-                        ) +
-
-                        '</span>' +
-
-                        '</td>' +
-
-                        '<td>' +
-
-                        '<div class="actions">' +
-
-                        '<button class="btn btn-success" onclick="sendMaintenanceWhatsApp(\'' +
-
-                        encodeURIComponent(
-                            item.id
-                        ) +
-
-                        '\')">' +
-
-                        '💬 WA Teknisi' +
-
-                        '</button>' +
-
-                        '<button class="btn btn-primary" onclick="editMaintenance(\'' +
-
-                        encodeURIComponent(
-                            item.id
-                        ) +
-
-                        '\')">' +
-
-                        'Kelola' +
-
-                        '</button>' +
-
-                        '</div>' +
-
-                        '</td>' +
-
-                        '</tr>'
-
+                        /^MNT-/i.test(id) &&
+                        status !== "SELESAI" &&
+                        status !== "BATAL"
                     );
 
                 }
-            )
-            .join("")
+              )
+            : [];
 
-        +
+    if(!maintenanceItems.length){
 
-        '</tbody>' +
+        box.innerHTML =
+            '<div class="empty">' +
+            'Tidak ada maintenance yang menunggu penyelesaian.' +
+            '</div>';
 
-        '</table>';
+        return;
+
+    }
+
+    box.innerHTML =
+        '<table class="data-table">' +
+        '<thead><tr>' +
+        '<th>ID</th>' +
+        '<th>Tenant</th>' +
+        '<th>Kamar</th>' +
+        '<th>Masalah</th>' +
+        '<th>Status</th>' +
+        '<th>Aksi</th>' +
+        '</tr></thead>' +
+        '<tbody>' +
+
+        maintenanceItems.map(function(item){
+
+            return (
+                '<tr>' +
+
+                '<td><strong>' +
+                escapeHtml(item.id) +
+                '</strong></td>' +
+
+                '<td>' +
+                escapeHtml(
+                    item.name ||
+                    item.tenantId ||
+                    "—"
+                ) +
+                (
+                    item.tenantId
+                        ? '<br><span class="small">' +
+                          escapeHtml(item.tenantId) +
+                          '</span>'
+                        : ""
+                ) +
+                '</td>' +
+
+                '<td>' +
+                escapeHtml(item.room || "—") +
+                '</td>' +
+
+                '<td>' +
+                escapeHtml(item.problem || "—") +
+                (
+                    item.description
+                        ? '<br><span class="small">' +
+                          escapeHtml(item.description) +
+                          '</span>'
+                        : ""
+                ) +
+                '</td>' +
+
+                '<td>' +
+                '<span class="badge badge-warn">TERKIRIM</span>' +
+                '</td>' +
+
+                '<td>' +
+                '<div class="actions">' +
+
+                '<button class="btn btn-success" onclick="sendMaintenanceWhatsApp(\\'' +
+                encodeURIComponent(item.id) +
+                '\\')">' +
+                '💬 Kirim WA' +
+                '</button>' +
+
+                '<button class="btn btn-primary" onclick="finishMaintenance(\\'' +
+                encodeURIComponent(item.id) +
+                '\\')">' +
+                'Selesai' +
+                '</button>' +
+
+                '</div>' +
+                '</td>' +
+
+                '</tr>'
+            );
+
+        }).join("") +
+
+        '</tbody></table>';
+
+}
+
+
+function finishMaintenance(encoded){
+
+    const id =
+        decodeURIComponent(encoded);
+
+    const item =
+        maintenanceItems.find(function(row){
+            return String(row.id) === String(id);
+        });
+
+    if(!item){
+        alert("Maintenance tidak ditemukan.");
+        return;
+    }
+
+    openModal(
+        "Selesaikan Maintenance — " + id,
+
+        '<div class="detail-box">' +
+
+        '<strong>' +
+        escapeHtml(
+            item.name ||
+            item.tenantId ||
+            "—"
+        ) +
+        '</strong>' +
+
+        '<span class="small">' +
+        (
+            item.room
+                ? "Kamar " + escapeHtml(item.room)
+                : ""
+        ) +
+        '</span>' +
+
+        '<p style="margin:12px 0 0;">' +
+        '<strong>Masalah</strong>' +
+        escapeHtml(item.problem || "—") +
+        '</p>' +
+
+        (
+            item.description
+                ? '<p style="margin:8px 0 0;"><strong>Deskripsi</strong>' +
+                  escapeHtml(item.description) +
+                  '</p>'
+                : ""
+        ) +
+
+        '</div>' +
+
+        '<input type="hidden" id="maintenanceStatus" value="SELESAI">' +
+
+        '<div class="form-grid">' +
+
+        '<div class="field">' +
+        '<label>PIC</label>' +
+        '<input id="maintenancePIC">' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Biaya</label>' +
+        '<input id="maintenanceCost" type="number" min="0" value="0">' +
+        '</div>' +
+
+        '<div class="field full">' +
+        '<label>Catatan Penyelesaian</label>' +
+        '<textarea id="maintenanceNote"></textarea>' +
+        '</div>' +
+
+        '<div class="field full">' +
+        '<label>Foto Setelah Perbaikan</label>' +
+        '<input id="maintenanceAfterPhoto" type="file" accept="image/*">' +
+        '<div class="small" style="margin-top:6px;">Foto setelah perbaikan tetap mengikuti aturan Maintenance yang sudah ada.</div>' +
+        '</div>' +
+
+        '</div>' +
+
+        '<button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="saveMaintenance(\\'' +
+        encodeURIComponent(id) +
+        '\\')">' +
+        'Tandai Selesai' +
+        '</button>'
+    );
 
 }
 
@@ -6063,6 +6210,387 @@ async function saveMaintenance(
         );
 
     }
+
+}
+
+
+/* ============================================================
+   LAUNDRY
+   ============================================================ */
+
+function buildLaundryWhatsAppMessage(item){
+
+    return [
+        "🧺 DJ FAMILY KOST",
+        "ORDER LAUNDRY",
+        "",
+        "Laundry ID    : " + String(item.id || "—"),
+        "Kamar         : " + String(item.room || "—"),
+        "Tenant        : " + String(item.name || item.tenantId || "—"),
+        "Layanan       : " + String(item.service || "—"),
+        "Pickup        : " + String(item.pickupLocation || "—"),
+        (
+            item.note
+                ? "Catatan       : " + String(item.note)
+                : ""
+        ),
+        "",
+        "Mohon dilakukan penjemputan.",
+        "",
+        "DJ Family Kost"
+    ].filter(Boolean).join("\n");
+
+}
+
+
+async function loadLaundry(){
+
+    const box =
+        document.getElementById(
+            "laundryBox"
+        );
+
+    box.innerHTML =
+        '<div class="loading">Memuat order laundry...</div>';
+
+    const data =
+        await api(
+            "masterLaundry"
+        );
+
+    laundryItems =
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items
+            : [];
+
+    if(!laundryItems.length){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'Belum ada order laundry aktif.' +
+            '</div>';
+
+        return;
+
+    }
+
+    box.innerHTML =
+        '<table class="data-table">' +
+        '<thead><tr>' +
+        '<th>ID</th>' +
+        '<th>Tenant</th>' +
+        '<th>Kamar</th>' +
+        '<th>Layanan</th>' +
+        '<th>Pickup</th>' +
+        '<th>Status</th>' +
+        '<th>Aksi</th>' +
+        '</tr></thead>' +
+        '<tbody>' +
+
+        laundryItems.map(function(item){
+
+            return (
+                '<tr>' +
+                '<td><strong>' +
+                escapeHtml(item.id) +
+                '</strong></td>' +
+                '<td>' +
+                escapeHtml(item.name || item.tenantId || "—") +
+                '</td>' +
+                '<td>' +
+                escapeHtml(item.room || "—") +
+                '</td>' +
+                '<td>' +
+                escapeHtml(item.service || "—") +
+                '</td>' +
+                '<td>' +
+                escapeHtml(item.pickupLocation || "—") +
+                (
+                    item.note
+                        ? '<br><span class="small">' +
+                          escapeHtml(item.note) +
+                          '</span>'
+                        : ""
+                ) +
+                '</td>' +
+                '<td><span class="badge badge-warn">TERKIRIM</span></td>' +
+                '<td>' +
+                '<div class="actions">' +
+                '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\\'' +
+                encodeURIComponent(item.id) +
+                '\\')">💬 Kirim WA</button>' +
+                '<button class="btn btn-primary" onclick="completeLaundry(\\'' +
+                encodeURIComponent(item.id) +
+                '\\')">Selesai</button>' +
+                '</div>' +
+                '</td>' +
+                '</tr>'
+            );
+
+        }).join("") +
+
+        '</tbody></table>';
+
+}
+
+
+function sendLaundryWhatsApp(encoded){
+
+    const id =
+        decodeURIComponent(encoded);
+
+    const item =
+        laundryItems.find(function(row){
+            return String(row.id) === String(id);
+        });
+
+    if(!item){
+        alert("Order laundry tidak ditemukan.");
+        return;
+    }
+
+    const number =
+        window.DJ_LAUNDRY_WA_NUMBER || "";
+
+    if(!number){
+        alert(
+            "Nomor WhatsApp Laundry belum dikonfigurasi. Order tetap tersimpan."
+        );
+        return;
+    }
+
+    const url =
+        "https://wa.me/" +
+        number +
+        "?text=" +
+        encodeURIComponent(
+            buildLaundryWhatsAppMessage(item)
+        );
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+async function completeLaundry(encoded){
+
+    const id =
+        decodeURIComponent(encoded);
+
+    if(
+        !confirm(
+            "Tandai order laundry " +
+            id +
+            " sebagai SELESAI?"
+        )
+    ){
+        return;
+    }
+
+    try{
+
+        await api(
+            "masterCompleteLaundry",
+            {
+                laundryId:id
+            }
+        );
+
+        await loadLaundry();
+        await loadHistory();
+        await loadDashboard();
+
+    }catch(error){
+
+        alert(error.message);
+
+    }
+
+}
+
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+
+function historyCategoryLabel(item){
+
+    const type =
+        String(
+            item && item.type ||
+            ""
+        ).toUpperCase();
+
+    if(type.indexOf("LAUNDRY") >= 0) return "LAUNDRY";
+    if(type.indexOf("CAFE") >= 0) return "CAFE";
+    if(type.indexOf("MAINTENANCE") >= 0) return "MAINTENANCE";
+
+    if(
+        type.indexOf("PAYMENT") >= 0 ||
+        type.indexOf("PEMBAYARAN") >= 0
+    ){
+        return "PEMBAYARAN";
+    }
+
+    if(
+        type.indexOf("REGISTRATION") >= 0 ||
+        type.indexOf("PENDAFTARAN") >= 0
+    ){
+        return "PENDAFTARAN";
+    }
+
+    if(
+        type.indexOf("CHECKIN") >= 0 ||
+        type.indexOf("CHECKOUT") >= 0
+    ){
+        return "CHECK-IN/OUT";
+    }
+
+    if(
+        type.indexOf("TENANT") >= 0 ||
+        type.indexOf("REVISION") >= 0 ||
+        type.indexOf("DATA") >= 0
+    ){
+        return "DATA TENANT";
+    }
+
+    if(type.indexOf("ANNOUNCEMENT") >= 0){
+        return "PENGUMUMAN";
+    }
+
+    return "LAINNYA";
+}
+
+
+async function loadHistory(){
+
+    const box =
+        document.getElementById(
+            "historyBox"
+        );
+
+    box.innerHTML =
+        '<div class="loading">Memuat History...</div>';
+
+    const data =
+        await api(
+            "masterHistory"
+        );
+
+    historyItems =
+        Array.isArray(
+            data &&
+            data.items
+        )
+            ? data.items
+            : [];
+
+    renderHistoryFilters();
+    renderHistory();
+
+}
+
+
+function renderHistoryFilters(){
+
+    const filters = [
+        ["ALL","Semua"],
+        ["MAINTENANCE","Maintenance"],
+        ["LAUNDRY","Laundry"],
+        ["CAFE","Cafe"],
+        ["PEMBAYARAN","Pembayaran"],
+        ["PENDAFTARAN","Pendaftaran"],
+        ["CHECK-IN/OUT","Check-in/out"],
+        ["DATA TENANT","Data Tenant"],
+        ["PENGUMUMAN","Pengumuman"],
+        ["LAINNYA","Lainnya"]
+    ];
+
+    document
+        .getElementById(
+            "historyFilters"
+        )
+        .innerHTML =
+            filters.map(function(item){
+                return (
+                    '<button class="filter ' +
+                    (
+                        historyFilter === item[0]
+                            ? "active"
+                            : ""
+                    ) +
+                    '" onclick="setHistoryFilter(\\'' +
+                    encodeURIComponent(item[0]) +
+                    '\\')">' +
+                    escapeHtml(item[1]) +
+                    '</button>'
+                );
+            }).join("");
+
+}
+
+
+function setHistoryFilter(encoded){
+
+    historyFilter =
+        decodeURIComponent(encoded);
+
+    renderHistoryFilters();
+    renderHistory();
+
+}
+
+
+function renderHistory(){
+
+    let items =
+        historyItems.slice();
+
+    if(historyFilter !== "ALL"){
+        items =
+            items.filter(function(item){
+                return historyCategoryLabel(item) === historyFilter;
+            });
+    }
+
+    const box =
+        document.getElementById(
+            "historyBox"
+        );
+
+    if(!items.length){
+        box.innerHTML =
+            '<div class="master-history-item master-history-empty">' +
+            'Belum ada history untuk filter ini.' +
+            '</div>';
+        return;
+    }
+
+    box.innerHTML =
+        items.map(function(item){
+            return (
+                '<article class="master-history-item">' +
+                '<div class="master-history-top">' +
+                '<span class="master-history-type">' +
+                escapeHtml(historyCategoryLabel(item)) +
+                '</span>' +
+                '<span class="master-history-time">' +
+                escapeHtml(item.timestamp || "—") +
+                '</span>' +
+                '</div>' +
+                '<div class="master-history-message">' +
+                escapeHtml(item.message || "—") +
+                '</div>' +
+                '</article>'
+            );
+        }).join("");
 
 }
 
