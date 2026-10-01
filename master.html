@@ -410,6 +410,119 @@ button{
 
 
 /* =========================================================
+   PAYMENT MONITORING + WHATSAPP CONTACT CENTER
+   ========================================================= */
+
+.payment-monitor-summary{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:10px;
+    margin:14px 0;
+}
+
+.payment-monitor-card{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+    padding:12px 13px;
+}
+
+.payment-monitor-card span{
+    display:block;
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.payment-monitor-card strong{
+    display:block;
+    margin-top:5px;
+    font-size:23px;
+}
+
+.payment-monitor-card.warn strong{
+    color:#b54708;
+}
+
+.payment-monitor-card.alert strong{
+    color:#b42318;
+}
+
+.payment-monitor-toolbar{
+    display:grid;
+    grid-template-columns:minmax(220px,1fr) minmax(180px,240px);
+    gap:10px;
+    margin:14px 0 8px;
+}
+
+.payment-monitor-toolbar .field,
+.whatsapp-toolbar .field{
+    margin:0;
+}
+
+.payment-monitor-note{
+    margin:0 0 14px;
+    color:#667085;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.whatsapp-toolbar{
+    display:grid;
+    grid-template-columns:minmax(220px,1fr);
+    gap:10px;
+    margin:14px 0 16px;
+}
+
+.whatsapp-contact-list{
+    display:grid;
+    gap:10px;
+}
+
+.whatsapp-contact-card{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:14px;
+    align-items:center;
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+    padding:14px 16px;
+}
+
+.whatsapp-contact-main strong{
+    display:block;
+    font-size:15px;
+}
+
+.whatsapp-contact-meta{
+    margin-top:4px;
+    color:#667085;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.whatsapp-contact-actions{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.whatsapp-contact-disabled{
+    color:#667085;
+    font-size:12px;
+    font-weight:700;
+}
+
+@media(max-width:1100px){
+    .payment-monitor-summary{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+}
+
+/* =========================================================
    DASHBOARD
    ========================================================= */
 
@@ -927,6 +1040,22 @@ button{
 
     .history-room-reset{
         width:100%;
+    }
+
+    .payment-monitor-summary{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .payment-monitor-toolbar{
+        grid-template-columns:1fr;
+    }
+
+    .whatsapp-contact-card{
+        grid-template-columns:1fr;
+    }
+
+    .whatsapp-contact-actions{
+        justify-content:flex-start;
     }
 }
 
@@ -1501,16 +1630,54 @@ button{
                     </h2>
 
                     <p class="section-subtitle">
-                        Verifikasi pembayaran dan lihat kembali
-                        bukti transfer.
+                        Pantau kondisi tagihan tenant. Email digunakan untuk reminder otomatis; WhatsApp digunakan untuk komunikasi manual.
                     </p>
 
+                    <div
+                        id="paymentSummary"
+                        class="payment-monitor-summary"
+                    ></div>
 
                     <div
                         id="paymentFilters"
                         class="filters"
                     ></div>
 
+                    <div class="payment-monitor-toolbar">
+
+                        <div class="field">
+
+                            <label for="paymentSearch">
+                                Cari Tenant / ID / Kamar
+                            </label>
+
+                            <input
+                                id="paymentSearch"
+                                type="text"
+                                autocomplete="off"
+                                placeholder="Contoh: Bima / TENANT-001 / 203"
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="paymentPeriodSelect">
+                                Periode
+                            </label>
+
+                            <select id="paymentPeriodSelect"></select>
+
+                        </div>
+
+                    </div>
+
+                    <p
+                        id="paymentMonitorHint"
+                        class="payment-monitor-note"
+                    >
+                        Memuat status pembayaran...
+                    </p>
 
                     <div
                         id="paymentsBox"
@@ -1723,14 +1890,36 @@ button{
                     </h2>
 
                     <p class="section-subtitle">
-                        Daftar tenant yang belum menyelesaikan
-                        pembayaran.
+                        Pusat kontak WhatsApp untuk komunikasi manual dengan tenant dan kontak operasional.
                     </p>
 
+                    <div class="whatsapp-toolbar">
+
+                        <div class="field">
+
+                            <label for="whatsappSearch">
+                                Cari Kontak
+                            </label>
+
+                            <input
+                                id="whatsappSearch"
+                                type="text"
+                                autocomplete="off"
+                                placeholder="Nama / Tenant ID / Kamar / Nomor"
+                            >
+
+                        </div>
+
+                        <div
+                            id="whatsappFilters"
+                            class="filters"
+                        ></div>
+
+                    </div>
 
                     <div
-                        id="whatsappBox"
-                        class="card table-wrap"
+                        id="whatsappContactsBox"
+                        class="whatsapp-contact-list"
                     ></div>
 
                 </section>
@@ -1975,6 +2164,14 @@ let laundryItems = [];
 let historyItems = [];
 
 let paymentFilter = "ALL";
+
+let paymentSearch = "";
+
+let paymentPeriodFilter = "CURRENT";
+
+let whatsappFilter = "ALL";
+
+let whatsappSearch = "";
 
 let mediaFilter = "ALL";
 
@@ -4818,7 +5015,6 @@ async function loadPayments(){
             "masterPayments"
         );
 
-
     paymentItems =
         Array.isArray(
             data &&
@@ -4827,10 +5023,390 @@ async function loadPayments(){
             ? data.items
             : [];
 
+    if(
+        !tenantItems.length
+    ){
+
+        try{
+
+            const tenantData =
+                await api(
+                    "masterTenants"
+                );
+
+            tenantItems =
+                Array.isArray(
+                    tenantData &&
+                    tenantData.items
+                )
+                    ? tenantData.items
+                    : [];
+
+        }catch(error){}
+
+    }
 
     renderPaymentFilters();
-
+    renderPaymentPeriodFilter();
+    renderPaymentSummary();
+    renderPaymentMonitoringHint();
     renderPayments();
+
+}
+
+
+function paymentDateValue(value){
+
+    const text =
+        String(
+            value ||
+            ""
+        ).trim();
+
+    if(!text){
+        return null;
+    }
+
+    let match =
+        text.match(
+            /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/
+        );
+
+    if(match){
+
+        const date =
+            new Date(
+                Number(match[3]),
+                Number(match[2]) - 1,
+                Number(match[1])
+            );
+
+        if(!isNaN(date.getTime())){
+            return date;
+        }
+
+    }
+
+    match =
+        text.match(
+            /^(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})/
+        );
+
+    if(match){
+
+        const date =
+            new Date(
+                Number(match[1]),
+                Number(match[2]) - 1,
+                Number(match[3])
+            );
+
+        if(!isNaN(date.getTime())){
+            return date;
+        }
+
+    }
+
+    const parsed =
+        new Date(text);
+
+    return isNaN(parsed.getTime())
+        ? null
+        : parsed;
+
+}
+
+
+function paymentToday(){
+
+    const now =
+        new Date();
+
+    return new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+    );
+
+}
+
+
+function paymentDaysLate(item){
+
+    const due =
+        paymentDateValue(
+            item &&
+            item.dueDate
+        );
+
+    if(!due){
+        return 0;
+    }
+
+    const today =
+        paymentToday();
+
+    return Math.max(
+        0,
+        Math.floor(
+            (
+                today.getTime() -
+                new Date(
+                    due.getFullYear(),
+                    due.getMonth(),
+                    due.getDate()
+                ).getTime()
+            ) /
+            86400000
+        )
+    );
+
+}
+
+
+function paymentOutstanding(item){
+
+    const total =
+        Number(
+            item &&
+            item.total ||
+            0
+        );
+
+    const paid =
+        Number(
+            item &&
+            item.paid ||
+            0
+        );
+
+    return Math.max(
+        0,
+        total -
+        paid
+    );
+
+}
+
+
+function paymentCondition(item){
+
+    const baseStatus =
+        String(
+            item &&
+            item.status ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const verification =
+        String(
+            item &&
+            item.verification ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const total =
+        Number(
+            item &&
+            item.total ||
+            0
+        );
+
+    const paid =
+        Number(
+            item &&
+            item.paid ||
+            0
+        );
+
+    const outstanding =
+        paymentOutstanding(
+            item
+        );
+
+    if(
+        total > 0 &&
+        paid >= total &&
+        (
+            verification ===
+            "TERVERIFIKASI" ||
+            baseStatus ===
+            "LUNAS"
+        )
+    ){
+        return "LUNAS";
+    }
+
+    if(
+        verification ===
+        "DITOLAK" ||
+        baseStatus ===
+        "DITOLAK"
+    ){
+        return "DITOLAK";
+    }
+
+    if(
+        verification ===
+        "MENUNGGU VERIFIKASI" &&
+        outstanding <= 0
+    ){
+        return "MENUNGGU VERIFIKASI";
+    }
+
+    if(
+        paid > 0 &&
+        total > 0 &&
+        paid < total
+    ){
+        return "KURANG BAYAR";
+    }
+
+    if(
+        outstanding > 0 &&
+        paymentDaysLate(item) > 0
+    ){
+        return "TERLAMBAT";
+    }
+
+    if(
+        outstanding > 0
+    ){
+        return "BELUM BAYAR";
+    }
+
+    return baseStatus || "BELUM BAYAR";
+
+}
+
+
+function paymentPeriodValue(item){
+
+    return String(
+        item &&
+        item.period ||
+        ""
+    ).trim();
+
+}
+
+
+function paymentCurrentPeriodLabel(){
+
+    const today =
+        paymentToday();
+
+    const months = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+    ];
+
+    return (
+        months[today.getMonth()] +
+        " " +
+        today.getFullYear()
+    );
+
+}
+
+
+function paymentPeriodMatches(item){
+
+    if(
+        paymentPeriodFilter ===
+        "ALL"
+    ){
+        return true;
+    }
+
+    return (
+        paymentPeriodValue(item).toUpperCase()
+        ===
+        paymentPeriodFilter.toUpperCase()
+    );
+
+}
+
+
+function renderPaymentSummary(){
+
+    const box =
+        document.getElementById(
+            "paymentSummary"
+        );
+
+    if(!box){
+        return;
+    }
+
+    const rows =
+        paymentItems.filter(
+            paymentPeriodMatches
+        );
+
+    const counts = {
+        total:rows.length,
+        lunas:0,
+        belum:0,
+        kurang:0,
+        terlambat:0,
+        menunggu:0,
+        ditolak:0
+    };
+
+    rows.forEach(function(item){
+
+        const condition =
+            paymentCondition(
+                item
+            );
+
+        if(condition === "LUNAS"){
+            counts.lunas++;
+        }else if(condition === "BELUM BAYAR"){
+            counts.belum++;
+        }else if(condition === "KURANG BAYAR"){
+            counts.kurang++;
+        }else if(condition === "TERLAMBAT"){
+            counts.terlambat++;
+        }else if(condition === "MENUNGGU VERIFIKASI"){
+            counts.menunggu++;
+        }else if(condition === "DITOLAK"){
+            counts.ditolak++;
+        }
+
+    });
+
+    box.innerHTML =
+        [
+            ["Total",counts.total,""],
+            ["Lunas",counts.lunas,""],
+            ["Belum Bayar",counts.belum,"warn"],
+            ["Kurang Bayar",counts.kurang,"warn"],
+            ["Terlambat",counts.terlambat,"alert"],
+            ["Menunggu Verifikasi",counts.menunggu,""]
+        ]
+        .map(function(card){
+
+            return (
+                '<div class="payment-monitor-card ' +
+                card[2] +
+                '">' +
+                '<span>' +
+                escapeHtml(card[0]) +
+                '</span>' +
+                '<strong>' +
+                escapeHtml(card[1]) +
+                '</strong>' +
+                '</div>'
+            );
+
+        })
+        .join("");
 
 }
 
@@ -4838,87 +5414,211 @@ async function loadPayments(){
 function renderPaymentFilters(){
 
     const filters = [
-
-        [
-            "ALL",
-            "Semua"
-        ],
-
-        [
-            "MENUNGGU VERIFIKASI",
-            "Menunggu Verifikasi"
-        ],
-
-        [
-            "TERVERIFIKASI",
-            "Lunas / Terverifikasi"
-        ],
-
-        [
-            "DITOLAK",
-            "Ditolak"
-        ]
-
+        ["ALL","Semua"],
+        ["LUNAS","Lunas"],
+        ["BELUM BAYAR","Belum Bayar"],
+        ["KURANG BAYAR","Kurang Bayar"],
+        ["TERLAMBAT","Terlambat"],
+        ["MENUNGGU VERIFIKASI","Menunggu Verifikasi"],
+        ["DITOLAK","Ditolak"]
     ];
-
 
     document
         .getElementById(
             "paymentFilters"
         )
         .innerHTML =
+        filters.map(function(item){
 
-        filters
-            .map(
-                function(item){
+            return (
+                '<button class="filter ' +
+                (
+                    paymentFilter === item[0]
+                        ? "active"
+                        : ""
+                ) +
+                '" onclick="setPaymentFilter(\'' +
+                encodeURIComponent(item[0]) +
+                '\')">' +
+                escapeHtml(item[1]) +
+                '</button>'
+            );
 
-                    return (
-
-                        '<button class="filter ' +
-
-                        (
-                            paymentFilter ===
-                            item[0]
-                                ? "active"
-                                : ""
-                        ) +
-
-                        '" onclick="setPaymentFilter(\'' +
-
-                        encodeURIComponent(
-                            item[0]
-                        ) +
-
-                        '\')">' +
-
-                        escapeHtml(
-                            item[1]
-                        ) +
-
-                        '</button>'
-
-                    );
-
-                }
-            )
-            .join("");
+        })
+        .join("");
 
 }
 
 
-function setPaymentFilter(
-    encoded
-){
+function renderPaymentPeriodFilter(){
+
+    const select =
+        document.getElementById(
+            "paymentPeriodSelect"
+        );
+
+    if(!select){
+        return;
+    }
+
+    const periods =
+        Array.from(
+            new Set(
+                paymentItems
+                    .map(paymentPeriodValue)
+                    .filter(Boolean)
+            )
+        );
+
+    const current =
+        paymentCurrentPeriodLabel();
+
+    if(
+        paymentPeriodFilter !== "ALL" &&
+        !periods.some(function(period){
+            return (
+                String(period).toUpperCase() ===
+                String(paymentPeriodFilter).toUpperCase()
+            );
+        })
+    ){
+
+        paymentPeriodFilter =
+            periods.some(function(period){
+                return (
+                    String(period).toUpperCase() ===
+                    String(current).toUpperCase()
+                );
+            })
+                ? current
+                : "ALL";
+
+    }
+
+    select.innerHTML =
+        '<option value="' +
+        escapeHtml(current) +
+        '">' +
+        'Periode Aktif — ' +
+        escapeHtml(current) +
+        '</option>' +
+
+        '<option value="ALL">Semua Periode</option>' +
+
+        periods
+            .filter(function(period){
+                return (
+                    String(period).toUpperCase() !==
+                    String(current).toUpperCase()
+                );
+            })
+            .sort()
+            .map(function(period){
+
+                return (
+                    '<option value="' +
+                    escapeHtml(period) +
+                    '">' +
+                    escapeHtml(period) +
+                    '</option>'
+                );
+
+            })
+            .join("");
+
+    select.value =
+        paymentPeriodFilter;
+
+}
+
+
+function renderPaymentMonitoringHint(){
+
+    const hint =
+        document.getElementById(
+            "paymentMonitorHint"
+        );
+
+    if(!hint){
+        return;
+    }
+
+    const rows =
+        paymentItems.filter(
+            paymentPeriodMatches
+        );
+
+    const overdue =
+        rows.filter(function(item){
+
+            return (
+                paymentOutstanding(item) > 0 &&
+                paymentDaysLate(item) > 0
+            );
+
+        }).length;
+
+    hint.textContent =
+        overdue
+            ? overdue +
+              " tagihan masih memiliki kewajiban dan sudah melewati jatuh tempo."
+            : "Tidak ada tagihan aktif yang melewati jatuh tempo.";
+
+}
+
+
+function setPaymentFilter(encoded){
 
     paymentFilter =
         decodeURIComponent(
             encoded
         );
 
-
     renderPaymentFilters();
-
     renderPayments();
+
+}
+
+
+function setPaymentPeriodFilter(value){
+
+    paymentPeriodFilter =
+        String(
+            value ||
+            "ALL"
+        ).trim();
+
+    renderPaymentSummary();
+    renderPaymentMonitoringHint();
+    renderPayments();
+
+}
+
+
+function paymentMatchesSearch(item, query){
+
+    if(!query){
+        return true;
+    }
+
+    const haystack =
+        [
+            item && item.name,
+            item && item.tenantId,
+            item && item.room,
+            item && item.period,
+            item && item.id
+        ]
+        .map(function(value){
+            return String(
+                value || ""
+            ).trim().toUpperCase();
+        })
+        .join(" ");
+
+    return haystack.indexOf(
+        query.toUpperCase()
+    ) >= 0;
 
 }
 
@@ -4926,8 +5626,9 @@ function setPaymentFilter(
 function renderPayments(){
 
     let items =
-        paymentItems.slice();
-
+        paymentItems.filter(
+            paymentPeriodMatches
+        );
 
     if(
         paymentFilter !==
@@ -4935,281 +5636,421 @@ function renderPayments(){
     ){
 
         items =
-            items.filter(
-                function(item){
+            items.filter(function(item){
 
-                    return (
+                return (
+                    paymentCondition(item) ===
+                    paymentFilter
+                );
 
-                        String(
-                            item.verification ||
-                            ""
-                        )
-                        .toUpperCase()
-
-                        ===
-
-                        paymentFilter
-
-                    );
-
-                }
-            );
+            });
 
     }
 
+    const query =
+        String(
+            paymentSearch ||
+            ""
+        ).trim();
 
-    document
-        .getElementById(
+    if(query){
+
+        items =
+            items.filter(function(item){
+
+                return paymentMatchesSearch(
+                    item,
+                    query
+                );
+
+            });
+
+    }
+
+    const box =
+        document.getElementById(
             "paymentsBox"
-        )
-        .innerHTML =
+        );
 
+    box.innerHTML =
         items.length
 
             ? (
-
-                '<table class="data-table">' +
-
-                '<thead>' +
-
-                '<tr>' +
-
+                '<table class="data-table" style="min-width:1120px;">' +
+                '<thead><tr>' +
                 '<th>Payment</th>' +
                 '<th>Tenant</th>' +
                 '<th>Periode</th>' +
+                '<th>Jatuh Tempo</th>' +
                 '<th>Dibayar</th>' +
-                '<th>Status</th>' +
+                '<th>Total</th>' +
+                '<th>Kondisi</th>' +
                 '<th>Verifikasi</th>' +
                 '<th>Aksi</th>' +
-
-                '</tr>' +
-
-                '</thead>' +
-
+                '</tr></thead>' +
                 '<tbody>' +
 
-                items
-                    .map(
-                        function(item){
-
-                            const verification =
-                                String(
-                                    item.verification ||
-                                    ""
-                                )
-                                .toUpperCase();
-
-
-                            let badge =
-                                "badge-warn";
-
-
-                            if(
-                                verification ===
-                                "TERVERIFIKASI"
-                            ){
-
-                                badge =
-                                    "badge-ok";
-
-                            }else if(
-                                verification ===
-                                "DITOLAK"
-                            ){
-
-                                badge =
-                                    "badge-danger";
-
-                            }
-
-
-                            let actions =
-
-                                '<button class="btn btn-secondary" onclick="viewPaymentProof(\'' +
-
-                                encodeURIComponent(
-                                    item.id
-                                ) +
-
-                                '\')">' +
-
-                                'Lihat Foto' +
-
-                                '</button>';
-
-
-                            if(
-                                verification ===
-                                "MENUNGGU VERIFIKASI"
-                            ){
-
-                                actions +=
-
-                                    '<button class="btn btn-success" onclick="verifyPayment(\'' +
-
-                                    encodeURIComponent(
-                                        item.id
-                                    ) +
-
-                                    '\',\'approve\')">' +
-
-                                    'Setujui' +
-
-                                    '</button>';
-
-
-                                actions +=
-
-                                    '<button class="btn btn-danger" onclick="verifyPayment(\'' +
-
-                                    encodeURIComponent(
-                                        item.id
-                                    ) +
-
-                                    '\',\'reject\')">' +
-
-                                    'Tolak' +
-
-                                    '</button>';
-
-                            }
-
-
-                            return (
-
-                                '<tr>' +
-
-                                '<td>' +
-
-                                escapeHtml(
-                                    item.id
-                                ) +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                '<strong>' +
-
-                                escapeHtml(
-                                    item.name ||
-                                    item.tenantId ||
-                                    "—"
-                                ) +
-
-                                '</strong>' +
-
-                                '<br>' +
-
-                                '<span class="small">' +
-
-                                escapeHtml(
-                                    item.tenantId ||
-                                    ""
-                                ) +
-
-                                ' · Kamar ' +
-
-                                escapeHtml(
-                                    item.room ||
-                                    "—"
-                                ) +
-
-                                '</span>' +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                escapeHtml(
-                                    item.period ||
-                                    "—"
-                                ) +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                money(
-                                    item.paid
-                                ) +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                '<span class="badge ' +
-                                badge +
-                                '">' +
-
-                                escapeHtml(
-                                    item.status ||
-                                    "—"
-                                ) +
-
-                                '</span>' +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                '<span class="badge ' +
-                                badge +
-                                '">' +
-
-                                escapeHtml(
-                                    verification ||
-                                    "—"
-                                ) +
-
-                                '</span>' +
-
-                                (
-                                    item.verifiedBy
-
-                                        ? (
-                                            '<br><span class="small">' +
-                                            escapeHtml(
-                                                item.verifiedBy
-                                            ) +
-                                            '</span>'
-                                          )
-
-                                        : ""
-
-                                ) +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                '<div class="actions">' +
-
-                                actions +
-
-                                '</div>' +
-
-                                '</td>' +
-
-                                '</tr>'
-
-                            );
-
-                        }
-                    )
-                    .join("")
-
-                +
-
-                '</tbody>' +
-
-                '</table>'
-
+                items.map(function(item){
+
+                    const condition =
+                        paymentCondition(item);
+
+                    const late =
+                        paymentDaysLate(item);
+
+                    const verification =
+                        String(
+                            item.verification ||
+                            ""
+                        ).trim().toUpperCase();
+
+                    let badge =
+                        "badge-warn";
+
+                    if(condition === "LUNAS"){
+                        badge = "badge-ok";
+                    }else if(
+                        condition === "TERLAMBAT" ||
+                        condition === "DITOLAK"
+                    ){
+                        badge = "badge-danger";
+                    }
+
+                    let actions =
+                        '<button class="btn btn-secondary" onclick="viewPaymentProof(\'' +
+                        encodeURIComponent(item.id) +
+                        '\')">Lihat Foto</button>';
+
+                    if(
+                        verification ===
+                        "MENUNGGU VERIFIKASI"
+                    ){
+
+                        actions +=
+                            '<button class="btn btn-success" onclick="verifyPayment(\'' +
+                            encodeURIComponent(item.id) +
+                            '\',\'approve\')">Setujui</button>' +
+
+                            '<button class="btn btn-danger" onclick="verifyPayment(\'' +
+                            encodeURIComponent(item.id) +
+                            '\',\'reject\')">Tolak</button>';
+
+                    }
+
+                    const phone =
+                        getTenantPhoneForWhatsApp(
+                            item.tenantId
+                        );
+
+                    if(
+                        phone &&
+                        paymentOutstanding(item) > 0
+                    ){
+
+                        actions +=
+                            '<button class="btn btn-success" onclick="openPaymentWhatsApp(\'' +
+                            encodeURIComponent(item.tenantId || "") +
+                            '\',\'' +
+                            encodeURIComponent(item.name || item.tenantId || "Tenant") +
+                            '\',\'' +
+                            encodeURIComponent(item.room || "") +
+                            '\',\'' +
+                            encodeURIComponent(condition) +
+                            '\',\'' +
+                            encodeURIComponent(item.period || "") +
+                            '\',\'' +
+                            encodeURIComponent(money(paymentOutstanding(item))) +
+                            '\')">💬 WhatsApp</button>';
+
+                    }
+
+                    return (
+                        '<tr>' +
+
+                        '<td><strong>' +
+                        escapeHtml(item.id || "—") +
+                        '</strong></td>' +
+
+                        '<td>' +
+                        '<strong>' +
+                        escapeHtml(
+                            item.name ||
+                            item.tenantId ||
+                            "—"
+                        ) +
+                        '</strong>' +
+                        '<br><span class="small">' +
+                        escapeHtml(
+                            item.tenantId ||
+                            ""
+                        ) +
+                        ' · Kamar ' +
+                        escapeHtml(
+                            item.room ||
+                            "—"
+                        ) +
+                        '</span>' +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(item.period || "—") +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(item.dueDate || "—") +
+                        '</td>' +
+
+                        '<td>' +
+                        money(item.paid) +
+                        '</td>' +
+
+                        '<td>' +
+                        money(item.total) +
+                        '</td>' +
+
+                        '<td>' +
+                        '<span class="badge ' +
+                        badge +
+                        '">' +
+                        escapeHtml(condition) +
+                        '</span>' +
+
+                        (
+                            late > 0 &&
+                            paymentOutstanding(item) > 0
+                                ? '<br><span class="small" style="color:#b42318;font-weight:800;">' +
+                                  late +
+                                  ' hari lewat jatuh tempo</span>'
+                                : ""
+                        ) +
+
+                        '</td>' +
+
+                        '<td>' +
+                        '<span class="badge ' +
+                        (
+                            verification === "TERVERIFIKASI"
+                                ? "badge-ok"
+                                : verification === "DITOLAK"
+                                    ? "badge-danger"
+                                    : "badge-warn"
+                        ) +
+                        '">' +
+                        escapeHtml(
+                            verification || "—"
+                        ) +
+                        '</span>' +
+
+                        (
+                            item.verifiedBy
+                                ? '<br><span class="small">' +
+                                  escapeHtml(item.verifiedBy) +
+                                  '</span>'
+                                : ""
+                        ) +
+
+                        '</td>' +
+
+                        '<td><div class="actions">' +
+                        actions +
+                        '</div></td>' +
+
+                        '</tr>'
+                    );
+
+                }).join("") +
+
+                '</tbody></table>'
             )
 
-            : '<div class="empty">Tidak ada pembayaran pada filter ini.</div>';
+            : '<div class="empty">' +
+              (
+                paymentSearch ||
+                paymentFilter !== "ALL" ||
+                paymentPeriodFilter !== "ALL"
+                    ? 'Tidak ada pembayaran yang sesuai dengan monitoring/filter.'
+                    : 'Belum ada data pembayaran.'
+              ) +
+              '</div>';
 
 }
+
+
+const paymentSearchInput =
+    document.getElementById(
+        "paymentSearch"
+    );
+
+if(paymentSearchInput){
+
+    paymentSearchInput.addEventListener(
+        "input",
+        function(){
+
+            paymentSearch =
+                String(
+                    this.value ||
+                    ""
+                ).trim();
+
+            renderPayments();
+
+        }
+    );
+
+}
+
+
+const paymentPeriodSelect =
+    document.getElementById(
+        "paymentPeriodSelect"
+    );
+
+if(paymentPeriodSelect){
+
+    paymentPeriodSelect.addEventListener(
+        "change",
+        function(){
+
+            setPaymentPeriodFilter(
+                this.value
+            );
+
+        }
+    );
+
+}
+
+
+function normalizeWhatsAppNumber(value){
+
+    let text =
+        String(
+            value ||
+            ""
+        )
+        .replace(
+            /\D/g,
+            ""
+        );
+
+    if(!text){
+        return "";
+    }
+
+    if(
+        text.indexOf("62") ===
+        0
+    ){
+        return text;
+    }
+
+    if(
+        text.indexOf("0") ===
+        0
+    ){
+        return "62" +
+            text.substring(1);
+    }
+
+    return text;
+
+}
+
+
+function getTenantPhoneForWhatsApp(tenantId){
+
+    const wanted =
+        String(
+            tenantId ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const tenant =
+        tenantItems.find(function(item){
+
+            return (
+                String(
+                    item &&
+                    item.tenantId ||
+                    ""
+                )
+                .trim()
+                .toUpperCase()
+                ===
+                wanted
+            );
+
+        });
+
+    return tenant
+        ? normalizeWhatsAppNumber(
+            tenant.phone
+        )
+        : "";
+
+}
+
+
+function openPaymentWhatsApp(
+    encodedTenantId,
+    encodedName,
+    encodedRoom,
+    encodedCondition,
+    encodedPeriod,
+    encodedRemaining
+){
+
+    openWhatsAppComposer(
+        JSON.stringify({
+
+            id:
+                "PAYMENT-" +
+                decodeURIComponent(
+                    encodedTenantId
+                ),
+
+            name:
+                decodeURIComponent(
+                    encodedName
+                ),
+
+            category:
+                "TENANT",
+
+            phone:
+                getTenantPhoneForWhatsApp(
+                    decodeURIComponent(
+                        encodedTenantId
+                    )
+                ),
+
+            room:
+                decodeURIComponent(
+                    encodedRoom
+                ),
+
+            note:
+                "Periode " +
+                decodeURIComponent(
+                    encodedPeriod
+                ) +
+                " · Status " +
+                decodeURIComponent(
+                    encodedCondition
+                ) +
+                " · Sisa " +
+                decodeURIComponent(
+                    encodedRemaining
+                )
+
+        })
+    );
+
+}
+
 
 
 async function viewPaymentProof(
@@ -7754,166 +8595,731 @@ function renderRooms(
 
 
 /* ============================================================
-   WHATSAPP
+   WHATSAPP CONTACT CENTER
    ============================================================ */
 
-async function loadWhatsApp(){
+const WHATSAPP_STATIC_CONTACTS = [
 
-    const data =
-        await api(
-            "masterWhatsApp"
-        );
+    {
+        id:
+            "WA-TECH-001",
+        name:
+            "Teknisi Maintenance",
+        category:
+            "TEKNISI",
+        phone:
+            MAINTENANCE_TECHNICIAN_WA,
+        room:
+            "",
+        note:
+            "Maintenance"
+    },
+
+    {
+        id:
+            "WA-LAUNDRY-001",
+        name:
+            "Laundry",
+        category:
+            "LAUNDRY",
+        phone:
+            "",
+        room:
+            "",
+        note:
+            "Nomor WhatsApp Laundry belum dikonfigurasi"
+    },
+
+    {
+        id:
+            "WA-CAFE-001",
+        name:
+            "Cafe",
+        category:
+            "CAFE",
+        phone:
+            "",
+        room:
+            "",
+        note:
+            "Kontak Cafe belum dikonfigurasi"
+    },
+
+    {
+        id:
+            "WA-OFFICE-001",
+        name:
+            "DJ Family Kost",
+        category:
+            "UMUM",
+        phone:
+            "6285196888766",
+        room:
+            "",
+        note:
+            "Kontak umum"
+    }
+
+];
 
 
-    const items =
-        Array.isArray(
-            data &&
-            data.items
-        )
-            ? data.items
-            : [];
+function getWhatsAppContacts(){
 
+    const contacts = [];
+
+    tenantItems.forEach(function(item){
+
+        const status =
+            String(
+                item &&
+                item.status ||
+                ""
+            )
+            .trim()
+            .toUpperCase();
+
+        if(
+            status &&
+            status !==
+            "AKTIF"
+        ){
+            return;
+        }
+
+        contacts.push({
+
+            id:
+                "TENANT-" +
+                String(
+                    item.tenantId ||
+                    ""
+                ),
+
+            name:
+                item.name ||
+                item.tenantId ||
+                "Tenant",
+
+            category:
+                "TENANT",
+
+            phone:
+                normalizeWhatsAppNumber(
+                    item.phone
+                ),
+
+            room:
+                item.room ||
+                "",
+
+            note:
+                item.tenantId ||
+                ""
+
+        });
+
+    });
+
+    return contacts.concat(
+        WHATSAPP_STATIC_CONTACTS
+    );
+
+}
+
+
+function renderWhatsAppFilters(){
+
+    const filters = [
+
+        ["ALL","Semua"],
+        ["TENANT","Tenant"],
+        ["TEKNISI","Teknisi"],
+        ["LAUNDRY","Laundry"],
+        ["CAFE","Cafe"],
+        ["UMUM","Umum"]
+
+    ];
 
     document
         .getElementById(
-            "whatsappBox"
+            "whatsappFilters"
         )
         .innerHTML =
+        filters
+            .map(function(item){
 
-        items.length
+                return (
+                    '<button class="filter ' +
+                    (
+                        whatsappFilter ===
+                        item[0]
+                            ? "active"
+                            : ""
+                    ) +
+                    '" onclick="setWhatsAppFilter(\'' +
+                    encodeURIComponent(item[0]) +
+                    '\')">' +
+                    escapeHtml(item[1]) +
+                    '</button>'
+                );
 
-            ? (
-
-                '<table class="data-table">' +
-
-                '<thead>' +
-
-                '<tr>' +
-
-                '<th>Tenant</th>' +
-                '<th>Kamar</th>' +
-                '<th>Periode</th>' +
-                '<th>Tagihan</th>' +
-                '<th>Aksi</th>' +
-
-                '</tr>' +
-
-                '</thead>' +
-
-                '<tbody>' +
-
-                items
-                    .map(
-                        function(item){
-
-                            return (
-
-                                '<tr>' +
-
-                                '<td>' +
-
-                                '<strong>' +
-
-                                escapeHtml(
-                                    item.name
-                                ) +
-
-                                '</strong>' +
-
-                                '<br>' +
-
-                                '<span class="small">' +
-
-                                escapeHtml(
-                                    item.phone
-                                ) +
-
-                                '</span>' +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                escapeHtml(
-                                    item.room
-                                ) +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                escapeHtml(
-                                    item.period
-                                ) +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                money(
-                                    item.amount
-                                ) +
-
-                                '</td>' +
-
-                                '<td>' +
-
-                                (
-                                    item.waLink
-
-                                        ? (
-
-                                            '<a ' +
-
-                                            'class="btn btn-success" ' +
-
-                                            'href="' +
-                                            escapeHtml(
-                                                item.waLink
-                                            ) +
-                                            '" ' +
-
-                                            'target="_blank" ' +
-
-                                            'rel="noopener noreferrer">' +
-
-                                            'Buka WhatsApp' +
-
-                                            '</a>'
-
-                                          )
-
-                                        : (
-
-                                            '<span class="small">' +
-                                            'Nomor tidak tersedia' +
-                                            '</span>'
-
-                                          )
-
-                                ) +
-
-                                '</td>' +
-
-                                '</tr>'
-
-                            );
-
-                        }
-                    )
-                    .join("")
-
-                +
-
-                '</tbody>' +
-
-                '</table>'
-
-            )
-
-            : '<div class="empty">Tidak ada tenant yang perlu diingatkan.</div>';
+            })
+            .join("");
 
 }
+
+
+function setWhatsAppFilter(
+    encoded
+){
+
+    whatsappFilter =
+        decodeURIComponent(
+            encoded
+        );
+
+    renderWhatsAppFilters();
+    renderWhatsAppContacts();
+
+}
+
+
+function buildWhatsAppOpeningMessage(
+    contact
+){
+
+    const name =
+        String(
+            contact &&
+            contact.name ||
+            "Bapak/Ibu"
+        ).trim();
+
+    const room =
+        String(
+            contact &&
+            contact.room ||
+            ""
+        ).trim();
+
+    const context =
+        room
+            ? "Terkait Kamar " + room + ","
+            : "Terkait operasional DJ Family Kost,";
+
+    return (
+        "Halo " +
+        name +
+        ",\n\n" +
+        context +
+        "\n\n" +
+        "[ Tulis isi pesan di sini ]" +
+        "\n\n" +
+        "Terima kasih.\n" +
+        "DJ Family Kost"
+    );
+
+}
+
+
+function openWhatsAppComposer(
+    contactJson
+){
+
+    let contact;
+
+    try{
+
+        contact =
+            JSON.parse(
+                contactJson
+            );
+
+    }catch(error){
+
+        alert(
+            "Kontak WhatsApp tidak valid."
+        );
+
+        return;
+
+    }
+
+    contact.phone =
+        normalizeWhatsAppNumber(
+            contact.phone
+        );
+
+    if(
+        !contact.phone
+    ){
+
+        alert(
+            "Nomor WhatsApp untuk kontak ini belum dikonfigurasi."
+        );
+
+        return;
+
+    }
+
+    openModal(
+
+        "Kirim WhatsApp",
+
+        '<div class="detail-box">' +
+
+        '<strong>' +
+        escapeHtml(
+            contact.name ||
+            "Kontak"
+        ) +
+        '</strong>' +
+
+        '<span class="small">' +
+
+        escapeHtml(
+            contact.category ||
+            ""
+        ) +
+
+        (
+            contact.room
+                ? " · Kamar " +
+                  escapeHtml(
+                      contact.room
+                  )
+                : ""
+        ) +
+
+        ' · ' +
+
+        escapeHtml(
+            contact.phone
+        ) +
+
+        '</span>' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="whatsappComposerMessage">' +
+        'Isi Pesan' +
+        '</label>' +
+
+        '<textarea' +
+        ' id="whatsappComposerMessage"' +
+        ' style="min-height:220px;"' +
+        '>' +
+
+        escapeHtml(
+            buildWhatsAppOpeningMessage(
+                contact
+            )
+        ) +
+
+        '</textarea>' +
+
+        '</div>' +
+
+        '<div class="actions" style="justify-content:flex-end;">' +
+
+        '<button class="btn btn-light" type="button" onclick="closeModal()">' +
+        'Batal' +
+        '</button>' +
+
+        '<button class="btn btn-success" type="button" onclick="openWhatsAppFromComposer(\'' +
+        encodeURIComponent(
+            contact.phone
+        ) +
+        '\')">' +
+
+        'Buka WhatsApp' +
+
+        '</button>' +
+
+        '</div>'
+
+    );
+
+}
+
+
+function openWhatsAppFromComposer(
+    encodedPhone
+){
+
+    const phone =
+        normalizeWhatsAppNumber(
+            decodeURIComponent(
+                encodedPhone
+            )
+        );
+
+    const input =
+        document.getElementById(
+            "whatsappComposerMessage"
+        );
+
+    const message =
+        input
+            ? String(
+                input.value ||
+                ""
+              ).trim()
+            : "";
+
+    if(!phone){
+
+        alert(
+            "Nomor WhatsApp tidak tersedia."
+        );
+
+        return;
+
+    }
+
+    if(!message){
+
+        alert(
+            "Isi pesan belum diisi."
+        );
+
+        return;
+
+    }
+
+    const url =
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        encodeURIComponent(
+            message
+        );
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+function openWhatsAppContactById(
+    encodedId
+){
+
+    const id =
+        decodeURIComponent(
+            encodedId
+        );
+
+    const contact =
+        getWhatsAppContacts().find(
+            function(item){
+
+                return (
+                    String(
+                        item &&
+                        item.id ||
+                        ""
+                    ) ===
+                    String(
+                        id
+                    )
+                );
+
+            }
+        );
+
+    if(!contact){
+
+        alert(
+            "Kontak WhatsApp tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    openWhatsAppComposer(
+        JSON.stringify(
+            contact
+        )
+    );
+
+}
+
+
+function renderWhatsAppContacts(){
+
+    const box =
+        document.getElementById(
+            "whatsappContactsBox"
+        );
+
+    if(!box){
+        return;
+    }
+
+    let items =
+        getWhatsAppContacts();
+
+    if(
+        whatsappFilter !==
+        "ALL"
+    ){
+
+        items =
+            items.filter(
+                function(item){
+
+                    return (
+                        String(
+                            item.category ||
+                            ""
+                        )
+                        .toUpperCase()
+                        ===
+                        whatsappFilter
+                    );
+
+                }
+            );
+
+    }
+
+    const query =
+        String(
+            whatsappSearch ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    if(query){
+
+        items =
+            items.filter(
+                function(item){
+
+                    const haystack =
+                        [
+                            item.name,
+                            item.id,
+                            item.phone,
+                            item.room,
+                            item.note
+                        ]
+                        .map(function(value){
+
+                            return String(
+                                value ||
+                                ""
+                            )
+                            .trim()
+                            .toUpperCase();
+
+                        })
+                        .join(" ");
+
+                    return haystack.indexOf(
+                        query
+                    ) >= 0;
+
+                }
+            );
+
+    }
+
+    items.sort(function(a,b){
+
+        const order = {
+            "TENANT":1,
+            "TEKNISI":2,
+            "LAUNDRY":3,
+            "CAFE":4,
+            "UMUM":5
+        };
+
+        const ao =
+            order[
+                a.category
+            ] || 99;
+
+        const bo =
+            order[
+                b.category
+            ] || 99;
+
+        if(
+            ao !==
+            bo
+        ){
+
+            return ao -
+                bo;
+
+        }
+
+        return String(
+            a.name ||
+            ""
+        ).localeCompare(
+            String(
+                b.name ||
+                ""
+            ),
+            "id"
+        );
+
+    });
+
+    box.innerHTML =
+        items.length
+            ? items.map(function(item){
+
+                const phone =
+                    normalizeWhatsAppNumber(
+                        item.phone
+                    );
+
+                return (
+                    '<article class="whatsapp-contact-card">' +
+
+                    '<div class="whatsapp-contact-main">' +
+
+                    '<strong>' +
+                    escapeHtml(
+                        item.name ||
+                        "Kontak"
+                    ) +
+                    '</strong>' +
+
+                    '<div class="whatsapp-contact-meta">' +
+
+                    escapeHtml(
+                        item.category ||
+                        ""
+                    ) +
+
+                    (
+                        item.room
+                            ? " · Kamar " +
+                              escapeHtml(
+                                  item.room
+                              )
+                            : ""
+                    ) +
+
+                    (
+                        phone
+                            ? " · " +
+                              escapeHtml(
+                                  phone
+                              )
+                            : ""
+                    ) +
+
+                    (
+                        item.note
+                            ? " · " +
+                              escapeHtml(
+                                  item.note
+                              )
+                            : ""
+                    ) +
+
+                    '</div>' +
+
+                    '</div>' +
+
+                    '<div class="whatsapp-contact-actions">' +
+
+                    (
+                        phone
+                            ? (
+                                '<button class="btn btn-success" onclick="openWhatsAppContactById(\'' +
+                                encodeURIComponent(
+                                    item.id
+                                ) +
+                                '\')">' +
+                                '💬 Buka WhatsApp' +
+                                '</button>'
+                              )
+                            : (
+                                '<span class="whatsapp-contact-disabled">' +
+                                'Nomor belum dikonfigurasi' +
+                                '</span>'
+                              )
+                    ) +
+
+                    '</div>' +
+
+                    '</article>'
+                );
+
+              }).join("")
+
+            : '<div class="card"><div class="empty">Kontak tidak ditemukan.</div></div>';
+
+}
+
+
+async function loadWhatsApp(){
+
+    if(
+        !tenantItems.length
+    ){
+
+        const data =
+            await api(
+                "masterTenants"
+            );
+
+        tenantItems =
+            Array.isArray(
+                data &&
+                data.items
+            )
+                ? data.items
+                : [];
+
+    }
+
+    renderWhatsAppFilters();
+    renderWhatsAppContacts();
+
+}
+
+
+const whatsappSearchInput =
+    document.getElementById(
+        "whatsappSearch"
+    );
+
+if(
+    whatsappSearchInput
+){
+
+    whatsappSearchInput.addEventListener(
+        "input",
+        function(){
+
+            whatsappSearch =
+                String(
+                    this.value ||
+                    ""
+                ).trim();
+
+            renderWhatsAppContacts();
+
+        }
+    );
+
+}
+
 
 
 /* ============================================================
