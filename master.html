@@ -1982,7 +1982,7 @@ let historyFilter = "ALL";
 
 let historyRoomFilter = "ALL";
 
-let historyRoomSearch = "";
+let historyTenantSearch = "";
 
 let historyTenantRooms = {};
 
@@ -6833,8 +6833,8 @@ function renderHistoryRoomFilters(){
         '</div>' +
 
         '<div class="history-room-field">' +
-        '<label for="historyRoomSearch">Cari Nomor Kamar</label>' +
-        '<input id="historyRoomSearch" type="text" inputmode="numeric" maxlength="4" placeholder="Ketik contoh: 101">' +
+        '<label for="historyTenantSearch">Cari Tenant ID</label>' +
+        '<input id="historyTenantSearch" type="text" autocomplete="off" placeholder="Ketik contoh: TENANT-001">' +
         '</div>' +
 
         '<button type="button" class="btn btn-secondary history-room-reset" onclick="resetHistoryRoomFilter()">' +
@@ -6848,14 +6848,14 @@ function renderHistoryRoomFilters(){
 
     const search =
         document.getElementById(
-            "historyRoomSearch"
+            "historyTenantSearch"
         );
 
     select.value =
         historyRoomFilter;
 
     search.value =
-        historyRoomSearch;
+        historyTenantSearch;
 
     select.addEventListener(
         "change",
@@ -6867,11 +6867,6 @@ function renderHistoryRoomFilters(){
                     "ALL"
                 );
 
-            historyRoomSearch =
-                historyRoomFilter === "ALL"
-                    ? ""
-                    : historyRoomFilter;
-
             renderHistoryRoomFilters();
             renderHistory();
 
@@ -6882,45 +6877,19 @@ function renderHistoryRoomFilters(){
         "input",
         function(){
 
-            historyRoomSearch =
+            historyTenantSearch =
                 String(
                     this.value ||
                     ""
                 )
-                .replace(
-                    /\D/g,
-                    ""
-                )
-                .slice(
-                    0,
-                    4
-                );
+                .trim()
+                .toUpperCase();
 
             /*
-             * Saat user mengetik manual, dropdown
-             * mengikuti angka yang sudah lengkap.
-             * Jangan rebuild toolbar di setiap karakter
-             * agar cursor/focus input tidak hilang.
+             * Search ini khusus Tenant ID.
+             * Tidak mengubah filter nomor kamar.
+             * Kosong berarti tidak memfilter history.
              */
-            historyRoomFilter =
-                HISTORY_ROOM_LIST
-                    .map(String)
-                    .indexOf(
-                        historyRoomSearch
-                    ) >= 0
-                        ? historyRoomSearch
-                        : "ALL";
-
-            const select =
-                document.getElementById(
-                    "historyRoomSelect"
-                );
-
-            if(select){
-                select.value =
-                    historyRoomFilter;
-            }
-
             renderHistory();
 
         }
@@ -6934,7 +6903,7 @@ function resetHistoryRoomFilter(){
     historyRoomFilter =
         "ALL";
 
-    historyRoomSearch =
+    historyTenantSearch =
         "";
 
     renderHistoryRoomFilters();
@@ -6955,13 +6924,17 @@ function renderHistory(){
             });
     }
 
+    /*
+     * Filter kamar hanya berasal dari dropdown.
+     * "ALL" berarti tidak ada filter kamar.
+     */
     const roomQuery =
-        String(
-            historyRoomSearch ||
-            historyRoomFilter ||
-            ""
-        )
-        .trim();
+        historyRoomFilter === "ALL"
+            ? ""
+            : String(
+                historyRoomFilter ||
+                ""
+              ).trim();
 
     if(roomQuery){
 
@@ -6981,6 +6954,57 @@ function renderHistory(){
 
     }
 
+    /*
+     * Search Tenant ID berdiri sendiri.
+     * Kosong berarti tidak memfilter history.
+     */
+    const tenantQuery =
+        String(
+            historyTenantSearch ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    if(tenantQuery){
+
+        items =
+            items.filter(function(item){
+
+                const tenantId =
+                    String(
+                        item &&
+                        item.tenantId ||
+                        ""
+                    )
+                    .trim()
+                    .toUpperCase();
+
+                const message =
+                    String(
+                        item &&
+                        item.message ||
+                        ""
+                    )
+                    .trim()
+                    .toUpperCase();
+
+                return (
+                    (
+                        tenantId &&
+                        tenantId.indexOf(
+                            tenantQuery
+                        ) >= 0
+                    ) ||
+                    message.indexOf(
+                        tenantQuery
+                    ) >= 0
+                );
+
+            });
+
+    }
+
     const box =
         document.getElementById(
             "historyBox"
@@ -6991,11 +7015,21 @@ function renderHistory(){
         box.innerHTML =
             '<div class="master-history-item master-history-empty">' +
             (
-                roomQuery
+                roomQuery && tenantQuery
                     ? 'Belum ada history untuk Kamar ' +
                       escapeHtml(roomQuery) +
-                      ' pada filter yang dipilih.'
-                    : 'Belum ada history untuk filter ini.'
+                      ' dan Tenant ID ' +
+                      escapeHtml(tenantQuery) +
+                      '.'
+                    : roomQuery
+                        ? 'Belum ada history untuk Kamar ' +
+                          escapeHtml(roomQuery) +
+                          '.'
+                        : tenantQuery
+                            ? 'Belum ada history untuk Tenant ID ' +
+                              escapeHtml(tenantQuery) +
+                              '.'
+                            : 'Belum ada history untuk filter ini.'
             ) +
             '</div>';
 
