@@ -10339,8 +10339,25 @@ document
 
 
 /* ============================================================
-   REFRESH
+   REFRESH / HARD RELOAD
    ============================================================ */
+
+function hardRefreshMasterPage(){
+
+    const currentPath =
+        window.location.pathname;
+
+    const refreshUrl =
+        currentPath +
+        "?refresh=" +
+        Date.now();
+
+    window.location.replace(
+        refreshUrl
+    );
+
+}
+
 
 document
     .getElementById(
@@ -10348,41 +10365,9 @@ document
     )
     .addEventListener(
         "click",
-        async function(){
+        function(){
 
-            try{
-
-                await loadDashboard();
-
-
-                const activePanel =
-                    document.querySelector(
-                        ".panel.active"
-                    );
-
-
-                if(
-                    activePanel &&
-                    activePanel.id !==
-                    "panel-dashboard"
-                ){
-
-                    await loadPanel(
-                        activePanel.id.replace(
-                            "panel-",
-                            ""
-                        )
-                    );
-
-                }
-
-            }catch(error){
-
-                alert(
-                    error.message
-                );
-
-            }
+            hardRefreshMasterPage();
 
         }
     );
