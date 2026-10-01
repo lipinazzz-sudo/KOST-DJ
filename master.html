@@ -3782,6 +3782,17 @@ async function showTenantDataEditor(
                                 ""
                             ).toUpperCase();
 
+                        /*
+                         * Backend revision engine menggunakan properti
+                         * "editable", sedangkan UI Master sebelumnya
+                         * hanya memeriksa "editableByTenant".
+                         * Terima keduanya agar tombol tetap tampil
+                         * tanpa mengubah logic backend.
+                         */
+                        const editableByTenant =
+                            editableByTenant === true ||
+                            field.editable === true;
+
                         const action =
                             pendingStatus === "MENUNGGU VERIFIKASI"
                                 ? (
@@ -3808,7 +3819,7 @@ async function showTenantDataEditor(
                                         '</div>'
                                       )
                                     : (
-                                    field.editableByTenant
+                                    editableByTenant
                                         ? (
                                             '<div class="actions" style="margin-top:9px;">' +
 
