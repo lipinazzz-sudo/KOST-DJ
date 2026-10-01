@@ -179,8 +179,7 @@
       }
 
       .dj-chat-message.mine .dj-chat-bubble{
-        background:#eef4ff;
-        border-color:#d6e4ff;
+        box-shadow:0 0 0 1px rgba(0,0,0,.02);
       }
 
       .dj-chat-message.deleted .dj-chat-bubble{
@@ -474,6 +473,94 @@
     );
   }
 
+  const DJ_CHAT_ROOMS = [
+    "101","102","103","104","105","106","107","108","109",
+    "201","202","203","204","205","206","207","208","209","210",
+    "301","302","303","304","305","306","307","308","309","310",
+    "401","402","403","404","405","406","407","408","409","410"
+  ];
+
+  function roomIndex(room){
+    const value =
+      String(room == null ? "" : room)
+        .replace(/^KAMAR\\s+/i,"")
+        .trim();
+
+    const index =
+      DJ_CHAT_ROOMS.indexOf(value);
+
+    return index >= 0 ? index : -1;
+  }
+
+  function roomTheme(room){
+    const index = roomIndex(room);
+
+    if(index < 0){
+      return {
+        color:"#344054",
+        background:"#ffffff",
+        border:"#d0d5dd"
+      };
+    }
+
+    const hue =
+      Math.round(
+        (360 / DJ_CHAT_ROOMS.length) * index
+      );
+
+    return {
+      color:
+        "hsl(" + hue + " 68% 39%)",
+      background:
+        "hsl(" + hue + " 88% 96%)",
+      border:
+        "hsl(" + hue + " 55% 68%)"
+    };
+  }
+
+  function chatVisual(item){
+    if(
+      item &&
+      String(item.role || "").toLowerCase() === "master"
+    ){
+      return {
+        color:"#ffffff",
+        background:"#0b0b0b",
+        border:"#000000"
+      };
+    }
+
+    return roomTheme(
+      item && (
+        item.displayName ||
+        item.room ||
+        item.senderKey ||
+        ""
+      )
+    );
+  }
+
+  function chatBubbleStyle(item){
+    const theme = chatVisual(item);
+
+    return (
+      ' style="' +
+      'color:' + esc(theme.color) + ';' +
+      'background:' + esc(theme.background) + ';' +
+      'border-color:' + esc(theme.border) + ';"'
+    );
+  }
+
+  function chatMetaStyle(item){
+    const theme = chatVisual(item);
+
+    return (
+      ' style="color:' +
+      esc(theme.color) +
+      ';"'
+    );
+  }
+
   function renderMessages() {
     const stream =
       document.getElementById("djChatStream");
@@ -517,13 +604,17 @@
             (item.deleted ? "deleted" : "") +
             '">' +
 
-            '<div class="dj-chat-meta">' +
+            '<div class="dj-chat-meta"' +
+            chatMetaStyle(item) +
+            '>' +
             esc(sender) +
             " · " +
             formatTime(item.createdAt) +
             "</div>" +
 
-            '<div class="dj-chat-bubble">' +
+            '<div class="dj-chat-bubble"' +
+            chatBubbleStyle(item) +
+            '>' +
             esc(item.message || "") +
             "</div>" +
 
@@ -595,8 +686,24 @@
     box.innerHTML =
       participants
         .map((item) => {
+          const participantTheme =
+            roomTheme(
+              item.room ||
+              item.displayName ||
+              item.tenantId ||
+              ""
+            );
+
           return (
-            '<span class="dj-chat-participant">' +
+            '<span class="dj-chat-participant"' +
+            ' style="' +
+            'background:' +
+            esc(participantTheme.background) +
+            ';border:1px solid ' +
+            esc(participantTheme.border) +
+            ';color:' +
+            esc(participantTheme.color) +
+            ';">' +
             esc(item.displayName || item.tenantId) +
 
             (
