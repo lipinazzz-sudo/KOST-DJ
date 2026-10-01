@@ -1574,7 +1574,157 @@ function tenantRevisionStatusClass(status){
 }
 
 
+const TENANT_COMPLETENESS_FIELDS_V1 = [
+    {
+        key:"Nama_Lengkap",
+        label:"Nama Lengkap"
+    },
+    {
+        key:"Nama_Panggilan",
+        label:"Nama Panggilan"
+    },
+    {
+        key:"No_HP",
+        label:"No. WhatsApp"
+    },
+    {
+        key:"Email",
+        label:"Email"
+    },
+    {
+        key:"Pekerjaan",
+        label:"Pekerjaan"
+    },
+    {
+        key:"Perusahaan_Instansi",
+        label:"Perusahaan / Instansi"
+    },
+    {
+        key:"Kontak_Darurat",
+        label:"Kontak Darurat"
+    },
+    {
+        key:"Hubungan_Kontak_Darurat",
+        label:"Hubungan Kontak Darurat"
+    },
+    {
+        key:"No_HP_Kontak_Darurat",
+        label:"No. HP Kontak Darurat"
+    },
+    {
+        key:"KTP",
+        label:"Foto KTP"
+    },
+    {
+        key:"Surat_Perjanjian",
+        label:"Foto Surat Perjanjian"
+    }
+];
+
+
+function renderTenantCompletenessSummary(fields){
+
+    const countBox =
+        document.getElementById(
+            "tenantCompletenessCount"
+        );
+
+    const listBox =
+        document.getElementById(
+            "tenantCompletenessList"
+        );
+
+    if(!countBox || !listBox){
+        return;
+    }
+
+    const items =
+        Array.isArray(fields)
+            ? fields
+            : [];
+
+    const total =
+        TENANT_COMPLETENESS_FIELDS_V1.length;
+
+    const complete =
+        items.filter(function(field){
+
+            return String(
+                field && field.status || ""
+            ).toUpperCase() === "LENGKAP";
+
+        }).length;
+
+    countBox.textContent =
+        complete + " / " + total + " lengkap";
+
+    listBox.innerHTML =
+        TENANT_COMPLETENESS_FIELDS_V1.map(function(expected){
+
+            const field =
+                items.find(function(item){
+
+                    return String(
+                        item && item.key || ""
+                    ) === expected.key;
+
+                }) || null;
+
+            const status =
+                String(
+                    field && field.status ||
+                    "BELUM LENGKAP"
+                ).toUpperCase();
+
+            const isComplete =
+                status === "LENGKAP";
+
+            const statusText =
+                isComplete
+                    ? "Lengkap"
+                    : status === "MENUNGGU VERIFIKASI"
+                        ? "Menunggu verifikasi"
+                        : status === "PERLU DIPERBAIKI"
+                            ? "Perlu diperbaiki"
+                            : "Belum ada";
+
+            return (
+                '<div class="tenant-status-row">' +
+
+                '<span class="tenant-status-label">' +
+                tenantRevisionEscape(
+                    expected.label
+                ) +
+                '</span>' +
+
+                '<span class="tenant-status-check">' +
+
+                '<i>' +
+                (
+                    isComplete
+                        ? "✓"
+                        : status === "PERLU DIPERBAIKI"
+                            ? "!"
+                            : "…"
+                ) +
+                '</i>' +
+
+                tenantRevisionEscape(
+                    statusText
+                ) +
+
+                '</span>' +
+
+                '</div>'
+            );
+
+        }).join("");
+
+}
+
+
 function renderTenantEditableFields(fields){
+
     const box =
         document.getElementById("tenantEditableFields");
 
@@ -1582,21 +1732,53 @@ function renderTenantEditableFields(fields){
         return;
     }
 
-    tenantRevisionFields =
+    const incoming =
         Array.isArray(fields)
             ? fields
             : [];
 
-    if(!tenantRevisionFields.length){
-        box.innerHTML =
-            '<div class="tenant-editable-empty">' +
-            'Belum ada data yang dapat diubah melalui portal.' +
-            '</div>';
-        return;
-    }
+    const normalized =
+        TENANT_COMPLETENESS_FIELDS_V1.map(function(expected){
+
+            const existing =
+                incoming.find(function(item){
+
+                    return String(
+                        item && item.key || ""
+                    ) === expected.key;
+
+                });
+
+            if(existing){
+                return existing;
+            }
+
+            return {
+                key:expected.key,
+                label:expected.label,
+                type:
+                    expected.key === "KTP" ||
+                    expected.key === "Surat_Perjanjian"
+                        ? "file"
+                        : "text",
+                status:"BELUM LENGKAP",
+                displayValue:"Belum diisi",
+                value:"",
+                editable:false,
+                backendReady:false
+            };
+
+        });
+
+    tenantRevisionFields =
+        normalized;
+
+    renderTenantCompletenessSummary(
+        normalized
+    );
 
     box.innerHTML =
-        tenantRevisionFields.map(function(field){
+        normalized.map(function(field){
 
             const status =
                 String(
@@ -1608,14 +1790,17 @@ function renderTenantEditableFields(fields){
                 tenantRevisionStatusClass(status);
 
             const buttonDisabled =
-                status === "MENUNGGU VERIFIKASI";
+                status === "MENUNGGU VERIFIKASI" ||
+                field.backendReady === false;
 
             let buttonText = "Ganti";
 
             if(status === "PERLU DIPERBAIKI"){
                 buttonText = "Perbaiki";
-            }else if(buttonDisabled){
+            }else if(status === "MENUNGGU VERIFIKASI"){
                 buttonText = "Menunggu";
+            }else if(field.backendReady === false){
+                buttonText = "Belum tersedia";
             }
 
             const reason =
@@ -1631,7 +1816,9 @@ function renderTenantEditableFields(fields){
                 '<div class="tenant-editable-copy">' +
 
                 '<span class="tenant-editable-label">' +
-                tenantRevisionEscape(field.label || field.key) +
+                tenantRevisionEscape(
+                    field.label || field.key
+                ) +
                 '</span>' +
 
                 '<span class="tenant-editable-value">' +
@@ -1677,13 +1864,20 @@ function renderTenantEditableFields(fields){
         button.addEventListener(
             "click",
             function(){
+
+                if(button.disabled){
+                    return;
+                }
+
                 openTenantRevisionModal(
                     button.getAttribute("data-tenant-field")
                 );
+
             }
         );
 
     });
+
 }
 
 
