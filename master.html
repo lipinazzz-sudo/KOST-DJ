@@ -3965,7 +3965,8 @@ async function loadTenants(){
                                 [
                                     item.ktp,
                                     item.surat,
-                                    item.contractFile
+                                    item.contractFile,
+                                    item.digitalContract
                                 ]
                                 .filter(
                                     Boolean
@@ -4164,8 +4165,13 @@ function showTenantDocuments(
         ],
 
         [
-            "Surat Perjanjian",
+            "Perjanjian Fisik Bertanda Tangan",
             tenant.contractFile
+        ],
+
+        [
+            "Kontrak Digital Arsip",
+            tenant.digitalContract
         ]
 
     ];
