@@ -1649,9 +1649,55 @@ function renderTenantCompletenessSummary(fields){
     const complete =
         items.filter(function(field){
 
-            return String(
-                field && field.status || ""
-            ).toUpperCase() === "LENGKAP";
+            /*
+             * Counter kelengkapan harus membaca DATA AKTUAL,
+             * bukan status workflow revision.
+             *
+             * Contoh:
+             * - data lama masih ada + sedang menunggu verifikasi
+             *   => tetap dihitung lengkap.
+             * - data ditandai PERLU DIPERBAIKI tetapi nilai lama
+             *   masih tersimpan
+             *   => tetap dihitung lengkap secara kelengkapan.
+             * Status perbaikan tetap ditampilkan pada itemnya.
+             */
+            const rawValue =
+                field &&
+                (
+                    field.value ??
+                    field.currentValue ??
+                    field.fileUrl ??
+                    field.url ??
+                    ""
+                );
+
+            const displayValue =
+                String(
+                    field &&
+                    field.displayValue || ""
+                ).trim();
+
+            const normalizedDisplay =
+                displayValue.toLowerCase();
+
+            const hasRealValue =
+                String(
+                    rawValue == null
+                        ? ""
+                        : rawValue
+                ).trim() !== "";
+
+            const hasRealDisplay =
+                displayValue !== "" &&
+                normalizedDisplay !== "belum diisi" &&
+                normalizedDisplay !== "belum ada" &&
+                normalizedDisplay !== "—" &&
+                normalizedDisplay !== "-";
+
+            return (
+                hasRealValue ||
+                hasRealDisplay
+            );
 
         }).length;
 
