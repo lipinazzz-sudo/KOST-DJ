@@ -516,6 +516,43 @@ button{
     font-weight:700;
 }
 
+.batch-wa-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin:0 0 14px;
+    padding:13px 15px;
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+}
+
+.batch-wa-toolbar-copy{
+    min-width:0;
+}
+
+.batch-wa-toolbar-copy strong{
+    display:block;
+    font-size:13px;
+    color:#17213a;
+}
+
+.batch-wa-toolbar-copy .small{
+    margin-top:3px;
+}
+
+@media(max-width:700px){
+    .batch-wa-toolbar{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .batch-wa-toolbar .btn{
+        width:100%;
+    }
+}
+
 @media(max-width:1100px){
     .payment-monitor-summary{
         grid-template-columns:repeat(3,minmax(0,1fr));
@@ -1704,6 +1741,31 @@ button{
                         Kelola laporan maintenance yang masih menunggu penyelesaian.
                     </p>
 
+                    <div class="batch-wa-toolbar">
+
+                        <div class="batch-wa-toolbar-copy">
+
+                            <strong>
+                                WhatsApp Batch Maintenance
+                            </strong>
+
+                            <div class="small">
+                                Gabungkan semua maintenance aktif menjadi 1 pesan WhatsApp untuk teknisi.
+                                Foto tetap dikirim manual setelah pesan dibuka.
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            type="button"
+                            onclick="sendMaintenanceBatchWhatsApp()"
+                        >
+                            ✨ Tombol Ajaib
+                        </button>
+
+                    </div>
+
 
                     <div
                         id="maintenanceBox"
@@ -1729,6 +1791,31 @@ button{
                     <p class="section-subtitle">
                         Order laundry tenant yang belum selesai.
                     </p>
+
+                    <div class="batch-wa-toolbar">
+
+                        <div class="batch-wa-toolbar-copy">
+
+                            <strong>
+                                WhatsApp Batch Laundry
+                            </strong>
+
+                            <div class="small">
+                                Gabungkan semua order laundry aktif menjadi 1 pesan WhatsApp untuk laundry.
+                                Berat per kamar akan diinformasikan oleh pihak laundry.
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            type="button"
+                            onclick="sendLaundryBatchWhatsApp()"
+                        >
+                            ✨ Tombol Ajaib
+                        </button>
+
+                    </div>
 
 
                     <div
@@ -6614,6 +6701,200 @@ function sendMaintenanceWhatsApp(
 }
 
 
+function normalizeWhatsAppBatchText(
+    value,
+    fallback="—"
+){
+
+    const text =
+        String(
+            value === null ||
+            value === undefined
+                ? ""
+                : value
+        )
+        .replace(
+            /\s+/g,
+            " "
+        )
+        .trim();
+
+    return text || fallback;
+
+}
+
+
+function getWhatsAppBatchSnapshot(
+    items
+){
+
+    return (
+        Array.isArray(items)
+            ? items.slice()
+            : []
+    ).filter(
+        function(item){
+
+            const status =
+                String(
+                    item &&
+                    item.status
+                        ? item.status
+                        : ""
+                )
+                .trim()
+                .toUpperCase();
+
+            return (
+                status !== "SELESAI" &&
+                status !== "BATAL"
+            );
+
+        }
+    );
+
+}
+
+
+function buildMaintenanceBatchWhatsAppMessage(
+    items
+){
+
+    const snapshot =
+        getWhatsAppBatchSnapshot(
+            items
+        );
+
+    const lines = [
+
+        "🔧 DJ FAMILY KOST",
+
+        "LAPORAN MAINTENANCE",
+
+        "",
+
+        "Halo selamat siang",
+
+        "Ini DJ Family Kost.",
+
+        "",
+
+        "Ada kebutuhan maintenance:"
+
+    ];
+
+    snapshot.forEach(
+        function(item){
+
+            const room =
+                normalizeWhatsAppBatchText(
+                    item.room
+                );
+
+            const tenant =
+                normalizeWhatsAppBatchText(
+                    item.name ||
+                    item.tenantId
+                );
+
+            const problem =
+                normalizeWhatsAppBatchText(
+                    item.problem
+                );
+
+            lines.push(
+                room +
+                " - " +
+                tenant +
+                " - " +
+                problem
+            );
+
+            const description =
+                normalizeWhatsAppBatchText(
+                    item.description,
+                    ""
+                );
+
+            if(description){
+
+                lines.push(
+                    "  Deskripsi: " +
+                    description
+                );
+
+            }
+
+        }
+    );
+
+    lines.push(
+        "",
+        "Mohon dibantu dicek dan ditindaklanjuti.",
+        "Foto kerusakan akan saya kirim manual setelah pesan ini.",
+        "",
+        "Terima kasih.",
+        "DJ Family Kost"
+    );
+
+    return lines.join(
+        "\n"
+    );
+
+}
+
+
+function sendMaintenanceBatchWhatsApp(){
+
+    const snapshot =
+        getWhatsAppBatchSnapshot(
+            maintenanceItems
+        );
+
+    if(!snapshot.length){
+
+        alert(
+            "Tidak ada maintenance aktif untuk dibuat menjadi pesan batch."
+        );
+
+        return;
+
+    }
+
+    const message =
+        buildMaintenanceBatchWhatsAppMessage(
+            snapshot
+        );
+
+    if(
+        !confirm(
+            "Tombol Ajaib akan membuat 1 pesan WhatsApp untuk " +
+            snapshot.length +
+            " maintenance aktif. Lanjut?"
+        )
+    ){
+
+        return;
+
+    }
+
+    const url =
+        "https://wa.me/" +
+        MAINTENANCE_TECHNICIAN_WA +
+        "?text=" +
+        encodeURIComponent(
+            message
+        );
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
 function editMaintenance(
     encoded
 ){
@@ -7310,6 +7591,175 @@ function sendLaundryWhatsApp(encoded){
         "?text=" +
         encodeURIComponent(
             buildLaundryWhatsAppMessage(item)
+        );
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+function buildLaundryBatchWhatsAppMessage(
+    items
+){
+
+    const snapshot =
+        getWhatsAppBatchSnapshot(
+            items
+        );
+
+    const lines = [
+
+        "🧺 DJ FAMILY KOST",
+
+        "ORDER LAUNDRY",
+
+        "",
+
+        "Halo selamat siang",
+
+        "Ini DJ Family Kost.",
+
+        "",
+
+        "Ada pesanan laundry:"
+
+    ];
+
+    snapshot.forEach(
+        function(item){
+
+            const room =
+                normalizeWhatsAppBatchText(
+                    item.room
+                );
+
+            const tenant =
+                normalizeWhatsAppBatchText(
+                    item.name ||
+                    item.tenantId
+                );
+
+            const service =
+                normalizeWhatsAppBatchText(
+                    item.service
+                );
+
+            const pickup =
+                normalizeWhatsAppBatchText(
+                    item.pickupLocation,
+                    ""
+                );
+
+            let line =
+                room +
+                " - " +
+                tenant +
+                " - " +
+                service;
+
+            if(pickup){
+
+                line +=
+                    " - Pickup: " +
+                    pickup;
+
+            }
+
+            lines.push(
+                line
+            );
+
+            const note =
+                normalizeWhatsAppBatchText(
+                    item.note,
+                    ""
+                );
+
+            if(note){
+
+                lines.push(
+                    "  Catatan: " +
+                    note
+                );
+
+            }
+
+        }
+    );
+
+    lines.push(
+        "",
+        "Mohon dibantu pickup dan diproses.",
+        "Mohon berat hasil timbang diinformasikan per kamar setelah diterima.",
+        "",
+        "Terima kasih.",
+        "DJ Family Kost"
+    );
+
+    return lines.join(
+        "\n"
+    );
+
+}
+
+
+function sendLaundryBatchWhatsApp(){
+
+    const snapshot =
+        getWhatsAppBatchSnapshot(
+            laundryItems
+        );
+
+    if(!snapshot.length){
+
+        alert(
+            "Tidak ada order laundry aktif untuk dibuat menjadi pesan batch."
+        );
+
+        return;
+
+    }
+
+    const number =
+        LAUNDRY_WHATSAPP_WA || "";
+
+    if(!number){
+
+        alert(
+            "Nomor WhatsApp Laundry belum dikonfigurasi. Order tetap tersimpan."
+        );
+
+        return;
+
+    }
+
+    const message =
+        buildLaundryBatchWhatsAppMessage(
+            snapshot
+        );
+
+    if(
+        !confirm(
+            "Tombol Ajaib akan membuat 1 pesan WhatsApp untuk " +
+            snapshot.length +
+            " order laundry aktif. Lanjut?"
+        )
+    ){
+
+        return;
+
+    }
+
+    const url =
+        "https://wa.me/" +
+        number +
+        "?text=" +
+        encodeURIComponent(
+            message
         );
 
     window.open(
