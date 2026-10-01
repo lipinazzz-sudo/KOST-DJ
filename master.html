@@ -857,6 +857,60 @@ button{
     color:#667085;
 }
 
+.history-room-toolbar{
+    display:grid;
+    grid-template-columns:minmax(220px,280px) minmax(220px,1fr) auto;
+    gap:10px;
+    align-items:end;
+    margin:4px 0 16px;
+}
+
+.history-room-field{
+    display:grid;
+    gap:6px;
+}
+
+.history-room-field label{
+    font-size:12px;
+    font-weight:800;
+    color:#475467;
+}
+
+.history-room-field select,
+.history-room-field input{
+    width:100%;
+    border:1px solid #dfe4ec;
+    background:#fff;
+    color:#17213a;
+    border-radius:10px;
+    padding:10px 12px;
+    font:inherit;
+    outline:none;
+}
+
+.history-room-field select:focus,
+.history-room-field input:focus{
+    border-color:#52658c;
+    box-shadow:0 0 0 3px rgba(82,101,140,.10);
+}
+
+.history-room-reset{
+    height:39px;
+    white-space:nowrap;
+}
+
+.master-history-room{
+    display:inline-flex;
+    align-items:center;
+    margin-top:8px;
+    padding:4px 8px;
+    border-radius:999px;
+    background:#f2f4f7;
+    color:#475467;
+    font-size:11px;
+    font-weight:800;
+}
+
 @media(max-width:700px){
     .master-service-grid{
         grid-template-columns:1fr;
@@ -865,6 +919,14 @@ button{
     .master-history-top{
         flex-direction:column;
         gap:4px;
+    }
+
+    .history-room-toolbar{
+        grid-template-columns:1fr;
+    }
+
+    .history-room-reset{
+        width:100%;
     }
 }
 
@@ -1601,6 +1663,11 @@ button{
                         class="filters"
                     ></div>
 
+                    <div
+                        id="historyRoomFilterBar"
+                        class="history-room-toolbar"
+                    ></div>
+
 
                     <div
                         id="historyBox"
@@ -1912,6 +1979,12 @@ let paymentFilter = "ALL";
 let mediaFilter = "ALL";
 
 let historyFilter = "ALL";
+
+let historyRoomFilter = "ALL";
+
+let historyRoomSearch = "";
+
+let historyTenantRooms = {};
 
 
 /* ============================================================
@@ -6479,6 +6552,22 @@ function historyCategoryLabel(item){
 }
 
 
+const HISTORY_ROOM_LIST = [
+
+    101,102,103,104,105,106,107,108,109,
+
+    201,202,203,204,205,
+    206,207,208,209,210,
+
+    301,302,303,304,305,
+    306,307,308,309,310,
+
+    401,402,403,404,405,
+    406,407,408,409,410
+
+];
+
+
 async function loadHistory(){
 
     const box =
@@ -6502,8 +6591,151 @@ async function loadHistory(){
             ? data.items
             : [];
 
+    /*
+     * Ambil mapping Tenant_ID -> nomor kamar agar
+     * history yang log-nya hanya menyebut Tenant ID
+     * tetap bisa difilter berdasarkan kamar.
+     */
+    try{
+
+        const tenantData =
+            tenantItems.length
+                ? {items:tenantItems}
+                : await api(
+                    "masterTenants"
+                  );
+
+        historyTenantRooms = {};
+
+        (
+            tenantData &&
+            Array.isArray(tenantData.items)
+                ? tenantData.items
+                : []
+        )
+        .forEach(function(tenant){
+
+            const tenantId =
+                String(
+                    tenant &&
+                    tenant.tenantId ||
+                    ""
+                )
+                .trim()
+                .toUpperCase();
+
+            const room =
+                String(
+                    tenant &&
+                    tenant.room ||
+                    ""
+                )
+                .trim();
+
+            if(
+                tenantId &&
+                room
+            ){
+
+                historyTenantRooms[
+                    tenantId
+                ] = room;
+
+            }
+
+        });
+
+    }catch(error){
+
+        /*
+         * History tetap dapat ditampilkan walaupun
+         * mapping tenant gagal dimuat.
+         */
+
+        historyTenantRooms = {};
+
+    }
+
     renderHistoryFilters();
+    renderHistoryRoomFilters();
     renderHistory();
+
+}
+
+
+function historyItemRoom(
+    item
+){
+
+    if(
+        item &&
+        item.room
+    ){
+
+        return String(
+            item.room
+        ).trim();
+
+    }
+
+    const message =
+        String(
+            item &&
+            item.message ||
+            ""
+        ).trim();
+
+    /*
+     * Prioritas pertama: room yang tertulis langsung
+     * di pesan log, misalnya "kamar 101".
+     */
+    const direct =
+        message.match(
+            /\b(?:kamar|room)\s*(?:[:#-]\s*)?(\d{3,4})\b/i
+        );
+
+    if(
+        direct &&
+        direct[1]
+    ){
+
+        return direct[1];
+
+    }
+
+    /*
+     * Prioritas kedua: beberapa log lama hanya
+     * menyebut Tenant ID. Petakan ke kamar aktifnya.
+     */
+    const tenantIds =
+        Object.keys(
+            historyTenantRooms
+        );
+
+    for(
+        let i = 0;
+        i < tenantIds.length;
+        i++
+    ){
+
+        if(
+            message.toUpperCase()
+                .indexOf(
+                    tenantIds[i]
+                ) >= 0
+        ){
+
+            return String(
+                historyTenantRooms[
+                    tenantIds[i]
+                ] || ""
+            ).trim();
+
+        }
+
+    }
+
+    return "";
 
 }
 
@@ -6558,6 +6790,148 @@ function setHistoryFilter(encoded){
 }
 
 
+function renderHistoryRoomFilters(){
+
+    const roomBar =
+        document.getElementById(
+            "historyRoomFilterBar"
+        );
+
+    if(!roomBar){
+        return;
+    }
+
+    const options =
+        [
+            '<option value="ALL">Semua Kamar</option>'
+        ]
+        .concat(
+            HISTORY_ROOM_LIST.map(
+                function(room){
+
+                    return (
+                        '<option value="' +
+                        escapeHtml(room) +
+                        '">' +
+                        'Kamar ' +
+                        escapeHtml(room) +
+                        '</option>'
+                    );
+
+                }
+            )
+        )
+        .join("");
+
+    roomBar.innerHTML =
+
+        '<div class="history-room-field">' +
+        '<label for="historyRoomSelect">Nomor Kamar</label>' +
+        '<select id="historyRoomSelect">' +
+        options +
+        '</select>' +
+        '</div>' +
+
+        '<div class="history-room-field">' +
+        '<label for="historyRoomSearch">Cari Nomor Kamar</label>' +
+        '<input id="historyRoomSearch" type="text" inputmode="numeric" maxlength="4" placeholder="Ketik contoh: 101">' +
+        '</div>' +
+
+        '<button type="button" class="btn btn-secondary history-room-reset" onclick="resetHistoryRoomFilter()">' +
+        'Reset' +
+        '</button>';
+
+    const select =
+        document.getElementById(
+            "historyRoomSelect"
+        );
+
+    const search =
+        document.getElementById(
+            "historyRoomSearch"
+        );
+
+    select.value =
+        historyRoomFilter;
+
+    search.value =
+        historyRoomSearch;
+
+    select.addEventListener(
+        "change",
+        function(){
+
+            historyRoomFilter =
+                String(
+                    this.value ||
+                    "ALL"
+                );
+
+            historyRoomSearch =
+                historyRoomFilter === "ALL"
+                    ? ""
+                    : historyRoomFilter;
+
+            renderHistoryRoomFilters();
+            renderHistory();
+
+        }
+    );
+
+    search.addEventListener(
+        "input",
+        function(){
+
+            historyRoomSearch =
+                String(
+                    this.value ||
+                    ""
+                )
+                .replace(
+                    /\D/g,
+                    ""
+                )
+                .slice(
+                    0,
+                    4
+                );
+
+            /*
+             * Saat user mengetik manual, dropdown
+             * mengikuti angka yang sudah lengkap.
+             */
+            historyRoomFilter =
+                HISTORY_ROOM_LIST
+                    .map(String)
+                    .indexOf(
+                        historyRoomSearch
+                    ) >= 0
+                        ? historyRoomSearch
+                        : "ALL";
+
+            renderHistoryRoomFilters();
+            renderHistory();
+
+        }
+    );
+
+}
+
+
+function resetHistoryRoomFilter(){
+
+    historyRoomFilter =
+        "ALL";
+
+    historyRoomSearch =
+        "";
+
+    renderHistoryRoomFilters();
+    renderHistory();
+
+}
+
+
 function renderHistory(){
 
     let items =
@@ -6570,36 +6944,104 @@ function renderHistory(){
             });
     }
 
+    const roomQuery =
+        String(
+            historyRoomSearch ||
+            historyRoomFilter ||
+            ""
+        )
+        .trim();
+
+    if(roomQuery){
+
+        items =
+            items.filter(function(item){
+
+                return (
+                    String(
+                        historyItemRoom(item) ||
+                        ""
+                    ).trim()
+                    ===
+                    roomQuery
+                );
+
+            });
+
+    }
+
     const box =
         document.getElementById(
             "historyBox"
         );
 
     if(!items.length){
+
         box.innerHTML =
             '<div class="master-history-item master-history-empty">' +
-            'Belum ada history untuk filter ini.' +
+            (
+                roomQuery
+                    ? 'Belum ada history untuk Kamar ' +
+                      escapeHtml(roomQuery) +
+                      ' pada filter yang dipilih.'
+                    : 'Belum ada history untuk filter ini.'
+            ) +
             '</div>';
+
         return;
+
     }
 
     box.innerHTML =
         items.map(function(item){
+
+            const room =
+                historyItemRoom(item);
+
             return (
                 '<article class="master-history-item">' +
+
                 '<div class="master-history-top">' +
+
                 '<span class="master-history-type">' +
-                escapeHtml(historyCategoryLabel(item)) +
+
+                escapeHtml(
+                    historyCategoryLabel(item)
+                ) +
+
                 '</span>' +
+
                 '<span class="master-history-time">' +
-                escapeHtml(item.timestamp || "—") +
+
+                escapeHtml(
+                    item.timestamp ||
+                    "—"
+                ) +
+
                 '</span>' +
+
                 '</div>' +
+
                 '<div class="master-history-message">' +
-                escapeHtml(item.message || "—") +
+
+                escapeHtml(
+                    item.message ||
+                    "—"
+                ) +
+
+                (
+                    room
+                        ? '<div class="master-history-room">Kamar ' +
+                          escapeHtml(room) +
+                          '</div>'
+                        : ""
+                ) +
+
                 '</div>' +
+
                 '</article>'
             );
+
         }).join("");
 
 }
