@@ -322,6 +322,51 @@ function aiAgentPaymentV1(item, decision, masterId, options) {
   };
 }
 
+/* ============================================================
+ * COMPATIBILITY WRAPPERS — AI EXECUTOR
+ * ============================================================
+ * Dipertahankan sebagai adapter nama untuk executor existing.
+ * Business logic tetap berada pada fungsi tanpa underscore.
+ * ============================================================
+ */
+
+function aiAgentPaymentV1_(
+  item,
+  decision,
+  masterId,
+  options
+) {
+
+  return aiAgentPaymentV1(
+    item,
+    decision,
+    masterId,
+    options
+  );
+
+}
+
+
+function aiAgentRegistrationApproveV1_(
+  item,
+  masterId,
+  options
+) {
+
+  return aiAgentRegistrationApproveV1(
+    item,
+    masterId,
+    options
+  );
+
+}
+
+
+/* ============================================================
+ * EXISTING REGISTRATION EXECUTOR
+ * ============================================================
+ */
+
 /* ======================= REGISTRATION ====================== */
 
 function aiAgentRegistrationApproveV1(item, masterId, options) {
