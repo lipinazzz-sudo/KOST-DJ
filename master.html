@@ -10710,6 +10710,109 @@ function financePercent(
 }
 
 
+function financeDisplayDate(
+    value
+){
+
+    if(!value){
+
+        return "—";
+
+    }
+
+
+    const text =
+        String(
+            value
+        ).trim();
+
+
+    let date = null;
+
+
+    if(
+        /^\\d{4}-\\d{2}-\\d{2}$/.test(
+            text
+        )
+    ){
+
+        date =
+            new Date(
+                text +
+                "T12:00:00+07:00"
+            );
+
+    }else{
+
+        date =
+            new Date(
+                text
+            );
+
+    }
+
+
+    if(
+        !date ||
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return text;
+
+    }
+
+
+    try{
+
+        return new Intl.DateTimeFormat(
+            "id-ID",
+            {
+                timeZone:
+                    "Asia/Jakarta",
+
+                day:
+                    "2-digit",
+
+                month:
+                    "2-digit",
+
+                year:
+                    "numeric"
+            }
+        )
+        .format(
+            date
+        );
+
+    }catch(error){
+
+        return (
+            String(
+                date.getDate()
+            ).padStart(
+                2,
+                "0"
+            ) +
+            "/" +
+            String(
+                date.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            ) +
+            "/" +
+            String(
+                date.getFullYear()
+            )
+        );
+
+    }
+
+}
+
+
 function financeSelectedSummary(){
 
     if(
@@ -11406,8 +11509,9 @@ function renderFinanceRecent(
 
                     '<td>' +
                     escapeHtml(
-                        item.date ||
-                        "—"
+                        financeDisplayDate(
+                            item.date
+                        )
                     ) +
                     '</td>' +
 
