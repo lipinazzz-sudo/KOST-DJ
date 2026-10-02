@@ -119,6 +119,12 @@ function djApiMasterFinanceV1_(
     );
 
 
+  const auditTrail =
+    djFinanceAuditTrailV1_(
+      40
+    );
+
+
   return {
 
     period: {
@@ -173,6 +179,9 @@ function djApiMasterFinanceV1_(
 
     roomAnalysis:
       roomAnalysis,
+
+    auditTrail:
+      auditTrail,
 
     expenseBreakdown:
       summary.expenseBreakdown,
@@ -3552,6 +3561,163 @@ function djFinancePaymentRankV1_(
 
 
 /* ============================================================
+ * FINANCE AUDIT TRAIL
+ * ============================================================ */
+
+function djFinanceAuditTrailV1_(
+  limit
+) {
+
+  const ss =
+    SpreadsheetApp.getActiveSpreadsheet();
+
+
+  const sheet =
+    ss.getSheetByName(
+      'System_Log'
+    );
+
+
+  if(!sheet){
+
+    return [];
+
+  }
+
+
+  const table =
+    djApiReadTableV5_(
+      sheet,
+      [
+        'Timestamp'
+      ]
+    );
+
+
+  if(!table){
+
+    return [];
+
+  }
+
+
+  const items = [];
+
+
+  table.rows.forEach(
+    function(row) {
+
+      const type =
+        String(
+          djApiValueV5_(
+            row,
+            table.headers,
+            [
+              'Type'
+            ]
+          ) || ''
+        ).trim().toUpperCase();
+
+
+      const message =
+        String(
+          djApiValueV5_(
+            row,
+            table.headers,
+            [
+              'Message'
+            ]
+          ) || ''
+        ).trim();
+
+
+      if(!type && !message){
+
+        return;
+
+      }
+
+
+      const financeRelevant =
+        type.indexOf(
+          'PEMBAYARAN'
+        ) === 0 ||
+
+        type.indexOf(
+          'PENGELUARAN'
+        ) === 0 ||
+
+        type.indexOf(
+          'MAINTENANCE'
+        ) === 0;
+
+
+      if(
+        !financeRelevant
+      ){
+
+        return;
+
+      }
+
+
+      items.push({
+
+        timestamp:
+          djFinanceDateV1_(
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Timestamp'
+              ]
+            )
+          ),
+
+        type:
+          type,
+
+        message:
+          message
+
+      });
+
+    }
+  );
+
+
+  items
+    .sort(
+      function(a,b){
+
+        return (
+          djFinanceTimeV1_(
+            b.timestamp
+          ) -
+          djFinanceTimeV1_(
+            a.timestamp
+          )
+        );
+
+      }
+    );
+
+
+  return items.slice(
+    0,
+    Math.max(
+      1,
+      Number(
+        limit
+      ) ||
+      30
+    )
+  );
+
+}
+
+
+/* ============================================================
  * ROOM ANALYSIS
  * ============================================================ */
 
@@ -4761,6 +4927,49 @@ function djApiMasterSaveExpenseV1_(
     .setValues([
       row
     ]);
+
+
+  try {
+
+    djApiLogV5_(
+      SpreadsheetApp.getActiveSpreadsheet(),
+      'PENGELUARAN_DICATAT',
+      'Pengeluaran ' +
+      id +
+      ' · ' +
+      category +
+      ' · ' +
+      description +
+      ' · Nominal ' +
+      amount +
+      ' · Kamar ' +
+      (
+        room ||
+        'Umum'
+      ) +
+      ' · Oleh ' +
+      masterId +
+      '.'
+    );
+
+  } catch (logError) {
+
+    Logger.log(
+      'HISTORY EXPENSE GAGAL | ' +
+      id +
+      ' | ' +
+      (
+        logError &&
+        logError.message
+          ? logError.message
+          : logError
+      )
+    );
+
+  }
+
+
+  SpreadsheetApp.flush();
 
 
   return {
