@@ -98,6 +98,20 @@ function djApiMasterFinanceV1_(
   }
 
 
+  const annual =
+    djFinanceAnnualSummaryV1_(
+      monthly,
+      targetYear
+    );
+
+
+  const floorAnalysis =
+    djFinanceFloorAnalysisV1_(
+      dataset,
+      targetYear
+    );
+
+
   return {
 
     period: {
@@ -143,6 +157,12 @@ function djApiMasterFinanceV1_(
 
     monthly:
       monthly,
+
+    annual:
+      annual,
+
+    floorAnalysis:
+      floorAnalysis,
 
     expenseBreakdown:
       summary.expenseBreakdown,
@@ -2072,6 +2092,420 @@ function djFinanceEnsureExpenseSheetV1_() {
 
 
   return sheet;
+
+}
+
+
+/* ============================================================
+ * ANNUAL SUMMARY
+ * ============================================================ */
+
+function djFinanceAnnualSummaryV1_(
+  monthly,
+  year
+) {
+
+  let revenue = 0;
+  let expense = 0;
+  let expectedRevenue = 0;
+  let cashIn = 0;
+  let occupiedRoomMonths = 0;
+  let rentableRoomMonths = 0;
+
+
+  const expenseMap = {};
+
+
+  (monthly || [])
+    .forEach(
+      function(item) {
+
+        revenue +=
+          Number(
+            item.revenue ||
+            0
+          );
+
+        expense +=
+          Number(
+            item.expense ||
+            0
+          );
+
+        expectedRevenue +=
+          Number(
+            item.expectedRevenue ||
+            0
+          );
+
+        cashIn +=
+          Number(
+            item.cashIn ||
+            0
+          );
+
+        occupiedRoomMonths +=
+          Number(
+            item.occupiedRooms ||
+            0
+          );
+
+        rentableRoomMonths +=
+          Number(
+            item.rentableRooms ||
+            0
+          );
+
+
+        (
+          item.expenseBreakdown ||
+          []
+        )
+        .forEach(
+          function(row) {
+
+            const key =
+              String(
+                row.category ||
+                'Lainnya'
+              )
+              .trim() ||
+              'Lainnya';
+
+
+            expenseMap[key] =
+              (
+                expenseMap[key] ||
+                0
+              ) +
+              Number(
+                row.amount ||
+                0
+              );
+
+          }
+        );
+
+      }
+    );
+
+
+  const netProfit =
+    revenue -
+    expense;
+
+
+  const netMargin =
+    revenue > 0
+      ? (
+          netProfit /
+          revenue
+        ) *
+        100
+      : 0;
+
+
+  const realizationRate =
+    expectedRevenue > 0
+      ? (
+          revenue /
+          expectedRevenue
+        ) *
+        100
+      : 0;
+
+
+  const averageOccupancy =
+    rentableRoomMonths > 0
+      ? (
+          occupiedRoomMonths /
+          rentableRoomMonths
+        ) *
+        100
+      : 0;
+
+
+  const expenseBreakdown =
+    Object.keys(
+      expenseMap
+    )
+    .map(
+      function(category) {
+
+        return {
+
+          category:
+            category,
+
+          amount:
+            expenseMap[category]
+
+        };
+
+      }
+    )
+    .sort(
+      function(a,b) {
+
+        return (
+          b.amount -
+          a.amount
+        );
+
+      }
+    );
+
+
+  return {
+
+    year:
+      year,
+
+    revenue:
+      revenue,
+
+    expense:
+      expense,
+
+    netProfit:
+      netProfit,
+
+    netMargin:
+      netMargin,
+
+    expectedRevenue:
+      expectedRevenue,
+
+    realizationRate:
+      realizationRate,
+
+    cashIn:
+      cashIn,
+
+    averageOccupancy:
+      averageOccupancy,
+
+    expenseBreakdown:
+      expenseBreakdown
+
+  };
+
+}
+
+
+/* ============================================================
+ * FLOOR ANALYSIS
+ * ============================================================ */
+
+function djFinanceFloorAnalysisV1_(
+  dataset,
+  year
+) {
+
+  const floors = {
+    '1': {
+      floor:1,
+      revenue:0,
+      expense:0
+    },
+    '2': {
+      floor:2,
+      revenue:0,
+      expense:0
+    },
+    '3': {
+      floor:3,
+      revenue:0,
+      expense:0
+    },
+    '4': {
+      floor:4,
+      revenue:0,
+      expense:0
+    }
+  };
+
+
+  function getFloor(
+    room
+  ) {
+
+    const text =
+      String(
+        room == null
+          ? ''
+          : room
+      )
+      .trim();
+
+
+    const match =
+      text.match(
+        /^(\\d)/
+      );
+
+
+    return (
+      match &&
+      floors[match[1]]
+    )
+      ? floors[match[1]]
+      : null;
+
+  }
+
+
+  (dataset.payments || [])
+    .forEach(
+      function(item) {
+
+        const periodKey =
+          djFinancePeriodKeyV1_(
+            item.period
+          );
+
+
+        if(
+          !periodKey ||
+          Number(
+            periodKey.slice(0,4)
+          ) !==
+          Number(year)
+        ){
+
+          return;
+
+        }
+
+
+        const floor =
+          getFloor(
+            item.room
+          );
+
+
+        if(!floor){
+
+          return;
+
+        }
+
+
+        floor.revenue +=
+          Number(
+            item.paid ||
+            0
+          );
+
+      }
+    );
+
+
+  (dataset.maintenance || [])
+    .forEach(
+      function(item) {
+
+        if(
+          !item.date ||
+          item.date.getFullYear() !==
+          Number(year)
+        ){
+
+          return;
+
+        }
+
+
+        const floor =
+          getFloor(
+            item.room
+          );
+
+
+        if(!floor){
+
+          return;
+
+        }
+
+
+        floor.expense +=
+          Number(
+            item.cost ||
+            0
+          );
+
+      }
+    );
+
+
+  (dataset.generalExpenses || [])
+    .forEach(
+      function(item) {
+
+        if(
+          !item.date ||
+          item.date.getFullYear() !==
+          Number(year)
+        ){
+
+          return;
+
+        }
+
+
+        const floor =
+          getFloor(
+            item.room
+          );
+
+
+        if(!floor){
+
+          return;
+
+        }
+
+
+        floor.expense +=
+          Number(
+            item.amount ||
+            0
+          );
+
+      }
+    );
+
+
+  return Object.keys(
+    floors
+  )
+  .map(
+    function(key) {
+
+      const item =
+        floors[key];
+
+
+      return {
+
+        floor:
+          item.floor,
+
+        revenue:
+          item.revenue,
+
+        expense:
+          item.expense,
+
+        netProfit:
+          item.revenue -
+          item.expense
+
+      };
+
+    }
+  );
 
 }
 
