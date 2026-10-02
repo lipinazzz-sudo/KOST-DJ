@@ -2237,10 +2237,28 @@ function djApiMasterSaveExpenseV1_(
   }
 
 
-  const headers =
-    djApiFindHeadersV5_(
-      sheet
+  const expenseTable =
+    djApiReadTableV5_(
+      sheet,
+      [
+        'Pengeluaran_ID'
+      ]
     );
+
+
+  if (
+    !expenseTable
+  ) {
+
+    throw new Error(
+      'Struktur sheet Pengeluaran tidak dapat dibaca.'
+    );
+
+  }
+
+
+  const headers =
+    expenseTable.headers;
 
 
   const id =
