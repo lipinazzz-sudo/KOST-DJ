@@ -467,6 +467,9 @@ function djFinanceBuildDatasetV1_(
           paid:
             paid,
 
+          paidField:
+            paidField,
+
           total:
             total,
 
@@ -1348,6 +1351,20 @@ function djFinanceComputeMonthSummaryV1_(
     billingStatus.outstanding;
 
 
+  const reconciliation =
+    djFinanceBuildReconciliationV1_(
+      dataset,
+      year,
+      month,
+      periodStart,
+      periodEnd,
+      revenue,
+      maintenanceExpense,
+      generalExpense,
+      expense
+    );
+
+
   const netProfit =
     revenue -
     expense;
@@ -1550,6 +1567,9 @@ function djFinanceComputeMonthSummaryV1_(
 
     billingStatus:
       billingStatus,
+
+    reconciliation:
+      reconciliation,
 
     expenseBreakdown:
       expenseBreakdown,
@@ -2283,6 +2303,373 @@ function djFinanceEnsureExpenseSheetV1_() {
 
 
   return sheet;
+
+}
+
+
+/* ============================================================
+ * RECONCILIATION
+ * ============================================================ */
+
+function djFinanceBuildReconciliationV1_(
+  dataset,
+  year,
+  month,
+  periodStart,
+  periodEnd,
+  recognizedRevenue,
+  maintenanceExpense,
+  generalExpense,
+  totalExpense
+) {
+
+  let verifiedPaymentCount = 0;
+  let verifiedPaymentAmount = 0;
+
+  let pendingVerificationCount = 0;
+  let pendingVerificationAmount = 0;
+
+  let rejectedCount = 0;
+  let rejectedAmount = 0;
+
+
+  const duplicateGroups = {};
+  const duplicateRows = {};
+
+
+  (dataset.allPayments || [])
+    .forEach(
+      function(item) {
+
+        const periodKey =
+          djFinancePeriodKeyV1_(
+            item.period
+          );
+
+
+        if (
+          periodKey !==
+          djFinanceMonthKeyV1_(
+            year,
+            month
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const verification =
+          String(
+            item.verification ||
+            ''
+          ).trim().toUpperCase();
+
+
+        const amount =
+          Number(
+            item.paidField ||
+            item.paid ||
+            0
+          );
+
+
+        if (
+          verification ===
+          'TERVERIFIKASI'
+        ) {
+
+          verifiedPaymentCount++;
+
+          verifiedPaymentAmount +=
+            amount;
+
+        } else if (
+          verification ===
+          'MENUNGGU VERIFIKASI'
+        ) {
+
+          pendingVerificationCount++;
+
+          pendingVerificationAmount +=
+            amount;
+
+        } else if (
+          verification ===
+          'DITOLAK'
+        ) {
+
+          rejectedCount++;
+
+          rejectedAmount +=
+            Number(
+              item.total ||
+              amount ||
+              0
+            );
+
+        }
+
+
+        const tenantId =
+          String(
+            item.tenantId ||
+            ''
+          ).trim().toUpperCase();
+
+
+        const room =
+          String(
+            item.room ||
+            ''
+          ).trim();
+
+
+        const key =
+          (
+            tenantId ||
+            'ROOM:' + room
+          ) +
+          '|' +
+          periodKey;
+
+
+        if (
+          key ===
+          '|' + periodKey
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          !duplicateGroups[key]
+        ) {
+
+          duplicateGroups[key] = [];
+
+        }
+
+
+        duplicateGroups[key].push(
+          item
+        );
+
+      }
+    );
+
+
+  const duplicateGroupList =
+    Object.keys(
+      duplicateGroups
+    )
+    .filter(
+      function(key) {
+
+        return (
+          duplicateGroups[key].length >
+          1
+        );
+
+      }
+    )
+    .map(
+      function(key) {
+
+        const rows =
+          duplicateGroups[key];
+
+
+        const verifiedRows =
+          rows.filter(
+            function(item) {
+
+              return (
+                item.verification ===
+                'TERVERIFIKASI'
+              );
+
+            }
+          );
+
+
+        const extraRows =
+          verifiedRows
+            .slice(1);
+
+
+        const extraAmount =
+          extraRows.reduce(
+            function(sum,item) {
+
+              return (
+                sum +
+                Number(
+                  item.paidField ||
+                  item.paid ||
+                  0
+                )
+              );
+
+            },
+            0
+          );
+
+
+        return {
+
+          key:
+            key,
+
+          count:
+            rows.length,
+
+          verifiedCount:
+            verifiedRows.length,
+
+          extraVerifiedAmount:
+            extraAmount
+
+        };
+
+      }
+    );
+
+
+  const duplicateExtraAmount =
+    duplicateGroupList.reduce(
+      function(sum,item) {
+
+        return (
+          sum +
+          Number(
+            item.extraVerifiedAmount ||
+            0
+          )
+        );
+
+      },
+      0
+    );
+
+
+  const paymentDifference =
+    verifiedPaymentAmount -
+    Number(
+      recognizedRevenue ||
+      0
+    );
+
+
+  const expenseDifference =
+    (
+      Number(
+        maintenanceExpense ||
+        0
+      ) +
+      Number(
+        generalExpense ||
+        0
+      )
+    ) -
+    Number(
+      totalExpense ||
+      0
+    );
+
+
+  const profitCheck =
+    Number(
+      recognizedRevenue ||
+      0
+    ) -
+    Number(
+      totalExpense ||
+      0
+    );
+
+
+  const ok =
+    Math.abs(
+      paymentDifference
+    ) < 0.01 &&
+    Math.abs(
+      expenseDifference
+    ) < 0.01 &&
+    duplicateExtraAmount <= 0;
+
+
+  return {
+
+    status:
+      ok
+        ? 'SESUAI'
+        : 'PERLU DICEK',
+
+    verifiedPaymentCount:
+      verifiedPaymentCount,
+
+    verifiedPaymentAmount:
+      verifiedPaymentAmount,
+
+    recognizedRevenue:
+      Number(
+        recognizedRevenue ||
+        0
+      ),
+
+    paymentDifference:
+      paymentDifference,
+
+    pendingVerificationCount:
+      pendingVerificationCount,
+
+    pendingVerificationAmount:
+      pendingVerificationAmount,
+
+    rejectedCount:
+      rejectedCount,
+
+    rejectedAmount:
+      rejectedAmount,
+
+    maintenanceExpense:
+      Number(
+        maintenanceExpense ||
+        0
+      ),
+
+    generalExpense:
+      Number(
+        generalExpense ||
+        0
+      ),
+
+    totalExpense:
+      Number(
+        totalExpense ||
+        0
+      ),
+
+    expenseDifference:
+      expenseDifference,
+
+    profitCheck:
+      profitCheck,
+
+    duplicateGroups:
+      duplicateGroupList.length,
+
+    duplicateExtraAmount:
+      duplicateExtraAmount,
+
+    duplicateDetails:
+      duplicateGroupList
+
+  };
 
 }
 
