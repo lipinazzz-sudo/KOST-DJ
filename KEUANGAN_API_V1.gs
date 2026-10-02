@@ -2325,15 +2325,23 @@ function djApiMasterSaveExpenseV1_(
   );
 
 
-  const sheetDate =
-    new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      12,
-      0,
-      0,
-      0
+  const sheetDateText =
+    String(
+      date.getDate()
+    ).padStart(
+      2,
+      '0'
+    ) +
+    '/' +
+    String(
+      date.getMonth() + 1
+    ).padStart(
+      2,
+      '0'
+    ) +
+    '/' +
+    String(
+      date.getFullYear()
     );
 
 
@@ -2341,7 +2349,7 @@ function djApiMasterSaveExpenseV1_(
     row,
     headers,
     'Tanggal',
-    sheetDate
+    sheetDateText
   );
 
 
