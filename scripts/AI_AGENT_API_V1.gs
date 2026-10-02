@@ -53,7 +53,7 @@ function aiAgentMasterApiV1_(action, body) {
       ok: true,
 
       data:
-        getAIMasterActionsV1_(
+        getAIMasterActionsV1(
           master.masterId
         )
 
