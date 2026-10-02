@@ -265,6 +265,15 @@ function djFinanceBuildDatasetV1_(
       : null;
 
 
+  const tenantTable =
+    tenantSheet
+      ? djApiReadTableV5_(
+          tenantSheet,
+          ['Tenant_ID']
+        )
+      : null;
+
+
   const expenseTable =
     expenseSheet
       ? djApiReadTableV5_(
