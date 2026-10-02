@@ -220,6 +220,11 @@ function djFinanceBuildDatasetV1_(
       'Kamar'
     );
 
+  const tenantSheet =
+    ss.getSheetByName(
+      'Tenant'
+    );
+
   const expenseSheet =
     djFinanceEnsureExpenseSheetV1_();
 
