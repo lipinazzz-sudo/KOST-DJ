@@ -788,7 +788,7 @@ function verifikasiPendaftaranDJ_(
 
 
 
-    var room =
+    var registeredRoom =
 
       djApprovalClean_(
 
@@ -811,6 +811,18 @@ function verifikasiPendaftaranDJ_(
         )
 
       );
+
+
+
+    var room =
+
+      djApprovalClean_(
+
+        finalRoom
+
+      ) ||
+
+      registeredRoom;
 
 
 
