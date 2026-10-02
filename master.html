@@ -2183,6 +2183,30 @@ button{
     margin-top:14px;
 }
 
+.ai-task-deeplink{
+    animation:
+        aiTaskDeepLinkPulse 1.2s ease-in-out 2;
+}
+
+
+@keyframes aiTaskDeepLinkPulse{
+
+    0%,
+    100%{
+        box-shadow:
+            0 0 0 1px #dfe4ec,
+            0 0 0 rgba(201,149,53,0);
+    }
+
+    50%{
+        box-shadow:
+            0 0 0 2px #c99535,
+            0 0 0 7px rgba(201,149,53,.14);
+    }
+
+}
+
+
 .ai-task{
     background:#fff;
     border:1px solid #e2e6ee;
@@ -4358,6 +4382,161 @@ function showApp(){
 
 
 /* ============================================================
+   AI DEEP LINK
+   ============================================================ */
+
+function getAIDeepLinkActionId(){
+
+    try{
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        return String(
+            params.get(
+                "aiAction"
+            ) ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    }catch(error){
+
+        return "";
+
+    }
+
+}
+
+
+function clearAIDeepLink(){
+
+    try{
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+        url.searchParams.delete(
+            "aiAction"
+        );
+
+        window.history.replaceState(
+            {},
+            document.title,
+            url.pathname +
+            (
+                url.search
+                    ? url.search
+                    : ""
+            ) +
+            (
+                url.hash
+                    ? url.hash
+                    : ""
+            )
+        );
+
+    }catch(error){}
+
+}
+
+
+async function openAIDeepLinkedAction(){
+
+    const actionId =
+        getAIDeepLinkActionId();
+
+
+    if(
+        !actionId ||
+        !masterSession
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        /*
+         * Setelah login sukses, langsung buka
+         * panel AI lalu fokus ke Action_ID yang
+         * dikirim dari email.
+         */
+        await openPanel(
+            "ai"
+        );
+
+
+        const task =
+            Array.from(
+                document.querySelectorAll(
+                    "[data-ai-action-id]"
+                )
+            ).find(
+                function(element){
+
+                    return String(
+                        element.getAttribute(
+                            "data-ai-action-id"
+                        ) ||
+                        ""
+                    )
+                    .trim()
+                    .toUpperCase() ===
+                    actionId;
+
+                }
+            );
+
+
+        if(task){
+
+            task.classList.add(
+                "ai-task-deeplink"
+            );
+
+
+            task.scrollIntoView(
+                {
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "center"
+                }
+            );
+
+
+            window.setTimeout(
+                function(){
+
+                    task.classList.remove(
+                        "ai-task-deeplink"
+                    );
+
+                },
+                2500
+            );
+
+        }
+
+    }finally{
+
+        clearAIDeepLink();
+
+    }
+
+}
+
+
+/* ============================================================
    API
    ============================================================ */
 
@@ -4598,6 +4777,9 @@ document
 
 
                 await loadDashboard();
+
+
+                await openAIDeepLinkedAction();
 
 
             }catch(error){
@@ -5271,7 +5453,11 @@ function renderAITask(
 
 
     return (
-        '<article class="ai-task">' +
+        '<article class="ai-task" data-ai-action-id="' +
+        escapeHtml(
+            actionId
+        ) +
+        '">' +
 
         '<div class="ai-task-head">' +
 
@@ -17273,6 +17459,9 @@ async function init(){
 
 
         await loadDashboard();
+
+
+        await openAIDeepLinkedAction();
 
 
     }catch(error){
