@@ -694,6 +694,58 @@ button{
     background:#fff;
 }
 
+.finance-billing-filter{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-top:14px;
+}
+
+.finance-billing-filter label{
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.finance-billing-filter select{
+    min-width:190px;
+}
+
+.finance-billing-detail-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.finance-billing-detail-table th,
+.finance-billing-detail-table td{
+    padding:9px 8px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+    font-size:12px;
+    vertical-align:middle;
+}
+
+.finance-billing-detail-table th{
+    color:#667085;
+    font-size:11px;
+    background:#fafbfc;
+}
+
+.finance-billing-detail-table tr:last-child td{
+    border-bottom:0;
+}
+
+.finance-billing-detail-table td:nth-child(n+3),
+.finance-billing-detail-table th:nth-child(n+3){
+    text-align:right;
+}
+
+.finance-billing-detail-status{
+    white-space:nowrap;
+}
+
 .finance-billing-detail-main{
     min-width:0;
 }
@@ -11560,6 +11612,182 @@ function renderFinanceBilling(
             : [];
 
 
+    const renderDetailTable =
+        function(
+            selectedStatus
+        ){
+
+            const filtered =
+                selectedStatus ===
+                'ALL'
+                    ? detailRows
+                    : detailRows.filter(
+                        function(item){
+
+                            return String(
+                                item.status ||
+                                ''
+                            ).trim() ===
+                            selectedStatus;
+
+                        }
+                    );
+
+
+            const detailBox =
+                box.querySelector(
+                    '#financeBillingDetailTableBox'
+                );
+
+
+            if(!detailBox){
+
+                return;
+
+            }
+
+
+            if(!filtered.length){
+
+                detailBox.innerHTML =
+                    '<div class="empty">Tidak ada tagihan dengan status tersebut.</div>';
+
+                return;
+
+            }
+
+
+            detailBox.innerHTML =
+
+                '<table class="finance-billing-detail-table">' +
+
+                '<thead>' +
+
+                '<tr>' +
+                '<th>Kamar / Tenant</th>' +
+                '<th>Status</th>' +
+                '<th>Tagihan</th>' +
+                '<th>Dibayar</th>' +
+                '<th>Sisa</th>' +
+                '</tr>' +
+
+                '</thead>' +
+
+                '<tbody>' +
+
+                filtered
+                    .map(
+                        function(item){
+
+                            const expected =
+                                Number(
+                                    item.expected ||
+                                    0
+                                );
+
+                            const paid =
+                                Number(
+                                    item.paid ||
+                                    0
+                                );
+
+                            const outstanding =
+                                Number(
+                                    item.outstanding ||
+                                    0
+                                );
+
+
+                            return (
+
+                                '<tr>' +
+
+                                '<td>' +
+
+                                '<strong>' +
+                                escapeHtml(
+                                    item.room
+                                        ? 'Kamar ' +
+                                          item.room
+                                        : 'Tagihan'
+                                ) +
+                                '</strong>' +
+
+                                '<div class="small">' +
+                                escapeHtml(
+                                    item.name ||
+                                    item.tenantId ||
+                                    '—'
+                                ) +
+                                ' · Jatuh tempo ' +
+                                escapeHtml(
+                                    financeDisplayDate(
+                                        item.dueDate
+                                    )
+                                ) +
+                                '</div>' +
+
+                                '</td>' +
+
+                                '<td class="finance-billing-detail-status">' +
+                                escapeHtml(
+                                    item.status ||
+                                    '—'
+                                ) +
+                                (
+                                    item.verification &&
+                                    item.verification !==
+                                    'TERVERIFIKASI'
+                                        ? '<div class="small">' +
+                                          escapeHtml(
+                                            item.verification
+                                          ) +
+                                          '</div>'
+                                        : ''
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    financeMoney(
+                                        expected
+                                    )
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    financeMoney(
+                                        paid
+                                    )
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                escapeHtml(
+                                    outstanding > 0
+                                        ? financeMoney(
+                                            outstanding
+                                          )
+                                        : 'Rp0'
+                                ) +
+                                '</td>' +
+
+                                '</tr>'
+
+                            );
+
+                        }
+                    )
+                    .join("") +
+
+                '</tbody>' +
+
+                '</table>';
+
+        };
+
+
     box.innerHTML =
 
         '<div class="finance-billing-summary">' +
@@ -11662,92 +11890,66 @@ function renderFinanceBilling(
                     'Rincian Tagihan' +
                     '</div>' +
 
-                    '<div class="finance-billing-details">' +
+                    '<div class="finance-billing-filter">' +
 
-                    detailRows
+                    '<label for="financeBillingStatusFilter">Filter status</label>' +
+
+                    '<select id="financeBillingStatusFilter">' +
+                    '<option value="ALL">Semua</option>' +
+                    labels
                         .map(
                             function(item){
 
-                                const status =
-                                    String(
-                                        item.status ||
-                                        ''
-                                    ).trim();
-
-                                const outstanding =
-                                    Number(
-                                        item.outstanding ||
-                                        0
-                                    );
-
-
                                 return (
-                                    '<div class="finance-billing-detail">' +
-
-                                    '<div class="finance-billing-detail-main">' +
-
-                                    '<div class="finance-billing-detail-name">' +
+                                    '<option value="' +
                                     escapeHtml(
-                                        item.room
-                                            ? 'Kamar ' +
-                                              item.room
-                                            : (
-                                                item.name ||
-                                                item.tenantId ||
-                                                'Tagihan'
-                                              )
+                                        item[0]
                                     ) +
-                                    '</div>' +
-
-                                    '<div class="finance-billing-detail-meta">' +
+                                    '">' +
                                     escapeHtml(
-                                        (
-                                            item.name ||
-                                            item.tenantId ||
-                                            '—'
-                                        )
+                                        item[1]
                                     ) +
-                                    ' · Jatuh tempo ' +
-                                    escapeHtml(
-                                        financeDisplayDate(
-                                            item.dueDate
-                                        )
-                                    ) +
-                                    '</div>' +
-
-                                    '</div>' +
-
-                                    '<div class="finance-billing-detail-status">' +
-                                    escapeHtml(
-                                        status ||
-                                        '—'
-                                    ) +
-                                    '</div>' +
-
-                                    '<div class="finance-billing-detail-amount">' +
-                                    escapeHtml(
-                                        outstanding > 0
-                                            ? financeMoney(
-                                                outstanding
-                                              ) +
-                                              ' sisa'
-                                            : financeMoney(
-                                                item.expected
-                                              )
-                                    ) +
-                                    '</div>' +
-
-                                    '</div>'
+                                    '</option>'
                                 );
 
                             }
                         )
                         .join("") +
+                    '</select>' +
 
-                    '</div>'
+                    '</div>' +
+
+                    '<div id="financeBillingDetailTableBox"></div>'
                   )
                 : ''
         );
+
+
+    const statusFilter =
+        box.querySelector(
+            '#financeBillingStatusFilter'
+        );
+
+
+    if(statusFilter){
+
+        statusFilter.addEventListener(
+            'change',
+            function(){
+
+                renderDetailTable(
+                    this.value
+                );
+
+            }
+        );
+
+    }
+
+
+    renderDetailTable(
+        'ALL'
+    );
 
 }
 
