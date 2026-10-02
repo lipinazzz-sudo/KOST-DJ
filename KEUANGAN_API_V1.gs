@@ -2499,20 +2499,62 @@ function djFinanceBuildBillingStatusV1_(
   const billingSources = [];
 
 
-  if (
-    Array.isArray(dataset.contracts) &&
-    dataset.contracts.length > 0
-  ) {
+  let hasUsableContracts =
+    false;
 
-    dataset.contracts.forEach(
+
+  (dataset.contracts || [])
+    .forEach(
       function(contract) {
 
-        billingSources.push(
-          contract
-        );
+        const startsBeforeEnd =
+          !contract.startDate ||
+          contract.startDate <=
+          periodEnd;
+
+
+        const endsAfterStart =
+          !contract.endDate ||
+          contract.endDate >=
+          periodStart;
+
+
+        const hasRent =
+          Number(
+            contract.monthlyRent ||
+            0
+          ) > 0;
+
+
+        if (
+          startsBeforeEnd &&
+          endsAfterStart &&
+          hasRent
+        ) {
+
+          hasUsableContracts =
+            true;
+
+        }
 
       }
     );
+
+
+  if (
+    hasUsableContracts
+  ) {
+
+    (dataset.contracts || [])
+      .forEach(
+        function(contract) {
+
+          billingSources.push(
+            contract
+          );
+
+        }
+      );
 
   } else {
 
