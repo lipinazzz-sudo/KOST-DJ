@@ -60,6 +60,29 @@ function doPost(e) {
 
 
     /* ========================================================
+     * AI AGENT MASTER ROUTES
+     * ========================================================
+     */
+
+    if (
+      action === 'masteraiinbox' ||
+      action === 'masteraiaction'
+    ) {
+
+      const aiResult =
+        aiAgentMasterApiV1_(
+          action,
+          body
+        );
+
+      return djApiJsonV5_(
+        aiResult
+      );
+
+    }
+
+
+    /* ========================================================
      * MASTER ROUTES
      * ========================================================
      */
