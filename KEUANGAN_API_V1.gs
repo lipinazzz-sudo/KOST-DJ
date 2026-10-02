@@ -4064,6 +4064,9 @@ function djFinanceRoomAnalysisV1_(
   );
 
 
+  const countedPayments = {};
+
+
   (dataset.payments || [])
     .forEach(
       function(item) {
@@ -4102,6 +4105,48 @@ function djFinanceRoomAnalysisV1_(
           return;
 
         }
+
+
+        const paymentId =
+          String(
+            item.paymentId ||
+            ''
+          ).trim().toUpperCase();
+
+
+        /*
+         * Satu tagihan per tenant/kamar dan periode.
+         * Hindari menghitung record pembayaran yang sama dua kali.
+         * Payment_ID menjadi kunci utama; bila kosong, gunakan
+         * tenant + kamar + periode sebagai fallback.
+         */
+        const dedupeKey =
+          paymentId
+            ? 'ID:' + paymentId
+            : (
+                'BILL:' +
+                String(
+                  item.tenantId ||
+                  ''
+                ).trim().toUpperCase() +
+                '|' +
+                room +
+                '|' +
+                periodKey
+              );
+
+
+        if (
+          countedPayments[dedupeKey]
+        ) {
+
+          return;
+
+        }
+
+
+        countedPayments[dedupeKey] =
+          true;
 
 
         rooms[room].revenue +=
