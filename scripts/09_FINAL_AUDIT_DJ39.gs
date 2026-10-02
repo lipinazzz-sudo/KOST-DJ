@@ -1,40 +1,40 @@
 /**
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;* DJ FAMILY KOST
+ * DJ FAMILY KOST
 
-&#x20;* STEP 9 — FINAL AUDIT DJ39
+ * STEP 9 — FINAL AUDIT DJ39
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*
+ *
 
-&#x20;* VERSI FINAL
+ * VERSI FINAL
 
-&#x20;*
+ *
 
-&#x20;* PRINSIP:
+ * PRINSIP:
 
-&#x20;* - TIDAK mengubah data.
+ * - TIDAK mengubah data.
 
-&#x20;* - TIDAK membuat sheet.
+ * - TIDAK membuat sheet.
 
-&#x20;* - TIDAK membuat kolom.
+ * - TIDAK membuat kolom.
 
-&#x20;* - TIDAK membuat trigger.
+ * - TIDAK membuat trigger.
 
-&#x20;* - TIDAK menghapus trigger.
+ * - TIDAK menghapus trigger.
 
-&#x20;* - System_Log bersifat OPTIONAL.
+ * - System_Log bersifat OPTIONAL.
 
-&#x20;* - Audit mengikuti struktur database aktual DJ Family Kost.
+ * - Audit mengikuti struktur database aktual DJ Family Kost.
 
-&#x20;*
+ *
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
@@ -42,75 +42,75 @@ const DJ39_FINAL_AUDIT_V2 = {
 
 
 
-&#x20; roomCount: 39,
+  roomCount: 39,
 
 
 
-&#x20; sheets: {
+  sheets: {
 
 
 
-&#x20;   kamar:
+    kamar:
 
-&#x20;     'Kamar',
-
-
-
-&#x20;   tenant:
-
-&#x20;     'Tenant',
+      'Kamar',
 
 
 
-&#x20;   kontrak:
+    tenant:
 
-&#x20;     'Kontrak',
-
-
-
-&#x20;   pembayaran:
-
-&#x20;     'Pembayaran',
+      'Tenant',
 
 
 
-&#x20;   maintenance:
+    kontrak:
 
-&#x20;     'Maintenance',
-
-
-
-&#x20;   checkInOut:
-
-&#x20;     'CheckInOut',
+      'Kontrak',
 
 
 
-&#x20;   pelanggaran:
+    pembayaran:
 
-&#x20;     'Pelanggaran',
-
-
-
-&#x20;   dashboard:
-
-&#x20;     'Dashboard',
+      'Pembayaran',
 
 
 
-&#x20;   api:
+    maintenance:
 
-&#x20;     'API_Data',
-
-
-
-&#x20;   log:
-
-&#x20;     'System_Log'
+      'Maintenance',
 
 
 
-&#x20; }
+    checkInOut:
+
+      'CheckInOut',
+
+
+
+    pelanggaran:
+
+      'Pelanggaran',
+
+
+
+    dashboard:
+
+      'Dashboard',
+
+
+
+    api:
+
+      'API_Data',
+
+
+
+    log:
+
+      'System_Log'
+
+
+
+  }
 
 
 
@@ -122,11 +122,11 @@ const DJ39_FINAL_AUDIT_V2 = {
 
 /* ============================================================
 
-&#x20;* 1. AUDIT UTAMA
+ * 1. AUDIT UTAMA
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
@@ -134,767 +134,767 @@ function auditFinalDJ39_V2() {
 
 
 
-&#x20; const ss =
+  const ss =
 
-&#x20;   SpreadsheetApp.getActiveSpreadsheet();
+    SpreadsheetApp.getActiveSpreadsheet();
 
 
 
-&#x20; if (!ss) {
+  if (!ss) {
 
 
 
-&#x20;   throw new Error(
+    throw new Error(
 
-&#x20;     'Spreadsheet DJ Family Kost tidak ditemukan.'
+      'Spreadsheet DJ Family Kost tidak ditemukan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'DJ FAMILY KOST — FINAL AUDIT V2'
+    'DJ FAMILY KOST — FINAL AUDIT V2'
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; const result = {
+  const result = {
 
 
 
-&#x20;   success:
+    success:
 
-&#x20;     true,
+      true,
 
 
 
-&#x20;   warnings:
+    warnings:
 
-&#x20;     [],
+      [],
 
 
 
-&#x20;   errors:
+    errors:
 
-&#x20;     [],
+      [],
 
 
 
-&#x20;   sheets:
+    sheets:
 
-&#x20;     {},
+      {},
 
 
 
-&#x20;   rooms:
+    rooms:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   tenants:
+    tenants:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   contracts:
+    contracts:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   payments:
+    payments:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   maintenance:
+    maintenance:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   checkInOut:
+    checkInOut:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   violations:
+    violations:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   openViolations:
+    openViolations:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   openFine:
+    openFine:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   openMaintenance:
+    openMaintenance:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   apiRooms:
+    apiRooms:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   dashboardRooms:
+    dashboardRooms:
 
-&#x20;     0,
+      0,
 
 
 
-&#x20;   triggers:
+    triggers:
 
-&#x20;     0
+      0
 
 
 
-&#x20; };
+  };
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 1 — SHEET UTAMA
+   * TEST 1 — SHEET UTAMA
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditSheetsV2_(
+  dj39AuditSheetsV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 2 — KAMAR
+   * TEST 2 — KAMAR
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditRoomsV2_(
+  dj39AuditRoomsV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 3 — TENANT
+   * TEST 3 — TENANT
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditTenantV2_(
+  dj39AuditTenantV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 4 — KONTRAK
+   * TEST 4 — KONTRAK
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditKontrakV2_(
+  dj39AuditKontrakV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 5 — PEMBAYARAN
+   * TEST 5 — PEMBAYARAN
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditPembayaranV2_(
+  dj39AuditPembayaranV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 6 — MAINTENANCE
+   * TEST 6 — MAINTENANCE
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditMaintenanceV2_(
+  dj39AuditMaintenanceV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 7 — CHECK IN / OUT
+   * TEST 7 — CHECK IN / OUT
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditCheckInOutV2_(
+  dj39AuditCheckInOutV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 8 — PELANGGARAN
+   * TEST 8 — PELANGGARAN
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditPelanggaranV2_(
+  dj39AuditPelanggaranV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 9 — API DATA
+   * TEST 9 — API DATA
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditApiV2_(
+  dj39AuditApiV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 10 — DASHBOARD
+   * TEST 10 — DASHBOARD
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditDashboardV2_(
+  dj39AuditDashboardV2_(
 
-&#x20;   ss,
+    ss,
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * TEST 11 — TRIGGER
+   * TEST 11 — TRIGGER
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; dj39AuditTriggersV2_(
+  dj39AuditTriggersV2_(
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /* ==========================================================
+  /* ==========================================================
 
-&#x20;  * HASIL AKHIR
+   * HASIL AKHIR
 
-&#x20;  * ==========================================================
+   * ==========================================================
 
-&#x20;  */
+   */
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.errors.length > 0
+    result.errors.length > 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.success =
+    result.success =
 
-&#x20;     false;
+      false;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'HASIL FINAL AUDIT'
+    'HASIL FINAL AUDIT'
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Kamar       : ' +
+    'Kamar       : ' +
 
-&#x20;   result.rooms
+    result.rooms
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Tenant      : ' +
+    'Tenant      : ' +
 
-&#x20;   result.tenants
+    result.tenants
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Kontrak     : ' +
+    'Kontrak     : ' +
 
-&#x20;   result.contracts
+    result.contracts
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Pembayaran  : ' +
+    'Pembayaran  : ' +
 
-&#x20;   result.payments
+    result.payments
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Maintenance : ' +
+    'Maintenance : ' +
 
-&#x20;   result.maintenance
+    result.maintenance
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'CheckInOut  : ' +
+    'CheckInOut  : ' +
 
-&#x20;   result.checkInOut
+    result.checkInOut
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Pelanggaran : ' +
+    'Pelanggaran : ' +
 
-&#x20;   result.violations
+    result.violations
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Open Fine   : Rp ' +
+    'Open Fine   : Rp ' +
 
-&#x20;   dj39AuditNumberFormatV2_(
+    dj39AuditNumberFormatV2_(
 
-&#x20;     result.openFine
+      result.openFine
 
-&#x20;   )
+    )
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'API Rooms   : ' +
+    'API Rooms   : ' +
 
-&#x20;   result.apiRooms
+    result.apiRooms
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Dashboard   : ' +
+    'Dashboard   : ' +
 
-&#x20;   result.dashboardRooms
+    result.dashboardRooms
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Triggers    : ' +
+    'Triggers    : ' +
 
-&#x20;   result.triggers
+    result.triggers
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.warnings.length > 0
+    result.warnings.length > 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     '--------------------------------------------------'
+      '--------------------------------------------------'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'WARNING:'
+      'WARNING:'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   result.warnings.forEach(
+    result.warnings.forEach(
 
-&#x20;     function(w) {
+      function(w) {
 
 
 
-&#x20;       Logger.log(
+        Logger.log(
 
-&#x20;         'WARNING: ' + w
+          'WARNING: ' + w
 
-&#x20;       );
+        );
 
 
 
-&#x20;     }
+      }
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.errors.length > 0
+    result.errors.length > 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     '--------------------------------------------------'
+      '--------------------------------------------------'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'ERROR:'
+      'ERROR:'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   result.errors.forEach(
+    result.errors.forEach(
 
-&#x20;     function(e) {
+      function(e) {
 
 
 
-&#x20;       Logger.log(
+        Logger.log(
 
-&#x20;         'ERROR: ' + e
+          'ERROR: ' + e
 
-&#x20;       );
+        );
 
 
 
-&#x20;     }
+      }
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.errors.length === 0
+    result.errors.length === 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     '=================================================='
+      '=================================================='
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'FINAL AUDIT DJ FAMILY KOST = BERHASIL'
+      'FINAL AUDIT DJ FAMILY KOST = BERHASIL'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'Sistem utama tidak menemukan error struktural.'
+      'Sistem utama tidak menemukan error struktural.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     '=================================================='
+      '=================================================='
 
-&#x20;   );
+    );
 
 
 
-&#x20; } else {
+  } else {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     '=================================================='
+      '=================================================='
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'FINAL AUDIT DJ FAMILY KOST = ADA ERROR'
+      'FINAL AUDIT DJ FAMILY KOST = ADA ERROR'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'Periksa daftar ERROR di atas.'
+      'Periksa daftar ERROR di atas.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     '=================================================='
+      '=================================================='
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; return result;
+  return result;
 
 
 
@@ -906,233 +906,233 @@ function auditFinalDJ39_V2() {
 
 /* ============================================================
 
-&#x20;* 2. AUDIT SHEET
+ * 2. AUDIT SHEET
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditSheetsV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const required = [
+  const required = [
 
 
 
-&#x20;   'kamar',
+    'kamar',
 
 
 
-&#x20;   'tenant',
+    'tenant',
 
 
 
-&#x20;   'kontrak',
+    'kontrak',
 
 
 
-&#x20;   'pembayaran',
+    'pembayaran',
 
 
 
-&#x20;   'maintenance',
+    'maintenance',
 
 
 
-&#x20;   'checkInOut',
+    'checkInOut',
 
 
 
-&#x20;   'pelanggaran',
+    'pelanggaran',
 
 
 
-&#x20;   'dashboard',
+    'dashboard',
 
 
 
-&#x20;   'api'
+    'api'
 
 
 
-&#x20; ];
+  ];
 
 
 
 
 
-&#x20; required.forEach(
+  required.forEach(
 
-&#x20;   function(key) {
+    function(key) {
 
 
 
-&#x20;     const name =
+      const name =
 
-&#x20;       DJ39_FINAL_AUDIT_V2
+        DJ39_FINAL_AUDIT_V2
 
-&#x20;         .sheets[key];
+          .sheets[key];
 
 
 
-&#x20;     const sheet =
+      const sheet =
 
-&#x20;       ss.getSheetByName(
+        ss.getSheetByName(
 
-&#x20;         name
+          name
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;     if (!sheet) {
+      if (!sheet) {
 
 
 
-&#x20;       result.errors.push(
+        result.errors.push(
 
-&#x20;         'Sheet wajib tidak ditemukan: ' +
+          'Sheet wajib tidak ditemukan: ' +
 
-&#x20;         name
+          name
 
-&#x20;       );
+        );
 
 
 
-&#x20;       result.sheets[key] =
+        result.sheets[key] =
 
-&#x20;         false;
+          false;
 
 
 
-&#x20;     } else {
+      } else {
 
 
 
-&#x20;       result.sheets[key] =
+        result.sheets[key] =
 
-&#x20;         true;
+          true;
 
 
 
-&#x20;       Logger.log(
+        Logger.log(
 
-&#x20;         'Sheet OK: ' +
+          'Sheet OK: ' +
 
-&#x20;         name
+          name
 
-&#x20;       );
+        );
 
 
 
-&#x20;     }
+      }
 
 
 
-&#x20;   }
+    }
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; /*
+  /*
 
-&#x20;  * System_Log OPTIONAL.
+   * System_Log OPTIONAL.
 
-&#x20;  */
+   */
 
 
 
-&#x20; const logSheet =
+  const logSheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.log
+        .sheets.log
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!logSheet) {
+  if (!logSheet) {
 
 
 
-&#x20;   result.warnings.push(
+    result.warnings.push(
 
-&#x20;     'System_Log tidak ditemukan. ' +
+      'System_Log tidak ditemukan. ' +
 
-&#x20;     'Ini OPTIONAL dan tidak dianggap error.'
+      'Ini OPTIONAL dan tidak dianggap error.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'WARNING: System_Log tidak ada — OPTIONAL.'
+      'WARNING: System_Log tidak ada — OPTIONAL.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; } else {
+  } else {
 
 
 
-&#x20;   result.sheets.log =
+    result.sheets.log =
 
-&#x20;     true;
+      true;
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'System_Log tersedia.'
+      'System_Log tersedia.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.errors.length === 0
+    result.errors.length === 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'TEST 1 BERHASIL: Semua sheet inti tersedia.'
+      'TEST 1 BERHASIL: Semua sheet inti tersedia.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
@@ -1144,267 +1144,267 @@ function dj39AuditSheetsV2_(
 
 /* ============================================================
 
-&#x20;* 3. AUDIT KAMAR
+ * 3. AUDIT KAMAR
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditRoomsV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.kamar
+        .sheets.kamar
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const info =
+  const info =
 
-&#x20;   dj39AuditFindHeaderV2_(
+    dj39AuditFindHeaderV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     [
+      [
 
-&#x20;       'No_Kamar',
+        'No_Kamar',
 
-&#x20;       'No Kamar',
+        'No Kamar',
 
-&#x20;       'Nomor Kamar'
+        'Nomor Kamar'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!info) {
+  if (!info) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Header nomor kamar tidak ditemukan di Kamar.'
+      'Header nomor kamar tidak ditemukan di Kamar.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const roomIndex =
+  const roomIndex =
 
-&#x20;   dj39AuditFindHeaderIndexV2_(
+    dj39AuditFindHeaderIndexV2_(
 
-&#x20;     info.headers,
+      info.headers,
 
-&#x20;     [
+      [
 
-&#x20;       'No_Kamar',
+        'No_Kamar',
 
-&#x20;       'No Kamar',
+        'No Kamar',
 
-&#x20;       'Nomor Kamar'
+        'Nomor Kamar'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; const lastRow =
+  const lastRow =
 
-&#x20;   sheet.getLastRow();
+    sheet.getLastRow();
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   lastRow <= info.row
+    lastRow <= info.row
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Sheet Kamar tidak memiliki data kamar.'
+      'Sheet Kamar tidak memiliki data kamar.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const values =
+  const values =
 
-&#x20;   sheet
+    sheet
 
-&#x20;     .getRange(
+      .getRange(
 
-&#x20;       info.row + 1,
+        info.row + 1,
 
-&#x20;       roomIndex + 1,
+        roomIndex + 1,
 
-&#x20;       lastRow - info.row,
+        lastRow - info.row,
 
-&#x20;       1
+        1
 
-&#x20;     )
+      )
 
-&#x20;     .getValues();
+      .getValues();
 
 
 
 
 
-&#x20; const rooms = {};
+  const rooms = {};
 
 
 
 
 
-&#x20; values.forEach(
+  values.forEach(
 
-&#x20;   function(row) {
+    function(row) {
 
 
 
-&#x20;     const room =
+      const room =
 
-&#x20;       dj39AuditNormalizeRoomV2_(
+        dj39AuditNormalizeRoomV2_(
 
-&#x20;         row[0]
+          row[0]
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;     if (room) {
+      if (room) {
 
 
 
-&#x20;       rooms[room] =
+        rooms[room] =
 
-&#x20;         true;
+          true;
 
 
 
-&#x20;     }
+      }
 
 
 
-&#x20;   }
+    }
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.rooms =
+  result.rooms =
 
-&#x20;   Object.keys(
+    Object.keys(
 
-&#x20;     rooms
+      rooms
 
-&#x20;   ).length;
+    ).length;
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.rooms !==
+    result.rooms !==
 
-&#x20;   DJ39_FINAL_AUDIT_V2.roomCount
+    DJ39_FINAL_AUDIT_V2.roomCount
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Jumlah kamar harus 39. ' +
+      'Jumlah kamar harus 39. ' +
 
-&#x20;     'Terdeteksi: ' +
+      'Terdeteksi: ' +
 
-&#x20;     result.rooms
+      result.rooms
 
-&#x20;   );
+    );
 
 
 
-&#x20; } else {
+  } else {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'TEST 2 BERHASIL: 39 kamar terdeteksi.'
+      'TEST 2 BERHASIL: 39 kamar terdeteksi.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
@@ -1416,165 +1416,165 @@ function dj39AuditRoomsV2_(
 
 /* ============================================================
 
-&#x20;* 4. AUDIT TENANT
+ * 4. AUDIT TENANT
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditTenantV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.tenant
+        .sheets.tenant
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const info =
+  const info =
 
-&#x20;   dj39AuditFindHeaderV2_(
+    dj39AuditFindHeaderV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     [
+      [
 
-&#x20;       'Tenant_ID'
+        'Tenant_ID'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!info) {
+  if (!info) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Header Tenant_ID tidak ditemukan di Tenant.'
+      'Header Tenant_ID tidak ditemukan di Tenant.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const required = [
+  const required = [
 
 
 
-&#x20;   'Tenant_ID',
+    'Tenant_ID',
 
 
 
-&#x20;   'Nama_Lengkap',
+    'Nama_Lengkap',
 
 
 
-&#x20;   'No_Kamar',
+    'No_Kamar',
 
 
 
-&#x20;   'Status_Tenant'
+    'Status_Tenant'
 
 
 
-&#x20; ];
+  ];
 
 
 
 
 
-&#x20; dj39AuditRequiredHeadersV2_(
+  dj39AuditRequiredHeadersV2_(
 
-&#x20;   info.headers,
+    info.headers,
 
-&#x20;   required,
+    required,
 
-&#x20;   'Tenant',
+    'Tenant',
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.tenants =
+  result.tenants =
 
-&#x20;   dj39AuditCountRowsV2_(
+    dj39AuditCountRowsV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     info.row
+      info.row
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.errors.length === 0
+    result.errors.length === 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'TEST 3 BERHASIL: Struktur Tenant sesuai.'
+      'TEST 3 BERHASIL: Struktur Tenant sesuai.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
@@ -1586,173 +1586,173 @@ function dj39AuditTenantV2_(
 
 /* ============================================================
 
-&#x20;* 5. AUDIT KONTRAK
+ * 5. AUDIT KONTRAK
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditKontrakV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.kontrak
+        .sheets.kontrak
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const info =
+  const info =
 
-&#x20;   dj39AuditFindHeaderV2_(
+    dj39AuditFindHeaderV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     [
+      [
 
-&#x20;       'Kontrak_ID'
+        'Kontrak_ID'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!info) {
+  if (!info) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Header Kontrak_ID tidak ditemukan di Kontrak.'
+      'Header Kontrak_ID tidak ditemukan di Kontrak.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const required = [
+  const required = [
 
 
 
-&#x20;   'Kontrak_ID',
+    'Kontrak_ID',
 
 
 
-&#x20;   'Tenant_ID',
+    'Tenant_ID',
 
 
 
-&#x20;   'No_Kamar',
+    'No_Kamar',
 
 
 
-&#x20;   'Nama_Tenant',
+    'Nama_Tenant',
 
 
 
-&#x20;   'Tanggal_Mulai',
+    'Tanggal_Mulai',
 
 
 
-&#x20;   'Tanggal_Berakhir',
+    'Tanggal_Berakhir',
 
 
 
-&#x20;   'Harga_Sewa',
+    'Harga_Sewa',
 
 
 
-&#x20;   'Deposit',
+    'Deposit',
 
 
 
-&#x20;   'Status_Kontrak'
+    'Status_Kontrak'
 
 
 
-&#x20; ];
+  ];
 
 
 
 
 
-&#x20; dj39AuditRequiredHeadersV2_(
+  dj39AuditRequiredHeadersV2_(
 
-&#x20;   info.headers,
+    info.headers,
 
-&#x20;   required,
+    required,
 
-&#x20;   'Kontrak',
+    'Kontrak',
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.contracts =
+  result.contracts =
 
-&#x20;   dj39AuditCountRowsV2_(
+    dj39AuditCountRowsV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     info.row
+      info.row
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'TEST 4 BERHASIL: Struktur Kontrak sesuai.'
+    'TEST 4 BERHASIL: Struktur Kontrak sesuai.'
 
-&#x20; );
+  );
 
 
 
@@ -1764,227 +1764,227 @@ function dj39AuditKontrakV2_(
 
 /* ============================================================
 
-&#x20;* 6. AUDIT PEMBAYARAN
+ * 6. AUDIT PEMBAYARAN
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditPembayaranV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.pembayaran
+        .sheets.pembayaran
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const info =
+  const info =
 
-&#x20;   dj39AuditFindHeaderV2_(
+    dj39AuditFindHeaderV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     [
+      [
 
-&#x20;       'Pembayaran_ID'
+        'Pembayaran_ID'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!info) {
+  if (!info) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Header Pembayaran_ID tidak ditemukan di Pembayaran.'
+      'Header Pembayaran_ID tidak ditemukan di Pembayaran.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; /*
+  /*
 
-&#x20;  * Schema AKTUAL Pembayaran.
+   * Schema AKTUAL Pembayaran.
 
-&#x20;  *
+   *
 
-&#x20;  * Tidak ada Tenant_ID.
+   * Tidak ada Tenant_ID.
 
-&#x20;  */
+   */
 
 
 
-&#x20; const required = [
+  const required = [
 
 
 
-&#x20;   'Pembayaran_ID',
+    'Pembayaran_ID',
 
 
 
-&#x20;   'No_Kamar',
+    'No_Kamar',
 
 
 
-&#x20;   'Nama_Tenant',
+    'Nama_Tenant',
 
 
 
-&#x20;   'Periode_Pembayaran',
+    'Periode_Pembayaran',
 
 
 
-&#x20;   'Tanggal_Pembayaran',
+    'Tanggal_Pembayaran',
 
 
 
-&#x20;   'Jatuh_Tempo',
+    'Jatuh_Tempo',
 
 
 
-&#x20;   'Tarif_Kamar',
+    'Tarif_Kamar',
 
 
 
-&#x20;   'Nominal_Dibayar',
+    'Nominal_Dibayar',
 
 
 
-&#x20;   'Denda_Terhitung',
+    'Denda_Terhitung',
 
 
 
-&#x20;   'Total_Tagihan',
+    'Total_Tagihan',
 
 
 
-&#x20;   'Selisih',
+    'Selisih',
 
 
 
-&#x20;   'Status_Pembayaran',
+    'Status_Pembayaran',
 
 
 
-&#x20;   'Status_Verifikasi',
+    'Status_Verifikasi',
 
 
 
-&#x20;   'Metode_Pembayaran',
+    'Metode_Pembayaran',
 
 
 
-&#x20;   'Bukti_Pembayaran_URL'
+    'Bukti_Pembayaran_URL'
 
 
 
-&#x20; ];
+  ];
 
 
 
 
 
-&#x20; dj39AuditRequiredHeadersV2_(
+  dj39AuditRequiredHeadersV2_(
 
-&#x20;   info.headers,
+    info.headers,
 
-&#x20;   required,
+    required,
 
-&#x20;   'Pembayaran',
+    'Pembayaran',
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.payments =
+  result.payments =
 
-&#x20;   dj39AuditCountRowsV2_(
+    dj39AuditCountRowsV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     info.row
+      info.row
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   dj39AuditHeadersExistV2_(
+    dj39AuditHeadersExistV2_(
 
-&#x20;     info.headers,
+      info.headers,
 
-&#x20;     required
+      required
 
-&#x20;   )
+    )
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'TEST 5 BERHASIL: Struktur Pembayaran sesuai.'
+      'TEST 5 BERHASIL: Struktur Pembayaran sesuai.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
@@ -1996,289 +1996,289 @@ function dj39AuditPembayaranV2_(
 
 /* ============================================================
 
-&#x20;* 7. AUDIT MAINTENANCE
+ * 7. AUDIT MAINTENANCE
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditMaintenanceV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.maintenance
+        .sheets.maintenance
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const info =
+  const info =
 
-&#x20;   dj39AuditFindHeaderV2_(
+    dj39AuditFindHeaderV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     [
+      [
 
-&#x20;       'Maintenance_ID'
+        'Maintenance_ID'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!info) {
+  if (!info) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Header Maintenance_ID tidak ditemukan.'
+      'Header Maintenance_ID tidak ditemukan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const required = [
+  const required = [
 
 
 
-&#x20;   'Maintenance_ID',
+    'Maintenance_ID',
 
 
 
-&#x20;   'No_Kamar',
+    'No_Kamar',
 
 
 
-&#x20;   'Nama_Tenant',
+    'Nama_Tenant',
 
 
 
-&#x20;   'Jenis_Masalah',
+    'Jenis_Masalah',
 
 
 
-&#x20;   'Deskripsi',
+    'Deskripsi',
 
 
 
-&#x20;   'Urgensi',
+    'Urgensi',
 
 
 
-&#x20;   'Status',
+    'Status',
 
 
 
-&#x20;   'PIC',
+    'PIC',
 
 
 
-&#x20;   'Tanggal_Tindak_Lanjut',
+    'Tanggal_Tindak_Lanjut',
 
 
 
-&#x20;   'Biaya'
+    'Biaya'
 
 
 
-&#x20; ];
+  ];
 
 
 
 
 
-&#x20; dj39AuditRequiredHeadersV2_(
+  dj39AuditRequiredHeadersV2_(
 
-&#x20;   info.headers,
+    info.headers,
 
-&#x20;   required,
+    required,
 
-&#x20;   'Maintenance',
+    'Maintenance',
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.maintenance =
+  result.maintenance =
 
-&#x20;   dj39AuditCountRowsV2_(
+    dj39AuditCountRowsV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     info.row
+      info.row
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; /*
+  /*
 
-&#x20;  * Hitung maintenance OPEN.
+   * Hitung maintenance OPEN.
 
-&#x20;  */
+   */
 
 
 
-&#x20; const statusIndex =
+  const statusIndex =
 
-&#x20;   dj39AuditFindHeaderIndexV2_(
+    dj39AuditFindHeaderIndexV2_(
 
-&#x20;     info.headers,
+      info.headers,
 
-&#x20;     [
+      [
 
-&#x20;       'Status'
+        'Status'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   statusIndex >= 0 &&
+    statusIndex >= 0 &&
 
-&#x20;   sheet.getLastRow() > info.row
+    sheet.getLastRow() > info.row
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   const values =
+    const values =
 
-&#x20;     sheet
+      sheet
 
-&#x20;       .getRange(
+        .getRange(
 
-&#x20;         info.row + 1,
+          info.row + 1,
 
-&#x20;         statusIndex + 1,
+          statusIndex + 1,
 
-&#x20;         sheet.getLastRow() - info.row,
+          sheet.getLastRow() - info.row,
 
-&#x20;         1
+          1
 
-&#x20;       )
+        )
 
-&#x20;       .getValues();
+        .getValues();
 
 
 
 
 
-&#x20;   values.forEach(
+    values.forEach(
 
-&#x20;     function(row) {
+      function(row) {
 
 
 
-&#x20;       const status =
+        const status =
 
-&#x20;         String(
+          String(
 
-&#x20;           row[0] || ''
+            row[0] || ''
 
-&#x20;         )
+          )
 
-&#x20;         .trim()
+          .trim()
 
-&#x20;         .toUpperCase();
+          .toUpperCase();
 
 
 
 
 
-&#x20;       if (
+        if (
 
-&#x20;         status === 'OPEN' ||
+          status === 'OPEN' ||
 
-&#x20;         status === 'PROSES' ||
+          status === 'PROSES' ||
 
-&#x20;         status === 'PENDING'
+          status === 'PENDING'
 
-&#x20;       ) {
+        ) {
 
 
 
-&#x20;         result.openMaintenance++;
+          result.openMaintenance++;
 
 
 
-&#x20;       }
+        }
 
 
 
-&#x20;     }
+      }
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'TEST 6 BERHASIL: Struktur Maintenance sesuai.'
+    'TEST 6 BERHASIL: Struktur Maintenance sesuai.'
 
-&#x20; );
+  );
 
 
 
@@ -2290,231 +2290,231 @@ function dj39AuditMaintenanceV2_(
 
 /* ============================================================
 
-&#x20;* 8. AUDIT CHECK IN / OUT
+ * 8. AUDIT CHECK IN / OUT
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditCheckInOutV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.checkInOut
+        .sheets.checkInOut
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const info =
+  const info =
 
-&#x20;   dj39AuditFindHeaderV2_(
+    dj39AuditFindHeaderV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     [
+      [
 
-&#x20;       'CheckInOut_ID'
+        'CheckInOut_ID'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!info) {
+  if (!info) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Header CheckInOut_ID tidak ditemukan.'
+      'Header CheckInOut_ID tidak ditemukan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; /*
+  /*
 
-&#x20;  * Schema AKTUAL CheckInOut.
+   * Schema AKTUAL CheckInOut.
 
-&#x20;  *
+   *
 
-&#x20;  * TIDAK memerlukan Tenant_ID.
+   * TIDAK memerlukan Tenant_ID.
 
-&#x20;  */
+   */
 
 
 
-&#x20; const required = [
+  const required = [
 
 
 
-&#x20;   'CheckInOut_ID',
+    'CheckInOut_ID',
 
 
 
-&#x20;   'Timestamp_Submit',
+    'Timestamp_Submit',
 
 
 
-&#x20;   'Jenis_Proses',
+    'Jenis_Proses',
 
 
 
-&#x20;   'No_Kamar',
+    'No_Kamar',
 
 
 
-&#x20;   'Nama_Tenant',
+    'Nama_Tenant',
 
 
 
-&#x20;   'Tanggal_Proses',
+    'Tanggal_Proses',
 
 
 
-&#x20;   'Kondisi_Kamar',
+    'Kondisi_Kamar',
 
 
 
-&#x20;   'Catatan_Kondisi',
+    'Catatan_Kondisi',
 
 
 
-&#x20;   'Foto_Kondisi_URL',
+    'Foto_Kondisi_URL',
 
 
 
-&#x20;   'Foto_Meter_Listrik_URL',
+    'Foto_Meter_Listrik_URL',
 
 
 
-&#x20;   'Kondisi_Fasilitas',
+    'Kondisi_Fasilitas',
 
 
 
-&#x20;   'Jumlah_Kunci_Akses',
+    'Jumlah_Kunci_Akses',
 
 
 
-&#x20;   'Kunci_Dikembalikan',
+    'Kunci_Dikembalikan',
 
 
 
-&#x20;   'Ada_Kerusakan_Kehilangan',
+    'Ada_Kerusakan_Kehilangan',
 
 
 
-&#x20;   'Detail_Kerusakan_Kehilangan',
+    'Detail_Kerusakan_Kehilangan',
 
 
 
-&#x20;   'Perkiraan_Pengurangan_Deposit'
+    'Perkiraan_Pengurangan_Deposit'
 
 
 
-&#x20; ];
+  ];
 
 
 
 
 
-&#x20; dj39AuditRequiredHeadersV2_(
+  dj39AuditRequiredHeadersV2_(
 
-&#x20;   info.headers,
+    info.headers,
 
-&#x20;   required,
+    required,
 
-&#x20;   'CheckInOut',
+    'CheckInOut',
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.checkInOut =
+  result.checkInOut =
 
-&#x20;   dj39AuditCountRowsV2_(
+    dj39AuditCountRowsV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     info.row
+      info.row
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   dj39AuditHeadersExistV2_(
+    dj39AuditHeadersExistV2_(
 
-&#x20;     info.headers,
+      info.headers,
 
-&#x20;     required
+      required
 
-&#x20;   )
+    )
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'TEST 7 BERHASIL: Struktur CheckInOut sesuai.'
+      'TEST 7 BERHASIL: Struktur CheckInOut sesuai.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
@@ -2526,315 +2526,315 @@ function dj39AuditCheckInOutV2_(
 
 /* ============================================================
 
-&#x20;* 9. AUDIT PELANGGARAN
+ * 9. AUDIT PELANGGARAN
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditPelanggaranV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.pelanggaran
+        .sheets.pelanggaran
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const info =
+  const info =
 
-&#x20;   dj39AuditFindHeaderV2_(
+    dj39AuditFindHeaderV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     [
+      [
 
-&#x20;       'Pelanggaran_ID'
+        'Pelanggaran_ID'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!info) {
+  if (!info) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Header Pelanggaran_ID tidak ditemukan.'
+      'Header Pelanggaran_ID tidak ditemukan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const required = [
+  const required = [
 
 
 
-&#x20;   'Pelanggaran_ID',
+    'Pelanggaran_ID',
 
 
 
-&#x20;   'Tanggal',
+    'Tanggal',
 
 
 
-&#x20;   'No_Kamar',
+    'No_Kamar',
 
 
 
-&#x20;   'Tenant_ID',
+    'Tenant_ID',
 
 
 
-&#x20;   'Nama_Tenant',
+    'Nama_Tenant',
 
 
 
-&#x20;   'Jenis_Pelanggaran',
+    'Jenis_Pelanggaran',
 
 
 
-&#x20;   'Kategori',
+    'Kategori',
 
 
 
-&#x20;   'Denda',
+    'Denda',
 
 
 
-&#x20;   'Bukti_URL',
+    'Bukti_URL',
 
 
 
-&#x20;   'Tindakan',
+    'Tindakan',
 
 
 
-&#x20;   'Status',
+    'Status',
 
 
 
-&#x20;   'Catatan'
+    'Catatan'
 
 
 
-&#x20; ];
+  ];
 
 
 
 
 
-&#x20; dj39AuditRequiredHeadersV2_(
+  dj39AuditRequiredHeadersV2_(
 
-&#x20;   info.headers,
+    info.headers,
 
-&#x20;   required,
+    required,
 
-&#x20;   'Pelanggaran',
+    'Pelanggaran',
 
-&#x20;   result
+    result
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.violations =
+  result.violations =
 
-&#x20;   dj39AuditCountRowsV2_(
+    dj39AuditCountRowsV2_(
 
-&#x20;     sheet,
+      sheet,
 
-&#x20;     info.row
+      info.row
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; const statusIndex =
+  const statusIndex =
 
-&#x20;   dj39AuditFindHeaderIndexV2_(
+    dj39AuditFindHeaderIndexV2_(
 
-&#x20;     info.headers,
+      info.headers,
 
-&#x20;     [
+      [
 
-&#x20;       'Status'
+        'Status'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; const fineIndex =
+  const fineIndex =
 
-&#x20;   dj39AuditFindHeaderIndexV2_(
+    dj39AuditFindHeaderIndexV2_(
 
-&#x20;     info.headers,
+      info.headers,
 
-&#x20;     [
+      [
 
-&#x20;       'Denda'
+        'Denda'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   statusIndex >= 0 &&
+    statusIndex >= 0 &&
 
-&#x20;   fineIndex >= 0 &&
+    fineIndex >= 0 &&
 
-&#x20;   sheet.getLastRow() > info.row
+    sheet.getLastRow() > info.row
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   const values =
+    const values =
 
-&#x20;     sheet
+      sheet
 
-&#x20;       .getRange(
+        .getRange(
 
-&#x20;         info.row + 1,
+          info.row + 1,
 
-&#x20;         1,
+          1,
 
-&#x20;         sheet.getLastRow() - info.row,
+          sheet.getLastRow() - info.row,
 
-&#x20;         sheet.getLastColumn()
+          sheet.getLastColumn()
 
-&#x20;       )
+        )
 
-&#x20;       .getValues();
+        .getValues();
 
 
 
 
 
-&#x20;   values.forEach(
+    values.forEach(
 
-&#x20;     function(row) {
+      function(row) {
 
 
 
-&#x20;       const status =
+        const status =
 
-&#x20;         String(
+          String(
 
-&#x20;           row[statusIndex] || ''
+            row[statusIndex] || ''
 
-&#x20;         )
+          )
 
-&#x20;         .trim()
+          .trim()
 
-&#x20;         .toUpperCase();
+          .toUpperCase();
 
 
 
 
 
-&#x20;       if (
+        if (
 
-&#x20;         status === 'OPEN'
+          status === 'OPEN'
 
-&#x20;       ) {
+        ) {
 
 
 
-&#x20;         result.openViolations++;
+          result.openViolations++;
 
 
 
-&#x20;         result.openFine +=
+          result.openFine +=
 
-&#x20;           dj39AuditNumberV2_(
+            dj39AuditNumberV2_(
 
-&#x20;             row[fineIndex]
+              row[fineIndex]
 
-&#x20;           );
+            );
 
 
 
-&#x20;       }
+        }
 
 
 
-&#x20;     }
+      }
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'TEST 8 BERHASIL: Struktur Pelanggaran sesuai.'
+    'TEST 8 BERHASIL: Struktur Pelanggaran sesuai.'
 
-&#x20; );
+  );
 
 
 
@@ -2846,339 +2846,339 @@ function dj39AuditPelanggaranV2_(
 
 /* ============================================================
 
-&#x20;* 10. AUDIT API DATA
+ * 10. AUDIT API DATA
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditApiV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.api
+        .sheets.api
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const lastRow =
+  const lastRow =
 
-&#x20;   sheet.getLastRow();
+    sheet.getLastRow();
 
 
 
 
 
-&#x20; const lastColumn =
+  const lastColumn =
 
-&#x20;   sheet.getLastColumn();
+    sheet.getLastColumn();
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   lastRow < 2 ||
+    lastRow < 2 ||
 
-&#x20;   lastColumn < 1
+    lastColumn < 1
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'API_Data tidak memiliki data.'
+      'API_Data tidak memiliki data.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const header =
+  const header =
 
-&#x20;   sheet
+    sheet
 
-&#x20;     .getRange(
+      .getRange(
 
-&#x20;       1,
+        1,
 
-&#x20;       1,
+        1,
 
-&#x20;       1,
+        1,
 
-&#x20;       lastColumn
+        lastColumn
 
-&#x20;     )
+      )
 
-&#x20;     .getValues()[0];
+      .getValues()[0];
 
 
 
 
 
-&#x20; /*
+  /*
 
-&#x20;  * Cari kolom nomor kamar dengan beberapa
+   * Cari kolom nomor kamar dengan beberapa
 
-&#x20;  * kemungkinan schema.
+   * kemungkinan schema.
 
-&#x20;  */
+   */
 
 
 
-&#x20; let roomIndex =
+  let roomIndex =
 
-&#x20;   dj39AuditFindHeaderIndexV2_(
+    dj39AuditFindHeaderIndexV2_(
 
-&#x20;     header,
+      header,
 
-&#x20;     [
+      [
 
-&#x20;       'No_Kamar',
+        'No_Kamar',
 
-&#x20;       'No Kamar',
+        'No Kamar',
 
-&#x20;       'Nomor Kamar',
+        'Nomor Kamar',
 
-&#x20;       'Room'
+        'Room'
 
-&#x20;     ]
+      ]
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; /*
+  /*
 
-&#x20;  * Jika header API tidak standar,
+   * Jika header API tidak standar,
 
-&#x20;  * coba cari berdasarkan isi data.
+   * coba cari berdasarkan isi data.
 
-&#x20;  */
+   */
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   roomIndex < 0
+    roomIndex < 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   roomIndex =
+    roomIndex =
 
-&#x20;     dj39AuditFindRoomColumnByDataV2_(
+      dj39AuditFindRoomColumnByDataV2_(
 
-&#x20;       sheet,
+        sheet,
 
-&#x20;       header
+        header
 
-&#x20;     );
+      );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   roomIndex < 0
+    roomIndex < 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.warnings.push(
+    result.warnings.push(
 
-&#x20;     'Kolom nomor kamar API_Data tidak dapat diidentifikasi. ' +
+      'Kolom nomor kamar API_Data tidak dapat diidentifikasi. ' +
 
-&#x20;     'API_Data tetap dianggap tersedia.'
+      'API_Data tetap dianggap tersedia.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'WARNING: Struktur kolom API_Data tidak dapat dipetakan.'
+      'WARNING: Struktur kolom API_Data tidak dapat dipetakan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const values =
+  const values =
 
-&#x20;   sheet
+    sheet
 
-&#x20;     .getRange(
+      .getRange(
 
-&#x20;       2,
+        2,
 
-&#x20;       roomIndex + 1,
+        roomIndex + 1,
 
-&#x20;       lastRow - 1,
+        lastRow - 1,
 
-&#x20;       1
+        1
 
-&#x20;     )
+      )
 
-&#x20;     .getValues();
+      .getValues();
 
 
 
 
 
-&#x20; const rooms = {};
+  const rooms = {};
 
 
 
 
 
-&#x20; values.forEach(
+  values.forEach(
 
-&#x20;   function(row) {
+    function(row) {
 
 
 
-&#x20;     const room =
+      const room =
 
-&#x20;       dj39AuditNormalizeRoomV2_(
+        dj39AuditNormalizeRoomV2_(
 
-&#x20;         row[0]
+          row[0]
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;     if (room) {
+      if (room) {
 
 
 
-&#x20;       rooms[room] =
+        rooms[room] =
 
-&#x20;         true;
+          true;
 
 
 
-&#x20;     }
+      }
 
 
 
-&#x20;   }
+    }
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.apiRooms =
+  result.apiRooms =
 
-&#x20;   Object.keys(
+    Object.keys(
 
-&#x20;     rooms
+      rooms
 
-&#x20;   ).length;
+    ).length;
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.apiRooms !==
+    result.apiRooms !==
 
-&#x20;   DJ39_FINAL_AUDIT_V2.roomCount
+    DJ39_FINAL_AUDIT_V2.roomCount
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.warnings.push(
+    result.warnings.push(
 
-&#x20;     'API_Data terdeteksi ' +
+      'API_Data terdeteksi ' +
 
-&#x20;     result.apiRooms +
+      result.apiRooms +
 
-&#x20;     ' kamar. Target 39.'
+      ' kamar. Target 39.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; } else {
+  } else {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'TEST 9 BERHASIL: API_Data berisi 39 kamar.'
+      'TEST 9 BERHASIL: API_Data berisi 39 kamar.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
@@ -3190,455 +3190,455 @@ function dj39AuditApiV2_(
 
 /* ============================================================
 
-&#x20;* 11. AUDIT DASHBOARD
+ * 11. AUDIT DASHBOARD
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditDashboardV2_(
 
-&#x20; ss,
+  ss,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const sheet =
+  const sheet =
 
-&#x20;   ss.getSheetByName(
+    ss.getSheetByName(
 
-&#x20;     DJ39_FINAL_AUDIT_V2
+      DJ39_FINAL_AUDIT_V2
 
-&#x20;       .sheets.dashboard
+        .sheets.dashboard
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (!sheet) {
+  if (!sheet) {
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const lastRow =
+  const lastRow =
 
-&#x20;   sheet.getLastRow();
+    sheet.getLastRow();
 
 
 
 
 
-&#x20; const lastColumn =
+  const lastColumn =
 
-&#x20;   sheet.getLastColumn();
+    sheet.getLastColumn();
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   lastRow < 1 ||
+    lastRow < 1 ||
 
-&#x20;   lastColumn < 1
+    lastColumn < 1
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.errors.push(
+    result.errors.push(
 
-&#x20;     'Dashboard kosong.'
+      'Dashboard kosong.'
 
-&#x20;   );
+    );
 
 
 
-&#x20;   return;
+    return;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const values =
+  const values =
 
-&#x20;   sheet
+    sheet
 
-&#x20;     .getRange(
+      .getRange(
 
-&#x20;       1,
+        1,
 
-&#x20;       1,
+        1,
 
-&#x20;       lastRow,
+        lastRow,
 
-&#x20;       lastColumn
+        lastColumn
 
-&#x20;     )
+      )
 
-&#x20;     .getDisplayValues();
+      .getDisplayValues();
 
 
 
 
 
-&#x20; let hasTitle =
+  let hasTitle =
 
-&#x20;   false;
+    false;
 
 
 
-&#x20; let hasTotalKamar =
+  let hasTotalKamar =
 
-&#x20;   false;
+    false;
 
 
 
-&#x20; let hasMonitor =
+  let hasMonitor =
 
-&#x20;   false;
+    false;
 
 
 
 
 
-&#x20; values.forEach(
+  values.forEach(
 
-&#x20;   function(row) {
+    function(row) {
 
 
 
-&#x20;     row.forEach(
+      row.forEach(
 
-&#x20;       function(cell) {
+        function(cell) {
 
 
 
-&#x20;         const text =
+          const text =
 
-&#x20;           String(
+            String(
 
-&#x20;             cell || ''
+              cell || ''
 
-&#x20;           )
+            )
 
-&#x20;           .trim()
+            .trim()
 
-&#x20;           .toUpperCase();
+            .toUpperCase();
 
 
 
 
 
-&#x20;         if (
+          if (
 
-&#x20;           text.indexOf(
+            text.indexOf(
 
-&#x20;             'DJ FAMILY KOST'
+              'DJ FAMILY KOST'
 
-&#x20;           ) >= 0 &&
+            ) >= 0 &&
 
-&#x20;           text.indexOf(
+            text.indexOf(
 
-&#x20;             'OWNER DASHBOARD'
+              'OWNER DASHBOARD'
 
-&#x20;           ) >= 0
+            ) >= 0
 
-&#x20;         ) {
+          ) {
 
 
 
-&#x20;           hasTitle =
+            hasTitle =
 
-&#x20;             true;
+              true;
 
 
 
-&#x20;         }
+          }
 
 
 
 
 
-&#x20;         if (
+          if (
 
-&#x20;           text ===
+            text ===
 
-&#x20;           'TOTAL KAMAR'
+            'TOTAL KAMAR'
 
-&#x20;         ) {
+          ) {
 
 
 
-&#x20;           hasTotalKamar =
+            hasTotalKamar =
 
-&#x20;             true;
+              true;
 
 
 
-&#x20;         }
+          }
 
 
 
 
 
-&#x20;         if (
+          if (
 
-&#x20;           text.indexOf(
+            text.indexOf(
 
-&#x20;             'MONITOR'
+              'MONITOR'
 
-&#x20;           ) >= 0 &&
+            ) >= 0 &&
 
-&#x20;           text.indexOf(
+            text.indexOf(
 
-&#x20;             'KAMAR'
+              'KAMAR'
 
-&#x20;           ) >= 0
+            ) >= 0
 
-&#x20;         ) {
+          ) {
 
 
 
-&#x20;           hasMonitor =
+            hasMonitor =
 
-&#x20;             true;
+              true;
 
 
 
-&#x20;         }
+          }
 
 
 
-&#x20;       }
+        }
 
-&#x20;     );
+      );
 
 
 
-&#x20;   }
+    }
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; if (!hasTitle) {
+  if (!hasTitle) {
 
 
 
-&#x20;   result.warnings.push(
+    result.warnings.push(
 
-&#x20;     'Judul Owner Dashboard tidak ditemukan.'
+      'Judul Owner Dashboard tidak ditemukan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (!hasTotalKamar) {
+  if (!hasTotalKamar) {
 
 
 
-&#x20;   result.warnings.push(
+    result.warnings.push(
 
-&#x20;     'Kartu TOTAL KAMAR tidak ditemukan.'
+      'Kartu TOTAL KAMAR tidak ditemukan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (!hasMonitor) {
+  if (!hasMonitor) {
 
 
 
-&#x20;   result.warnings.push(
+    result.warnings.push(
 
-&#x20;     'Bagian MONITOR KAMAR tidak ditemukan.'
+      'Bagian MONITOR KAMAR tidak ditemukan.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; /*
+  /*
 
-&#x20;  * Hitung nomor kamar yang benar-benar
+   * Hitung nomor kamar yang benar-benar
 
-&#x20;  * muncul pada area dashboard.
+   * muncul pada area dashboard.
 
-&#x20;  */
+   */
 
 
 
-&#x20; const dashboardRooms =
+  const dashboardRooms =
 
-&#x20;   {};
+    {};
 
 
 
 
 
-&#x20; values.forEach(
+  values.forEach(
 
-&#x20;   function(row) {
+    function(row) {
 
 
 
-&#x20;     row.forEach(
+      row.forEach(
 
-&#x20;       function(cell) {
+        function(cell) {
 
 
 
-&#x20;         const room =
+          const room =
 
-&#x20;           dj39AuditNormalizeRoomV2_(
+            dj39AuditNormalizeRoomV2_(
 
-&#x20;             cell
+              cell
 
-&#x20;           );
+            );
 
 
 
 
 
-&#x20;         if (
+          if (
 
-&#x20;           room &&
+            room &&
 
-&#x20;           dj39AuditIsKnownRoomV2_(
+            dj39AuditIsKnownRoomV2_(
 
-&#x20;             room
+              room
 
-&#x20;           )
+            )
 
-&#x20;         ) {
+          ) {
 
 
 
-&#x20;           dashboardRooms[room] =
+            dashboardRooms[room] =
 
-&#x20;             true;
+              true;
 
 
 
-&#x20;         }
+          }
 
 
 
-&#x20;       }
+        }
 
-&#x20;     );
+      );
 
 
 
-&#x20;   }
+    }
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; result.dashboardRooms =
+  result.dashboardRooms =
 
-&#x20;   Object.keys(
+    Object.keys(
 
-&#x20;     dashboardRooms
+      dashboardRooms
 
-&#x20;   ).length;
+    ).length;
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.dashboardRooms <
+    result.dashboardRooms <
 
-&#x20;   DJ39_FINAL_AUDIT_V2.roomCount
+    DJ39_FINAL_AUDIT_V2.roomCount
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   result.warnings.push(
+    result.warnings.push(
 
-&#x20;     'Dashboard menampilkan ' +
+      'Dashboard menampilkan ' +
 
-&#x20;     result.dashboardRooms +
+      result.dashboardRooms +
 
-&#x20;     ' nomor kamar unik. Target 39.'
+      ' nomor kamar unik. Target 39.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   hasTitle &&
+    hasTitle &&
 
-&#x20;   hasTotalKamar &&
+    hasTotalKamar &&
 
-&#x20;   hasMonitor
+    hasMonitor
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'TEST 10 BERHASIL: Struktur Dashboard Final terdeteksi.'
+      'TEST 10 BERHASIL: Struktur Dashboard Final terdeteksi.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
@@ -3650,95 +3650,95 @@ function dj39AuditDashboardV2_(
 
 /* ============================================================
 
-&#x20;* 12. AUDIT TRIGGER
+ * 12. AUDIT TRIGGER
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditTriggersV2_(
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; const triggers =
+  const triggers =
 
-&#x20;   ScriptApp.getProjectTriggers();
-
-
-
-
-
-&#x20; result.triggers =
-
-&#x20;   triggers.length;
+    ScriptApp.getProjectTriggers();
 
 
 
 
 
-&#x20; if (
+  result.triggers =
 
-&#x20;   triggers.length === 0
-
-&#x20; ) {
-
-
-
-&#x20;   result.warnings.push(
-
-&#x20;     'Tidak ada trigger Apps Script yang terdeteksi.'
-
-&#x20;   );
-
-
-
-&#x20; } else {
-
-
-
-&#x20;   Logger.log(
-
-&#x20;     'TEST 11 BERHASIL: ' +
-
-&#x20;     triggers.length +
-
-&#x20;     ' trigger terdeteksi.'
-
-&#x20;   );
+    triggers.length;
 
 
 
 
 
-&#x20;   triggers.forEach(
+  if (
 
-&#x20;     function(trigger) {
+    triggers.length === 0
 
-
-
-&#x20;       Logger.log(
-
-&#x20;         'Trigger: ' +
-
-&#x20;         trigger.getHandlerFunction()
-
-&#x20;       );
+  ) {
 
 
 
-&#x20;     }
+    result.warnings.push(
 
-&#x20;   );
+      'Tidak ada trigger Apps Script yang terdeteksi.'
+
+    );
 
 
 
-&#x20; }
+  } else {
+
+
+
+    Logger.log(
+
+      'TEST 11 BERHASIL: ' +
+
+      triggers.length +
+
+      ' trigger terdeteksi.'
+
+    );
+
+
+
+
+
+    triggers.forEach(
+
+      function(trigger) {
+
+
+
+        Logger.log(
+
+          'Trigger: ' +
+
+          trigger.getHandlerFunction()
+
+        );
+
+
+
+      }
+
+    );
+
+
+
+  }
 
 
 
@@ -3750,81 +3750,81 @@ function dj39AuditTriggersV2_(
 
 /* ============================================================
 
-&#x20;* 13. REQUIRED HEADERS
+ * 13. REQUIRED HEADERS
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditRequiredHeadersV2_(
 
-&#x20; headers,
+  headers,
 
-&#x20; required,
+  required,
 
-&#x20; sheetName,
+  sheetName,
 
-&#x20; result
+  result
 
 ) {
 
 
 
-&#x20; required.forEach(
+  required.forEach(
 
-&#x20;   function(requiredHeader) {
-
-
-
-&#x20;     const index =
-
-&#x20;       dj39AuditFindHeaderIndexV2_(
-
-&#x20;         headers,
-
-&#x20;         [
-
-&#x20;           requiredHeader
-
-&#x20;         ]
-
-&#x20;       );
+    function(requiredHeader) {
 
 
 
+      const index =
 
+        dj39AuditFindHeaderIndexV2_(
 
-&#x20;     if (
+          headers,
 
-&#x20;       index < 0
+          [
 
-&#x20;     ) {
+            requiredHeader
 
+          ]
 
-
-&#x20;       result.errors.push(
-
-&#x20;         'Kolom ' +
-
-&#x20;         requiredHeader +
-
-&#x20;         ' tidak ditemukan di sheet ' +
-
-&#x20;         sheetName
-
-&#x20;       );
+        );
 
 
 
-&#x20;     }
+
+
+      if (
+
+        index < 0
+
+      ) {
 
 
 
-&#x20;   }
+        result.errors.push(
 
-&#x20; );
+          'Kolom ' +
+
+          requiredHeader +
+
+          ' tidak ditemukan di sheet ' +
+
+          sheetName
+
+        );
+
+
+
+      }
+
+
+
+    }
+
+  );
 
 
 
@@ -3836,67 +3836,67 @@ function dj39AuditRequiredHeadersV2_(
 
 /* ============================================================
 
-&#x20;* 14. CEK HEADER
+ * 14. CEK HEADER
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditHeadersExistV2_(
 
-&#x20; headers,
+  headers,
 
-&#x20; required
+  required
 
 ) {
 
 
 
-&#x20; for (
+  for (
 
-&#x20;   let i = 0;
+    let i = 0;
 
-&#x20;   i < required.length;
+    i < required.length;
 
-&#x20;   i++
+    i++
 
-&#x20; ) {
-
-
-
-&#x20;   if (
-
-&#x20;     dj39AuditFindHeaderIndexV2_(
-
-&#x20;       headers,
-
-&#x20;       [
-
-&#x20;         required[i]
-
-&#x20;       ]
-
-&#x20;     ) < 0
-
-&#x20;   ) {
+  ) {
 
 
 
-&#x20;     return false;
+    if (
+
+      dj39AuditFindHeaderIndexV2_(
+
+        headers,
+
+        [
+
+          required[i]
+
+        ]
+
+      ) < 0
+
+    ) {
 
 
 
-&#x20;   }
+      return false;
 
 
 
-&#x20; }
+    }
 
 
 
-&#x20; return true;
+  }
+
+
+
+  return true;
 
 
 
@@ -3908,145 +3908,145 @@ function dj39AuditHeadersExistV2_(
 
 /* ============================================================
 
-&#x20;* 15. FIND HEADER ROW
+ * 15. FIND HEADER ROW
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditFindHeaderV2_(
 
-&#x20; sheet,
+  sheet,
 
-&#x20; aliases
+  aliases
 
 ) {
 
 
 
-&#x20; const maxRows =
+  const maxRows =
 
-&#x20;   Math.min(
+    Math.min(
 
-&#x20;     10,
+      10,
 
-&#x20;     sheet.getLastRow()
+      sheet.getLastRow()
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; const maxColumns =
+  const maxColumns =
 
-&#x20;   sheet.getLastColumn();
+    sheet.getLastColumn();
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   maxRows < 1 ||
+    maxRows < 1 ||
 
-&#x20;   maxColumns < 1
+    maxColumns < 1
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   return null;
+    return null;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const values =
+  const values =
 
-&#x20;   sheet
+    sheet
 
-&#x20;     .getRange(
+      .getRange(
 
-&#x20;       1,
+        1,
 
-&#x20;       1,
+        1,
 
-&#x20;       maxRows,
+        maxRows,
 
-&#x20;       maxColumns
+        maxColumns
 
-&#x20;     )
+      )
 
-&#x20;     .getValues();
+      .getValues();
 
 
 
 
 
-&#x20; for (
+  for (
 
-&#x20;   let row = 0;
+    let row = 0;
 
-&#x20;   row < values.length;
+    row < values.length;
 
-&#x20;   row++
+    row++
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   if (
+    if (
 
-&#x20;     dj39AuditFindHeaderIndexV2_(
+      dj39AuditFindHeaderIndexV2_(
 
-&#x20;       values[row],
+        values[row],
 
-&#x20;       aliases
+        aliases
 
-&#x20;     ) >= 0
+      ) >= 0
 
-&#x20;   ) {
+    ) {
 
 
 
-&#x20;     return {
+      return {
 
 
 
-&#x20;       row:
+        row:
 
-&#x20;         row + 1,
+          row + 1,
 
 
 
-&#x20;       headers:
+        headers:
 
-&#x20;         values[row]
+          values[row]
 
 
 
-&#x20;     };
+      };
 
 
 
-&#x20;   }
+    }
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; return null;
+  return null;
 
 
 
@@ -4058,113 +4058,113 @@ function dj39AuditFindHeaderV2_(
 
 /* ============================================================
 
-&#x20;* 16. FIND HEADER INDEX
+ * 16. FIND HEADER INDEX
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditFindHeaderIndexV2_(
 
-&#x20; headers,
+  headers,
 
-&#x20; aliases
+  aliases
 
 ) {
 
 
 
-&#x20; const normalized =
+  const normalized =
 
-&#x20;   headers.map(
+    headers.map(
 
-&#x20;     function(header) {
-
-
-
-&#x20;       return dj39AuditNormalizeHeaderV2_(
-
-&#x20;         header
-
-&#x20;       );
+      function(header) {
 
 
 
-&#x20;     }
+        return dj39AuditNormalizeHeaderV2_(
 
-&#x20;   );
+          header
 
-
-
-
-
-&#x20; for (
-
-&#x20;   let a = 0;
-
-&#x20;   a < aliases.length;
-
-&#x20;   a++
-
-&#x20; ) {
+        );
 
 
 
-&#x20;   const wanted =
+      }
 
-&#x20;     dj39AuditNormalizeHeaderV2_(
-
-&#x20;       aliases[a]
-
-&#x20;     );
+    );
 
 
 
 
 
-&#x20;   for (
+  for (
 
-&#x20;     let i = 0;
+    let a = 0;
 
-&#x20;     i < normalized.length;
+    a < aliases.length;
 
-&#x20;     i++
+    a++
 
-&#x20;   ) {
-
-
-
-&#x20;     if (
-
-&#x20;       normalized[i] ===
-
-&#x20;       wanted
-
-&#x20;     ) {
+  ) {
 
 
 
-&#x20;       return i;
+    const wanted =
 
+      dj39AuditNormalizeHeaderV2_(
 
+        aliases[a]
 
-&#x20;     }
-
-
-
-&#x20;   }
-
-
-
-&#x20; }
+      );
 
 
 
 
 
-&#x20; return -1;
+    for (
+
+      let i = 0;
+
+      i < normalized.length;
+
+      i++
+
+    ) {
+
+
+
+      if (
+
+        normalized[i] ===
+
+        wanted
+
+      ) {
+
+
+
+        return i;
+
+
+
+      }
+
+
+
+    }
+
+
+
+  }
+
+
+
+
+
+  return -1;
 
 
 
@@ -4176,51 +4176,51 @@ function dj39AuditFindHeaderIndexV2_(
 
 /* ============================================================
 
-&#x20;* 17. COUNT DATA ROW
+ * 17. COUNT DATA ROW
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditCountRowsV2_(
 
-&#x20; sheet,
+  sheet,
 
-&#x20; headerRow
+  headerRow
 
 ) {
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   sheet.getLastRow() <=
+    sheet.getLastRow() <=
 
-&#x20;   headerRow
+    headerRow
 
-&#x20; ) {
-
-
-
-&#x20;   return 0;
+  ) {
 
 
 
-&#x20; }
+    return 0;
+
+
+
+  }
 
 
 
 
 
-&#x20; return (
+  return (
 
-&#x20;   sheet.getLastRow() -
+    sheet.getLastRow() -
 
-&#x20;   headerRow
+    headerRow
 
-&#x20; );
+  );
 
 
 
@@ -4232,55 +4232,55 @@ function dj39AuditCountRowsV2_(
 
 /* ============================================================
 
-&#x20;* 18. NORMALIZE HEADER
+ * 18. NORMALIZE HEADER
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditNormalizeHeaderV2_(
 
-&#x20; value
+  value
 
 ) {
 
 
 
-&#x20; return String(
+  return String(
 
-&#x20;   value || ''
+    value || ''
 
-&#x20; )
+  )
 
-&#x20;   .trim()
+    .trim()
 
-&#x20;   .toLowerCase()
+    .toLowerCase()
 
-&#x20;   .replace(
+    .replace(
 
-&#x20;     /[.\\-\\/]+/g,
+      /[.\\-\\/]+/g,
 
-&#x20;     '_'
+      '_'
 
-&#x20;   )
+    )
 
-&#x20;   .replace(
+    .replace(
 
-&#x20;     /\s+/g,
+      /\s+/g,
 
-&#x20;     '_'
+      '_'
 
-&#x20;   )
+    )
 
-&#x20;   .replace(
+    .replace(
 
-&#x20;     /_+/g,
+      /_+/g,
 
-&#x20;     '_'
+      '_'
 
-&#x20;   );
+    );
 
 
 
@@ -4292,133 +4292,133 @@ function dj39AuditNormalizeHeaderV2_(
 
 /* ============================================================
 
-&#x20;* 19. NORMALIZE ROOM
+ * 19. NORMALIZE ROOM
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditNormalizeRoomV2_(
 
-&#x20; value
+  value
 
 ) {
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   value === null ||
+    value === null ||
 
-&#x20;   value === undefined ||
+    value === undefined ||
 
-&#x20;   value === ''
+    value === ''
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   return '';
+    return '';
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   typeof value ===
+    typeof value ===
 
-&#x20;   'number'
+    'number'
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   const n =
+    const n =
 
-&#x20;     Math.round(
+      Math.round(
 
-&#x20;       value
+        value
 
-&#x20;     );
+      );
 
 
 
 
 
-&#x20;   if (
+    if (
 
-&#x20;     n >= 100 &&
+      n >= 100 &&
 
-&#x20;     n <= 999
+      n <= 999
 
-&#x20;   ) {
+    ) {
 
 
 
-&#x20;     return String(n);
+      return String(n);
 
 
 
-&#x20;   }
+    }
 
 
 
 
 
-&#x20;   return '';
+    return '';
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const text =
+  const text =
 
-&#x20;   String(
+    String(
 
-&#x20;     value
+      value
 
-&#x20;   )
+    )
 
-&#x20;   .trim();
+    .trim();
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   !/^\d{3}$/.test(
+    !/^\d{3}$/.test(
 
-&#x20;     text
+      text
 
-&#x20;   )
+    )
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   return '';
+    return '';
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; return text;
+  return text;
 
 
 
@@ -4430,75 +4430,75 @@ function dj39AuditNormalizeRoomV2_(
 
 /* ============================================================
 
-&#x20;* 20. CEK KAMAR VALID
+ * 20. CEK KAMAR VALID
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditIsKnownRoomV2_(
 
-&#x20; room
+  room
 
 ) {
 
 
 
-&#x20; const n =
+  const n =
 
-&#x20;   Number(room);
-
-
+    Number(room);
 
 
 
-&#x20; return (
+
+
+  return (
 
 
 
-&#x20;   (
+    (
 
-&#x20;     n >= 101 &&
+      n >= 101 &&
 
-&#x20;     n <= 109
+      n <= 109
 
-&#x20;   ) ||
-
-
-
-&#x20;   (
-
-&#x20;     n >= 201 &&
-
-&#x20;     n <= 210
-
-&#x20;   ) ||
+    ) ||
 
 
 
-&#x20;   (
+    (
 
-&#x20;     n >= 301 &&
+      n >= 201 &&
 
-&#x20;     n <= 310
+      n <= 210
 
-&#x20;   ) ||
-
-
-
-&#x20;   (
-
-&#x20;     n >= 401 &&
-
-&#x20;     n <= 410
-
-&#x20;   )
+    ) ||
 
 
 
-&#x20; );
+    (
+
+      n >= 301 &&
+
+      n <= 310
+
+    ) ||
+
+
+
+    (
+
+      n >= 401 &&
+
+      n <= 410
+
+    )
+
+
+
+  );
 
 
 
@@ -4510,173 +4510,173 @@ function dj39AuditIsKnownRoomV2_(
 
 /* ============================================================
 
-&#x20;* 21. CARI KOLOM ROOM API
+ * 21. CARI KOLOM ROOM API
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditFindRoomColumnByDataV2_(
 
-&#x20; sheet,
+  sheet,
 
-&#x20; headers
+  headers
 
 ) {
 
 
 
-&#x20; const rowsToCheck =
+  const rowsToCheck =
 
-&#x20;   Math.min(
+    Math.min(
 
-&#x20;     sheet.getLastRow() - 1,
+      sheet.getLastRow() - 1,
 
-&#x20;     20
+      20
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   rowsToCheck <= 0
+    rowsToCheck <= 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   return -1;
+    return -1;
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; const values =
+  const values =
 
-&#x20;   sheet
+    sheet
 
-&#x20;     .getRange(
+      .getRange(
 
-&#x20;       2,
+        2,
 
-&#x20;       1,
+        1,
 
-&#x20;       rowsToCheck,
+        rowsToCheck,
 
-&#x20;       sheet.getLastColumn()
+        sheet.getLastColumn()
 
-&#x20;     )
+      )
 
-&#x20;     .getValues();
+      .getValues();
 
 
 
 
 
-&#x20; for (
+  for (
 
-&#x20;   let column = 0;
+    let column = 0;
 
-&#x20;   column < headers.length;
+    column < headers.length;
 
-&#x20;   column++
+    column++
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   let valid =
+    let valid =
 
-&#x20;     0;
+      0;
 
 
 
 
 
-&#x20;   for (
+    for (
 
-&#x20;     let row = 0;
+      let row = 0;
 
-&#x20;     row < values.length;
+      row < values.length;
 
-&#x20;     row++
+      row++
 
-&#x20;   ) {
+    ) {
 
 
 
-&#x20;     const room =
+      const room =
 
-&#x20;       dj39AuditNormalizeRoomV2_(
+        dj39AuditNormalizeRoomV2_(
 
-&#x20;         values[row][column]
+          values[row][column]
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;     if (
+      if (
 
-&#x20;       room &&
+        room &&
 
-&#x20;       dj39AuditIsKnownRoomV2_(
+        dj39AuditIsKnownRoomV2_(
 
-&#x20;         room
+          room
 
-&#x20;       )
+        )
 
-&#x20;     ) {
+      ) {
 
 
 
-&#x20;       valid++;
+        valid++;
 
 
 
-&#x20;     }
+      }
 
 
 
-&#x20;   }
+    }
 
 
 
 
 
-&#x20;   if (
+    if (
 
-&#x20;     valid >= 5
+      valid >= 5
 
-&#x20;   ) {
+    ) {
 
 
 
-&#x20;     return column;
+      return column;
 
 
 
-&#x20;   }
+    }
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; return -1;
+  return -1;
 
 
 
@@ -4688,97 +4688,97 @@ function dj39AuditFindRoomColumnByDataV2_(
 
 /* ============================================================
 
-&#x20;* 22. NUMBER
+ * 22. NUMBER
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditNumberV2_(
 
-&#x20; value
+  value
 
 ) {
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   typeof value ===
+    typeof value ===
 
-&#x20;   'number'
+    'number'
 
-&#x20; ) {
-
-
-
-&#x20;   return isNaN(value)
-
-&#x20;     ? 0
-
-&#x20;     : value;
+  ) {
 
 
 
-&#x20; }
+    return isNaN(value)
+
+      ? 0
+
+      : value;
 
 
 
-
-
-&#x20; const text =
-
-&#x20;   String(
-
-&#x20;     value || ''
-
-&#x20;   )
-
-&#x20;   .replace(
-
-&#x20;     /[^\d\\-]/g,
-
-&#x20;     ''
-
-&#x20;   );
+  }
 
 
 
 
 
-&#x20; if (!text) {
+  const text =
 
+    String(
 
+      value || ''
 
-&#x20;   return 0;
+    )
 
+    .replace(
 
+      /[^\d\\-]/g,
 
-&#x20; }
+      ''
 
-
-
-
-
-&#x20; const number =
-
-&#x20;   Number(
-
-&#x20;     text
-
-&#x20;   );
+    );
 
 
 
 
 
-&#x20; return isNaN(number)
+  if (!text) {
 
-&#x20;   ? 0
 
-&#x20;   : number;
+
+    return 0;
+
+
+
+  }
+
+
+
+
+
+  const number =
+
+    Number(
+
+      text
+
+    );
+
+
+
+
+
+  return isNaN(number)
+
+    ? 0
+
+    : number;
 
 
 
@@ -4790,31 +4790,31 @@ function dj39AuditNumberV2_(
 
 /* ============================================================
 
-&#x20;* 23. FORMAT NUMBER
+ * 23. FORMAT NUMBER
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
 function dj39AuditNumberFormatV2_(
 
-&#x20; value
+  value
 
 ) {
 
 
 
-&#x20; return Number(
+  return Number(
 
-&#x20;   value || 0
+    value || 0
 
-&#x20; ).toLocaleString(
+  ).toLocaleString(
 
-&#x20;   'id-ID'
+    'id-ID'
 
-&#x20; );
+  );
 
 
 
@@ -4826,11 +4826,11 @@ function dj39AuditNumberFormatV2_(
 
 /* ============================================================
 
-&#x20;* 24. TEST FINAL
+ * 24. TEST FINAL
 
-&#x20;* ============================================================
+ * ============================================================
 
-&#x20;*/
+ */
 
 
 
@@ -4838,197 +4838,197 @@ function testFinalSystemDJ39_V2() {
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'TEST FINAL SYSTEM DJ39 V2'
+    'TEST FINAL SYSTEM DJ39 V2'
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; const result =
+  const result =
 
-&#x20;   auditFinalDJ39_V2();
+    auditFinalDJ39_V2();
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   !result.success
+    !result.success
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   throw new Error(
+    throw new Error(
 
-&#x20;     'FINAL SYSTEM TEST GAGAL. ' +
+      'FINAL SYSTEM TEST GAGAL. ' +
 
-&#x20;     result.errors.join(
+      result.errors.join(
 
-&#x20;       ' | '
+        ' | '
 
-&#x20;     )
+      )
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'FINAL SYSTEM TEST = BERHASIL'
+    'FINAL SYSTEM TEST = BERHASIL'
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '39 kamar terverifikasi.'
+    '39 kamar terverifikasi.'
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'Tidak ada error struktural.'
+    'Tidak ada error struktural.'
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; if (
+  if (
 
-&#x20;   result.warnings.length > 0
+    result.warnings.length > 0
 
-&#x20; ) {
+  ) {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'Jumlah WARNING: ' +
+      'Jumlah WARNING: ' +
 
-&#x20;     result.warnings.length
+      result.warnings.length
 
-&#x20;   );
+    );
 
 
 
-&#x20;   result.warnings.forEach(
+    result.warnings.forEach(
 
-&#x20;     function(w) {
+      function(w) {
 
 
 
-&#x20;       Logger.log(
+        Logger.log(
 
-&#x20;         'WARNING: ' + w
+          'WARNING: ' + w
 
-&#x20;       );
+        );
 
 
 
-&#x20;     }
+      }
 
-&#x20;   );
+    );
 
 
 
-&#x20; } else {
+  } else {
 
 
 
-&#x20;   Logger.log(
+    Logger.log(
 
-&#x20;     'Tidak ada WARNING.'
+      'Tidak ada WARNING.'
 
-&#x20;   );
+    );
 
 
 
-&#x20; }
+  }
 
 
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   'DJ FAMILY KOST SIAP DIGUNAKAN.'
+    'DJ FAMILY KOST SIAP DIGUNAKAN.'
 
-&#x20; );
+  );
 
 
 
-&#x20; Logger.log(
+  Logger.log(
 
-&#x20;   '=================================================='
+    '=================================================='
 
-&#x20; );
+  );
 
 
 
 
 
-&#x20; return result;
+  return result;
 
 
 
