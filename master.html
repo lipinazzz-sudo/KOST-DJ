@@ -11487,13 +11487,10 @@ function openExpenseModal(){
         '<label for="financeExpenseDate">Tanggal</label>' +
 
         '<input id="financeExpenseDate" type="date" required value="' +
-        new Date(
-            financeYear,
-            financeMonth - 1,
-            1
-        )
-        .toISOString()
-        .slice(0,10) +
+        String(financeYear) +
+        '-' +
+        String(financeMonth).padStart(2,'0') +
+        '-01' +
         '">' +
 
         '</div>' +
@@ -11718,6 +11715,19 @@ async function saveExpenseFromModal(){
 
         alert(
             "Nominal pengeluaran harus lebih besar dari 0."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        date < "2027-01-01"
+    ){
+
+        alert(
+            "Tanggal pengeluaran untuk modul Keuangan minimal 1 Januari 2027."
         );
 
         return;
