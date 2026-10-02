@@ -25,6 +25,12 @@
 
 const DJ_FINANCE_START_YEAR_V1_ = 2027;
 
+/*
+ * Periode 2026 tetap dibuka untuk histori/pengujian.
+ * Periode resmi operasional Keuangan tetap dimulai 01/01/2027.
+ */
+const DJ_FINANCE_MIN_QUERY_YEAR_V1_ = 2026;
+
 
 /* ============================================================
  * MASTER FINANCE
@@ -43,11 +49,11 @@ function djApiMasterFinanceV1_(
 
   if (
     targetYear <
-    DJ_FINANCE_START_YEAR_V1_
+    DJ_FINANCE_MIN_QUERY_YEAR_V1_
   ) {
 
     throw new Error(
-      'Laporan keuangan baru dimulai 1 Januari 2027.'
+      'Periode laporan yang tersedia mulai 1 Januari 2026 untuk histori/pengujian; periode operasional resmi dimulai 1 Januari 2027.'
     );
 
   }
@@ -4815,7 +4821,7 @@ function djApiMasterSaveExpenseV1_(
 
   const financeStartDate =
     new Date(
-      2027,
+      DJ_FINANCE_MIN_QUERY_YEAR_V1_,
       0,
       1
     );
@@ -4830,7 +4836,7 @@ function djApiMasterSaveExpenseV1_(
       ok:false,
 
       error:
-        'Tanggal pengeluaran untuk modul Keuangan minimal 1 Januari 2027.'
+        'Tanggal pengeluaran untuk modul Keuangan tidak boleh sebelum 1 Januari 2026.'
 
     };
 
