@@ -409,6 +409,7 @@ function aiAgentTableV1_(sh) {
 function aiAgentObjectV1_(row, headers) {
   const o={};
   headers.forEach(function(h,i){if(h)o[h]=row[i];});
+  o._rowNumber = i + 2;
   return o;
 }
 
