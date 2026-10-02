@@ -105,6 +105,13 @@ function djApiMasterFinanceV1_(
     );
 
 
+  const cashFlow =
+    djFinanceCashFlowSummaryV1_(
+      monthly,
+      targetYear
+    );
+
+
   const floorAnalysis =
     djFinanceFloorAnalysisV1_(
       dataset,
@@ -173,6 +180,9 @@ function djApiMasterFinanceV1_(
 
     annual:
       annual,
+
+    cashFlow:
+      cashFlow,
 
     floorAnalysis:
       floorAnalysis,
@@ -3713,6 +3723,123 @@ function djFinanceAuditTrailV1_(
       30
     )
   );
+
+}
+
+
+/* ============================================================
+ * CASH FLOW SUMMARY
+ * ============================================================ */
+
+function djFinanceCashFlowSummaryV1_(
+  monthly,
+  year
+) {
+
+  const rows =
+    Array.isArray(
+      monthly
+    )
+      ? monthly.map(
+          function(item) {
+
+            const cashIn =
+              Number(
+                item.cashIn ||
+                0
+              );
+
+            const cashOut =
+              Number(
+                item.expense ||
+                0
+              );
+
+            return {
+
+              month:
+                Number(
+                  item.month ||
+                  0
+                ),
+
+              label:
+                item.label ||
+                djFinanceMonthLabelV1_(
+                  year,
+                  item.month
+                ),
+
+              cashIn:
+                cashIn,
+
+              cashOut:
+                cashOut,
+
+              netCashFlow:
+                cashIn -
+                cashOut
+
+            };
+
+          }
+        )
+      : [];
+
+
+  const totalCashIn =
+    rows.reduce(
+      function(sum,item) {
+
+        return (
+          sum +
+          Number(
+            item.cashIn ||
+            0
+          )
+        );
+
+      },
+      0
+    );
+
+
+  const totalCashOut =
+    rows.reduce(
+      function(sum,item) {
+
+        return (
+          sum +
+          Number(
+            item.cashOut ||
+            0
+          )
+        );
+
+      },
+      0
+    );
+
+
+  return {
+
+    year:
+      year,
+
+    monthly:
+      rows,
+
+    totalCashIn:
+      totalCashIn,
+
+    totalCashOut:
+      totalCashOut,
+
+    netCashFlow:
+      totalCashIn -
+      totalCashOut
+
+  };
 
 }
 
