@@ -2852,6 +2852,7 @@ function djFinanceAnnualSummaryV1_(
 ) {
 
   let revenue = 0;
+  let rentRevenue = 0;
   let expense = 0;
   let expectedRevenue = 0;
   let cashIn = 0;
@@ -2869,6 +2870,12 @@ function djFinanceAnnualSummaryV1_(
         revenue +=
           Number(
             item.revenue ||
+            0
+          );
+
+        rentRevenue +=
+          Number(
+            item.rentRevenue ||
             0
           );
 
@@ -2954,7 +2961,7 @@ function djFinanceAnnualSummaryV1_(
   const realizationRate =
     expectedRevenue > 0
       ? (
-          revenue /
+          rentRevenue /
           expectedRevenue
         ) *
         100
