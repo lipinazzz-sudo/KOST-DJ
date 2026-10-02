@@ -530,6 +530,94 @@ function djFinanceBuildDatasetV1_(
   }
 
 
+  const tenants = [];
+
+
+  if (tenantTable) {
+
+    tenantTable.rows.forEach(
+      function(row) {
+
+        const tenantId =
+          String(
+            djApiValueV5_(
+              row,
+              tenantTable.headers,
+              [
+                'Tenant_ID'
+              ]
+            ) || ''
+          )
+          .trim()
+          .toUpperCase();
+
+
+        const room =
+          String(
+            djApiValueV5_(
+              row,
+              tenantTable.headers,
+              [
+                'No_Kamar'
+              ]
+            ) || ''
+          )
+          .trim();
+
+
+        if (
+          !tenantId ||
+          !room
+        ) {
+
+          return;
+
+        }
+
+
+        tenants.push({
+
+          tenantId:
+            tenantId,
+
+          name:
+            String(
+              djApiValueV5_(
+                row,
+                tenantTable.headers,
+                [
+                  'Nama_Lengkap',
+                  'Nama_Tenant'
+                ]
+              ) || ''
+            )
+            .trim(),
+
+          room:
+            room,
+
+          status:
+            String(
+              djApiValueV5_(
+                row,
+                tenantTable.headers,
+                [
+                  'Status_Tenant',
+                  'Status'
+                ]
+              ) || ''
+            )
+            .trim()
+            .toUpperCase()
+
+        });
+
+      }
+    );
+
+  }
+
+
   const maintenance = [];
 
 
@@ -911,6 +999,9 @@ function djFinanceBuildDatasetV1_(
 
     generalExpenses:
       generalExpenses,
+
+    tenants:
+      tenants,
 
     contracts:
       contracts,
