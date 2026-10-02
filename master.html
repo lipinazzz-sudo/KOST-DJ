@@ -622,6 +622,65 @@ button{
     line-height:1.55;
 }
 
+.finance-billing-summary{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.finance-billing-rate{
+    padding:12px 13px;
+    background:#f8fafc;
+    border:1px solid #edf0f4;
+    border-radius:12px;
+}
+
+.finance-billing-rate span{
+    display:block;
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.finance-billing-rate strong{
+    display:block;
+    margin-top:5px;
+    font-size:18px;
+}
+
+.finance-billing-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.finance-billing-table th,
+.finance-billing-table td{
+    padding:10px 8px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+    font-size:12px;
+}
+
+.finance-billing-table th{
+    color:#667085;
+    font-size:11px;
+    background:#fafbfc;
+}
+
+.finance-billing-table tr:last-child td{
+    border-bottom:0;
+}
+
+.finance-billing-table td:last-child,
+.finance-billing-table th:last-child{
+    text-align:right;
+}
+
+.finance-billing-label{
+    font-weight:800;
+}
+
 .finance-analysis-grid{
     display:grid;
     grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
@@ -2507,6 +2566,34 @@ button{
                         id="financeSecondaryGrid"
                         class="finance-secondary-grid"
                     ></div>
+
+                    <div
+                        class="finance-panel"
+                        style="margin-top:16px;"
+                    >
+
+                        <div class="finance-panel-head">
+
+                            <h3>
+                                Status Tagihan
+                            </h3>
+
+                            <span
+                                id="financeBillingAsOf"
+                                class="small"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+                        <div
+                            id="financeBillingBox"
+                            class="finance-panel-body table-wrap"
+                        ></div>
+
+                    </div>
+
 
                     <div
                         class="finance-analysis-grid"
@@ -11070,6 +11157,13 @@ async function loadFinance(){
 
         document
             .getElementById(
+                "financeBillingBox"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
                 "financeMonthlyBox"
             )
             .innerHTML =
@@ -11252,6 +11346,10 @@ function renderFinance(){
         .join("");
 
 
+    renderFinanceBilling(
+        summary.billingStatus
+    );
+
     renderFinanceAnnual(
         financeData.annual
     );
@@ -11269,6 +11367,231 @@ function renderFinance(){
     renderFinanceRecent(
         summary
     );
+
+}
+
+
+function renderFinanceBilling(
+    billing
+){
+
+    const box =
+        document.getElementById(
+            "financeBillingBox"
+        );
+
+
+    const asOfBox =
+        document.getElementById(
+            "financeBillingAsOf"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    if(!billing){
+
+        box.innerHTML =
+            '<div class="empty">Status tagihan belum tersedia.</div>';
+
+        if(asOfBox){
+
+            asOfBox.textContent =
+                "—";
+
+        }
+
+        return;
+
+    }
+
+
+    if(asOfBox){
+
+        asOfBox.textContent =
+            "Per posisi " +
+            String(
+                billing.asOf ||
+                "—"
+            );
+
+    }
+
+
+    const metrics = [
+
+        [
+            "Collection Rate",
+            financePercent(
+                billing.collectionRate
+            )
+        ],
+
+        [
+            "Belum Tertagih",
+            financeMoney(
+                billing.outstanding
+            )
+        ]
+
+    ];
+
+
+    const labels = [
+
+        [
+            "BELUM JATUH TEMPO",
+            "Belum jatuh tempo",
+            billing.notDueCount,
+            billing.notDue
+        ],
+
+        [
+            "JATUH TEMPO",
+            "Jatuh tempo",
+            billing.dueCount,
+            billing.due
+        ],
+
+        [
+            "TERLAMBAT",
+            "Terlambat",
+            billing.overdueCount,
+            billing.overdue
+        ],
+
+        [
+            "KURANG BAYAR",
+            "Kurang bayar",
+            billing.shortPaidCount,
+            billing.shortfall
+        ],
+
+        [
+            "MENUNGGU VERIFIKASI",
+            "Menunggu verifikasi",
+            billing.pendingCount,
+            billing.pendingVerification
+        ],
+
+        [
+            "DITOLAK",
+            "Ditolak",
+            billing.rejectedCount,
+            billing.rejected
+        ],
+
+        [
+            "LUNAS",
+            "Lunas",
+            billing.paidBillCount,
+            billing.statusAmount &&
+            billing.statusAmount.LUNAS ||
+            0
+        ]
+
+    ];
+
+
+    box.innerHTML =
+
+        '<div class="finance-billing-summary">' +
+
+        metrics
+            .map(
+                function(item){
+
+                    return (
+                        '<div class="finance-billing-rate">' +
+
+                        '<span>' +
+                        escapeHtml(
+                            item[0]
+                        ) +
+                        '</span>' +
+
+                        '<strong>' +
+                        escapeHtml(
+                            item[1]
+                        ) +
+                        '</strong>' +
+
+                        '</div>'
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</div>' +
+
+        '<table class="finance-billing-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+        '<th>Status</th>' +
+        '<th>Jumlah</th>' +
+        '<th>Nominal</th>' +
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        labels
+            .map(
+                function(item){
+
+                    return (
+
+                        '<tr>' +
+
+                        '<td class="finance-billing-label">' +
+                        escapeHtml(
+                            item[1]
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            String(
+                                Number(
+                                    item[2] ||
+                                    0
+                                )
+                            )
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            financeMoney(
+                                item[3]
+                            )
+                        ) +
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</tbody>' +
+
+        '</table>' +
+
+        '<div class="small" style="margin-top:12px;">' +
+        'Belum Tertagih hanya menghitung tagihan yang sudah jatuh tempo, terlambat, ditolak, atau masih memiliki kekurangan pembayaran. Tagihan yang belum jatuh tempo dipisahkan.' +
+        '</div>';
 
 }
 
