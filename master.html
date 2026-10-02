@@ -677,6 +677,51 @@ button{
     text-align:right;
 }
 
+.finance-billing-details{
+    display:grid;
+    gap:8px;
+    margin-top:14px;
+}
+
+.finance-billing-detail{
+    display:grid;
+    grid-template-columns:minmax(0,1.2fr) auto auto;
+    gap:12px;
+    align-items:center;
+    padding:10px 12px;
+    border:1px solid #edf0f4;
+    border-radius:11px;
+    background:#fff;
+}
+
+.finance-billing-detail-main{
+    min-width:0;
+}
+
+.finance-billing-detail-name{
+    font-weight:800;
+    font-size:12px;
+}
+
+.finance-billing-detail-meta{
+    margin-top:3px;
+    color:#667085;
+    font-size:11px;
+}
+
+.finance-billing-detail-status{
+    font-size:11px;
+    font-weight:900;
+    white-space:nowrap;
+}
+
+.finance-billing-detail-amount{
+    text-align:right;
+    font-size:12px;
+    font-weight:900;
+    white-space:nowrap;
+}
+
 .finance-billing-label{
     font-weight:800;
 }
@@ -762,6 +807,15 @@ button{
 }
 
 @media(max-width:700px){
+    .finance-billing-detail{
+        grid-template-columns:1fr;
+        gap:5px;
+    }
+
+    .finance-billing-detail-amount{
+        text-align:left;
+    }
+
     .finance-toolbar{
         grid-template-columns:1fr;
     }
@@ -11498,6 +11552,14 @@ function renderFinanceBilling(
     ];
 
 
+    const detailRows =
+        Array.isArray(
+            billing.details
+        )
+            ? billing.details
+            : [];
+
+
     box.innerHTML =
 
         '<div class="finance-billing-summary">' +
@@ -11591,7 +11653,101 @@ function renderFinanceBilling(
 
         '<div class="small" style="margin-top:12px;">' +
         'Belum Tertagih hanya menghitung tagihan yang sudah jatuh tempo, terlambat, ditolak, atau masih memiliki kekurangan pembayaran. Tagihan yang belum jatuh tempo dipisahkan.' +
-        '</div>';
+        '</div>' +
+
+        (
+            detailRows.length
+                ? (
+                    '<div style="margin-top:18px;font-weight:900;font-size:13px;">' +
+                    'Rincian Tagihan' +
+                    '</div>' +
+
+                    '<div class="finance-billing-details">' +
+
+                    detailRows
+                        .map(
+                            function(item){
+
+                                const status =
+                                    String(
+                                        item.status ||
+                                        ''
+                                    ).trim();
+
+                                const outstanding =
+                                    Number(
+                                        item.outstanding ||
+                                        0
+                                    );
+
+
+                                return (
+                                    '<div class="finance-billing-detail">' +
+
+                                    '<div class="finance-billing-detail-main">' +
+
+                                    '<div class="finance-billing-detail-name">' +
+                                    escapeHtml(
+                                        item.room
+                                            ? 'Kamar ' +
+                                              item.room
+                                            : (
+                                                item.name ||
+                                                item.tenantId ||
+                                                'Tagihan'
+                                              )
+                                    ) +
+                                    '</div>' +
+
+                                    '<div class="finance-billing-detail-meta">' +
+                                    escapeHtml(
+                                        (
+                                            item.name ||
+                                            item.tenantId ||
+                                            '—'
+                                        )
+                                    ) +
+                                    ' · Jatuh tempo ' +
+                                    escapeHtml(
+                                        financeDisplayDate(
+                                            item.dueDate
+                                        )
+                                    ) +
+                                    '</div>' +
+
+                                    '</div>' +
+
+                                    '<div class="finance-billing-detail-status">' +
+                                    escapeHtml(
+                                        status ||
+                                        '—'
+                                    ) +
+                                    '</div>' +
+
+                                    '<div class="finance-billing-detail-amount">' +
+                                    escapeHtml(
+                                        outstanding > 0
+                                            ? financeMoney(
+                                                outstanding
+                                              ) +
+                                              ' sisa'
+                                            : financeMoney(
+                                                item.expected
+                                              )
+                                    ) +
+                                    '</div>' +
+
+                                    '</div>'
+                                );
+
+                            }
+                        )
+                        .join("") +
+
+                    '</div>'
+                  )
+                : ''
+        );
 
 }
 
