@@ -328,26 +328,69 @@ function aiAgentRegistrationApproveV1(item, masterId, options) {
   const id = String(item.Reference_ID || '').trim();
   const room = String(options.finalRoom || item.Room || '').trim();
 
-  if (!id) throw new Error('Pendaftaran_ID pada AI Action kosong.');
-  if (!room) throw new Error('Kamar final wajib ditentukan.');
+  if (!id) {
+    throw new Error('Pendaftaran_ID pada AI Action kosong.');
+  }
 
-  if (typeof djApiMasterApproveRegistrationV6_ !== 'function') {
+  if (!room) {
+    throw new Error('Kamar final wajib ditentukan.');
+  }
+
+  if (typeof verifikasiPendaftaranDJ_ !== 'function') {
     throw new Error(
-      'Adapter approval registration belum tersedia di runtime. Tidak ada perubahan data dilakukan.'
+      'Engine approval registration existing (verifikasiPendaftaranDJ_) tidak tersedia di runtime.'
     );
   }
 
-  const result = djApiMasterApproveRegistrationV6_(id, room, masterId);
+  /*
+   * Adapter tipis:
+   * AI tidak menulis Tenant/Kontrak/Kamar.
+   * AI hanya meneruskan keputusan Master ke engine approval existing.
+   */
+  const result =
+    verifikasiPendaftaranDJ_(
+      id,
+      room
+    );
 
-  if (!result || result.ok === false) {
-    throw new Error(result && result.error ? result.error : 'Approval pendaftaran gagal.');
+  if (!result || result.ok !== true) {
+    throw new Error(
+      result && result.error
+        ? result.error
+        : 'Approval pendaftaran gagal.'
+    );
   }
 
   return {
-    ok:true, status:DJ_AI_AGENT_V1.STATUS.DONE,
-    message:'Pendaftaran diproses melalui adapter approval existing.', data:result
+    ok: true,
+    status: DJ_AI_AGENT_V1.STATUS.DONE,
+    message:
+      'Pendaftaran diproses melalui existing Registration Approval Engine.',
+    data: result
   };
 }
+
+/* ============================================================
+ * REGISTRATION APPROVAL COMPATIBILITY ADAPTER
+ * ============================================================
+ * Nama ini dipertahankan agar integrasi lama tetap kompatibel.
+ * Business logic tetap berada di verifikasiPendaftaranDJ_().
+ * ============================================================
+ */
+
+function djApiMasterApproveRegistrationV6_(
+  registrationId,
+  finalRoom,
+  masterId
+) {
+
+  return verifikasiPendaftaranDJ_(
+    registrationId,
+    finalRoom
+  );
+
+}
+
 
 /* ========================= DAILY BRIEF ===================== */
 
