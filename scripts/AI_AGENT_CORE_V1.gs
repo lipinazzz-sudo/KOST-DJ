@@ -167,8 +167,8 @@ function getAIMasterActionsV1(masterId) {
   const table = aiAgentTableV1_(aiAgentSheetV1_());
   const now = new Date();
 
-  const items = table.rows.map(function(row) {
-    return aiAgentObjectV1_(row, table.headers);
+  const items = table.rows.map(function(row, index) {
+    return aiAgentObjectV1_(row, table.headers, index + 2);
   }).filter(function(item) {
     const status = String(item.Status || '').toUpperCase();
     if (!item.Action_ID || status === DJ_AI_AGENT_V1.STATUS.DONE || status === DJ_AI_AGENT_V1.STATUS.CANCELLED) return false;
@@ -440,7 +440,7 @@ function aiAgentFindByIdV1_(table, id) {
 
 function aiAgentFindActiveV1_(table, core, ref) {
   for(let i=0;i<table.rows.length;i++){
-    const item=aiAgentObjectV1_(table.rows[i],table.headers);
+    const item=aiAgentObjectV1_(table.rows[i],table.headers,i+2);
     const status=String(item.Status || '').trim().toUpperCase();
     if(aiAgentCoreV1_(item.Core)!==core) continue;
     if(String(item.Reference_ID || '').trim()!==ref) continue;
