@@ -2340,6 +2340,14 @@ function djFinanceBuildBillingStatusV1_(
   }
 
 
+  const asOfDay =
+    new Date(
+      asOfDate.getFullYear(),
+      asOfDate.getMonth(),
+      asOfDate.getDate()
+    );
+
+
   const paymentMap = {};
 
 
@@ -2831,7 +2839,7 @@ function djFinanceBuildBillingStatusV1_(
             paymentTotal;
 
         } else if (
-          asOfDate <
+          asOfDay <
           dueDate
         ) {
 
@@ -2844,7 +2852,7 @@ function djFinanceBuildBillingStatusV1_(
             rent;
 
         } else if (
-          asOfDate.getTime() ===
+          asOfDay.getTime() ===
           dueDate.getTime()
         ) {
 
