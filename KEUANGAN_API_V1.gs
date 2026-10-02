@@ -2974,6 +2974,11 @@ function djFinanceBuildBillingStatusV1_(
           status:
             status,
 
+          verification:
+            payment &&
+            payment.verification ||
+            '',
+
           expected:
             paymentTotal,
 
