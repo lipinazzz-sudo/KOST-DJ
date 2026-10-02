@@ -2469,7 +2469,119 @@ function djFinanceBuildBillingStatusV1_(
   const detailRows = [];
 
 
-  (dataset.contracts || [])
+  const tenantByRoom = {};
+
+
+  (dataset.tenants || [])
+    .forEach(
+      function(tenant) {
+
+        tenantByRoom[
+          String(
+            tenant.room ||
+            ''
+          ).trim()
+        ] =
+          tenant;
+
+      }
+    );
+
+
+  const billingSources = [];
+
+
+  if (
+    Array.isArray(dataset.contracts) &&
+    dataset.contracts.length > 0
+  ) {
+
+    dataset.contracts.forEach(
+      function(contract) {
+
+        billingSources.push(
+          contract
+        );
+
+      }
+    );
+
+  } else {
+
+    (dataset.rooms || [])
+      .forEach(
+        function(room) {
+
+          const roomNumber =
+            String(
+              room.number ||
+              ''
+            ).trim();
+
+
+          if (
+            !roomNumber ||
+            Number(
+              room.price ||
+              0
+            ) <= 0 ||
+            String(
+              room.status ||
+              ''
+            )
+            .trim()
+            .toUpperCase() ===
+            'KOSONG'
+          ) {
+
+            return;
+
+          }
+
+
+          const tenant =
+            tenantByRoom[
+              roomNumber
+            ] ||
+            null;
+
+
+          billingSources.push({
+
+            tenantId:
+              tenant
+                ? tenant.tenantId
+                : '',
+
+            name:
+              tenant
+                ? tenant.name
+                : '',
+
+            room:
+              roomNumber,
+
+            startDate:
+              null,
+
+            endDate:
+              null,
+
+            monthlyRent:
+              Number(
+                room.price ||
+                0
+              )
+
+          });
+
+        }
+      );
+
+  }
+
+
+  billingSources
     .forEach(
       function(contract) {
 
