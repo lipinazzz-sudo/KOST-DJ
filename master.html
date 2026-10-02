@@ -622,6 +622,71 @@ button{
     line-height:1.55;
 }
 
+.finance-analysis-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+    gap:16px;
+    margin-top:16px;
+}
+
+.finance-annual-metrics{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+}
+
+.finance-annual-metric{
+    padding:12px 13px;
+    background:#f8fafc;
+    border:1px solid #edf0f4;
+    border-radius:12px;
+}
+
+.finance-annual-metric span{
+    display:block;
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.finance-annual-metric strong{
+    display:block;
+    margin-top:5px;
+    font-size:16px;
+    line-height:1.2;
+}
+
+.finance-annual-metric.positive strong{
+    color:#027a48;
+}
+
+.finance-annual-metric.negative strong{
+    color:#b42318;
+}
+
+.finance-floor-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.finance-floor-table th,
+.finance-floor-table td{
+    padding:10px 8px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+    font-size:12px;
+}
+
+.finance-floor-table th{
+    color:#667085;
+    font-size:11px;
+    background:#fafbfc;
+}
+
+.finance-floor-table tr:last-child td{
+    border-bottom:0;
+}
+
 @media(max-width:1100px){
     .finance-kpi-grid{
         grid-template-columns:repeat(2,minmax(0,1fr));
@@ -631,7 +696,8 @@ button{
         grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
-    .finance-panels{
+    .finance-panels,
+    .finance-analysis-grid{
         grid-template-columns:1fr;
     }
 }
@@ -646,11 +712,11 @@ button{
     }
 
     .finance-kpi-grid,
-    .finance-secondary-grid{
+    .finance-secondary-grid,
+    .finance-annual-metrics{
         grid-template-columns:1fr;
     }
 }
-
 
 /* =========================================================
    PAYMENT MONITORING + WHATSAPP CONTACT CENTER
@@ -2441,6 +2507,55 @@ button{
                         id="financeSecondaryGrid"
                         class="finance-secondary-grid"
                     ></div>
+
+                    <div
+                        class="finance-analysis-grid"
+                    >
+
+                        <div class="finance-panel">
+
+                            <div class="finance-panel-head">
+
+                                <h3>
+                                    Ringkasan 2027
+                                </h3>
+
+                                <span class="small">
+                                    Akumulasi Januari–Desember
+                                </span>
+
+                            </div>
+
+                            <div
+                                id="financeAnnualBox"
+                                class="finance-panel-body"
+                            ></div>
+
+                        </div>
+
+                        <div class="finance-panel">
+
+                            <div class="finance-panel-head">
+
+                                <h3>
+                                    Analisis Lantai
+                                </h3>
+
+                                <span class="small">
+                                    Pendapatan · Pengeluaran · Profit
+                                </span>
+
+                            </div>
+
+                            <div
+                                id="financeFloorBox"
+                                class="finance-panel-body table-wrap"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
 
                     <div class="finance-panels">
 
@@ -11137,6 +11252,14 @@ function renderFinance(){
         .join("");
 
 
+    renderFinanceAnnual(
+        financeData.annual
+    );
+
+    renderFinanceFloor(
+        financeData.floorAnalysis
+    );
+
     renderFinanceMonthly();
 
     renderFinanceBreakdown(
@@ -11146,6 +11269,258 @@ function renderFinance(){
     renderFinanceRecent(
         summary
     );
+
+}
+
+
+function renderFinanceAnnual(
+    annual
+){
+
+    const box =
+        document.getElementById(
+            "financeAnnualBox"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    if(!annual){
+
+        box.innerHTML =
+            '<div class="empty">Ringkasan tahunan belum tersedia.</div>';
+
+        return;
+
+    }
+
+
+    const profitClass =
+        Number(
+            annual.netProfit || 0
+        ) >= 0
+            ? "positive"
+            : "negative";
+
+
+    const metrics = [
+
+        [
+            "Total Pendapatan",
+            financeMoney(
+                annual.revenue
+            ),
+            ""
+        ],
+
+        [
+            "Total Pengeluaran",
+            financeMoney(
+                annual.expense
+            ),
+            ""
+        ],
+
+        [
+            "Profit Bersih",
+            financeMoney(
+                annual.netProfit
+            ),
+            profitClass
+        ],
+
+        [
+            "Net Margin",
+            financePercent(
+                annual.netMargin
+            ),
+            profitClass
+        ],
+
+        [
+            "Realisasi Potensi",
+            financePercent(
+                annual.realizationRate
+            ),
+            ""
+        ],
+
+        [
+            "Uang Masuk",
+            financeMoney(
+                annual.cashIn
+            ),
+            ""
+        ]
+
+    ];
+
+
+    box.innerHTML =
+        '<div class="finance-annual-metrics">' +
+
+        metrics
+            .map(
+                function(item){
+
+                    return (
+                        '<div class="finance-annual-metric ' +
+                        escapeHtml(
+                            item[2]
+                        ) +
+                        '">' +
+
+                        '<span>' +
+                        escapeHtml(
+                            item[0]
+                        ) +
+                        '</span>' +
+
+                        '<strong>' +
+                        escapeHtml(
+                            item[1]
+                        ) +
+                        '</strong>' +
+
+                        '</div>'
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</div>' +
+
+        '<div class="small" style="margin-top:12px;">' +
+
+        'Rata-rata occupancy 2027: ' +
+
+        escapeHtml(
+            financePercent(
+                annual.averageOccupancy
+            )
+        ) +
+
+        '. Realisasi potensi dihitung dari pendapatan terverifikasi dibanding potensi pendapatan kontrak tahun berjalan.' +
+
+        '</div>';
+
+}
+
+
+function renderFinanceFloor(
+    floors
+){
+
+    const box =
+        document.getElementById(
+            "financeFloorBox"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    const rows =
+        Array.isArray(
+            floors
+        )
+            ? floors
+            : [];
+
+
+    if(!rows.length){
+
+        box.innerHTML =
+            '<div class="empty">Analisis lantai belum tersedia.</div>';
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+
+        '<table class="finance-floor-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+        '<th>Lantai</th>' +
+        '<th>Pendapatan</th>' +
+        '<th>Pengeluaran</th>' +
+        '<th>Profit</th>' +
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        rows
+            .map(
+                function(item){
+
+                    const profit =
+                        Number(
+                            item.netProfit ||
+                            0
+                        );
+
+
+                    return (
+
+                        '<tr>' +
+
+                        '<td><strong>Lantai ' +
+                        escapeHtml(
+                            item.floor
+                        ) +
+                        '</strong></td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            financeMoney(
+                                item.revenue
+                            )
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            financeMoney(
+                                item.expense
+                            )
+                        ) +
+                        '</td>' +
+
+                        '<td style="font-weight:900;">' +
+                        escapeHtml(
+                            financeMoney(
+                                profit
+                            )
+                        ) +
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</tbody>' +
+
+        '</table>';
 
 }
 
