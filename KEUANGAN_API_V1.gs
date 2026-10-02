@@ -4532,7 +4532,7 @@ function djFinanceFloorAnalysisV1_(
 
     const match =
       text.match(
-        /^(\\d)/
+        /^(\d)/
       );
 
 
