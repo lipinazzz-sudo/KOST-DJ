@@ -348,7 +348,9 @@ function verifikasiPendaftaranDJ() {
 
 function verifikasiPendaftaranDJ_(
 
-  registrationId
+  registrationId,
+
+  finalRoom
 
 ) {
 
