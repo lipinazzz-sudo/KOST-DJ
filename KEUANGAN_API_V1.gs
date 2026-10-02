@@ -177,6 +177,14 @@ function djFinanceBuildDatasetV1_(
       'Pembayaran'
     );
 
+  if (paymentSheet) {
+
+    djApiEnsurePaymentColumnsV5_(
+      paymentSheet
+    );
+
+  }
+
   const maintenanceSheet =
     ss.getSheetByName(
       'Maintenance'
@@ -936,8 +944,8 @@ function djFinanceComputeMonthSummaryV1_(
             'INCOME',
 
           category:
-            fineRevenue > 0
-              ? 'Pembayaran'
+            Number(item.fine || 0) > 0
+              ? 'Sewa + Denda'
               : 'Sewa',
 
           description:
@@ -970,10 +978,14 @@ function djFinanceComputeMonthSummaryV1_(
       }
 
 
+      const cashDate =
+        item.paidDate ||
+        item.verifiedDate;
+
       if (
-        item.paidDate &&
+        cashDate &&
         djFinanceDateInMonthV1_(
-          item.paidDate,
+          cashDate,
           year,
           month
         )
@@ -1524,24 +1536,14 @@ function djFinanceDateV1_(
   ) {
 
     return new Date(
-      1899,
-      11,
-      30,
-      0,
-      0,
-      0,
-      0
-    ).getTime()
-      ? new Date(
-          new Date(
-            1899,
-            11,
-            30
-          ).getTime() +
-          value *
-          86400000
-        )
-      : null;
+      new Date(
+        1899,
+        11,
+        30
+      ).getTime() +
+      value *
+      86400000
+    );
 
   }
 
