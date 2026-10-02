@@ -406,10 +406,10 @@ function aiAgentTableV1_(sh) {
   };
 }
 
-function aiAgentObjectV1_(row, headers) {
+function aiAgentObjectV1_(row, headers, rowNumber) {
   const o={};
   headers.forEach(function(h,i){if(h)o[h]=row[i];});
-  o._rowNumber = i + 2;
+  o._rowNumber = Number(rowNumber || 0);
   return o;
 }
 
@@ -430,7 +430,7 @@ function aiAgentUpdateV1_(sh, rowNumber, headers, changes) {
 
 function aiAgentFindByIdV1_(table, id) {
   for(let i=0;i<table.rows.length;i++){
-    const item=aiAgentObjectV1_(table.rows[i],table.headers);
+    const item=aiAgentObjectV1_(table.rows[i],table.headers,i+2);
     if(String(item.Action_ID || '').trim()===id){
       return {rowNumber:i+2,item:item};
     }
@@ -505,4 +505,1248 @@ function aiAgentRequireDateV1_(value) {
   const d=aiAgentDateV1_(value);
   if(!d) throw new Error('Waktu pengingat tidak valid.');
   return d;
+}
+
+
+/* ============================================================
+ * BUSINESS SYNC V1.1
+ * ============================================================
+ * READ ONLY terhadap business sheets.
+ * SATU-SATUNYA sheet yang ditulis oleh sync adalah AI_Action.
+ *
+ * Sumber:
+ * - Pembayaran
+ * - Pendaftaran
+ * - Maintenance
+ * - Laundry
+ *
+ * Prinsip:
+ * - tidak mengubah transaksi bisnis
+ * - tidak membuat approval logic baru
+ * - tidak mengirim WhatsApp
+ * - tidak membuat task aktif duplikat
+ * - task hanya selesai otomatis jika source sudah terminal
+ * ============================================================
+ */
+
+function runAIAgentSyncV1() {
+
+  setupAIAgentCoreV1();
+
+  const result = {
+    ok: true,
+    startedAt: new Date(),
+    created: 0,
+    existing: 0,
+    reconciled: 0,
+    byCore: {
+      PAYMENT: 0,
+      REGISTRATION: 0,
+      MAINTENANCE: 0,
+      LAUNDRY: 0
+    },
+    errors: []
+  };
+
+  const states = {
+    PAYMENT: {},
+    REGISTRATION: {},
+    MAINTENANCE: {},
+    LAUNDRY: {}
+  };
+
+  const scanners = [
+    ['PAYMENT', aiAgentScanPaymentsV1_],
+    ['REGISTRATION', aiAgentScanRegistrationsV1_],
+    ['MAINTENANCE', aiAgentScanMaintenanceV1_],
+    ['LAUNDRY', aiAgentScanLaundryV1_]
+  ];
+
+  scanners.forEach(function(pair) {
+
+    const core = pair[0];
+    const scanner = pair[1];
+
+    try {
+      const scan = scanner();
+      states[core] = scan.terminalRefs || {};
+
+      result.byCore[core] = Number(scan.activeCount || 0);
+      result.created += Number(scan.created || 0);
+      result.existing += Number(scan.existing || 0);
+    } catch (error) {
+      result.ok = false;
+      result.errors.push(
+        core + ': ' +
+        String(
+          error && error.message
+            ? error.message
+            : error
+        )
+      );
+    }
+
+  });
+
+  try {
+    result.reconciled =
+      aiAgentReconcileV1_(states);
+  } catch (error) {
+    result.ok = false;
+    result.errors.push(
+      'RECONCILE: ' +
+      String(
+        error && error.message
+          ? error.message
+          : error
+      )
+    );
+  }
+
+  result.finishedAt = new Date();
+
+  Logger.log(
+    JSON.stringify(
+      result,
+      null,
+      2
+    )
+  );
+
+  return result;
+}
+
+
+/* ============================================================
+ * SCANNER HELPERS
+ * ============================================================
+ */
+
+function aiAgentScanPaymentsV1_() {
+
+  const table =
+    aiAgentReadBusinessTableV1_(
+      'Pembayaran',
+      [
+        'Pembayaran_ID',
+        'Payment_ID',
+        'Tenant_ID'
+      ]
+    );
+
+  if (!table) {
+    return {
+      activeCount: 0,
+      created: 0,
+      existing: 0,
+      terminalRefs: {}
+    };
+  }
+
+  const aiTable =
+    aiAgentTableV1_(
+      aiAgentSheetV1_()
+    );
+
+  const terminalRefs = {};
+
+  let created = 0;
+  let existing = 0;
+  let activeCount = 0;
+
+  table.rows.forEach(function(row) {
+
+    const paymentId =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Payment_ID',
+          'Pembayaran_ID'
+        ]
+      );
+
+    if (!paymentId) {
+      return;
+    }
+
+    const verification =
+      aiAgentUpperFieldV1_(
+        row,
+        table.headers,
+        [
+          'Status_Verifikasi'
+        ]
+      );
+
+    if (
+      verification === 'TERVERIFIKASI' ||
+      verification === 'VERIFIED' ||
+      verification === 'DISETUJUI' ||
+      verification === 'APPROVED'
+    ) {
+      terminalRefs[paymentId] = verification;
+      return;
+    }
+
+    if (
+      verification === 'DITOLAK' ||
+      verification === 'REJECTED'
+    ) {
+      terminalRefs[paymentId] = verification;
+      return;
+    }
+
+    const amount =
+      aiAgentNumberFieldV1_(
+        row,
+        table.headers,
+        [
+          'Nominal_Dibayar'
+        ]
+      );
+
+    const proofUrl =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Bukti_Pembayaran_URL',
+          'Bukti_URL'
+        ]
+      );
+
+    /*
+     * Generated billing rows biasanya amount=0 dan
+     * tidak memiliki bukti. Jangan dibuat sebagai task.
+     */
+    if (
+      amount <= 0 &&
+      !proofUrl
+    ) {
+      return;
+    }
+
+    activeCount++;
+
+    if (
+      aiAgentFindAnyV1_(
+        aiTable,
+        DJ_AI_AGENT_V1.CORE.PAYMENT,
+        paymentId
+      )
+    ) {
+      existing++;
+      return;
+    }
+
+    const tenantId =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Tenant_ID'
+        ]
+      );
+
+    const room =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'No_Kamar',
+          'Room'
+        ]
+      );
+
+    const tenantName =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Nama_Tenant',
+          'Nama_Lengkap'
+        ]
+      );
+
+    const period =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Periode_Pembayaran',
+          'Periode'
+        ]
+      );
+
+    const total =
+      aiAgentNumberFieldV1_(
+        row,
+        table.headers,
+        [
+          'Total_Tagihan'
+        ]
+      );
+
+    const result =
+      createAIPaymentTaskV1({
+        paymentId: paymentId,
+        tenantId: tenantId,
+        room: room,
+        tenantName: tenantName,
+        amount: amount,
+        period: period,
+        proofUrl: proofUrl,
+        summary:
+          'Pembayaran ' +
+          paymentId +
+          ' menunggu keputusan Master. ' +
+          'Verifikasi saat ini: ' +
+          (verification || 'BELUM DIVERIFIKASI') +
+          '. Total tagihan: Rp' +
+          total.toLocaleString('id-ID') +
+          '.'
+      });
+
+    if (result && result.duplicate) {
+      existing++;
+    } else {
+      created++;
+    }
+
+  });
+
+  return {
+    activeCount: activeCount,
+    created: created,
+    existing: existing,
+    terminalRefs: terminalRefs
+  };
+}
+
+
+function aiAgentScanRegistrationsV1_() {
+
+  const table =
+    aiAgentReadBusinessTableV1_(
+      'Pendaftaran',
+      [
+        'Pendaftaran_ID',
+        'Status_Pendaftaran'
+      ]
+    );
+
+  if (!table) {
+    return {
+      activeCount: 0,
+      created: 0,
+      existing: 0,
+      terminalRefs: {}
+    };
+  }
+
+  const aiTable =
+    aiAgentTableV1_(
+      aiAgentSheetV1_()
+    );
+
+  const terminalRefs = {};
+
+  let created = 0;
+  let existing = 0;
+  let activeCount = 0;
+
+  table.rows.forEach(function(row) {
+
+    const registrationId =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Pendaftaran_ID'
+        ]
+      );
+
+    if (!registrationId) {
+      return;
+    }
+
+    const status =
+      aiAgentUpperFieldV1_(
+        row,
+        table.headers,
+        [
+          'Status_Pendaftaran'
+        ]
+      );
+
+    const terminal =
+      [
+        'DITOLAK',
+        'REJECTED',
+        'DISETUJUI',
+        'APPROVED',
+        'MENUNGGU AKTIVASI AKUN'
+      ];
+
+    if (
+      terminal.indexOf(status) >= 0
+    ) {
+      terminalRefs[registrationId] = status;
+      return;
+    }
+
+    activeCount++;
+
+    if (
+      aiAgentFindAnyV1_(
+        aiTable,
+        DJ_AI_AGENT_V1.CORE.REGISTRATION,
+        registrationId
+      )
+    ) {
+      existing++;
+      return;
+    }
+
+    const tenantId =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Tenant_ID'
+        ]
+      );
+
+    const room =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'No_Kamar'
+        ]
+      );
+
+    const name =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Nama_Lengkap',
+          'Nama_Tenant'
+        ]
+      );
+
+    const phone =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'No_HP'
+        ]
+      );
+
+    const summaryParts = [];
+
+    if (name) {
+      summaryParts.push(
+        'Nama: ' + name
+      );
+    }
+
+    if (room) {
+      summaryParts.push(
+        'Kamar: ' + room
+      );
+    }
+
+    if (phone) {
+      summaryParts.push(
+        'WA: ' + phone
+      );
+    }
+
+    const result =
+      createAIRegistrationTaskV1({
+        registrationId: registrationId,
+        tenantId: tenantId,
+        room: room,
+        tenantName: name,
+        summary:
+          summaryParts.join(' · ') ||
+          'Pendaftaran baru menunggu keputusan Master.'
+      });
+
+    if (result && result.duplicate) {
+      existing++;
+    } else {
+      created++;
+    }
+
+  });
+
+  return {
+    activeCount: activeCount,
+    created: created,
+    existing: existing,
+    terminalRefs: terminalRefs
+  };
+}
+
+
+function aiAgentScanMaintenanceV1_() {
+
+  const table =
+    aiAgentReadBusinessTableV1_(
+      'Maintenance',
+      [
+        'Maintenance_ID',
+        'Status'
+      ]
+    );
+
+  if (!table) {
+    return {
+      activeCount: 0,
+      created: 0,
+      existing: 0,
+      terminalRefs: {}
+    };
+  }
+
+  const aiTable =
+    aiAgentTableV1_(
+      aiAgentSheetV1_()
+    );
+
+  const terminalRefs = {};
+
+  let created = 0;
+  let existing = 0;
+  let activeCount = 0;
+
+  table.rows.forEach(function(row) {
+
+    const id =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Maintenance_ID'
+        ]
+      );
+
+    if (!id) {
+      return;
+    }
+
+    const status =
+      aiAgentUpperFieldV1_(
+        row,
+        table.headers,
+        [
+          'Status'
+        ]
+      );
+
+    if (
+      status === 'SELESAI' ||
+      status === 'COMPLETED' ||
+      status === 'BATAL' ||
+      status === 'CANCELLED'
+    ) {
+      terminalRefs[id] = status;
+      return;
+    }
+
+    /*
+     * Hanya status operasional yang terisi yang dianggap aktif.
+     */
+    if (!status) {
+      return;
+    }
+
+    activeCount++;
+
+    if (
+      aiAgentFindAnyV1_(
+        aiTable,
+        DJ_AI_AGENT_V1.CORE.MAINTENANCE,
+        id
+      )
+    ) {
+      existing++;
+      return;
+    }
+
+    const tenantId =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Tenant_ID'
+        ]
+      );
+
+    const room =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'No_Kamar'
+        ]
+      );
+
+    const name =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Nama_Tenant',
+          'Nama_Lengkap'
+        ]
+      );
+
+    const issueType =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Jenis_Masalah'
+        ]
+      );
+
+    const description =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Deskripsi'
+        ]
+      );
+
+    const urgency =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Urgensi'
+        ]
+      );
+
+    const summary =
+      [
+        issueType
+          ? 'Masalah: ' + issueType
+          : '',
+        description
+          ? 'Detail: ' + description
+          : '',
+        urgency
+          ? 'Urgensi: ' + urgency
+          : ''
+      ]
+      .filter(Boolean)
+      .join(' · ') ||
+      'Laporan maintenance baru diterima.';
+
+    const result =
+      createAIMaintenanceTaskV1({
+        maintenanceId: id,
+        tenantId: tenantId,
+        room: room,
+        tenantName: name,
+        summary: summary
+      });
+
+    if (result && result.duplicate) {
+      existing++;
+    } else {
+      created++;
+    }
+
+  });
+
+  return {
+    activeCount: activeCount,
+    created: created,
+    existing: existing,
+    terminalRefs: terminalRefs
+  };
+}
+
+
+function aiAgentScanLaundryV1_() {
+
+  const table =
+    aiAgentReadBusinessTableV1_(
+      'Laundry',
+      [
+        'Laundry_ID',
+        'Status'
+      ]
+    );
+
+  if (!table) {
+    return {
+      activeCount: 0,
+      created: 0,
+      existing: 0,
+      terminalRefs: {}
+    };
+  }
+
+  const aiTable =
+    aiAgentTableV1_(
+      aiAgentSheetV1_()
+    );
+
+  const terminalRefs = {};
+
+  let created = 0;
+  let existing = 0;
+  let activeCount = 0;
+
+  table.rows.forEach(function(row) {
+
+    const id =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Laundry_ID'
+        ]
+      );
+
+    if (!id) {
+      return;
+    }
+
+    const status =
+      aiAgentUpperFieldV1_(
+        row,
+        table.headers,
+        [
+          'Status'
+        ]
+      );
+
+    if (
+      status === 'SELESAI' ||
+      status === 'COMPLETED' ||
+      status === 'BATAL' ||
+      status === 'CANCELLED'
+    ) {
+      terminalRefs[id] = status;
+      return;
+    }
+
+    if (!status) {
+      return;
+    }
+
+    activeCount++;
+
+    if (
+      aiAgentFindAnyV1_(
+        aiTable,
+        DJ_AI_AGENT_V1.CORE.LAUNDRY,
+        id
+      )
+    ) {
+      existing++;
+      return;
+    }
+
+    const tenantId =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Tenant_ID'
+        ]
+      );
+
+    const room =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'No_Kamar'
+        ]
+      );
+
+    const name =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Nama_Tenant',
+          'Nama_Lengkap'
+        ]
+      );
+
+    const service =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Layanan',
+          'Service'
+        ]
+      );
+
+    const pickupLocation =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Lokasi_Pickup',
+          'Pickup_Location'
+        ]
+      );
+
+    const note =
+      aiAgentStringFieldV1_(
+        row,
+        table.headers,
+        [
+          'Catatan',
+          'Note'
+        ]
+      );
+
+    const result =
+      createAILaundryTaskV1({
+        laundryId: id,
+        tenantId: tenantId,
+        room: room,
+        tenantName: name,
+        summary:
+          [
+            service
+              ? 'Layanan: ' + service
+              : '',
+            pickupLocation
+              ? 'Pickup: ' + pickupLocation
+              : '',
+            note
+              ? 'Catatan: ' + note
+              : ''
+          ]
+          .filter(Boolean)
+          .join(' · ') ||
+          'Order laundry baru diterima.'
+      });
+
+    if (result && result.duplicate) {
+      existing++;
+    } else {
+      created++;
+    }
+
+  });
+
+  return {
+    activeCount: activeCount,
+    created: created,
+    existing: existing,
+    terminalRefs: terminalRefs
+  };
+}
+
+
+/* ============================================================
+ * RECONCILIATION
+ * ============================================================
+ */
+
+function aiAgentReconcileV1_(states) {
+
+  states = states || {};
+
+  const sh = aiAgentSheetV1_();
+
+  const table =
+    aiAgentTableV1_(sh);
+
+  const lock =
+    LockService.getDocumentLock();
+
+  lock.waitLock(30000);
+
+  let reconciled = 0;
+
+  try {
+
+    table.rows.forEach(function(row, index) {
+
+      const item =
+        aiAgentObjectV1_(
+          row,
+          table.headers,
+          index + 2
+        );
+
+      const core =
+        aiAgentCoreV1_(
+          item.Core
+        );
+
+      if (!core) {
+        return;
+      }
+
+      const ref =
+        String(
+          item.Reference_ID || ''
+        ).trim();
+
+      if (!ref) {
+        return;
+      }
+
+      const status =
+        String(
+          item.Status || ''
+        )
+        .trim()
+        .toUpperCase();
+
+      if (
+        status === DJ_AI_AGENT_V1.STATUS.DONE ||
+        status === DJ_AI_AGENT_V1.STATUS.CANCELLED
+      ) {
+        return;
+      }
+
+      const terminalMap =
+        states[core] || {};
+
+      if (
+        !Object.prototype.hasOwnProperty.call(
+          terminalMap,
+          ref
+        )
+      ) {
+        return;
+      }
+
+      const sourceStatus =
+        String(
+          terminalMap[ref] || 'TERMINAL'
+        );
+
+      aiAgentUpdateV1_(
+        sh,
+        index + 2,
+        table.headers,
+        {
+          Status: DJ_AI_AGENT_V1.STATUS.DONE,
+          Handled_By: 'SYSTEM_SYNC_V1',
+          Handled_At: new Date(),
+          Decision: 'AUTO_RECONCILE',
+          Notes:
+            'Source ' +
+            core +
+            ' sudah terminal: ' +
+            sourceStatus,
+          Last_Update: new Date()
+        }
+      );
+
+      reconciled++;
+
+    });
+
+    SpreadsheetApp.flush();
+
+  } finally {
+    lock.releaseLock();
+  }
+
+  return reconciled;
+}
+
+
+/* ============================================================
+ * BUSINESS TABLE READER
+ * ============================================================
+ */
+
+function aiAgentReadBusinessTableV1_(
+  sheetName,
+  requiredHeaders
+) {
+
+  const ss =
+    SpreadsheetApp.getActiveSpreadsheet();
+
+  if (!ss) {
+    throw new Error(
+      'Spreadsheet DJ Family Kost tidak ditemukan.'
+    );
+  }
+
+  const sh =
+    ss.getSheetByName(
+      sheetName
+    );
+
+  if (!sh) {
+    return null;
+  }
+
+  const maxColumns =
+    Math.max(
+      sh.getLastColumn(),
+      1
+    );
+
+  const rowsToProbe =
+    Math.min(
+      Math.max(
+        sh.getLastRow(),
+        1
+      ),
+      10
+    );
+
+  if (rowsToProbe < 1) {
+    return null;
+  }
+
+  const probe =
+    sh
+      .getRange(
+        1,
+        1,
+        rowsToProbe,
+        maxColumns
+      )
+      .getValues();
+
+  let headerRowNumber =
+    -1;
+
+  let headers =
+    [];
+
+  for (
+    let i = 0;
+    i < probe.length;
+    i++
+  ) {
+
+    const rowHeaders =
+      probe[i].map(function(value) {
+        return String(
+          value || ''
+        ).trim();
+      });
+
+    const hitCount =
+      requiredHeaders.filter(function(required) {
+        return rowHeaders.indexOf(required) >= 0;
+      }).length;
+
+    if (
+      hitCount >=
+      Math.min(
+        requiredHeaders.length,
+        1
+      )
+    ) {
+      headerRowNumber = i + 1;
+      headers = rowHeaders;
+      break;
+    }
+
+  }
+
+  if (
+    headerRowNumber < 0
+  ) {
+    return null;
+  }
+
+  if (
+    sh.getLastRow() <=
+    headerRowNumber
+  ) {
+    return {
+      headerRow: headerRowNumber,
+      headers: headers,
+      rows: []
+    };
+  }
+
+  return {
+    headerRow: headerRowNumber,
+    headers: headers,
+    rows:
+      sh.getRange(
+        headerRowNumber + 1,
+        1,
+        sh.getLastRow() - headerRowNumber,
+        headers.length
+      ).getValues()
+  };
+}
+
+
+function aiAgentStringFieldV1_(
+  row,
+  headers,
+  aliases
+) {
+
+  const value =
+    aiAgentValueFieldV1_(
+      row,
+      headers,
+      aliases
+    );
+
+  return String(
+    value == null
+      ? ''
+      : value
+  ).trim();
+}
+
+
+function aiAgentUpperFieldV1_(
+  row,
+  headers,
+  aliases
+) {
+
+  return aiAgentStringFieldV1_(
+    row,
+    headers,
+    aliases
+  )
+  .toUpperCase();
+}
+
+
+function aiAgentNumberFieldV1_(
+  row,
+  headers,
+  aliases
+) {
+
+  const value =
+    aiAgentValueFieldV1_(
+      row,
+      headers,
+      aliases
+    );
+
+  return aiAgentNumberV1_(
+    value
+  ) || 0;
+}
+
+
+function aiAgentValueFieldV1_(
+  row,
+  headers,
+  aliases
+) {
+
+  aliases =
+    Array.isArray(
+      aliases
+    )
+      ? aliases
+      : [];
+
+  for (
+    let i = 0;
+    i < aliases.length;
+    i++
+  ) {
+
+    const index =
+      headers.indexOf(
+        aliases[i]
+      );
+
+    if (
+      index >= 0
+    ) {
+      return row[index];
+    }
+
+  }
+
+  return '';
+}
+
+
+/* ============================================================
+ * FIND EXISTING TASK — INCLUDING RESOLVED
+ * ============================================================
+ */
+
+function aiAgentFindAnyV1_(
+  table,
+  core,
+  ref
+) {
+
+  if (!table) {
+    return null;
+  }
+
+  for (
+    let i = 0;
+    i < table.rows.length;
+    i++
+  ) {
+
+    const item =
+      aiAgentObjectV1_(
+        table.rows[i],
+        table.headers,
+        i + 2
+      );
+
+    if (
+      aiAgentCoreV1_(
+        item.Core
+      ) !==
+      core
+    ) {
+      continue;
+    }
+
+    if (
+      String(
+        item.Reference_ID || ''
+      ).trim() !==
+      String(
+        ref || ''
+      ).trim()
+    ) {
+      continue;
+    }
+
+    return {
+      rowNumber: i + 2,
+      actionId:
+        String(
+          item.Action_ID || ''
+        ).trim(),
+      status:
+        String(
+          item.Status || ''
+        ).trim()
+    };
+
+  }
+
+  return null;
 }
