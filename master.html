@@ -412,6 +412,93 @@ button{
    FINANCE
    ========================================================= */
 
+.finance-nav{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:4px 0 16px;
+    padding:8px;
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+    overflow-x:auto;
+    scrollbar-width:thin;
+}
+
+.finance-nav button{
+    flex:0 0 auto;
+    min-height:36px;
+    padding:7px 12px;
+    border:1px solid #e2e6ee;
+    border-radius:10px;
+    background:#fff;
+    color:#344054;
+    font-size:11px;
+    font-weight:900;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.finance-nav button:hover{
+    background:#f8fafc;
+}
+
+.finance-nav .finance-nav-divider{
+    width:1px;
+    height:22px;
+    background:#e2e6ee;
+    flex:0 0 auto;
+}
+
+.finance-section-toggle{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:30px;
+    height:30px;
+    padding:0 9px;
+    border:1px solid #e2e6ee;
+    border-radius:9px;
+    background:#fff;
+    color:#344054;
+    font-size:12px;
+    font-weight:900;
+    cursor:pointer;
+    flex:0 0 auto;
+}
+
+.finance-section-toggle:hover{
+    background:#f8fafc;
+}
+
+.finance-collapsible.is-collapsed > .finance-panel-body{
+    display:none;
+}
+
+.finance-collapsible.is-collapsed > .finance-panel-head{
+    border-bottom:0;
+}
+
+.finance-report-section-body{
+    padding:0 0 12px;
+}
+
+.finance-report-section.is-collapsed > .finance-report-grid,
+.finance-report-section.is-collapsed > .finance-report-note,
+.finance-report-section.is-collapsed > .finance-report-print-only{
+    display:none;
+}
+
+.finance-collapsible.is-collapsed{
+    margin-bottom:16px;
+}
+
+.finance-panel-head h3.finance-section-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
 .finance-toolbar{
     display:grid;
     grid-template-columns:220px 220px minmax(240px,1fr) 170px;
@@ -2987,6 +3074,56 @@ button{
                     </div>
 
                     <div
+                        class="finance-nav"
+                        id="financeNavigation"
+                        aria-label="Navigasi Keuangan"
+                    >
+
+                        <button type="button" data-finance-target="financeOverviewSection">
+                            Ringkasan
+                        </button>
+
+                        <button type="button" data-finance-target="financeBillingSection">
+                            Tagihan
+                        </button>
+
+                        <button type="button" data-finance-target="financeRoomSection">
+                            Kamar
+                        </button>
+
+                        <button type="button" data-finance-target="financeCashFlowSection">
+                            Arus Kas
+                        </button>
+
+                        <button type="button" data-finance-target="financeAuditSection">
+                            Riwayat
+                        </button>
+
+                        <button type="button" data-finance-target="financeReportSection">
+                            Laporan
+                        </button>
+
+                        <button type="button" data-finance-target="financePerformanceSection">
+                            Performa
+                        </button>
+
+                        <button type="button" data-finance-target="financeBreakdownSection">
+                            Pengeluaran
+                        </button>
+
+                        <div class="finance-nav-divider"></div>
+
+                        <button type="button" onclick="financeSetAllSections(true)">
+                            Buka Semua
+                        </button>
+
+                        <button type="button" onclick="financeSetAllSections(false)">
+                            Tutup Semua
+                        </button>
+
+                    </div>
+
+                    <div
                         id="financeStatus"
                         class="finance-status-note"
                     >
@@ -3004,13 +3141,14 @@ button{
                     ></div>
 
                     <div
-                        class="finance-panel"
+                        id="financeBillingSection"
+                        class="finance-panel finance-collapsible"
                         style="margin-top:16px;"
                     >
 
                         <div class="finance-panel-head">
 
-                            <h3>
+                            <h3 class="finance-section-title">
                                 Status Tagihan
                             </h3>
 
@@ -3020,6 +3158,16 @@ button{
                             >
                                 —
                             </span>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle"
+                                data-finance-toggle="financeBillingSection"
+                                aria-expanded="true"
+                                title="Tutup bagian"
+                            >
+                                −
+                            </button>
 
                         </div>
 
@@ -3032,13 +3180,14 @@ button{
 
 
                     <div
-                        class="finance-panel"
+                        id="financeReconciliationSection"
+                        class="finance-panel finance-collapsible is-collapsed"
                         style="margin-top:16px;"
                     >
 
                         <div class="finance-panel-head">
 
-                            <h3>
+                            <h3 class="finance-section-title">
                                 Rekonsiliasi Keuangan
                             </h3>
 
@@ -3048,6 +3197,16 @@ button{
                             >
                                 —
                             </span>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle"
+                                data-finance-toggle="financeReconciliationSection"
+                                aria-expanded="false"
+                                title="Buka bagian"
+                            >
+                                +
+                            </button>
 
                         </div>
 
@@ -3060,6 +3219,7 @@ button{
 
 
                     <div
+                        id="financeOverviewSection"
                         class="finance-analysis-grid"
                     >
 
@@ -3109,19 +3269,30 @@ button{
 
 
                     <div
-                        class="finance-panel"
+                        id="financeRoomSection"
+                        class="finance-panel finance-collapsible is-collapsed"
                         style="margin-top:16px;"
                     >
 
                         <div class="finance-panel-head">
 
-                            <h3>
+                            <h3 class="finance-section-title">
                                 Analisis Kamar <span id="financeRoomYearLabel">2027</span>
                             </h3>
 
                             <span class="small">
                                 Pendapatan · Pengeluaran · Profit
                             </span>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle"
+                                data-finance-toggle="financeRoomSection"
+                                aria-expanded="false"
+                                title="Buka bagian"
+                            >
+                                +
+                            </button>
 
                         </div>
 
@@ -3134,19 +3305,30 @@ button{
 
 
                     <div
-                        class="finance-panel"
+                        id="financeCashFlowSection"
+                        class="finance-panel finance-collapsible is-collapsed"
                         style="margin-top:16px;"
                     >
 
                         <div class="finance-panel-head">
 
-                            <h3>
+                            <h3 class="finance-section-title">
                                 Arus Kas <span id="financeCashFlowYearLabel">2027</span>
                             </h3>
 
                             <span class="small">
                                 Uang masuk · uang keluar · arus kas bersih
                             </span>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle"
+                                data-finance-toggle="financeCashFlowSection"
+                                aria-expanded="false"
+                                title="Buka bagian"
+                            >
+                                +
+                            </button>
 
                         </div>
 
@@ -3159,19 +3341,30 @@ button{
 
 
                     <div
-                        class="finance-panel"
+                        id="financeAuditSection"
+                        class="finance-panel finance-collapsible is-collapsed"
                         style="margin-top:16px;"
                     >
 
                         <div class="finance-panel-head">
 
-                            <h3>
+                            <h3 class="finance-section-title">
                                 Riwayat Keuangan
                             </h3>
 
                             <span class="small">
                                 Aktivitas pembayaran, pengeluaran, dan maintenance
                             </span>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle"
+                                data-finance-toggle="financeAuditSection"
+                                aria-expanded="false"
+                                title="Buka bagian"
+                            >
+                                +
+                            </button>
 
                         </div>
 
@@ -3184,13 +3377,13 @@ button{
 
 
                     <div
-                        id="financePrintReport"
-                        class="finance-print-report"
+                        id="financeReportSection"
+                        class="finance-print-report finance-report-section finance-collapsible is-collapsed"
                     >
 
-                        <div class="finance-report-title">
+                        <div class="finance-report-title finance-panel-head">
 
-                            <h3>
+                            <h3 class="finance-section-title">
                                 Laporan Keuangan Periode
                             </h3>
 
@@ -3199,6 +3392,16 @@ button{
                             >
                                 —
                             </p>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle finance-report-toggle"
+                                data-finance-toggle="financeReportSection"
+                                aria-expanded="false"
+                                title="Buka bagian"
+                            >
+                                +
+                            </button>
 
                         </div>
 
@@ -3223,7 +3426,10 @@ button{
 
                     <div class="finance-panels">
 
-                        <div class="finance-panel">
+                        <div
+                            id="financePerformanceSection"
+                            class="finance-panel finance-collapsible is-collapsed"
+                        >
 
                             <div class="finance-panel-head">
 
@@ -3235,6 +3441,16 @@ button{
                                     Pendapatan · Pengeluaran · Profit
                                 </span>
 
+                                <button
+                                    type="button"
+                                    class="finance-section-toggle"
+                                    data-finance-toggle="financePerformanceSection"
+                                    aria-expanded="false"
+                                    title="Buka bagian"
+                                >
+                                    +
+                                </button>
+
                             </div>
 
                             <div
@@ -3244,11 +3460,14 @@ button{
 
                         </div>
 
-                        <div class="finance-panel">
+                        <div
+                            id="financeBreakdownSection"
+                            class="finance-panel finance-collapsible is-collapsed"
+                        >
 
                             <div class="finance-panel-head">
 
-                                <h3>
+                                <h3 class="finance-section-title">
                                     Rincian Pengeluaran
                                 </h3>
 
@@ -3258,6 +3477,16 @@ button{
                                 >
                                     —
                                 </span>
+
+                                <button
+                                    type="button"
+                                    class="finance-section-toggle"
+                                    data-finance-toggle="financeBreakdownSection"
+                                    aria-expanded="false"
+                                    title="Buka bagian"
+                                >
+                                    +
+                                </button>
 
                             </div>
 
@@ -3270,17 +3499,30 @@ button{
 
                     </div>
 
-                    <div class="finance-panel finance-recent">
+                    <div
+                        id="financeRecentSection"
+                        class="finance-panel finance-recent finance-collapsible is-collapsed"
+                    >
 
                         <div class="finance-panel-head">
 
-                            <h3>
+                            <h3 class="finance-section-title">
                                 Transaksi Terbaru
                             </h3>
 
                             <span class="small">
                                 Berdasarkan periode yang dipilih
                             </span>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle"
+                                data-finance-toggle="financeRecentSection"
+                                aria-expanded="false"
+                                title="Buka bagian"
+                            >
+                                +
+                            </button>
 
                         </div>
 
@@ -15103,6 +15345,217 @@ function compressImage(
 
 
 /* ============================================================
+   FINANCE SECTION NAVIGATION
+   ============================================================ */
+
+function financeSetSectionState(
+    id,
+    expanded
+){
+
+    const section =
+        document.getElementById(
+            id
+        );
+
+
+    if(!section){
+
+        return;
+
+    }
+
+
+    section.classList.toggle(
+        "is-collapsed",
+        !expanded
+    );
+
+
+    const toggle =
+        section.querySelector(
+            "[data-finance-toggle]"
+        );
+
+
+    if(toggle){
+
+        toggle.setAttribute(
+            "aria-expanded",
+            expanded
+                ? "true"
+                : "false"
+        );
+
+        toggle.textContent =
+            expanded
+                ? "−"
+                : "+";
+
+        toggle.title =
+            expanded
+                ? "Tutup bagian"
+                : "Buka bagian";
+
+    }
+
+}
+
+
+function financeToggleSection(
+    id
+){
+
+    const section =
+        document.getElementById(
+            id
+        );
+
+
+    if(!section){
+
+        return;
+
+    }
+
+
+    const expanded =
+        !section.classList.contains(
+            "is-collapsed"
+        );
+
+
+    financeSetSectionState(
+        id,
+        !expanded
+    );
+
+}
+
+
+function financeSetAllSections(
+    expanded
+){
+
+    [
+        "financeBillingSection",
+        "financeReconciliationSection",
+        "financeRoomSection",
+        "financeCashFlowSection",
+        "financeAuditSection",
+        "financeReportSection",
+        "financePerformanceSection",
+        "financeBreakdownSection",
+        "financeRecentSection"
+    ]
+    .forEach(
+        function(id){
+
+            financeSetSectionState(
+                id,
+                expanded
+            );
+
+        }
+    );
+
+}
+
+
+function financeInitNavigation(){
+
+    document
+        .querySelectorAll(
+            "[data-finance-toggle]"
+        )
+        .forEach(
+            function(button){
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+                        financeToggleSection(
+                            this.getAttribute(
+                                "data-finance-toggle"
+                            )
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            "[data-finance-target]"
+        )
+        .forEach(
+            function(button){
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+                        const id =
+                            this.getAttribute(
+                                "data-finance-target"
+                            );
+
+
+                        const section =
+                            document.getElementById(
+                                id
+                            );
+
+
+                        if(!section){
+
+                            return;
+
+                        }
+
+
+                        /*
+                         * Navigasi selalu membuka bagian tujuan
+                         * supaya klik menu langsung menampilkan data.
+                         */
+                        if(
+                            section.classList.contains(
+                                "is-collapsed"
+                            )
+                        ){
+
+                            financeSetSectionState(
+                                id,
+                                true
+                            );
+
+                        }
+
+
+                        section.scrollIntoView(
+                            {
+                                behavior:
+                                    "smooth",
+
+                                block:
+                                    "start"
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* ============================================================
    INIT
    ============================================================ */
 
@@ -15140,6 +15593,9 @@ async function init(){
     }
 
 }
+
+
+financeInitNavigation();
 
 
 init();
