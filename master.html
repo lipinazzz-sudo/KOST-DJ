@@ -13255,13 +13255,24 @@ function renderFinanceCashFlow(
             : "negative";
 
 
+    const cashFlowYear =
+        String(
+            cashFlow.year ||
+            financeYear
+        );
+
+
     box.innerHTML =
 
         '<div class="finance-cashflow-summary">' +
 
         '<div class="finance-cashflow-card">' +
 
-        '<span>Uang Masuk 2027</span>' +
+        '<span>Uang Masuk ' +
+        escapeHtml(
+            cashFlowYear
+        ) +
+        '</span>' +
 
         '<strong>' +
         escapeHtml(
@@ -13275,7 +13286,7 @@ function renderFinanceCashFlow(
 
         '<div class="finance-cashflow-card">' +
 
-        '<span>Uang Keluar 2027</span>' +
+        '<span>Uang Keluar ' + escapeHtml(cashFlowYear) + '</span>' +
 
         '<strong>' +
         escapeHtml(
@@ -13289,7 +13300,7 @@ function renderFinanceCashFlow(
 
         '<div class="finance-cashflow-card net">' +
 
-        '<span>Arus Kas Bersih 2027</span>' +
+        '<span>Arus Kas Bersih ' + escapeHtml(cashFlowYear) + '</span>' +
 
         '<strong class="' +
         netClass +
