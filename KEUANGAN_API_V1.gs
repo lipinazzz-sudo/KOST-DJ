@@ -271,6 +271,8 @@ function djFinanceBuildDatasetV1_(
 
   const payments = [];
 
+  const allPayments = [];
+
 
   if (paymentTable) {
 
@@ -289,16 +291,6 @@ function djFinanceBuildDatasetV1_(
           )
           .trim()
           .toUpperCase();
-
-
-        if (
-          verification !==
-          'TERVERIFIKASI'
-        ) {
-
-          return;
-
-        }
 
 
         const rent =
@@ -339,13 +331,36 @@ function djFinanceBuildDatasetV1_(
           );
 
 
+        const storedTotal =
+          djApiNumberV5_(
+            djApiValueV5_(
+              row,
+              paymentTable.headers,
+              [
+                'Total_Tagihan'
+              ]
+            )
+          );
+
+
         const total =
-          paidField > 0
-            ? paidField
+          storedTotal > 0
+            ? storedTotal
             : rent + fine;
 
 
-        payments.push({
+        const paid =
+          paidField > 0
+            ? paidField
+            : (
+                verification ===
+                'TERVERIFIKASI'
+                  ? total
+                  : 0
+              );
+
+
+        const payment = {
 
           paymentId:
             djApiValueV5_(
@@ -426,7 +441,26 @@ function djFinanceBuildDatasetV1_(
             fine,
 
           paid:
+            paid,
+
+          total:
             total,
+
+          status:
+            String(
+              djApiValueV5_(
+                row,
+                paymentTable.headers,
+                [
+                  'Status_Pembayaran'
+                ]
+              ) || ''
+            )
+            .trim()
+            .toUpperCase(),
+
+          verification:
+            verification,
 
           name:
             djApiValueV5_(
@@ -448,7 +482,33 @@ function djFinanceBuildDatasetV1_(
               ]
             )
 
-        });
+        };
+
+
+        /*
+         * Semua record pembayaran disimpan untuk analisis
+         * status tagihan. Pendapatan tetap hanya menggunakan
+         * pembayaran yang sudah TERVERIFIKASI.
+         */
+
+        allPayments.push(
+          payment
+        );
+
+
+        if (
+          verification !==
+          'TERVERIFIKASI'
+        ) {
+
+          return;
+
+        }
+
+
+        payments.push(
+          payment
+        );
 
       }
     );
@@ -829,6 +889,9 @@ function djFinanceBuildDatasetV1_(
     payments:
       payments,
 
+    allPayments:
+      allPayments,
+
     maintenance:
       maintenance,
 
@@ -1155,12 +1218,19 @@ function djFinanceComputeMonthSummaryV1_(
     );
 
 
-  const outstanding =
-    Math.max(
-      0,
-      expectedRevenue -
-      revenue
+  const billingStatus =
+    djFinanceBuildBillingStatusV1_(
+      dataset,
+      year,
+      month,
+      periodStart,
+      periodEnd,
+      expectedRevenue
     );
+
+
+  const outstanding =
+    billingStatus.outstanding;
 
 
   const netProfit =
@@ -1359,6 +1429,12 @@ function djFinanceComputeMonthSummaryV1_(
     arusKasBersih:
       cashIn -
       expense,
+
+    collectionRate:
+      billingStatus.collectionRate,
+
+    billingStatus:
+      billingStatus,
 
     expenseBreakdown:
       expenseBreakdown,
@@ -2092,6 +2168,676 @@ function djFinanceEnsureExpenseSheetV1_() {
 
 
   return sheet;
+
+}
+
+
+/* ============================================================
+ * BILLING STATUS ANALYSIS
+ * ============================================================ */
+
+function djFinanceBuildBillingStatusV1_(
+  dataset,
+  year,
+  month,
+  periodStart,
+  periodEnd,
+  expectedRevenue
+) {
+
+  const now =
+    new Date();
+
+
+  const selectedStart =
+    new Date(
+      year,
+      month - 1,
+      1
+    );
+
+
+  const currentStart =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1
+    );
+
+
+  let asOfDate;
+
+
+  if (
+    selectedStart >
+    currentStart
+  ) {
+
+    asOfDate =
+      new Date(
+        selectedStart.getTime() -
+        86400000
+      );
+
+  } else if (
+    selectedStart.getTime() ===
+    currentStart.getTime()
+  ) {
+
+    asOfDate =
+      now;
+
+  } else {
+
+    asOfDate =
+      periodEnd;
+
+  }
+
+
+  const paymentMap = {};
+
+
+  (dataset.allPayments || [])
+    .forEach(
+      function(item) {
+
+        const periodKey =
+          djFinancePeriodKeyV1_(
+            item.period
+          );
+
+
+        if (
+          periodKey !==
+          djFinanceMonthKeyV1_(
+            year,
+            month
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const key =
+          String(
+            item.tenantId ||
+            ''
+          )
+          .trim()
+          .toUpperCase();
+
+
+        if(!key){
+
+          return;
+
+        }
+
+
+        const current =
+          paymentMap[key];
+
+
+        /*
+         * Prioritaskan record terverifikasi.
+         * Jika level verifikasi sama, gunakan record yang
+         * paling baru berdasarkan tanggal pembayaran/verifikasi.
+         */
+
+        const currentRank =
+          current
+            ? djFinancePaymentRankV1_(
+                current
+              )
+            : -1;
+
+
+        const nextRank =
+          djFinancePaymentRankV1_(
+            item
+          );
+
+
+        if (
+          !current ||
+          nextRank >= currentRank
+        ) {
+
+          paymentMap[key] =
+            item;
+
+        }
+
+      }
+    );
+
+
+  const statusAmount = {
+
+    'BELUM JATUH TEMPO':0,
+    'JATUH TEMPO':0,
+    'TERLAMBAT':0,
+    'KURANG BAYAR':0,
+    'MENUNGGU VERIFIKASI':0,
+    'DITOLAK':0,
+    'LUNAS':0
+
+  };
+
+
+  const statusCount = {
+
+    'BELUM JATUH TEMPO':0,
+    'JATUH TEMPO':0,
+    'TERLAMBAT':0,
+    'KURANG BAYAR':0,
+    'MENUNGGU VERIFIKASI':0,
+    'DITOLAK':0,
+    'LUNAS':0
+
+  };
+
+
+  let verifiedRent = 0;
+  let verifiedFine = 0;
+  let pendingAmount = 0;
+  let notDueAmount = 0;
+  let dueAmount = 0;
+  let overdueAmount = 0;
+  let shortfallAmount = 0;
+  let rejectedAmount = 0;
+
+
+  let billCount = 0;
+  let paidBillCount = 0;
+  let notDueCount = 0;
+  let dueCount = 0;
+  let overdueCount = 0;
+  let shortPaidCount = 0;
+  let pendingCount = 0;
+  let rejectedCount = 0;
+
+
+  const detailRows = [];
+
+
+  (dataset.contracts || [])
+    .forEach(
+      function(contract) {
+
+        if (
+          contract.startDate &&
+          contract.startDate >
+          periodEnd
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          contract.endDate &&
+          contract.endDate <
+          periodStart
+        ) {
+
+          return;
+
+        }
+
+
+        const tenantId =
+          String(
+            contract.tenantId ||
+            ''
+          )
+          .trim()
+          .toUpperCase();
+
+
+        if(!tenantId){
+
+          return;
+
+        }
+
+
+        const rent =
+          Number(
+            contract.monthlyRent ||
+            0
+          );
+
+
+        if (
+          rent <= 0
+        ) {
+
+          return;
+
+        }
+
+
+        billCount++;
+
+
+        const dueDate =
+          new Date(
+            year,
+            month - 1,
+            1
+          );
+
+
+        const payment =
+          paymentMap[tenantId] ||
+          null;
+
+
+        const paymentPaid =
+          payment
+            ? Number(
+                payment.paid ||
+                0
+              )
+            : 0;
+
+
+        const paymentTotal =
+          payment &&
+          Number(
+            payment.total ||
+            0
+          ) > 0
+            ? Number(
+                payment.total
+              )
+            : rent;
+
+
+        let status =
+          'BELUM JATUH TEMPO';
+
+
+        let outstandingForBill = 0;
+
+
+        if (
+          payment &&
+          payment.verification ===
+          'TERVERIFIKASI'
+        ) {
+
+          verifiedRent +=
+            Math.min(
+              rent,
+              paymentPaid
+            );
+
+
+          verifiedFine +=
+            Math.max(
+              0,
+              paymentPaid -
+              Math.min(
+                rent,
+                paymentPaid
+              )
+            );
+
+
+          if (
+            paymentPaid >=
+            paymentTotal
+          ) {
+
+            status =
+              'LUNAS';
+
+            paidBillCount++;
+
+          } else if (
+            paymentPaid > 0
+          ) {
+
+            status =
+              'KURANG BAYAR';
+
+            shortPaidCount++;
+
+            outstandingForBill =
+              paymentTotal -
+              paymentPaid;
+
+            shortfallAmount +=
+              outstandingForBill;
+
+          }
+
+        } else if (
+          payment &&
+          payment.verification ===
+          'MENUNGGU VERIFIKASI'
+        ) {
+
+          pendingCount++;
+
+          pendingAmount +=
+            paymentPaid;
+
+
+          if (
+            paymentPaid >=
+            paymentTotal &&
+            paymentTotal > 0
+          ) {
+
+            status =
+              'MENUNGGU VERIFIKASI';
+
+          } else if (
+            paymentPaid > 0
+          ) {
+
+            status =
+              'KURANG BAYAR';
+
+            shortPaidCount++;
+
+            outstandingForBill =
+              Math.max(
+                0,
+                paymentTotal -
+                paymentPaid
+              );
+
+            shortfallAmount +=
+              outstandingForBill;
+
+          } else {
+
+            status =
+              'JATUH TEMPO';
+
+          }
+
+        } else if (
+          payment &&
+          payment.verification ===
+          'DITOLAK'
+        ) {
+
+          status =
+            'DITOLAK';
+
+          rejectedCount++;
+
+          rejectedAmount +=
+            paymentTotal;
+
+          outstandingForBill =
+            paymentTotal;
+
+        } else if (
+          asOfDate <
+          dueDate
+        ) {
+
+          status =
+            'BELUM JATUH TEMPO';
+
+          notDueCount++;
+
+          notDueAmount +=
+            rent;
+
+        } else if (
+          asOfDate.getTime() ===
+          dueDate.getTime()
+        ) {
+
+          status =
+            'JATUH TEMPO';
+
+          dueCount++;
+
+          dueAmount +=
+            rent;
+
+          outstandingForBill =
+            rent;
+
+        } else {
+
+          status =
+            'TERLAMBAT';
+
+          overdueCount++;
+
+          overdueAmount +=
+            rent;
+
+          outstandingForBill =
+            rent;
+
+        }
+
+
+        if (
+          status ===
+          'LUNAS'
+        ) {
+
+          statusCount[status]++;
+          statusAmount[status] +=
+            paymentTotal;
+
+        } else {
+
+          statusCount[status]++;
+          statusAmount[status] +=
+            outstandingForBill;
+
+        }
+
+
+        detailRows.push({
+
+          tenantId:
+            tenantId,
+
+          name:
+            payment &&
+            payment.name ||
+            '',
+
+          room:
+            payment &&
+            payment.room ||
+            contract.room ||
+            '',
+
+          dueDate:
+            dueDate,
+
+          status:
+            status,
+
+          expected:
+            paymentTotal,
+
+          paid:
+            paymentPaid,
+
+          outstanding:
+            Math.max(
+              0,
+              outstandingForBill
+            )
+
+        });
+
+      }
+    );
+
+
+  const collectionRate =
+    expectedRevenue > 0
+      ? (
+          verifiedRent /
+          expectedRevenue
+        ) *
+        100
+      : 0;
+
+
+  /*
+   * Untuk laporan keuangan, uang yang sudah disetor tetapi
+   * belum diverifikasi dipisahkan dari pendapatan. Dengan
+   * demikian Master tidak salah menganggapnya sebagai revenue.
+   *
+   * Outstanding hanya memasukkan tagihan yang sudah jatuh
+   * tempo, terlambat, ditolak, atau masih kurang bayar.
+   * Tagihan yang belum jatuh tempo tidak dianggap tunggakan.
+   */
+
+  const outstanding =
+    dueAmount +
+    overdueAmount +
+    shortfallAmount +
+    rejectedAmount;
+
+
+  return {
+
+    asOf:
+      Utilities.formatDate(
+        asOfDate,
+        Session.getScriptTimeZone() ||
+        'Asia/Jakarta',
+        'dd/MM/yyyy HH:mm'
+      ),
+
+    expected:
+      expectedRevenue,
+
+    verifiedRent:
+      verifiedRent,
+
+    verifiedFine:
+      verifiedFine,
+
+    pendingVerification:
+      pendingAmount,
+
+    notDue:
+      notDueAmount,
+
+    due:
+      dueAmount,
+
+    overdue:
+      overdueAmount,
+
+    shortfall:
+      shortfallAmount,
+
+    rejected:
+      rejectedAmount,
+
+    outstanding:
+      outstanding,
+
+    collectionRate:
+      collectionRate,
+
+    billCount:
+      billCount,
+
+    paidBillCount:
+      paidBillCount,
+
+    notDueCount:
+      notDueCount,
+
+    dueCount:
+      dueCount,
+
+    overdueCount:
+      overdueCount,
+
+    shortPaidCount:
+      shortPaidCount,
+
+    pendingCount:
+      pendingCount,
+
+    rejectedCount:
+      rejectedCount,
+
+    statusAmount:
+      statusAmount,
+
+    statusCount:
+      statusCount,
+
+    details:
+      detailRows
+
+  };
+
+}
+
+
+function djFinancePaymentRankV1_(
+  item
+) {
+
+  const verification =
+    String(
+      item &&
+      item.verification ||
+      ''
+    )
+    .trim()
+    .toUpperCase();
+
+
+  const verificationRank =
+
+    verification === 'TERVERIFIKASI'
+      ? 3
+      : (
+          verification === 'MENUNGGU VERIFIKASI'
+            ? 2
+            : (
+                verification === 'DITOLAK'
+                  ? 1
+                  : 0
+              )
+        );
+
+
+  const date =
+    item &&
+    (
+      item.paidDate ||
+      item.verifiedDate
+    );
+
+
+  return (
+    verificationRank * 1000000000000
+  ) +
+  (
+    date instanceof Date
+      ? date.getTime()
+      : 0
+  );
 
 }
 
