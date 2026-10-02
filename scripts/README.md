@@ -16,6 +16,7 @@ Folder ini khusus untuk **backup/source code Google Apps Script dan script backe
 Semua script resmi yang sudah dibackup dikumpulkan di folder `scripts/` berikut:
 
 - `09_FINAL_AUDIT_DJ39.gs`
+- `AI_AGENT_CORE_V1.gs` — fondasi task/orchestration AI; belum terhubung ke router/event produksi
 - `APPROVAL_ENGINE_V2.gs`
 - `CLEAN_MAINTENANCE_TEST_DATA_V1.gs`
 - `DASHBOARD_ENGINE.gs`
@@ -37,7 +38,7 @@ Semua script resmi yang sudah dibackup dikumpulkan di folder `scripts/` berikut:
 - `TENANT_REVISION_ENGINE_V1.gs`
 - `WHATSAPP_AUTO_DJ39.gs`
 
-**Total: 21 official backup files.**
+**Total: 22 official backup files.**
 
 ## Aturan backup
 
