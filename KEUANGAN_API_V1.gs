@@ -2106,10 +2106,17 @@ function djApiMasterSaveExpenseV1_(
     .trim();
 
 
+  const dateInput =
+    String(
+      body.date ||
+      body.tanggal ||
+      ''
+    ).trim();
+
+
   const date =
     djFinanceDateV1_(
-      body.date ||
-      body.tanggal
+      dateInput
     );
 
 
@@ -2318,11 +2325,23 @@ function djApiMasterSaveExpenseV1_(
   );
 
 
+  const sheetDate =
+    new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      12,
+      0,
+      0,
+      0
+    );
+
+
   djFinanceSetValueV1_(
     row,
     headers,
     'Tanggal',
-    date
+    sheetDate
   );
 
 
