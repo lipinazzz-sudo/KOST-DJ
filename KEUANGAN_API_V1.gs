@@ -2187,6 +2187,30 @@ function djApiMasterSaveExpenseV1_(
   }
 
 
+  const financeStartDate =
+    new Date(
+      2027,
+      0,
+      1
+    );
+
+
+  if (
+    date < financeStartDate
+  ) {
+
+    return {
+
+      ok:false,
+
+      error:
+        'Tanggal pengeluaran untuk modul Keuangan minimal 1 Januari 2027.'
+
+    };
+
+  }
+
+
   if (
     /^maintenance$/i.test(
       category
