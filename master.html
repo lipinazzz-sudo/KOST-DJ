@@ -414,7 +414,7 @@ button{
 
 .finance-toolbar{
     display:grid;
-    grid-template-columns:minmax(180px,220px) minmax(180px,220px) auto;
+    grid-template-columns:minmax(180px,220px) minmax(180px,220px) minmax(240px,1fr) auto;
     gap:10px;
     align-items:end;
     margin:18px 0;
@@ -935,6 +935,105 @@ button{
         grid-template-columns:1fr;
     }
 }
+
+.finance-report-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+    margin-top:16px;
+}
+
+.finance-report-sheet{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    overflow:hidden;
+}
+
+.finance-report-title{
+    padding:18px 20px 8px;
+}
+
+.finance-report-title h3{
+    margin:0;
+    font-size:18px;
+}
+
+.finance-report-title p{
+    margin:5px 0 0;
+    color:#667085;
+    font-size:12px;
+}
+
+.finance-report-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.finance-report-table td{
+    padding:10px 20px;
+    border-bottom:1px solid #edf0f4;
+    font-size:12px;
+}
+
+.finance-report-table td:last-child{
+    text-align:right;
+    font-weight:800;
+}
+
+.finance-report-table tr:last-child td{
+    border-bottom:0;
+}
+
+.finance-report-total td{
+    padding-top:13px;
+    padding-bottom:13px;
+    font-weight:900;
+    border-top:1px solid #dfe4ec;
+}
+
+.finance-report-note{
+    padding:12px 20px 18px;
+    color:#667085;
+    font-size:11px;
+    line-height:1.5;
+}
+
+@media print{
+    body *{
+        visibility:hidden !important;
+    }
+
+    .finance-print-report,
+    .finance-print-report *{
+        visibility:visible !important;
+    }
+
+    .finance-print-report{
+        position:absolute !important;
+        left:0 !important;
+        top:0 !important;
+        width:100% !important;
+        margin:0 !important;
+        border:0 !important;
+        box-shadow:none !important;
+        background:#fff !important;
+    }
+
+    .finance-report-print-only{
+        display:block !important;
+    }
+
+    @page{
+        size:A4;
+        margin:12mm;
+    }
+}
+
+.finance-report-print-only{
+    display:none;
+}
+
 
 /* =========================================================
    PAYMENT MONITORING + WHATSAPP CONTACT CENTER
@@ -2707,6 +2806,14 @@ button{
                             + Tambah Pengeluaran
                         </button>
 
+                        <button
+                            class="btn btn-secondary"
+                            type="button"
+                            onclick="printFinanceReport()"
+                        >
+                            Cetak Laporan
+                        </button>
+
                     </div>
 
                     <div
@@ -2823,6 +2930,44 @@ button{
                         <div
                             id="financeRoomBox"
                             class="finance-panel-body table-wrap"
+                        ></div>
+
+                    </div>
+
+
+                    <div
+                        id="financePrintReport"
+                        class="finance-print-report"
+                    >
+
+                        <div class="finance-report-title">
+
+                            <h3>
+                                Laporan Keuangan Periode
+                            </h3>
+
+                            <p
+                                id="financeReportPeriodLabel"
+                            >
+                                —
+                            </p>
+
+                        </div>
+
+                        <div
+                            id="financeReportBox"
+                            class="finance-report-grid"
+                        ></div>
+
+                        <div
+                            class="finance-report-note"
+                        >
+                            Basis laporan: pendapatan diakui dari pembayaran yang sudah terverifikasi; pengeluaran mencakup Maintenance dan Pengeluaran Umum yang tercatat pada periode laporan. Deposit tidak diperlakukan sebagai pendapatan.
+                        </div>
+
+                        <div
+                            class="finance-report-print-only"
+                            id="financeReportGeneratedAt"
                         ></div>
 
                     </div>
@@ -11348,6 +11493,13 @@ async function loadFinance(){
 
         document
             .getElementById(
+                "financeReportBox"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
                 "financeMonthlyBox"
             )
             .innerHTML =
@@ -11544,6 +11696,11 @@ function renderFinance(){
 
     renderFinanceRooms(
         financeData.roomAnalysis
+    );
+
+    renderFinanceReport(
+        summary,
+        financeData.annual
     );
 
     renderFinanceMonthly();
@@ -12524,6 +12681,343 @@ function renderFinanceRooms(
     renderTable(
         'ALL'
     );
+
+}
+
+
+function renderFinanceReport(
+    summary,
+    annual
+){
+
+    const box =
+        document.getElementById(
+            "financeReportBox"
+        );
+
+
+    const labelBox =
+        document.getElementById(
+            "financeReportPeriodLabel"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    const periodLabel =
+        summary &&
+        summary.label
+            ? summary.label
+            : "Periode laporan";
+
+
+    if(labelBox){
+
+        labelBox.textContent =
+            periodLabel +
+            " · Tahun " +
+            String(
+                summary &&
+                summary.year ||
+                financeYear
+            );
+
+    }
+
+
+    const metrics = [
+
+        {
+            title:
+                "Laporan Laba Rugi",
+
+            rows: [
+
+                [
+                    "Pendapatan Sewa",
+                    financeMoney(
+                        summary &&
+                        summary.rentRevenue
+                    )
+                ],
+
+                [
+                    "Pendapatan Denda",
+                    financeMoney(
+                        summary &&
+                        summary.fineRevenue
+                    )
+                ],
+
+                [
+                    "Total Pendapatan",
+                    financeMoney(
+                        summary &&
+                        summary.revenue
+                    ),
+                    "total"
+                ],
+
+                [
+                    "Biaya Maintenance",
+                    financeMoney(
+                        summary &&
+                        summary.maintenanceExpense
+                    )
+                ],
+
+                [
+                    "Pengeluaran Umum",
+                    financeMoney(
+                        summary &&
+                        summary.generalExpense
+                    )
+                ],
+
+                [
+                    "Total Pengeluaran",
+                    financeMoney(
+                        summary &&
+                        summary.expense
+                    ),
+                    "total"
+                ],
+
+                [
+                    "Profit Bersih",
+                    financeMoney(
+                        summary &&
+                        summary.netProfit
+                    ),
+                    "total"
+                ],
+
+                [
+                    "Net Margin",
+                    financePercent(
+                        summary &&
+                        summary.netMargin
+                    )
+                ]
+
+            ]
+
+        },
+
+        {
+            title:
+                "Arus Kas & Penagihan",
+
+            rows: [
+
+                [
+                    "Uang Masuk",
+                    financeMoney(
+                        summary &&
+                        summary.cashIn
+                    )
+                ],
+
+                [
+                    "Uang Keluar",
+                    financeMoney(
+                        summary &&
+                        summary.expense
+                    )
+                ],
+
+                [
+                    "Arus Kas Bersih",
+                    financeMoney(
+                        summary &&
+                        summary.arusKasBersih
+                    ),
+                    "total"
+                ],
+
+                [
+                    "Potensi Pendapatan",
+                    financeMoney(
+                        summary &&
+                        summary.expectedRevenue
+                    )
+                ],
+
+                [
+                    "Belum Tertagih",
+                    financeMoney(
+                        summary &&
+                        summary.outstanding
+                    )
+                ],
+
+                [
+                    "Collection Rate",
+                    financePercent(
+                        summary &&
+                        summary.collectionRate
+                    )
+                ],
+
+                [
+                    "Occupancy",
+                    String(
+                        Number(
+                            summary &&
+                            summary.occupiedRooms ||
+                            0
+                        )
+                    ) +
+                    " / " +
+                    String(
+                        Number(
+                            summary &&
+                            summary.rentableRooms ||
+                            0
+                        )
+                    ) +
+                    " · " +
+                    financePercent(
+                        summary &&
+                        summary.occupancyRate
+                    )
+                ]
+
+            ]
+
+        }
+
+    ];
+
+
+    box.innerHTML =
+        metrics
+            .map(
+                function(sheet){
+
+                    return (
+
+                        '<div class="finance-report-sheet">' +
+
+                        '<div class="finance-report-title">' +
+
+                        '<h3>' +
+                        escapeHtml(
+                            sheet.title
+                        ) +
+                        '</h3>' +
+
+                        '</div>' +
+
+                        '<table class="finance-report-table">' +
+
+                        '<tbody>' +
+
+                        sheet.rows
+                            .map(
+                                function(row){
+
+                                    return (
+                                        '<tr class="' +
+                                        (
+                                            row[2]
+                                                ? "finance-report-total"
+                                                : ""
+                                        ) +
+                                        '">' +
+
+                                        '<td>' +
+                                        escapeHtml(
+                                            row[0]
+                                        ) +
+                                        '</td>' +
+
+                                        '<td>' +
+                                        escapeHtml(
+                                            row[1]
+                                        ) +
+                                        '</td>' +
+
+                                        '</tr>'
+                                    );
+
+                                }
+                            )
+                            .join("") +
+
+                        '</tbody>' +
+
+                        '</table>' +
+
+                        '</div>'
+
+                    );
+
+                }
+            )
+            .join("");
+
+
+    const generatedAt =
+        document.getElementById(
+            "financeReportGeneratedAt"
+        );
+
+
+    if(generatedAt){
+
+        generatedAt.textContent =
+            "Dicetak dari Master DJ Family Kost · " +
+            new Intl.DateTimeFormat(
+                "id-ID",
+                {
+                    dateStyle:
+                        "long",
+                    timeStyle:
+                        "short",
+                    timeZone:
+                        "Asia/Jakarta"
+                }
+            )
+            .format(
+                new Date()
+            );
+
+    }
+
+}
+
+
+function printFinanceReport(){
+
+    const summary =
+        financeSelectedSummary();
+
+
+    if(!summary){
+
+        alert(
+            "Laporan keuangan belum selesai dimuat."
+        );
+
+        return;
+
+    }
+
+
+    renderFinanceReport(
+        summary,
+        financeData &&
+        financeData.annual
+    );
+
+
+    window.print();
 
 }
 
