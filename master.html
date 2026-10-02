@@ -2103,6 +2103,190 @@ button{
 
 }
 
+
+/* =========================================================
+   AI ASSISTANT
+   ========================================================= */
+
+.ai-nav-button{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.ai-nav-label{
+    min-width:0;
+}
+
+.ai-badge{
+    min-width:22px;
+    height:22px;
+    padding:0 6px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    background:#b42318;
+    color:#fff;
+    font-size:10px;
+    font-weight:900;
+    line-height:1;
+}
+
+.ai-badge.show{
+    display:inline-flex;
+}
+
+.ai-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:18px;
+    padding:13px 15px;
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+}
+
+.ai-kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+    margin-top:14px;
+}
+
+.ai-kpi{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+    padding:15px;
+}
+
+.ai-kpi span{
+    display:block;
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.ai-kpi strong{
+    display:block;
+    margin-top:6px;
+    font-size:24px;
+}
+
+.ai-task-list{
+    display:grid;
+    gap:12px;
+    margin-top:14px;
+}
+
+.ai-task{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    padding:17px;
+}
+
+.ai-task-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.ai-task-title{
+    margin:0;
+    font-size:16px;
+    font-weight:900;
+}
+
+.ai-task-meta{
+    margin-top:5px;
+    color:#667085;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.ai-task-summary{
+    margin-top:12px;
+    color:#344054;
+    font-size:13px;
+    line-height:1.65;
+    white-space:pre-wrap;
+}
+
+.ai-task-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px;
+    margin-top:13px;
+}
+
+.ai-task-field{
+    padding:10px 11px;
+    background:#f8fafc;
+    border:1px solid #edf0f4;
+    border-radius:10px;
+}
+
+.ai-task-field span{
+    display:block;
+    color:#667085;
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+}
+
+.ai-task-field strong{
+    display:block;
+    margin-top:4px;
+    font-size:12px;
+    word-break:break-word;
+}
+
+.ai-task-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:14px;
+}
+
+.ai-task-note{
+    margin-top:10px;
+    color:#667085;
+    font-size:11px;
+    line-height:1.55;
+}
+
+@media(max-width:900px){
+    .ai-kpi-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .ai-task-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:600px){
+    .ai-toolbar{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .ai-kpi-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .ai-task-grid{
+        grid-template-columns:1fr;
+    }
+}
+
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
@@ -2293,6 +2477,24 @@ button{
                 >
                     Pendaftaran
                 </button>
+
+
+                <button
+                    data-panel="ai"
+                    class="ai-nav-button"
+                >
+                    <span class="ai-nav-label">
+                        AI Assistant
+                    </span>
+
+                    <span
+                        id="aiNavBadge"
+                        class="ai-badge"
+                    >
+                        0
+                    </span>
+                </button>
+
 
                 <button
                     data-panel="tenants"
@@ -2529,6 +2731,67 @@ button{
                     </div>
 
                 </section>
+
+
+                <!-- ==========================================
+                     AI ASSISTANT
+                     ========================================== -->
+
+                <section
+                    id="panel-ai"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        AI Assistant
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Inbox operasional AI. Master tetap menjadi pengambil keputusan.
+                        Aksi internal akan diteruskan ke business engine yang sudah ada.
+                        Maintenance dan Laundry hanya menyiapkan pesan untuk disalin.
+                    </p>
+
+                    <div class="ai-toolbar">
+
+                        <div>
+                            <strong>
+                                Master Inbox
+                            </strong>
+
+                            <div class="small">
+                                Task berasal dari Payment, Pendaftaran, Maintenance, dan Laundry.
+                            </div>
+                        </div>
+
+                        <button
+                            id="refreshAIButton"
+                            class="btn btn-secondary"
+                            type="button"
+                        >
+                            Refresh AI
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="aiKpiGrid"
+                        class="ai-kpi-grid"
+                    ></div>
+
+                    <div
+                        id="aiTaskList"
+                        class="ai-task-list"
+                    >
+                        <div class="card card-padding">
+                            <div class="loading">
+                                Memuat AI Assistant...
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
 
 
                 <!-- ==========================================
@@ -4467,6 +4730,13 @@ async function loadPanel(
 
     }else if(
         panelName ===
+        "ai"
+    ){
+
+        await loadAIAssistant();
+
+    }else if(
+        panelName ===
         "registrations"
     ){
 
@@ -4569,6 +4839,1131 @@ async function loadPanel(
 
 
 /* ============================================================
+   AI ASSISTANT
+   ============================================================ */
+
+let aiItems = [];
+
+
+function getAICoreLabel(
+    core
+){
+
+    const map = {
+        PAYMENT:
+            "Payment",
+        REGISTRATION:
+            "Pendaftaran",
+        MAINTENANCE:
+            "Maintenance",
+        LAUNDRY:
+            "Laundry"
+    };
+
+    return (
+        map[
+            String(
+                core || ""
+            ).toUpperCase()
+        ] ||
+        String(
+            core || "AI"
+        )
+    );
+
+}
+
+
+function refreshAIBadge(){
+
+    if(
+        !masterSession
+    ){
+
+        return;
+
+    }
+
+    api(
+        "masterAIInbox"
+    )
+    .then(
+        function(data){
+
+            const items =
+                data &&
+                Array.isArray(
+                    data.items
+                )
+                    ? data.items
+                    : [];
+
+            const badge =
+                document.getElementById(
+                    "aiNavBadge"
+                );
+
+            if(!badge){
+
+                return;
+
+            }
+
+            const count =
+                items.length;
+
+            badge.textContent =
+                count > 99
+                    ? "99+"
+                    : String(
+                        count
+                    );
+
+            badge.classList.toggle(
+                "show",
+                count > 0
+            );
+
+        }
+    )
+    .catch(
+        function(){
+            /* Badge gagal dimuat tidak boleh
+               mengganggu dashboard utama. */
+        }
+    );
+
+}
+
+
+async function loadAIAssistant(){
+
+    const list =
+        document.getElementById(
+            "aiTaskList"
+        );
+
+    const kpi =
+        document.getElementById(
+            "aiKpiGrid"
+        );
+
+    if(!list){
+
+        return;
+
+    }
+
+    list.innerHTML =
+        '<div class="card card-padding">' +
+        '<div class="loading">Memuat AI Assistant...</div>' +
+        '</div>';
+
+    try{
+
+        const data =
+            await api(
+                "masterAIInbox"
+            );
+
+        aiItems =
+            data &&
+            Array.isArray(
+                data.items
+            )
+                ? data.items
+                : [];
+
+        renderAIAssistant();
+
+    }catch(error){
+
+        list.innerHTML =
+            '<div class="card card-padding">' +
+            '<div class="empty" style="color:#b42318;">' +
+            escapeHtml(
+                error.message
+            ) +
+            '</div>' +
+            '</div>';
+
+        if(kpi){
+            kpi.innerHTML = "";
+        }
+
+    }
+
+}
+
+
+function renderAIAssistant(){
+
+    const kpi =
+        document.getElementById(
+            "aiKpiGrid"
+        );
+
+    const list =
+        document.getElementById(
+            "aiTaskList"
+        );
+
+    if(!kpi || !list){
+
+        return;
+
+    }
+
+    const counts = {
+        total:
+            aiItems.length,
+        payment:0,
+        registration:0,
+        maintenance:0,
+        laundry:0
+    };
+
+    aiItems.forEach(
+        function(item){
+
+            const core =
+                String(
+                    item.Core || ""
+                ).toUpperCase();
+
+            if(core === "PAYMENT"){
+                counts.payment++;
+            }else if(core === "REGISTRATION"){
+                counts.registration++;
+            }else if(core === "MAINTENANCE"){
+                counts.maintenance++;
+            }else if(core === "LAUNDRY"){
+                counts.laundry++;
+            }
+
+        }
+    );
+
+    kpi.innerHTML =
+        [
+            ["Semua Task",counts.total],
+            ["Payment",counts.payment],
+            ["Pendaftaran",counts.registration],
+            ["Operasional",counts.maintenance + counts.laundry]
+        ]
+        .map(
+            function(item){
+
+                return (
+                    '<div class="ai-kpi">' +
+                    '<span>' +
+                    escapeHtml(
+                        item[0]
+                    ) +
+                    '</span>' +
+                    '<strong>' +
+                    escapeHtml(
+                        item[1]
+                    ) +
+                    '</strong>' +
+                    '</div>'
+                );
+
+            }
+        )
+        .join("");
+
+
+    if(
+        !aiItems.length
+    ){
+
+        list.innerHTML =
+            '<div class="card card-padding">' +
+            '<div class="empty">' +
+            'Tidak ada task AI yang menunggu perhatian Master.' +
+            '</div>' +
+            '</div>';
+
+        refreshAIBadge();
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        aiItems
+            .map(
+                renderAITask
+            )
+            .join("");
+
+    refreshAIBadge();
+
+}
+
+
+function renderAITask(
+    item
+){
+
+    const actionId =
+        String(
+            item.Action_ID || ""
+        ).trim();
+
+    const core =
+        String(
+            item.Core || ""
+        ).trim().toUpperCase();
+
+    const status =
+        String(
+            item.Status || "PENDING"
+        ).trim().toUpperCase();
+
+    const tenant =
+        String(
+            item.Tenant_Name ||
+            item.tenantName ||
+            item.Tenant_ID ||
+            "—"
+        );
+
+    const allowed =
+        Array.isArray(
+            item.allowedActions
+        )
+            ? item.allowedActions
+            : [];
+
+    let actions = "";
+
+    if(
+        core === "PAYMENT"
+    ){
+
+        if(
+            allowed.indexOf(
+                "PAYMENT_APPROVE"
+            ) >= 0
+        ){
+
+            actions +=
+                '<button class="btn btn-success" onclick="aiRunAction(\'' +
+                escapeHtml(
+                    actionId
+                ) +
+                '\',\'PAYMENT_APPROVE\')">' +
+                'SETUJUI' +
+                '</button>';
+
+        }
+
+        if(
+            allowed.indexOf(
+                "PAYMENT_REJECT"
+            ) >= 0
+        ){
+
+            actions +=
+                '<button class="btn btn-danger" onclick="aiRejectPayment(\'' +
+                escapeHtml(
+                    actionId
+                ) +
+                '\')">' +
+                'TOLAK' +
+                '</button>';
+
+        }
+
+    }else if(
+        core === "REGISTRATION"
+    ){
+
+        if(
+            allowed.indexOf(
+                "REGISTRATION_APPROVE"
+            ) >= 0
+        ){
+
+            actions +=
+                '<button class="btn btn-success" onclick="aiOpenRegistrationApprove(\'' +
+                escapeHtml(
+                    actionId
+                ) +
+                '\',\'' +
+                escapeHtml(
+                    String(
+                        item.Room || ""
+                    )
+                ) +
+                '\')">' +
+                'SETUJUI' +
+                '</button>';
+
+        }
+
+    }else if(
+        core === "MAINTENANCE"
+    ){
+
+        actions +=
+            '<button class="btn btn-secondary" onclick="aiCopyMaintenance(\'' +
+            escapeHtml(
+                actionId
+            ) +
+            '\')">' +
+            'COPY PESAN' +
+            '</button>';
+
+        actions +=
+            '<button class="btn btn-success" onclick="aiRunAction(\'' +
+            escapeHtml(
+                actionId
+            ) +
+            '\',\'ACKNOWLEDGE\')">' +
+            'TANDAI DIBACA' +
+            '</button>';
+
+    }else if(
+        core === "LAUNDRY"
+    ){
+
+        actions +=
+            '<button class="btn btn-secondary" onclick="aiCopyLaundry(\'' +
+            escapeHtml(
+                actionId
+            ) +
+            '\')">' +
+            'COPY PESAN' +
+            '</button>';
+
+        actions +=
+            '<button class="btn btn-success" onclick="aiRunAction(\'' +
+            escapeHtml(
+                actionId
+            ) +
+            '\',\'ACKNOWLEDGE\')">' +
+            'TANDAI DIBACA' +
+            '</button>';
+
+    }
+
+
+    if(
+        allowed.indexOf(
+            "SNOOZE"
+        ) >= 0
+    ){
+
+        actions +=
+            '<button class="btn btn-warning" onclick="aiSnooze(\'' +
+            escapeHtml(
+                actionId
+            ) +
+            '\')">' +
+            'NANTI DULU' +
+            '</button>';
+
+    }
+
+
+    return (
+        '<article class="ai-task">' +
+
+        '<div class="ai-task-head">' +
+
+        '<div>' +
+
+        '<h3 class="ai-task-title">' +
+        escapeHtml(
+            item.Title ||
+            getAICoreLabel(
+                core
+            )
+        ) +
+        '</h3>' +
+
+        '<div class="ai-task-meta">' +
+        escapeHtml(
+            getAICoreLabel(
+                core
+            )
+        ) +
+        ' · ' +
+        escapeHtml(
+            actionId
+        ) +
+        ' · ' +
+        escapeHtml(
+            item.Event_Type ||
+            ""
+        ) +
+        '</div>' +
+
+        '</div>' +
+
+        '<span class="badge ' +
+        (
+            status === "INFO"
+                ? "badge-info"
+                : "badge-warn"
+        ) +
+        '">' +
+        escapeHtml(
+            status
+        ) +
+        '</span>' +
+
+        '</div>' +
+
+        '<div class="ai-task-summary">' +
+        escapeHtml(
+            item.Summary ||
+            "Tidak ada ringkasan."
+        ) +
+        '</div>' +
+
+        '<div class="ai-task-grid">' +
+
+        '<div class="ai-task-field">' +
+        '<span>Tenant</span>' +
+        '<strong>' +
+        escapeHtml(
+            tenant
+        ) +
+        '</strong>' +
+        '</div>' +
+
+        '<div class="ai-task-field">' +
+        '<span>Kamar</span>' +
+        '<strong>' +
+        escapeHtml(
+            item.Room ||
+            "—"
+        ) +
+        '</strong>' +
+        '</div>' +
+
+        '<div class="ai-task-field">' +
+        '<span>Nominal</span>' +
+        '<strong>' +
+        (
+            Number(
+                item.amount || 0
+            ) > 0
+                ? money(
+                    item.amount
+                )
+                : "—"
+        ) +
+        '</strong>' +
+        '</div>' +
+
+        '<div class="ai-task-field">' +
+        '<span>Periode</span>' +
+        '<strong>' +
+        escapeHtml(
+            item.Period ||
+            "—"
+        ) +
+        '</strong>' +
+        '</div>' +
+
+        '</div>' +
+
+        (
+            item.Proof_URL ||
+            item.proofUrl
+                ? (
+                    '<div class="ai-task-actions">' +
+                    '<a class="btn btn-light" target="_blank" rel="noopener" href="' +
+                    escapeHtml(
+                        item.Proof_URL ||
+                        item.proofUrl
+                    ) +
+                    '">' +
+                    'BUKA BUKTI PEMBAYARAN' +
+                    '</a>' +
+                    '</div>'
+                )
+                : ""
+        ) +
+
+        '<div class="ai-task-actions">' +
+        actions +
+        '</div>' +
+
+        (
+            core === "REGISTRATION"
+                ? (
+                    '<div class="ai-task-note">' +
+                    'SETUJUI menggunakan kamar yang dipilih akan memanggil approval engine existing.' +
+                    ' Tombol Revisi/Tolak belum dibuat aktif di AI karena adapter production-nya belum terpetakan.' +
+                    '</div>'
+                )
+                : ""
+        ) +
+
+        '</article>'
+    );
+
+}
+
+
+async function aiRunAction(
+    actionId,
+    command,
+    options
+){
+
+    try{
+
+        const result =
+            await api(
+                "masterAIAction",
+                {
+                    actionId:
+                        actionId,
+                    command:
+                        command,
+                    options:
+                        options || {}
+                }
+            );
+
+        alert(
+            result &&
+            result.message
+                ? result.message
+                : "Aksi AI berhasil diproses."
+        );
+
+        await loadAIAssistant();
+
+        await loadDashboard();
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+async function aiRejectPayment(
+    actionId
+){
+
+    const reason =
+        prompt(
+            "Alasan penolakan pembayaran:",
+            ""
+        );
+
+    if(
+        reason ===
+        null
+    ){
+
+        return;
+
+    }
+
+    if(
+        !reason.trim()
+    ){
+
+        alert(
+            "Alasan penolakan wajib diisi."
+        );
+
+        return;
+
+    }
+
+    await aiRunAction(
+        actionId,
+        "PAYMENT_REJECT",
+        {
+            reason:
+                reason.trim()
+        }
+    );
+
+}
+
+
+function aiOpenRegistrationApprove(
+    actionId,
+    currentRoom
+){
+
+    api(
+        "masterRegistrations"
+    )
+    .then(
+        function(data){
+
+            const rooms =
+                data &&
+                Array.isArray(
+                    data.availableRooms
+                )
+                    ? data.availableRooms.slice()
+                    : [];
+
+            const current =
+                String(
+                    currentRoom || ""
+                ).trim();
+
+            if(
+                current &&
+                !rooms.some(
+                    function(room){
+                        return String(
+                            room.number || ""
+                        ) === current;
+                    }
+                )
+            ){
+
+                rooms.push({
+                    number:
+                        current,
+                    status:
+                        "KAMAR SAAT INI",
+                    price:
+                        ""
+                });
+
+            }
+
+            rooms.sort(
+                function(a,b){
+                    return Number(
+                        a.number || 0
+                    ) -
+                    Number(
+                        b.number || 0
+                    );
+                }
+            );
+
+            const optionsHtml =
+                rooms.length
+                    ? rooms.map(
+                        function(room){
+
+                            const number =
+                                String(
+                                    room.number || ""
+                                );
+
+                            const selected =
+                                number === current
+                                    ? " selected"
+                                    : "";
+
+                            return (
+                                '<option value="' +
+                                escapeHtml(
+                                    number
+                                ) +
+                                '"' +
+                                selected +
+                                '>' +
+                                escapeHtml(
+                                    number
+                                ) +
+                                (
+                                    room.price
+                                        ? " · " +
+                                          money(
+                                              room.price
+                                          )
+                                        : ""
+                                ) +
+                                '</option>'
+                            );
+
+                        }
+                    ).join("")
+                    : '<option value="">Tidak ada kamar tersedia</option>';
+
+            openModal(
+                "Setujui Pendaftaran",
+                '<div class="field">' +
+                '<label for="aiRegistrationRoomSelect">Kamar final</label>' +
+                '<select id="aiRegistrationRoomSelect">' +
+                optionsHtml +
+                '</select>' +
+                '</div>' +
+
+                '<div class="small" style="margin-top:10px;">' +
+                'AI akan memanggil approval engine existing setelah Master mengonfirmasi.' +
+                '</div>' +
+
+                '<div class="actions" style="margin-top:16px;">' +
+                '<button class="btn btn-success" onclick="aiConfirmRegistrationApprove(\'' +
+                escapeHtml(
+                    actionId
+                ) +
+                '\')">' +
+                'KONFIRMASI SETUJUI' +
+                '</button>' +
+                '</div>'
+            );
+
+        }
+    )
+    .catch(
+        function(error){
+
+            alert(
+                error.message
+            );
+
+        }
+    );
+
+}
+
+
+async function aiConfirmRegistrationApprove(
+    actionId
+){
+
+    const select =
+        document.getElementById(
+            "aiRegistrationRoomSelect"
+        );
+
+    const room =
+        select
+            ? String(
+                select.value || ""
+              ).trim()
+            : "";
+
+    if(!room){
+
+        alert(
+            "Kamar final wajib dipilih."
+        );
+
+        return;
+
+    }
+
+    closeModal();
+
+    await aiRunAction(
+        actionId,
+        "REGISTRATION_APPROVE",
+        {
+            finalRoom:
+                room
+        }
+    );
+
+}
+
+
+async function aiSnooze(
+    actionId
+){
+
+    const defaultUntil =
+        new Date(
+            Date.now() +
+            (
+                4 *
+                60 *
+                60 *
+                1000
+            )
+        );
+
+    const value =
+        prompt(
+            "Tunda sampai (ISO 8601):",
+            defaultUntil.toISOString()
+        );
+
+    if(
+        value ===
+        null
+    ){
+
+        return;
+
+    }
+
+    await aiRunAction(
+        actionId,
+        "SNOOZE",
+        {
+            snoozeUntil:
+                value.trim()
+        }
+    );
+
+}
+
+
+function aiCopyText(
+    textValue
+){
+
+    const value =
+        String(
+            textValue || ""
+        );
+
+    if(
+        navigator.clipboard &&
+        window.isSecureContext
+    ){
+
+        navigator.clipboard
+            .writeText(
+                value
+            )
+            .then(
+                function(){
+                    alert(
+                        "Pesan berhasil disalin."
+                    );
+                }
+            )
+            .catch(
+                function(){
+                    aiCopyTextFallback(
+                        value
+                    );
+                }
+            );
+
+        return;
+
+    }
+
+    aiCopyTextFallback(
+        value
+    );
+
+}
+
+
+function aiCopyTextFallback(
+    value
+){
+
+    const area =
+        document.createElement(
+            "textarea"
+        );
+
+    area.value =
+        value;
+
+    area.style.position =
+        "fixed";
+
+    area.style.opacity =
+        "0";
+
+    document.body.appendChild(
+        area
+    );
+
+    area.select();
+
+    try{
+        document.execCommand(
+            "copy"
+        );
+        alert(
+            "Pesan berhasil disalin."
+        );
+    }catch(error){
+        alert(
+            "Pesan tidak dapat disalin otomatis."
+        );
+    }
+
+    area.remove();
+
+}
+
+
+function aiBuildMaintenanceMessage(
+    item
+){
+
+    return [
+        "🔧 DJ FAMILY KOST",
+        "LAPORAN MAINTENANCE",
+        "",
+        "Maintenance ID : " +
+            String(
+                item.Reference_ID ||
+                "—"
+            ),
+        "Kamar          : " +
+            String(
+                item.Room ||
+                "—"
+            ),
+        "Tenant         : " +
+            String(
+                item.Tenant_Name ||
+                item.Tenant_ID ||
+                "—"
+            ),
+        "",
+        "Detail:",
+        String(
+            item.Summary ||
+            "Mohon dilakukan pengecekan."
+        ),
+        "",
+        "Mohon dilakukan pengecekan dan tindak lanjut.",
+        "",
+        "DJ Family Kost"
+    ].join("\n");
+
+}
+
+
+function aiBuildLaundryMessage(
+    item
+){
+
+    return [
+        "🧺 DJ FAMILY KOST",
+        "ORDER LAUNDRY",
+        "",
+        "Laundry ID     : " +
+            String(
+                item.Reference_ID ||
+                "—"
+            ),
+        "Kamar          : " +
+            String(
+                item.Room ||
+                "—"
+            ),
+        "Tenant         : " +
+            String(
+                item.Tenant_Name ||
+                item.Tenant_ID ||
+                "—"
+            ),
+        "",
+        "Detail:",
+        String(
+            item.Summary ||
+            "Order laundry baru diterima."
+        ),
+        "",
+        "Mohon dilakukan penjemputan.",
+        "",
+        "DJ Family Kost"
+    ].join("\n");
+
+}
+
+
+function aiCopyMaintenance(
+    actionId
+){
+
+    const item =
+        aiItems.find(
+            function(row){
+                return String(
+                    row.Action_ID || ""
+                ) ===
+                String(
+                    actionId || ""
+                );
+            }
+        );
+
+    if(!item){
+
+        alert(
+            "Task AI tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    aiCopyText(
+        aiBuildMaintenanceMessage(
+            item
+        )
+    );
+
+}
+
+
+function aiCopyLaundry(
+    actionId
+){
+
+    const item =
+        aiItems.find(
+            function(row){
+                return String(
+                    row.Action_ID || ""
+                ) ===
+                String(
+                    actionId || ""
+                );
+            }
+        );
+
+    if(!item){
+
+        alert(
+            "Task AI tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    aiCopyText(
+        aiBuildLaundryMessage(
+            item
+        )
+    );
+
+}
+
+
+document
+    .getElementById(
+        "refreshAIButton"
+    )
+    ?.addEventListener(
+        "click",
+        loadAIAssistant
+    );
+
+
+
+/* ============================================================
    DASHBOARD
    ============================================================ */
 
@@ -4602,6 +5997,8 @@ async function loadDashboard(){
         dashboardData.rooms ||
         []
     );
+
+    refreshAIBadge();
 
 }
 
