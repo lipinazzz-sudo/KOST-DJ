@@ -408,6 +408,249 @@ button{
     font-size:28px;
 }
 
+/* =========================================================
+   FINANCE
+   ========================================================= */
+
+.finance-toolbar{
+    display:grid;
+    grid-template-columns:minmax(180px,220px) minmax(180px,220px) auto;
+    gap:10px;
+    align-items:end;
+    margin:18px 0;
+}
+
+.finance-toolbar .field{
+    margin:0;
+}
+
+.finance-kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
+    margin-top:18px;
+}
+
+.finance-kpi{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    padding:18px;
+}
+
+.finance-kpi span{
+    display:block;
+    color:#667085;
+    font-size:12px;
+    font-weight:800;
+}
+
+.finance-kpi strong{
+    display:block;
+    margin-top:7px;
+    font-size:25px;
+    line-height:1.2;
+}
+
+.finance-kpi small{
+    display:block;
+    margin-top:7px;
+    color:#98a2b3;
+    font-size:11px;
+    line-height:1.45;
+}
+
+.finance-kpi.positive strong{
+    color:#027a48;
+}
+
+.finance-kpi.negative strong{
+    color:#b42318;
+}
+
+.finance-secondary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+    margin-top:12px;
+}
+
+.finance-secondary{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:14px;
+    padding:14px 15px;
+}
+
+.finance-secondary span{
+    display:block;
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.finance-secondary strong{
+    display:block;
+    margin-top:5px;
+    font-size:18px;
+}
+
+.finance-panels{
+    display:grid;
+    grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);
+    gap:16px;
+    margin-top:16px;
+}
+
+.finance-panel{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    overflow:hidden;
+}
+
+.finance-panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:16px 18px;
+    border-bottom:1px solid #edf0f4;
+}
+
+.finance-panel-head h3{
+    margin:0;
+    font-size:16px;
+}
+
+.finance-panel-body{
+    padding:16px 18px;
+}
+
+.finance-month-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.finance-month-table th,
+.finance-month-table td{
+    padding:10px 8px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+    font-size:12px;
+    vertical-align:middle;
+}
+
+.finance-month-table th{
+    color:#667085;
+    font-size:11px;
+    background:#fafbfc;
+}
+
+.finance-month-table tr:last-child td{
+    border-bottom:0;
+}
+
+.finance-bar{
+    height:8px;
+    border-radius:999px;
+    background:#eef2f6;
+    overflow:hidden;
+    min-width:110px;
+}
+
+.finance-bar > span{
+    display:block;
+    height:100%;
+    background:#17213a;
+    border-radius:999px;
+}
+
+.finance-breakdown-list{
+    display:grid;
+    gap:9px;
+}
+
+.finance-breakdown-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:12px;
+    align-items:center;
+}
+
+.finance-breakdown-main{
+    min-width:0;
+}
+
+.finance-breakdown-label{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.finance-breakdown-track{
+    margin-top:6px;
+    height:7px;
+    border-radius:999px;
+    background:#eef2f6;
+    overflow:hidden;
+}
+
+.finance-breakdown-track span{
+    display:block;
+    height:100%;
+    border-radius:999px;
+    background:#52658c;
+}
+
+.finance-breakdown-amount{
+    font-size:12px;
+    font-weight:900;
+    white-space:nowrap;
+}
+
+.finance-recent{
+    margin-top:16px;
+}
+
+.finance-status-note{
+    margin:0;
+    color:#667085;
+    font-size:12px;
+    line-height:1.55;
+}
+
+@media(max-width:1100px){
+    .finance-kpi-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .finance-secondary-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .finance-panels{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .finance-toolbar{
+        grid-template-columns:1fr;
+    }
+
+    .finance-toolbar .btn{
+        width:100%;
+    }
+
+    .finance-kpi-grid,
+    .finance-secondary-grid{
+        grid-template-columns:1fr;
+    }
+}
+
 
 /* =========================================================
    PAYMENT MONITORING + WHATSAPP CONTACT CENTER
@@ -1442,6 +1685,13 @@ button{
                 </button>
 
                 <button
+                    data-panel="finance"
+                >
+                    Keuangan
+                </button>
+
+
+                <button
                     data-panel="automation"
                 >
                     Otomasi
@@ -2122,6 +2372,150 @@ button{
                      OTOMASI
                      ========================================== -->
 
+                <!-- ==========================================
+                     KEUANGAN
+                     ========================================== -->
+
+                <section
+                    id="panel-finance"
+                    class="panel"
+                >
+
+                    <h2 class="section-title">
+                        Keuangan
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Laporan keuangan operasional DJ Family Kost mulai 1 Januari 2027.
+                        Pendapatan menggunakan pembayaran yang sudah terverifikasi; biaya Maintenance
+                        dibaca otomatis dari data Maintenance.
+                    </p>
+
+                    <div class="finance-toolbar">
+
+                        <div class="field">
+
+                            <label for="financeYearSelect">
+                                Tahun
+                            </label>
+
+                            <select id="financeYearSelect">
+                                <option value="2027">2027</option>
+                            </select>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="financeMonthSelect">
+                                Bulan
+                            </label>
+
+                            <select id="financeMonthSelect"></select>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            type="button"
+                            onclick="openExpenseModal()"
+                        >
+                            + Tambah Pengeluaran
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="financeStatus"
+                        class="finance-status-note"
+                    >
+                        Memuat laporan keuangan...
+                    </div>
+
+                    <div
+                        id="financeKpiGrid"
+                        class="finance-kpi-grid"
+                    ></div>
+
+                    <div
+                        id="financeSecondaryGrid"
+                        class="finance-secondary-grid"
+                    ></div>
+
+                    <div class="finance-panels">
+
+                        <div class="finance-panel">
+
+                            <div class="finance-panel-head">
+
+                                <h3>
+                                    Performa 2027
+                                </h3>
+
+                                <span class="small">
+                                    Pendapatan · Pengeluaran · Profit
+                                </span>
+
+                            </div>
+
+                            <div
+                                id="financeMonthlyBox"
+                                class="finance-panel-body table-wrap"
+                            ></div>
+
+                        </div>
+
+                        <div class="finance-panel">
+
+                            <div class="finance-panel-head">
+
+                                <h3>
+                                    Rincian Pengeluaran
+                                </h3>
+
+                                <span
+                                    id="financeBreakdownLabel"
+                                    class="small"
+                                >
+                                    —
+                                </span>
+
+                            </div>
+
+                            <div
+                                id="financeBreakdownBox"
+                                class="finance-panel-body"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="finance-panel finance-recent">
+
+                        <div class="finance-panel-head">
+
+                            <h3>
+                                Transaksi Terbaru
+                            </h3>
+
+                            <span class="small">
+                                Berdasarkan periode yang dipilih
+                            </span>
+
+                        </div>
+
+                        <div
+                            id="financeRecentBox"
+                            class="finance-panel-body table-wrap"
+                        ></div>
+
+                    </div>
+
+                </section>
+
+
+
                 <section
                     id="panel-automation"
                     class="panel"
@@ -2287,6 +2681,12 @@ let historyRoomFilter = "ALL";
 let historyTenantSearch = "";
 
 let historyTenantRooms = {};
+
+let financeData = null;
+
+let financeYear = 2027;
+
+let financeMonth = 1;
 
 
 /* ============================================================
@@ -3015,6 +3415,14 @@ async function loadPanel(
     ){
 
         await loadLaundry();
+
+    }else if(
+        panelName ===
+        "finance"
+    ){
+
+        await loadFinance();
+
 
     }else if(
         panelName ===
@@ -10253,6 +10661,1095 @@ document
 
         }
     );
+
+
+/* ============================================================
+   FINANCE
+   ============================================================ */
+
+function financeMonths(){
+
+    return [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+    ];
+
+}
+
+
+function financeMoney(
+    value
+){
+
+    return money(
+        Number(value || 0)
+    );
+
+}
+
+
+function financePercent(
+    value
+){
+
+    return (
+        Number(value || 0)
+        .toFixed(1)
+    ) + "%";
+
+}
+
+
+function financeSelectedSummary(){
+
+    if(
+        !financeData ||
+        !Array.isArray(
+            financeData.monthly
+        )
+    ){
+
+        return null;
+
+    }
+
+
+    return (
+        financeData.monthly.find(
+            function(item){
+
+                return Number(item.month) ===
+                    Number(financeMonth);
+
+            }
+        ) ||
+        financeData.summary ||
+        null
+    );
+
+}
+
+
+async function loadFinance(){
+
+    const status =
+        document.getElementById(
+            "financeStatus"
+        );
+
+    if(status){
+
+        status.textContent =
+            "Memuat laporan keuangan...";
+
+    }
+
+
+    const yearSelect =
+        document.getElementById(
+            "financeYearSelect"
+        );
+
+    const monthSelect =
+        document.getElementById(
+            "financeMonthSelect"
+        );
+
+
+    if(
+        yearSelect
+    ){
+
+        yearSelect.value =
+            String(financeYear);
+
+    }
+
+
+    if(
+        monthSelect
+    ){
+
+        monthSelect.innerHTML =
+            financeMonths()
+                .map(
+                    function(name,index){
+
+                        return (
+                            '<option value="' +
+                            String(index + 1) +
+                            '">' +
+                            escapeHtml(name) +
+                            '</option>'
+                        );
+
+                    }
+                )
+                .join("");
+
+        monthSelect.value =
+            String(financeMonth);
+
+    }
+
+
+    try{
+
+        financeData =
+            await api(
+                "masterFinance",
+                {
+                    year:
+                        financeYear,
+
+                    month:
+                        financeMonth
+                }
+            );
+
+
+        renderFinance();
+
+
+    }catch(error){
+
+        financeData =
+            null;
+
+        if(status){
+
+            status.textContent =
+                "Laporan keuangan belum dapat dimuat: " +
+                error.message;
+
+        }
+
+        document
+            .getElementById(
+                "financeKpiGrid"
+            )
+            .innerHTML =
+                '<div class="empty">' +
+                escapeHtml(error.message) +
+                '</div>';
+
+        document
+            .getElementById(
+                "financeSecondaryGrid"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
+                "financeMonthlyBox"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
+                "financeBreakdownBox"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
+                "financeRecentBox"
+            )
+            .innerHTML =
+                "";
+
+    }
+
+}
+
+
+function renderFinance(){
+
+    const summary =
+        financeSelectedSummary();
+
+
+    if(!summary){
+
+        return;
+
+    }
+
+
+    const status =
+        document.getElementById(
+            "financeStatus"
+        );
+
+
+    if(status){
+
+        status.textContent =
+            "Periode aktif: " +
+            String(
+                summary.label ||
+                "—"
+            ) +
+            ". Pendapatan hanya memasukkan pembayaran yang sudah terverifikasi.";
+
+    }
+
+
+    const profitClass =
+        Number(
+            summary.netProfit || 0
+        ) >= 0
+            ? "positive"
+            : "negative";
+
+
+    document
+        .getElementById(
+            "financeKpiGrid"
+        )
+        .innerHTML =
+
+        [
+            [
+                "Pendapatan",
+                financeMoney(summary.revenue),
+                "Sewa + denda yang terverifikasi",
+                ""
+            ],
+            [
+                "Pengeluaran",
+                financeMoney(summary.expense),
+                "Maintenance + pengeluaran umum",
+                ""
+            ],
+            [
+                "Profit Bersih",
+                financeMoney(summary.netProfit),
+                "Pendapatan dikurangi pengeluaran",
+                profitClass
+            ],
+            [
+                "Net Margin",
+                financePercent(summary.netMargin),
+                "Profit bersih ÷ pendapatan",
+                profitClass
+            ]
+        ]
+        .map(
+            function(card){
+
+                return (
+                    '<div class="finance-kpi ' +
+                    card[3] +
+                    '">' +
+
+                    '<span>' +
+                    escapeHtml(card[0]) +
+                    '</span>' +
+
+                    '<strong>' +
+                    escapeHtml(card[1]) +
+                    '</strong>' +
+
+                    '<small>' +
+                    escapeHtml(card[2]) +
+                    '</small>' +
+
+                    '</div>'
+                );
+
+            }
+        )
+        .join("");
+
+
+    document
+        .getElementById(
+            "financeSecondaryGrid"
+        )
+        .innerHTML =
+
+        [
+            [
+                "Potensi Pendapatan",
+                financeMoney(summary.expectedRevenue)
+            ],
+            [
+                "Belum Tertagih",
+                financeMoney(summary.outstanding)
+            ],
+            [
+                "Uang Masuk",
+                financeMoney(summary.cashIn)
+            ],
+            [
+                "Occupancy",
+                String(
+                    Number(
+                        summary.occupiedRooms || 0
+                    )
+                ) +
+                " / " +
+                String(
+                    Number(
+                        summary.rentableRooms || 0
+                    )
+                ) +
+                " · " +
+                financePercent(summary.occupancyRate)
+            ]
+        ]
+        .map(
+            function(card){
+
+                return (
+                    '<div class="finance-secondary">' +
+
+                    '<span>' +
+                    escapeHtml(card[0]) +
+                    '</span>' +
+
+                    '<strong>' +
+                    escapeHtml(card[1]) +
+                    '</strong>' +
+
+                    '</div>'
+                );
+
+            }
+        )
+        .join("");
+
+
+    renderFinanceMonthly();
+
+    renderFinanceBreakdown(
+        summary
+    );
+
+    renderFinanceRecent(
+        summary
+    );
+
+}
+
+
+function renderFinanceMonthly(){
+
+    const box =
+        document.getElementById(
+            "financeMonthlyBox"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    const rows =
+        Array.isArray(
+            financeData &&
+            financeData.monthly
+        )
+            ? financeData.monthly
+            : [];
+
+
+    if(!rows.length){
+
+        box.innerHTML =
+            '<div class="empty">Belum ada data bulanan.</div>';
+
+        return;
+
+    }
+
+
+    const maxRevenue =
+        Math.max.apply(
+            null,
+            rows.map(
+                function(item){
+
+                    return Number(
+                        item.revenue ||
+                        0
+                    );
+
+                }
+            )
+        ) || 1;
+
+
+    box.innerHTML =
+
+        '<table class="finance-month-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+        '<th>Bulan</th>' +
+        '<th>Pendapatan</th>' +
+        '<th>Pengeluaran</th>' +
+        '<th>Profit</th>' +
+        '<th>Grafik</th>' +
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        rows.map(
+            function(item){
+
+                const profit =
+                    Number(
+                        item.netProfit ||
+                        0
+                    );
+
+                const width =
+                    Math.max(
+                        2,
+                        Math.min(
+                            100,
+                            (
+                                Number(
+                                    item.revenue ||
+                                    0
+                                ) /
+                                maxRevenue
+                            ) *
+                            100
+                        )
+                    );
+
+                return (
+
+                    '<tr>' +
+
+                    '<td>' +
+
+                    '<strong>' +
+                    escapeHtml(
+                        item.label ||
+                        "—"
+                    ) +
+                    '</strong>' +
+
+                    '</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        financeMoney(
+                            item.revenue
+                        )
+                    ) +
+                    '</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        financeMoney(
+                            item.expense
+                        )
+                    ) +
+                    '</td>' +
+
+                    '<td style="font-weight:900;">' +
+                    escapeHtml(
+                        financeMoney(
+                            profit
+                        )
+                    ) +
+                    '</td>' +
+
+                    '<td>' +
+
+                    '<div class="finance-bar">' +
+                    '<span style="width:' +
+                    String(width) +
+                    '%;"></span>' +
+                    '</div>' +
+
+                    '</td>' +
+
+                    '</tr>'
+                );
+
+            }
+        )
+        .join("") +
+
+        '</tbody>' +
+
+        '</table>';
+
+}
+
+
+function renderFinanceBreakdown(
+    summary
+){
+
+    const box =
+        document.getElementById(
+            "financeBreakdownBox"
+        );
+
+    const label =
+        document.getElementById(
+            "financeBreakdownLabel"
+        );
+
+
+    if(label){
+
+        label.textContent =
+            String(
+                summary.label ||
+                "—"
+            );
+
+    }
+
+
+    const rows =
+        Array.isArray(
+            summary.expenseBreakdown
+        )
+            ? summary.expenseBreakdown
+            : [];
+
+
+    if(!rows.length){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'Belum ada pengeluaran tercatat pada periode ini.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    const max =
+        Math.max.apply(
+            null,
+            rows.map(
+                function(item){
+
+                    return Number(
+                        item.amount ||
+                        0
+                    );
+
+                }
+            )
+        ) || 1;
+
+
+    box.innerHTML =
+
+        '<div class="finance-breakdown-list">' +
+
+        rows
+            .map(
+                function(item){
+
+                    const width =
+                        Math.max(
+                            3,
+                            Math.min(
+                                100,
+                                (
+                                    Number(
+                                        item.amount ||
+                                        0
+                                    ) /
+                                    max
+                                ) *
+                                100
+                            )
+                        );
+
+
+                    return (
+
+                        '<div class="finance-breakdown-row">' +
+
+                        '<div class="finance-breakdown-main">' +
+
+                        '<div class="finance-breakdown-label">' +
+
+                        '<span>' +
+                        escapeHtml(
+                            item.category ||
+                            "Lainnya"
+                        ) +
+                        '</span>' +
+
+                        '<span>' +
+                        escapeHtml(
+                            financeMoney(
+                                item.amount
+                            )
+                        ) +
+                        '</span>' +
+
+                        '</div>' +
+
+                        '<div class="finance-breakdown-track">' +
+
+                        '<span style="width:' +
+                        String(width) +
+                        '%;"></span>' +
+
+                        '</div>' +
+
+                        '</div>' +
+
+                        '</div>'
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</div>';
+
+}
+
+
+function renderFinanceRecent(
+    summary
+){
+
+    const box =
+        document.getElementById(
+            "financeRecentBox"
+        );
+
+
+    const rows =
+        Array.isArray(
+            summary.recent
+        )
+            ? summary.recent
+            : [];
+
+
+    if(!rows.length){
+
+        box.innerHTML =
+            '<div class="empty">Belum ada transaksi pada periode ini.</div>';
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+
+        '<table class="data-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+        '<th>Tanggal</th>' +
+        '<th>Jenis</th>' +
+        '<th>Kategori</th>' +
+        '<th>Keterangan</th>' +
+        '<th>Nominal</th>' +
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        rows.map(
+            function(item){
+
+                const type =
+                    String(
+                        item.type ||
+                        ""
+                    )
+                    .toUpperCase();
+
+
+                const amount =
+                    financeMoney(
+                        item.amount
+                    );
+
+
+                return (
+
+                    '<tr>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        item.date ||
+                        "—"
+                    ) +
+                    '</td>' +
+
+                    '<td>' +
+
+                    '<span class="badge ' +
+                    (
+                        type === "INCOME"
+                            ? "badge-ok"
+                            : "badge-danger"
+                    ) +
+                    '">' +
+
+                    escapeHtml(
+                        type === "INCOME"
+                            ? "MASUK"
+                            : "KELUAR"
+                    ) +
+
+                    '</span>' +
+
+                    '</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        item.category ||
+                        "—"
+                    ) +
+                    '</td>' +
+
+                    '<td>' +
+                    escapeHtml(
+                        item.description ||
+                        "—"
+                    ) +
+                    (
+                        item.room
+                            ? '<br><span class="small">Kamar ' +
+                              escapeHtml(item.room) +
+                              '</span>'
+                            : ""
+                    ) +
+                    '</td>' +
+
+                    '<td style="font-weight:900;">' +
+                    escapeHtml(
+                        amount
+                    ) +
+                    '</td>' +
+
+                    '</tr>'
+                );
+
+            }
+        )
+        .join("") +
+
+        '</tbody>' +
+
+        '</table>';
+
+}
+
+
+function openExpenseModal(){
+
+    openModal(
+
+        "Tambah Pengeluaran",
+
+        '<form id="financeExpenseForm">' +
+
+        '<div class="form-grid">' +
+
+        '<div class="field">' +
+
+        '<label for="financeExpenseDate">Tanggal</label>' +
+
+        '<input id="financeExpenseDate" type="date" required value="' +
+        new Date(
+            financeYear,
+            financeMonth - 1,
+            1
+        )
+        .toISOString()
+        .slice(0,10) +
+        '">' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="financeExpenseCategory">Kategori</label>' +
+
+        '<select id="financeExpenseCategory" required>' +
+
+        [
+            "Listrik",
+            "Air",
+            "Internet",
+            "Gaji / Upah",
+            "Kebersihan",
+            "Perawatan",
+            "Perlengkapan",
+            "Pajak / Administrasi",
+            "Operasional",
+            "Lainnya"
+        ]
+        .map(
+            function(item){
+
+                return (
+                    '<option value="' +
+                    escapeHtml(item) +
+                    '">' +
+                    escapeHtml(item) +
+                    '</option>'
+                );
+
+            }
+        )
+        .join("") +
+
+        '</select>' +
+
+        '</div>' +
+
+        '<div class="field full">' +
+
+        '<label for="financeExpenseDescription">Keterangan</label>' +
+
+        '<textarea id="financeExpenseDescription" required placeholder="Contoh: pembayaran internet Januari 2027"></textarea>' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="financeExpenseAmount">Nominal</label>' +
+
+        '<input id="financeExpenseAmount" type="number" min="1" step="1" required placeholder="0">' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="financeExpenseRoom">Kamar (opsional)</label>' +
+
+        '<input id="financeExpenseRoom" type="text" placeholder="Contoh: 203">' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="financeExpenseVendor">Vendor (opsional)</label>' +
+
+        '<input id="financeExpenseVendor" type="text" placeholder="Nama vendor / penyedia">' +
+
+        '</div>' +
+
+        '<div class="field">' +
+
+        '<label for="financeExpenseMethod">Metode Pembayaran</label>' +
+
+        '<select id="financeExpenseMethod">' +
+
+        '<option value="">Pilih</option>' +
+        '<option value="Cash">Cash</option>' +
+        '<option value="Transfer">Transfer</option>' +
+        '<option value="E-Wallet">E-Wallet</option>' +
+
+        '</select>' +
+
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="small" style="margin:12px 0 15px;">' +
+        'Biaya Maintenance tidak dicatat melalui form ini. Biaya tersebut diambil otomatis dari sheet Maintenance agar tidak terhitung dua kali.' +
+        '</div>' +
+
+        '<div class="actions">' +
+
+        '<button class="btn btn-primary" type="submit">Simpan Pengeluaran</button>' +
+
+        '<button class="btn btn-secondary" type="button" onclick="closeModal()">Batal</button>' +
+
+        '</div>' +
+
+        '</form>'
+
+    );
+
+
+    document
+        .getElementById(
+            "financeExpenseForm"
+        )
+        .addEventListener(
+            "submit",
+            async function(event){
+
+                event.preventDefault();
+
+
+                const submit =
+                    this.querySelector(
+                        'button[type="submit"]'
+                    );
+
+
+                submit.disabled =
+                    true;
+
+
+                submit.textContent =
+                    "Menyimpan...";
+
+
+                try{
+
+                    await api(
+                        "masterSaveExpense",
+                        {
+
+                            date:
+                                document
+                                    .getElementById(
+                                        "financeExpenseDate"
+                                    )
+                                    .value,
+
+                            category:
+                                document
+                                    .getElementById(
+                                        "financeExpenseCategory"
+                                    )
+                                    .value,
+
+                            description:
+                                document
+                                    .getElementById(
+                                        "financeExpenseDescription"
+                                    )
+                                    .value,
+
+                            amount:
+                                document
+                                    .getElementById(
+                                        "financeExpenseAmount"
+                                    )
+                                    .value,
+
+                            room:
+                                document
+                                    .getElementById(
+                                        "financeExpenseRoom"
+                                    )
+                                    .value,
+
+                            vendor:
+                                document
+                                    .getElementById(
+                                        "financeExpenseVendor"
+                                    )
+                                    .value,
+
+                            method:
+                                document
+                                    .getElementById(
+                                        "financeExpenseMethod"
+                                    )
+                                    .value
+
+                        }
+                    );
+
+
+                    closeModal();
+
+
+                    await loadFinance();
+
+
+                }catch(error){
+
+                    alert(
+                        error.message
+                    );
+
+                }finally{
+
+                    submit.disabled =
+                        false;
+
+                    submit.textContent =
+                        "Simpan Pengeluaran";
+
+                }
+
+            }
+        );
+
+}
+
+
+document
+    .getElementById(
+        "financeMonthSelect"
+    )
+    ?.addEventListener(
+        "change",
+        async function(){
+
+            financeMonth =
+                Number(
+                    this.value
+                ) || 1;
+
+            await loadFinance();
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "financeYearSelect"
+    )
+    ?.addEventListener(
+        "change",
+        async function(){
+
+            financeYear =
+                Number(
+                    this.value
+                ) || 2027;
+
+            await loadFinance();
+
+        }
+    );
+
 
 
 /* ============================================================
