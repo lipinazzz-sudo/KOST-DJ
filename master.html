@@ -1004,6 +1004,39 @@ button{
     line-height:1.5;
 }
 
+.finance-audit-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.finance-audit-table th,
+.finance-audit-table td{
+    padding:9px 8px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+    font-size:12px;
+    vertical-align:top;
+}
+
+.finance-audit-table th{
+    color:#667085;
+    font-size:11px;
+    background:#fafbfc;
+}
+
+.finance-audit-table tr:last-child td{
+    border-bottom:0;
+}
+
+.finance-audit-type{
+    font-weight:900;
+    white-space:nowrap;
+}
+
+.finance-audit-message{
+    line-height:1.45;
+}
+
 .finance-report-grid{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -3025,6 +3058,31 @@ button{
 
                         <div
                             id="financeRoomBox"
+                            class="finance-panel-body table-wrap"
+                        ></div>
+
+                    </div>
+
+
+                    <div
+                        class="finance-panel"
+                        style="margin-top:16px;"
+                    >
+
+                        <div class="finance-panel-head">
+
+                            <h3>
+                                Riwayat Keuangan
+                            </h3>
+
+                            <span class="small">
+                                Aktivitas pembayaran, pengeluaran, dan maintenance
+                            </span>
+
+                        </div>
+
+                        <div
+                            id="financeAuditBox"
                             class="finance-panel-body table-wrap"
                         ></div>
 
@@ -11596,6 +11654,13 @@ async function loadFinance(){
 
         document
             .getElementById(
+                "financeAuditBox"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
                 "financeReportBox"
             )
             .innerHTML =
@@ -11808,6 +11873,10 @@ function renderFinance(){
     renderFinanceReport(
         summary,
         financeData.annual
+    );
+
+    renderFinanceAudit(
+        financeData.auditTrail
     );
 
     renderFinanceMonthly();
@@ -12983,6 +13052,152 @@ function renderFinanceRooms(
 
     renderTable(
         'ALL'
+    );
+
+}
+
+
+function renderFinanceAudit(
+    items
+){
+
+    const box =
+        document.getElementById(
+            "financeAuditBox"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    const rows =
+        Array.isArray(
+            items
+        )
+            ? items
+            : [];
+
+
+    if(!rows.length){
+
+        box.innerHTML =
+            '<div class="empty">Belum ada aktivitas keuangan pada System_Log.</div>';
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+
+        '<table class="finance-audit-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+        '<th>Waktu</th>' +
+        '<th>Jenis</th>' +
+        '<th>Detail</th>' +
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        rows
+            .map(
+                function(item){
+
+                    return (
+
+                        '<tr>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            financeDisplayDateTime(
+                                item.timestamp
+                            )
+                        ) +
+                        '</td>' +
+
+                        '<td class="finance-audit-type">' +
+                        escapeHtml(
+                            item.type ||
+                            '—'
+                        ) +
+                        '</td>' +
+
+                        '<td class="finance-audit-message">' +
+                        escapeHtml(
+                            item.message ||
+                            '—'
+                        ) +
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</tbody>' +
+
+        '</table>';
+
+}
+
+
+function financeDisplayDateTime(
+    value
+){
+
+    if(!value){
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return String(
+            value
+        );
+
+    }
+
+
+    return new Intl.DateTimeFormat(
+        "id-ID",
+        {
+            dateStyle:
+                "short",
+
+            timeStyle:
+                "short",
+
+            timeZone:
+                "Asia/Jakarta"
+        }
+    )
+    .format(
+        date
     );
 
 }
