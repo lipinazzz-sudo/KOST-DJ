@@ -112,6 +112,13 @@ function djApiMasterFinanceV1_(
     );
 
 
+  const roomAnalysis =
+    djFinanceRoomAnalysisV1_(
+      dataset,
+      targetYear
+    );
+
+
   return {
 
     period: {
@@ -163,6 +170,9 @@ function djApiMasterFinanceV1_(
 
     floorAnalysis:
       floorAnalysis,
+
+    roomAnalysis:
+      roomAnalysis,
 
     expenseBreakdown:
       summary.expenseBreakdown,
@@ -3149,6 +3159,436 @@ function djFinancePaymentRankV1_(
     date instanceof Date
       ? date.getTime()
       : 0
+  );
+
+}
+
+
+/* ============================================================
+ * ROOM ANALYSIS
+ * ============================================================ */
+
+function djFinanceRoomAnalysisV1_(
+  dataset,
+  year
+) {
+
+  const rooms = {};
+
+
+  (dataset.rooms || [])
+    .forEach(
+      function(room) {
+
+        const number =
+          String(
+            room.number ||
+            ''
+          ).trim();
+
+
+        const price =
+          Number(
+            room.price ||
+            0
+          );
+
+
+        if (
+          !number ||
+          price <= 0
+        ) {
+
+          return;
+
+        }
+
+
+        const floorMatch =
+          number.match(
+            /^(\d)/
+          );
+
+
+        rooms[number] = {
+
+          room:
+            number,
+
+          floor:
+            floorMatch
+              ? Number(
+                  floorMatch[1]
+                )
+              : 0,
+
+          status:
+            String(
+              room.status ||
+              ''
+            )
+            .trim()
+            .toUpperCase(),
+
+          monthlyRent:
+            price,
+
+          revenue:
+            0,
+
+          expense:
+            0,
+
+          occupancyMonths:
+            0
+
+        };
+
+      }
+    );
+
+
+  const occupancyMonthsByRoom = {};
+
+
+  (dataset.contracts || [])
+    .forEach(
+      function(contract) {
+
+        const room =
+          String(
+            contract.room ||
+            ''
+          ).trim();
+
+
+        if (
+          !room ||
+          !rooms[room]
+        ) {
+
+          return;
+
+        }
+
+
+        const start =
+          contract.startDate ||
+          new Date(
+            year,
+            0,
+            1
+          );
+
+
+        const end =
+          contract.endDate ||
+          new Date(
+            year,
+            11,
+            31
+          );
+
+
+        let cursor =
+          new Date(
+            Math.max(
+              start.getTime(),
+              new Date(
+                year,
+                0,
+                1
+              ).getTime()
+            )
+          );
+
+
+        const last =
+          new Date(
+            Math.min(
+              end.getTime(),
+              new Date(
+                year,
+                11,
+                31
+              ).getTime()
+            )
+          );
+
+
+        while (
+          cursor <=
+          last
+        ) {
+
+          const key =
+            String(
+              cursor.getFullYear()
+            ) +
+            '-' +
+            String(
+              cursor.getMonth() + 1
+            )
+            .padStart(
+              2,
+              '0'
+            );
+
+
+          if(
+            !occupancyMonthsByRoom[room]
+          ){
+
+            occupancyMonthsByRoom[room] = {};
+
+          }
+
+
+          occupancyMonthsByRoom[room][key] = true;
+
+
+          cursor =
+            new Date(
+              cursor.getFullYear(),
+              cursor.getMonth() + 1,
+              1
+            );
+
+        }
+
+      }
+    );
+
+
+  Object.keys(
+    occupancyMonthsByRoom
+  )
+  .forEach(
+    function(room) {
+
+      rooms[room].occupancyMonths =
+        Math.min(
+          12,
+          Object.keys(
+            occupancyMonthsByRoom[room]
+          ).length
+        );
+
+    }
+  );
+
+
+  (dataset.payments || [])
+    .forEach(
+      function(item) {
+
+        const room =
+          String(
+            item.room ||
+            ''
+          ).trim();
+
+
+        const periodKey =
+          djFinancePeriodKeyV1_(
+            item.period
+          );
+
+
+        if (
+          !room ||
+          !rooms[room] ||
+          !periodKey
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          Number(
+            periodKey.slice(0,4)
+          ) !==
+          Number(year)
+        ) {
+
+          return;
+
+        }
+
+
+        rooms[room].revenue +=
+          Number(
+            item.paid ||
+            0
+          );
+
+      }
+    );
+
+
+  (dataset.maintenance || [])
+    .forEach(
+      function(item) {
+
+        const room =
+          String(
+            item.room ||
+            ''
+          ).trim();
+
+
+        if(
+          !room ||
+          !rooms[room] ||
+          !item.date ||
+          item.date.getFullYear() !==
+          Number(year)
+        ){
+
+          return;
+
+        }
+
+
+        rooms[room].expense +=
+          Number(
+            item.cost ||
+            0
+          );
+
+      }
+    );
+
+
+  (dataset.generalExpenses || [])
+    .forEach(
+      function(item) {
+
+        const room =
+          String(
+            item.room ||
+            ''
+          ).trim();
+
+
+        if(
+          !room ||
+          !rooms[room] ||
+          !item.date ||
+          item.date.getFullYear() !==
+          Number(year)
+        ){
+
+          return;
+
+        }
+
+
+        rooms[room].expense +=
+          Number(
+            item.amount ||
+            0
+          );
+
+      }
+    );
+
+
+  const tenantByRoom = {};
+
+
+  (dataset.tenants || [])
+    .forEach(
+      function(tenant) {
+
+        const room =
+          String(
+            tenant.room ||
+            ''
+          ).trim();
+
+
+        if(
+          !room
+        ){
+
+          return;
+
+        }
+
+
+        tenantByRoom[room] =
+          tenant.name ||
+          '';
+
+      }
+    );
+
+
+  return Object.keys(
+    rooms
+  )
+  .map(
+    function(roomNumber) {
+
+      const item =
+        rooms[roomNumber];
+
+
+      return {
+
+        room:
+          item.room,
+
+        floor:
+          item.floor,
+
+        tenant:
+          tenantByRoom[
+            item.room
+          ] ||
+          '',
+
+        status:
+          item.status,
+
+        monthlyRent:
+          item.monthlyRent,
+
+        occupancyMonths:
+          item.occupancyMonths,
+
+        revenue:
+          item.revenue,
+
+        expense:
+          item.expense,
+
+        netProfit:
+          item.revenue -
+          item.expense
+
+      };
+
+    }
+  )
+  .sort(
+    function(a,b) {
+
+      return (
+        Number(
+          a.room ||
+          0
+        ) -
+        Number(
+          b.room ||
+          0
+        )
+      );
+
+    }
   );
 
 }
