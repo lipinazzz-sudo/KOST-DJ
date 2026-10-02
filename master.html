@@ -3068,7 +3068,7 @@ button{
                             <div class="finance-panel-head">
 
                                 <h3>
-                                    Ringkasan 2027
+                                    Ringkasan <span id="financeAnnualYearLabel">2027</span>
                                 </h3>
 
                                 <span class="small">
@@ -3116,7 +3116,7 @@ button{
                         <div class="finance-panel-head">
 
                             <h3>
-                                Analisis Kamar 2027
+                                Analisis Kamar <span id="financeRoomYearLabel">2027</span>
                             </h3>
 
                             <span class="small">
@@ -3141,7 +3141,7 @@ button{
                         <div class="finance-panel-head">
 
                             <h3>
-                                Arus Kas 2027
+                                Arus Kas <span id="financeCashFlowYearLabel">2027</span>
                             </h3>
 
                             <span class="small">
@@ -3228,7 +3228,7 @@ button{
                             <div class="finance-panel-head">
 
                                 <h3>
-                                    Performa 2027
+                                    Performa <span id="financeMonthlyYearLabel">2027</span>
                                 </h3>
 
                                 <span class="small">
@@ -11623,6 +11623,47 @@ function financeSelectedSummary(){
 
 
 async function loadFinance(){
+
+    const annualYearLabel =
+        document.getElementById(
+            "financeAnnualYearLabel"
+        );
+
+    const roomYearLabel =
+        document.getElementById(
+            "financeRoomYearLabel"
+        );
+
+    const monthlyYearLabel =
+        document.getElementById(
+            "financeMonthlyYearLabel"
+        );
+
+    const cashFlowYearLabel =
+        document.getElementById(
+            "financeCashFlowYearLabel"
+        );
+
+    [
+        annualYearLabel,
+        roomYearLabel,
+        monthlyYearLabel,
+        cashFlowYearLabel
+    ].forEach(
+        function(el){
+
+            if(el){
+
+                el.textContent =
+                    String(
+                        financeYear
+                    );
+
+            }
+
+        }
+    );
+
 
     const status =
         document.getElementById(
