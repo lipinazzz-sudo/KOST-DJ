@@ -902,6 +902,10 @@ button{
 }
 
 @media(max-width:1100px){
+    .finance-cashflow-summary{
+        grid-template-columns:1fr;
+    }
+
     .finance-reconciliation-grid{
         grid-template-columns:repeat(2,minmax(0,1fr));
     }
@@ -1002,6 +1006,70 @@ button{
     color:#667085;
     font-size:11px;
     line-height:1.5;
+}
+
+.finance-cashflow-summary{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.finance-cashflow-card{
+    padding:12px 13px;
+    background:#f8fafc;
+    border:1px solid #edf0f4;
+    border-radius:12px;
+}
+
+.finance-cashflow-card span{
+    display:block;
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.finance-cashflow-card strong{
+    display:block;
+    margin-top:5px;
+    font-size:17px;
+    line-height:1.2;
+}
+
+.finance-cashflow-card.net strong.positive{
+    color:#027a48;
+}
+
+.finance-cashflow-card.net strong.negative{
+    color:#b42318;
+}
+
+.finance-cashflow-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.finance-cashflow-table th,
+.finance-cashflow-table td{
+    padding:9px 8px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+    font-size:12px;
+}
+
+.finance-cashflow-table th{
+    color:#667085;
+    font-size:11px;
+    background:#fafbfc;
+}
+
+.finance-cashflow-table tr:last-child td{
+    border-bottom:0;
+}
+
+.finance-cashflow-table td:nth-child(n+2),
+.finance-cashflow-table th:nth-child(n+2){
+    text-align:right;
 }
 
 .finance-audit-table{
@@ -3058,6 +3126,31 @@ button{
 
                         <div
                             id="financeRoomBox"
+                            class="finance-panel-body table-wrap"
+                        ></div>
+
+                    </div>
+
+
+                    <div
+                        class="finance-panel"
+                        style="margin-top:16px;"
+                    >
+
+                        <div class="finance-panel-head">
+
+                            <h3>
+                                Arus Kas 2027
+                            </h3>
+
+                            <span class="small">
+                                Uang masuk · uang keluar · arus kas bersih
+                            </span>
+
+                        </div>
+
+                        <div
+                            id="financeCashFlowBox"
                             class="finance-panel-body table-wrap"
                         ></div>
 
@@ -11654,6 +11747,13 @@ async function loadFinance(){
 
         document
             .getElementById(
+                "financeCashFlowBox"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
                 "financeAuditBox"
             )
             .innerHTML =
@@ -11873,6 +11973,10 @@ function renderFinance(){
     renderFinanceReport(
         summary,
         financeData.annual
+    );
+
+    renderFinanceCashFlow(
+        financeData.cashFlow
     );
 
     renderFinanceAudit(
@@ -13053,6 +13157,186 @@ function renderFinanceRooms(
     renderTable(
         'ALL'
     );
+
+}
+
+
+function renderFinanceCashFlow(
+    cashFlow
+){
+
+    const box =
+        document.getElementById(
+            "financeCashFlowBox"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    if(!cashFlow){
+
+        box.innerHTML =
+            '<div class="empty">Data arus kas belum tersedia.</div>';
+
+        return;
+
+    }
+
+
+    const monthly =
+        Array.isArray(
+            cashFlow.monthly
+        )
+            ? cashFlow.monthly
+            : [];
+
+
+    const net =
+        Number(
+            cashFlow.netCashFlow ||
+            0
+        );
+
+
+    const netClass =
+        net >= 0
+            ? "positive"
+            : "negative";
+
+
+    box.innerHTML =
+
+        '<div class="finance-cashflow-summary">' +
+
+        '<div class="finance-cashflow-card">' +
+
+        '<span>Uang Masuk 2027</span>' +
+
+        '<strong>' +
+        escapeHtml(
+            financeMoney(
+                cashFlow.totalCashIn
+            )
+        ) +
+        '</strong>' +
+
+        '</div>' +
+
+        '<div class="finance-cashflow-card">' +
+
+        '<span>Uang Keluar 2027</span>' +
+
+        '<strong>' +
+        escapeHtml(
+            financeMoney(
+                cashFlow.totalCashOut
+            )
+        ) +
+        '</strong>' +
+
+        '</div>' +
+
+        '<div class="finance-cashflow-card net">' +
+
+        '<span>Arus Kas Bersih 2027</span>' +
+
+        '<strong class="' +
+        netClass +
+        '">' +
+
+        escapeHtml(
+            financeMoney(
+                net
+            )
+        ) +
+
+        '</strong>' +
+
+        '</div>' +
+
+        '</div>' +
+
+        '<table class="finance-cashflow-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+        '<th>Bulan</th>' +
+        '<th>Uang Masuk</th>' +
+        '<th>Uang Keluar</th>' +
+        '<th>Arus Kas Bersih</th>' +
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        monthly
+            .map(
+                function(item){
+
+                    const rowNet =
+                        Number(
+                            item.netCashFlow ||
+                            0
+                        );
+
+
+                    return (
+
+                        '<tr>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            item.label ||
+                            '—'
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            financeMoney(
+                                item.cashIn
+                            )
+                        ) +
+                        '</td>' +
+
+                        '<td>' +
+                        escapeHtml(
+                            financeMoney(
+                                item.cashOut
+                            )
+                        ) +
+                        '</td>' +
+
+                        '<td style="font-weight:900;">' +
+                        escapeHtml(
+                            financeMoney(
+                                rowNet
+                            )
+                        ) +
+                        '</td>' +
+
+                        '</tr>'
+
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</tbody>' +
+
+        '</table>' +
+
+        '<div class="small" style="margin-top:12px;">' +
+        'Arus kas menunjukkan pergerakan uang berdasarkan tanggal pembayaran/penerimaan dan tanggal pengeluaran yang tercatat. Saldo kas awal dan saldo kas akhir belum dihitung karena sumber saldo kas awal belum tersedia di sistem.' +
+        '</div>';
 
 }
 
