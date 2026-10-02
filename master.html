@@ -843,6 +843,59 @@ button{
     border-bottom:0;
 }
 
+.finance-room-toolbar{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.finance-room-toolbar label{
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.finance-room-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.finance-room-table th,
+.finance-room-table td{
+    padding:9px 8px;
+    border-bottom:1px solid #edf0f4;
+    text-align:left;
+    font-size:12px;
+    vertical-align:middle;
+}
+
+.finance-room-table th{
+    color:#667085;
+    font-size:11px;
+    background:#fafbfc;
+}
+
+.finance-room-table tr:last-child td{
+    border-bottom:0;
+}
+
+.finance-room-table td:nth-child(n+4),
+.finance-room-table th:nth-child(n+4){
+    text-align:right;
+}
+
+.finance-room-profit-positive{
+    color:#027a48;
+    font-weight:900;
+}
+
+.finance-room-profit-negative{
+    color:#b42318;
+    font-weight:900;
+}
+
 @media(max-width:1100px){
     .finance-kpi-grid{
         grid-template-columns:repeat(2,minmax(0,1fr));
@@ -2746,6 +2799,31 @@ button{
                             ></div>
 
                         </div>
+
+                    </div>
+
+
+                    <div
+                        class="finance-panel"
+                        style="margin-top:16px;"
+                    >
+
+                        <div class="finance-panel-head">
+
+                            <h3>
+                                Analisis Kamar 2027
+                            </h3>
+
+                            <span class="small">
+                                Pendapatan · Pengeluaran · Profit
+                            </span>
+
+                        </div>
+
+                        <div
+                            id="financeRoomBox"
+                            class="finance-panel-body table-wrap"
+                        ></div>
 
                     </div>
 
@@ -11464,6 +11542,10 @@ function renderFinance(){
         financeData.floorAnalysis
     );
 
+    renderFinanceRooms(
+        financeData.roomAnalysis
+    );
+
     renderFinanceMonthly();
 
     renderFinanceBreakdown(
@@ -12202,6 +12284,246 @@ function renderFinanceFloor(
         '</tbody>' +
 
         '</table>';
+
+}
+
+
+function renderFinanceRooms(
+    rooms
+){
+
+    const box =
+        document.getElementById(
+            "financeRoomBox"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    const rows =
+        Array.isArray(
+            rooms
+        )
+            ? rooms
+            : [];
+
+
+    if(!rows.length){
+
+        box.innerHTML =
+            '<div class="empty">Analisis kamar belum tersedia.</div>';
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+
+        '<div class="finance-room-toolbar">' +
+
+        '<label for="financeRoomFloorFilter">Lantai</label>' +
+
+        '<select id="financeRoomFloorFilter">' +
+
+        '<option value="ALL">Semua</option>' +
+
+        '<option value="1">Lantai 1</option>' +
+        '<option value="2">Lantai 2</option>' +
+        '<option value="3">Lantai 3</option>' +
+        '<option value="4">Lantai 4</option>' +
+
+        '</select>' +
+
+        '</div>' +
+
+        '<div id="financeRoomTableBox"></div>' +
+
+        '<div class="small" style="margin-top:12px;">' +
+        'Pengeluaran umum tanpa nomor kamar tidak dialokasikan ke kamar. Profit keseluruhan tetap menghitung seluruh pengeluaran.' +
+        '</div>';
+
+
+    const tableBox =
+        box.querySelector(
+            '#financeRoomTableBox'
+        );
+
+
+    const filter =
+        box.querySelector(
+            '#financeRoomFloorFilter'
+        );
+
+
+    function renderTable(
+        selectedFloor
+    ){
+
+        const filtered =
+            selectedFloor ===
+            'ALL'
+                ? rows
+                : rows.filter(
+                    function(item){
+
+                        return String(
+                            item.floor ||
+                            ''
+                        ) ===
+                        selectedFloor;
+
+                    }
+                );
+
+
+        if(!filtered.length){
+
+            tableBox.innerHTML =
+                '<div class="empty">Tidak ada kamar pada lantai tersebut.</div>';
+
+            return;
+
+        }
+
+
+        tableBox.innerHTML =
+
+            '<table class="finance-room-table">' +
+
+            '<thead>' +
+
+            '<tr>' +
+            '<th>Kamar</th>' +
+            '<th>Tenant</th>' +
+            '<th>Occupancy</th>' +
+            '<th>Pendapatan</th>' +
+            '<th>Pengeluaran</th>' +
+            '<th>Profit</th>' +
+            '</tr>' +
+
+            '</thead>' +
+
+            '<tbody>' +
+
+            filtered
+                .map(
+                    function(item){
+
+                        const profit =
+                            Number(
+                                item.netProfit ||
+                                0
+                            );
+
+
+                        const profitClass =
+                            profit >= 0
+                                ? "finance-room-profit-positive"
+                                : "finance-room-profit-negative";
+
+
+                        return (
+
+                            '<tr>' +
+
+                            '<td>' +
+
+                            '<strong>' +
+                            escapeHtml(
+                                item.room
+                            ) +
+                            '</strong>' +
+
+                            '<div class="small">' +
+                            'Lantai ' +
+                            escapeHtml(
+                                item.floor
+                            ) +
+                            '</div>' +
+
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.tenant ||
+                                '—'
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                String(
+                                    Number(
+                                        item.occupancyMonths ||
+                                        0
+                                    )
+                                ) +
+                                ' / 12 bln'
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                financeMoney(
+                                    item.revenue
+                                )
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                financeMoney(
+                                    item.expense
+                                )
+                            ) +
+                            '</td>' +
+
+                            '<td class="' +
+                            profitClass +
+                            '">' +
+                            escapeHtml(
+                                financeMoney(
+                                    profit
+                                )
+                            ) +
+                            '</td>' +
+
+                            '</tr>'
+
+                        );
+
+                    }
+                )
+                .join("") +
+
+            '</tbody>' +
+
+            '</table>';
+
+    }
+
+
+    filter.addEventListener(
+        'change',
+        function(){
+
+            renderTable(
+                this.value
+            );
+
+        }
+    );
+
+
+    renderTable(
+        'ALL'
+    );
 
 }
 
