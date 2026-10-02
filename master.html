@@ -2938,9 +2938,9 @@ button{
                     </h2>
 
                     <p class="section-subtitle">
-                        Laporan keuangan operasional DJ Family Kost mulai 1 Januari 2027.
-                        Pendapatan menggunakan pembayaran yang sudah terverifikasi; biaya Maintenance
-                        dibaca otomatis dari data Maintenance.
+                        Laporan keuangan operasional DJ Family Kost dengan periode 2026 untuk histori/pengujian
+                        dan periode resmi mulai 1 Januari 2027. Pendapatan menggunakan pembayaran yang sudah
+                        terverifikasi; biaya Maintenance dibaca otomatis dari data Maintenance.
                     </p>
 
                     <div class="finance-toolbar">
@@ -2952,7 +2952,8 @@ button{
                             </label>
 
                             <select id="financeYearSelect">
-                                <option value="2027">2027</option>
+                                <option value="2026">2026 · Histori/Uji</option>
+                                <option value="2027">2027 · Operasional</option>
                             </select>
 
                         </div>
@@ -14609,6 +14610,9 @@ document
                 Number(
                     this.value
                 ) || 2027;
+
+            financeData =
+                null;
 
             await loadFinance();
 
