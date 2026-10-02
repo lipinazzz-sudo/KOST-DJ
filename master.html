@@ -11478,7 +11478,7 @@ function openExpenseModal(){
 
         "Tambah Pengeluaran",
 
-        '<form id="financeExpenseForm">' +
+        '<form id="financeExpenseForm" novalidate>' +
 
         '<div class="form-grid">' +
 
@@ -11590,7 +11590,7 @@ function openExpenseModal(){
 
         '<div class="actions">' +
 
-        '<button class="btn btn-primary" type="submit">Simpan Pengeluaran</button>' +
+        '<button class="btn btn-primary" type="button" id="financeExpenseSaveButton">Simpan Pengeluaran</button>' +
 
         '<button class="btn btn-secondary" type="button" onclick="closeModal()">Batal</button>' +
 
@@ -11601,114 +11601,191 @@ function openExpenseModal(){
     );
 
 
-    document
-        .getElementById(
-            "financeExpenseForm"
-        )
-        .addEventListener(
-            "submit",
-            async function(event){
-
-                event.preventDefault();
+    const saveButton =
+        document.getElementById(
+            "financeExpenseSaveButton"
+        );
 
 
-                const submit =
-                    this.querySelector(
-                        'button[type="submit"]'
-                    );
+    saveButton.addEventListener(
+        "click",
+        saveExpenseFromModal
+    );
+
+}
 
 
-                submit.disabled =
-                    true;
+async function saveExpenseFromModal(){
+
+    const saveButton =
+        document.getElementById(
+            "financeExpenseSaveButton"
+        );
 
 
-                submit.textContent =
-                    "Menyimpan...";
+    if(!saveButton){
+
+        return;
+
+    }
 
 
-                try{
-
-                    await api(
-                        "masterSaveExpense",
-                        {
-
-                            date:
-                                document
-                                    .getElementById(
-                                        "financeExpenseDate"
-                                    )
-                                    .value,
-
-                            category:
-                                document
-                                    .getElementById(
-                                        "financeExpenseCategory"
-                                    )
-                                    .value,
-
-                            description:
-                                document
-                                    .getElementById(
-                                        "financeExpenseDescription"
-                                    )
-                                    .value,
-
-                            amount:
-                                document
-                                    .getElementById(
-                                        "financeExpenseAmount"
-                                    )
-                                    .value,
-
-                            room:
-                                document
-                                    .getElementById(
-                                        "financeExpenseRoom"
-                                    )
-                                    .value,
-
-                            vendor:
-                                document
-                                    .getElementById(
-                                        "financeExpenseVendor"
-                                    )
-                                    .value,
-
-                            method:
-                                document
-                                    .getElementById(
-                                        "financeExpenseMethod"
-                                    )
-                                    .value
-
-                        }
-                    );
+    const date =
+        document.getElementById(
+            "financeExpenseDate"
+        ).value.trim();
 
 
-                    closeModal();
+    const category =
+        document.getElementById(
+            "financeExpenseCategory"
+        ).value.trim();
 
 
-                    await loadFinance();
+    const description =
+        document.getElementById(
+            "financeExpenseDescription"
+        ).value.trim();
 
 
-                }catch(error){
+    const amountRaw =
+        document.getElementById(
+            "financeExpenseAmount"
+        ).value.trim();
 
-                    alert(
-                        error.message
-                    );
 
-                }finally{
+    const room =
+        document.getElementById(
+            "financeExpenseRoom"
+        ).value.trim();
 
-                    submit.disabled =
-                        false;
 
-                    submit.textContent =
-                        "Simpan Pengeluaran";
+    const vendor =
+        document.getElementById(
+            "financeExpenseVendor"
+        ).value.trim();
 
-                }
+
+    const method =
+        document.getElementById(
+            "financeExpenseMethod"
+        ).value.trim();
+
+
+    if(!date){
+
+        alert(
+            "Tanggal pengeluaran wajib diisi."
+        );
+
+        return;
+
+    }
+
+
+    if(!category){
+
+        alert(
+            "Kategori pengeluaran wajib diisi."
+        );
+
+        return;
+
+    }
+
+
+    if(!description){
+
+        alert(
+            "Keterangan pengeluaran wajib diisi."
+        );
+
+        return;
+
+    }
+
+
+    const amount =
+        Number(
+            amountRaw
+        );
+
+
+    if(
+        !Number.isFinite(amount) ||
+        amount <= 0
+    ){
+
+        alert(
+            "Nominal pengeluaran harus lebih besar dari 0."
+        );
+
+        return;
+
+    }
+
+
+    saveButton.disabled =
+        true;
+
+
+    saveButton.textContent =
+        "Menyimpan...";
+
+
+    try{
+
+        await api(
+            "masterSaveExpense",
+            {
+
+                date:
+                    date,
+
+                category:
+                    category,
+
+                description:
+                    description,
+
+                amount:
+                    amount,
+
+                room:
+                    room,
+
+                vendor:
+                    vendor,
+
+                method:
+                    method
 
             }
         );
+
+
+        closeModal();
+
+
+        await loadFinance();
+
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+
+    }finally{
+
+        saveButton.disabled =
+            false;
+
+        saveButton.textContent =
+            "Simpan Pengeluaran";
+
+    }
 
 }
 
