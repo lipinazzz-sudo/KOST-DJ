@@ -332,6 +332,37 @@ button{
     font-size:22px;
 }
 
+.topbar-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.master-auto-sync-note{
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.master-auto-sync-note.is-updating{
+    color:#344054;
+}
+
+.master-auto-sync-note.is-success{
+    color:#027a48;
+}
+
+@media(max-width:700px){
+    .topbar-actions{
+        gap:6px;
+    }
+
+    .master-auto-sync-note{
+        display:none;
+    }
+}
+
 .content{
     padding:25px;
 }
@@ -2362,12 +2393,23 @@ button{
                 </h1>
 
 
-                <button
-                    id="refreshButton"
-                    class="btn btn-secondary"
-                >
-                    Refresh
-                </button>
+                <div class="topbar-actions">
+
+                    <span
+                        id="masterAutoSyncNote"
+                        class="master-auto-sync-note"
+                    >
+                        Auto update 5 menit
+                    </span>
+
+                    <button
+                        id="refreshButton"
+                        class="btn btn-secondary"
+                    >
+                        Refresh
+                    </button>
+
+                </div>
 
             </header>
 
@@ -3711,6 +3753,23 @@ let financeMonth = 1;
 
 
 /* ============================================================
+   AUTO SYNC MASTER
+   ============================================================ */
+
+const MASTER_AUTO_REFRESH_MS =
+    5 * 60 * 1000;
+
+let currentMasterPanel =
+    "dashboard";
+
+let masterAutoRefreshTimer =
+    null;
+
+let masterAutoRefreshBusy =
+    false;
+
+
+/* ============================================================
    DOM
    ============================================================ */
 
@@ -4382,6 +4441,10 @@ async function openPanel(
             activeButton
                 ? activeButton.textContent.trim()
                 : panelName;
+
+
+    currentMasterPanel =
+        panelName;
 
 
     await loadPanel(
@@ -5248,6 +5311,8 @@ async function approveRegistration(
         await loadRegistrations();
 
         await loadDashboard();
+
+        startMasterAutoRefresh();
 
 
     }catch(error){
@@ -15000,6 +15065,235 @@ document
 
         }
     );
+
+
+/* ============================================================
+   AUTO SYNC MASTER
+   ============================================================ */
+
+function setMasterAutoSyncStatus(
+    state
+){
+
+    const note =
+        document.getElementById(
+            "masterAutoSyncNote"
+        );
+
+
+    if(!note){
+
+        return;
+
+    }
+
+
+    note.classList.remove(
+        "is-updating",
+        "is-success"
+    );
+
+
+    if(
+        state ===
+        "updating"
+    ){
+
+        note.textContent =
+            "Memperbarui...";
+
+        note.classList.add(
+            "is-updating"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        state ===
+        "success"
+    ){
+
+        note.textContent =
+            "Terakhir update " +
+            new Intl.DateTimeFormat(
+                "id-ID",
+                {
+                    hour:
+                        "2-digit",
+                    minute:
+                        "2-digit",
+                    timeZone:
+                        "Asia/Jakarta"
+                }
+            )
+            .format(
+                new Date()
+            );
+
+        note.classList.add(
+            "is-success"
+        );
+
+        return;
+
+    }
+
+
+    note.textContent =
+        "Auto update 5 menit";
+
+}
+
+
+async function runMasterAutoRefresh(){
+
+    if(
+        masterAutoRefreshBusy
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        document.hidden
+    ){
+
+        return;
+
+    }
+
+
+    /*
+     * Jangan mengambil ulang data saat Master sedang
+     * mengisi modal/form agar input tidak terganggu.
+     */
+    if(
+        modal &&
+        modal.classList.contains(
+            "show"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !masterSession
+    ){
+
+        return;
+
+    }
+
+
+    masterAutoRefreshBusy =
+        true;
+
+
+    setMasterAutoSyncStatus(
+        "updating"
+    );
+
+
+    try{
+
+        /*
+         * Dashboard selalu diperbarui supaya ringkasan
+         * operasional tetap segar.
+         */
+        await loadDashboard();
+
+
+        /*
+         * Bila Master sedang berada di panel lain,
+         * panel aktif ikut diperbarui.
+         *
+         * Dashboard tidak dipanggil dua kali.
+         * Kamar memakai data Dashboard yang baru.
+         */
+        if(
+            currentMasterPanel ===
+            "rooms"
+        ){
+
+            renderRooms(
+                dashboardData &&
+                dashboardData.rooms ||
+                []
+            );
+
+        }else if(
+            currentMasterPanel !==
+            "dashboard"
+        ){
+
+            await loadPanel(
+                currentMasterPanel
+            );
+
+        }
+
+
+        setMasterAutoSyncStatus(
+            "success"
+        );
+
+    }catch(error){
+
+        /*
+         * Jangan mengganggu UI dengan alert dari
+         * refresh otomatis. Error akan terlihat saat
+         * pengguna membuka panel secara manual.
+         */
+        console.warn(
+            "MASTER AUTO SYNC:",
+            error &&
+            error.message
+                ? error.message
+                : error
+        );
+
+        setMasterAutoSyncStatus(
+            "idle"
+        );
+
+    }finally{
+
+        masterAutoRefreshBusy =
+            false;
+
+    }
+
+}
+
+
+function startMasterAutoRefresh(){
+
+    if(
+        masterAutoRefreshTimer
+    ){
+
+        clearInterval(
+            masterAutoRefreshTimer
+        );
+
+    }
+
+
+    masterAutoRefreshTimer =
+        setInterval(
+            runMasterAutoRefresh,
+            MASTER_AUTO_REFRESH_MS
+        );
+
+}
 
 
 /* ============================================================
