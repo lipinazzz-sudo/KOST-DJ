@@ -902,6 +902,10 @@ button{
 }
 
 @media(max-width:1100px){
+    .finance-reconciliation-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
     .finance-toolbar{
         grid-template-columns:minmax(160px,220px) minmax(160px,220px) minmax(240px,1fr);
     }
@@ -926,6 +930,10 @@ button{
 }
 
 @media(max-width:700px){
+    .finance-reconciliation-grid{
+        grid-template-columns:1fr;
+    }
+
     .finance-toolbar{
         grid-template-columns:1fr;
     }
@@ -952,6 +960,48 @@ button{
     .finance-annual-metrics{
         grid-template-columns:1fr;
     }
+}
+
+.finance-reconciliation-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+}
+
+.finance-reconciliation-card{
+    padding:12px 13px;
+    background:#f8fafc;
+    border:1px solid #edf0f4;
+    border-radius:12px;
+}
+
+.finance-reconciliation-card span{
+    display:block;
+    color:#667085;
+    font-size:11px;
+    font-weight:800;
+}
+
+.finance-reconciliation-card strong{
+    display:block;
+    margin-top:5px;
+    font-size:16px;
+    line-height:1.2;
+}
+
+.finance-reconciliation-card.good strong{
+    color:#027a48;
+}
+
+.finance-reconciliation-card.warn strong{
+    color:#b42318;
+}
+
+.finance-reconciliation-note{
+    margin-top:12px;
+    color:#667085;
+    font-size:11px;
+    line-height:1.5;
 }
 
 .finance-report-grid{
@@ -2874,6 +2924,34 @@ button{
                         <div
                             id="financeBillingBox"
                             class="finance-panel-body table-wrap"
+                        ></div>
+
+                    </div>
+
+
+                    <div
+                        class="finance-panel"
+                        style="margin-top:16px;"
+                    >
+
+                        <div class="finance-panel-head">
+
+                            <h3>
+                                Rekonsiliasi Keuangan
+                            </h3>
+
+                            <span
+                                id="financeReconciliationStatus"
+                                class="small"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+                        <div
+                            id="financeReconciliationBox"
+                            class="finance-panel-body"
                         ></div>
 
                     </div>
@@ -11511,6 +11589,13 @@ async function loadFinance(){
 
         document
             .getElementById(
+                "financeReconciliationBox"
+            )
+            .innerHTML =
+                "";
+
+        document
+            .getElementById(
                 "financeReportBox"
             )
             .innerHTML =
@@ -11702,6 +11787,10 @@ function renderFinance(){
 
     renderFinanceBilling(
         summary.billingStatus
+    );
+
+    renderFinanceReconciliation(
+        summary.reconciliation
     );
 
     renderFinanceAnnual(
@@ -12207,6 +12296,202 @@ function renderFinanceBilling(
     renderDetailTable(
         'ALL'
     );
+
+}
+
+
+function renderFinanceReconciliation(
+    reconciliation
+){
+
+    const box =
+        document.getElementById(
+            "financeReconciliationBox"
+        );
+
+
+    const statusBox =
+        document.getElementById(
+            "financeReconciliationStatus"
+        );
+
+
+    if(!box){
+
+        return;
+
+    }
+
+
+    if(!reconciliation){
+
+        box.innerHTML =
+            '<div class="empty">Data rekonsiliasi belum tersedia.</div>';
+
+        return;
+
+    }
+
+
+    const isOk =
+        String(
+            reconciliation.status ||
+            ''
+        ) ===
+        'SESUAI';
+
+
+    if(statusBox){
+
+        statusBox.textContent =
+            isOk
+                ? '✓ Sesuai'
+                : '⚠ Perlu dicek';
+
+        statusBox.style.fontWeight =
+            '900';
+
+        statusBox.style.color =
+            isOk
+                ? '#027a48'
+                : '#b42318';
+
+    }
+
+
+    const cards = [
+
+        [
+            "Pembayaran Terverifikasi",
+            String(
+                Number(
+                    reconciliation.verifiedPaymentCount ||
+                    0
+                )
+            ) +
+            " transaksi"
+        ],
+
+        [
+            "Pendapatan Terverifikasi",
+            financeMoney(
+                reconciliation.verifiedPaymentAmount
+            )
+        ],
+
+        [
+            "Menunggu Verifikasi",
+            financeMoney(
+                reconciliation.pendingVerificationAmount
+            )
+        ],
+
+        [
+            "Pembayaran Ditolak",
+            financeMoney(
+                reconciliation.rejectedAmount
+            )
+        ],
+
+        [
+            "Selisih Pendapatan",
+            financeMoney(
+                reconciliation.paymentDifference
+            )
+        ],
+
+        [
+            "Selisih Pengeluaran",
+            financeMoney(
+                reconciliation.expenseDifference
+            )
+        ],
+
+        [
+            "Profit Check",
+            financeMoney(
+                reconciliation.profitCheck
+            )
+        ],
+
+        [
+            "Duplikasi Terindikasi",
+            String(
+                Number(
+                    reconciliation.duplicateGroups ||
+                    0
+                )
+            ) +
+            " grup"
+        ]
+
+    ];
+
+
+    box.innerHTML =
+
+        '<div class="finance-reconciliation-grid">' +
+
+        cards
+            .map(
+                function(item,index){
+
+                    const warning =
+                        (
+                            index === 4 ||
+                            index === 5 ||
+                            index === 7
+                        ) &&
+                        (
+                            Number(
+                                index === 7
+                                    ? reconciliation.duplicateGroups
+                                    : (
+                                        index === 4
+                                            ? reconciliation.paymentDifference
+                                            : reconciliation.expenseDifference
+                                      )
+                            ) !== 0
+                        );
+
+
+                    return (
+
+                        '<div class="finance-reconciliation-card ' +
+                        (
+                            warning
+                                ? 'warn'
+                                : 'good'
+                        ) +
+                        '">' +
+
+                        '<span>' +
+                        escapeHtml(
+                            item[0]
+                        ) +
+                        '</span>' +
+
+                        '<strong>' +
+                        escapeHtml(
+                            item[1]
+                        ) +
+                        '</strong>' +
+
+                        '</div>'
+
+                    );
+
+                }
+            )
+            .join("") +
+
+        '</div>' +
+
+        '<div class="finance-reconciliation-note">' +
+
+        'Rekonsiliasi membandingkan pembayaran terverifikasi dengan pendapatan yang diakui pada periode ini, serta memeriksa penjumlahan Maintenance + Pengeluaran Umum. Duplikasi yang terdeteksi tidak otomatis dihapus; Master tetap harus memeriksa sumber pembayaran sebelum melakukan koreksi.' +
+
+        '</div>';
 
 }
 
