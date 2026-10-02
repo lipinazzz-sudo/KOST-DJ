@@ -2616,11 +2616,36 @@ function djFinanceBuildBillingStatusV1_(
           .toUpperCase();
 
 
-        if(!tenantId){
+        const tenant =
+          tenantId
+            ? null
+            : (
+                tenantByRoom[
+                  String(
+                    contract.room ||
+                    ''
+                  ).trim()
+                ] ||
+                null
+              );
 
-          return;
 
-        }
+        const resolvedTenantId =
+          tenantId ||
+          (
+            tenant
+              ? tenant.tenantId
+              : ''
+          );
+
+
+        const resolvedName =
+          tenant
+            ? tenant.name
+            : (
+                contract.name ||
+                ''
+              );
 
 
         const rent =
@@ -2651,8 +2676,14 @@ function djFinanceBuildBillingStatusV1_(
 
 
         const payment =
-          paymentMap[tenantId] ||
-          null;
+          resolvedTenantId
+            ? (
+                paymentMap[
+                  resolvedTenantId
+                ] ||
+                null
+              )
+            : null;
 
 
         const paymentPaid =
@@ -2865,17 +2896,26 @@ function djFinanceBuildBillingStatusV1_(
         detailRows.push({
 
           tenantId:
-            tenantId,
+            resolvedTenantId,
 
           name:
-            payment &&
-            payment.name ||
+            (
+              payment &&
+              payment.name
+            ) ||
+            resolvedName ||
             '',
 
           room:
-            payment &&
-            payment.room ||
+            (
+              payment &&
+              payment.room
+            ) ||
             contract.room ||
+            (
+              tenant &&
+              tenant.room
+            ) ||
             '',
 
           dueDate:
