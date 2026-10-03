@@ -2709,6 +2709,44 @@ button{
     }
 }
 
+/* =========================================================
+   DASHBOARD OPERATIONAL FEEDS V2
+   ========================================================= */
+
+#panel-dashboard .dashboard-ops-note{
+    margin-top:8px;
+    padding:9px 12px;
+    background:#f8fafc;
+    border:1px solid #e1e6ee;
+    border-left:4px solid #52658c;
+    border-radius:10px;
+    color:#475467;
+    font-size:11px;
+    font-weight:700;
+}
+
+#panel-dashboard .data-table td{
+    vertical-align:middle;
+}
+
+#panel-dashboard .data-table .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+#panel-dashboard .data-table .actions .btn{
+    white-space:nowrap;
+}
+
+#panel-dashboard .data-table tr:has(.badge-danger){
+    background:#fffafa;
+}
+
+#panel-dashboard .data-table tr:has(.badge-warn){
+    background:#fffdf7;
+}
+
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
@@ -3087,6 +3125,11 @@ button{
                                     <h3 style="margin:0;">
                                         Perlu Perhatian
                                     </h3>
+
+                                    <div class="dashboard-ops-note">
+                                        Data di bawah disegarkan dari Payment, Pendaftaran, Maintenance, dan Laundry.
+                                        Action dapat diproses langsung dari Dashboard tanpa membuka panel lain.
+                                    </div>
 
                                 </div>
 
@@ -6571,6 +6614,19 @@ async function loadDashboard(){
             : [];
 
 
+    /*
+     * Dashboard tidak lagi bergantung pada snapshot status
+     * lama dari masterDashboard untuk angka Payment,
+     * Pendaftaran, Maintenance, dan Laundry.
+     *
+     * Semua feed operasional utama diambil ulang dari
+     * endpoint panel masing-masing, lalu Dashboard
+     * menghitung ulang ringkasan + Perlu Perhatian dari
+     * sumber data yang sama dengan panel detail.
+     */
+    await loadDashboardOperationalFeeds();
+
+
     renderSummary();
 
     renderAttention();
@@ -6587,6 +6643,201 @@ async function loadDashboard(){
 }
 
 
+async function loadDashboardOperationalFeeds(){
+
+    const requests = await Promise.allSettled([
+
+        api(
+            "masterRegistrations"
+        ),
+
+        api(
+            "masterPayments"
+        ),
+
+        api(
+            "masterMaintenance"
+        ),
+
+        api(
+            "masterLaundry"
+        ),
+
+        api(
+            "masterTenants"
+        )
+
+    ]);
+
+
+    /*
+     * Jangan menghapus data lama jika salah satu feed gagal.
+     * Feed yang berhasil akan langsung dipakai Dashboard.
+     */
+    const registrationsResult =
+        requests[0];
+
+    if(
+        registrationsResult &&
+        registrationsResult.status ===
+        "fulfilled"
+    ){
+
+        const items =
+            registrationsResult.value &&
+            Array.isArray(
+                registrationsResult.value.items
+            )
+                ? registrationsResult.value.items
+                : [];
+
+        registrationItems =
+            items.filter(
+                function(item){
+
+                    return (
+                        String(
+                            item.status ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase() ===
+                        "MENUNGGU VERIFIKASI"
+                    );
+
+                }
+            );
+
+    }
+
+
+    const paymentsResult =
+        requests[1];
+
+    if(
+        paymentsResult &&
+        paymentsResult.status ===
+        "fulfilled"
+    ){
+
+        paymentItems =
+            paymentsResult.value &&
+            Array.isArray(
+                paymentsResult.value.items
+            )
+                ? paymentsResult.value.items
+                : [];
+
+    }
+
+
+    const maintenanceResult =
+        requests[2];
+
+    if(
+        maintenanceResult &&
+        maintenanceResult.status ===
+        "fulfilled"
+    ){
+
+        const items =
+            maintenanceResult.value &&
+            Array.isArray(
+                maintenanceResult.value.items
+            )
+                ? maintenanceResult.value.items
+                : [];
+
+        maintenanceItems =
+            items.filter(
+                function(item){
+
+                    const id =
+                        String(
+                            item.id ||
+                            ""
+                        ).trim();
+
+                    const status =
+                        String(
+                            item.status ||
+                            "OPEN"
+                        )
+                        .trim()
+                        .toUpperCase();
+
+                    return (
+                        /^MNT-/i.test(id) &&
+                        status !==
+                        "SELESAI" &&
+                        status !==
+                        "BATAL"
+                    );
+
+                }
+            );
+
+    }
+
+
+    const laundryResult =
+        requests[3];
+
+    if(
+        laundryResult &&
+        laundryResult.status ===
+        "fulfilled"
+    ){
+
+        laundryItems =
+            laundryResult.value &&
+            Array.isArray(
+                laundryResult.value.items
+            )
+                ? laundryResult.value.items
+                : [];
+
+    }
+
+
+    const tenantResult =
+        requests[4];
+
+    if(
+        tenantResult &&
+        tenantResult.status ===
+        "fulfilled"
+    ){
+
+        tenantItems =
+            tenantResult.value &&
+            Array.isArray(
+                tenantResult.value.items
+            )
+                ? tenantResult.value.items
+                : [];
+
+    }
+
+
+    return {
+        registrations:
+            registrationItems.length,
+
+        payments:
+            paymentItems.length,
+
+        maintenance:
+            maintenanceItems.length,
+
+        laundry:
+            laundryItems.length
+
+    };
+
+}
+
+
 function renderSummary(){
 
     const summary =
@@ -6594,6 +6845,47 @@ function renderSummary(){
         dashboardData.summary
             ? dashboardData.summary
             : {};
+
+
+    const paymentRows =
+        Array.isArray(
+            paymentItems
+        )
+            ? paymentItems
+            : [];
+
+
+    let paymentNeedAction =
+        0;
+
+    let paymentPaid =
+        0;
+
+
+    paymentRows.forEach(
+        function(item){
+
+            const condition =
+                paymentCondition(
+                    item
+                );
+
+
+            if(
+                condition ===
+                "LUNAS"
+            ){
+
+                paymentPaid++;
+
+            }else{
+
+                paymentNeedAction++;
+
+            }
+
+        }
+    );
 
 
     const cards = [
@@ -6620,22 +6912,22 @@ function renderSummary(){
 
         [
             "Pendaftaran Pending",
-            summary.pendingRegistrations || 0
+            registrationItems.length
         ],
 
         [
-            "Pembayaran Pending",
-            summary.pendingPayment || 0
+            "Pembayaran Perlu Tindakan",
+            paymentNeedAction
         ],
 
         [
             "Sudah Lunas",
-            summary.paidPayment || 0
+            paymentPaid
         ],
 
         [
             "Maintenance Aktif",
-            summary.openMaintenance || 0
+            maintenanceItems.length
         ]
 
     ];
@@ -6683,37 +6975,42 @@ function renderAttention(){
     const rows = [];
 
 
-    (
-        dashboardData &&
-        dashboardData.registrations
-            ? dashboardData.registrations
-            : []
-    )
-    .forEach(
+    /*
+     * ----------------------------------------------------------
+     * PENDAFTARAN
+     * ----------------------------------------------------------
+     */
+    registrationItems.forEach(
         function(item){
 
             rows.push(
 
                 '<tr>' +
 
-                '<td>Pendaftaran</td>' +
+                '<td>' +
+                '<strong>Pendaftaran</strong>' +
+                '</td>' +
 
                 '<td>' +
-
                 escapeHtml(
                     item.name ||
                     "—"
                 ) +
-
+                (
+                    item.id
+                        ? '<br><span class="small">' +
+                          escapeHtml(item.id) +
+                          '</span>'
+                        : ""
+                ) +
                 '</td>' +
 
-                '<td>Kamar ' +
-
+                '<td>' +
+                'Kamar ' +
                 escapeHtml(
                     item.room ||
                     "—"
                 ) +
-
                 '</td>' +
 
                 '<td>' +
@@ -6726,9 +7023,23 @@ function renderAttention(){
 
                 '<td>' +
 
-                '<button class="btn btn-primary" onclick="openPanel(\'registrations\')">' +
-                'Buka' +
+                '<div class="actions">' +
+
+                '<button class="btn btn-success" onclick="approveRegistration(\'' +
+                encodeURIComponent(item.id || "") +
+                '\',\'' +
+                encodeURIComponent(item.room || "") +
+                '\')">' +
+                'Setujui' +
                 '</button>' +
+
+                '<button class="btn btn-danger" onclick="rejectRegistration(\'' +
+                encodeURIComponent(item.id || "") +
+                '\')">' +
+                'Tolak' +
+                '</button>' +
+
+                '</div>' +
 
                 '</td>' +
 
@@ -6740,53 +7051,203 @@ function renderAttention(){
     );
 
 
-    (
-        dashboardData &&
-        dashboardData.payments
-            ? dashboardData.payments
-            : []
-    )
-    .forEach(
+    /*
+     * ----------------------------------------------------------
+     * PEMBAYARAN
+     * ----------------------------------------------------------
+     */
+    paymentItems.forEach(
         function(item){
+
+            const condition =
+                paymentCondition(
+                    item
+                );
+
+
+            if(
+                condition ===
+                "LUNAS"
+            ){
+
+                return;
+
+            }
+
+
+            const outstanding =
+                paymentOutstanding(
+                    item
+                );
+
+
+            let badgeClass =
+                "badge-warn";
+
+
+            if(
+                condition ===
+                "TERLAMBAT" ||
+                condition ===
+                "DITOLAK"
+            ){
+
+                badgeClass =
+                    "badge-danger";
+
+            }
+
+
+            let actions =
+                '<button class="btn btn-secondary" onclick="viewPaymentProof(\'' +
+                encodeURIComponent(item.id || "") +
+                '\')">' +
+                'Lihat Foto' +
+                '</button>';
+
+
+            if(
+                String(
+                    item.verification ||
+                    ""
+                )
+                .trim()
+                .toUpperCase() ===
+                "MENUNGGU VERIFIKASI"
+            ){
+
+                actions +=
+
+                    '<button class="btn btn-success" onclick="verifyPayment(\'' +
+                    encodeURIComponent(item.id || "") +
+                    '\',\'approve\')">' +
+                    'Setujui' +
+                    '</button>' +
+
+                    '<button class="btn btn-danger" onclick="verifyPayment(\'' +
+                    encodeURIComponent(item.id || "") +
+                    '\',\'reject\')">' +
+                    'Tolak' +
+                    '</button>';
+
+            }
+
+
+            const phone =
+                getTenantPhoneForWhatsApp(
+                    item.tenantId
+                );
+
+
+            if(
+                phone &&
+                outstanding >
+                0
+            ){
+
+                actions +=
+
+                    '<button class="btn btn-success" onclick="openPaymentWhatsApp(\'' +
+                    encodeURIComponent(item.tenantId || "") +
+                    '\',\'' +
+                    encodeURIComponent(item.name || item.tenantId || "Tenant") +
+                    '\',\'' +
+                    encodeURIComponent(item.room || "") +
+                    '\',\'' +
+                    encodeURIComponent(condition) +
+                    '\',\'' +
+                    encodeURIComponent(item.period || "") +
+                    '\',\'' +
+                    encodeURIComponent(money(outstanding)) +
+                    '\')">' +
+                    '💬 WhatsApp' +
+                    '</button>';
+
+            }
+
+
+            let detail =
+                item.period ||
+                "—";
+
+
+            if(
+                condition ===
+                "KURANG BAYAR" &&
+                outstanding >
+                0
+            ){
+
+                detail +=
+                    '<br><span class="small" style="color:#b42318;font-weight:800;">' +
+                    'Sisa ' +
+                    escapeHtml(
+                        money(outstanding)
+                    ) +
+                    '</span>';
+
+            }else if(
+                condition ===
+                "TERLAMBAT"
+            ){
+
+                detail +=
+                    '<br><span class="small" style="color:#b42318;font-weight:800;">' +
+                    String(
+                        paymentDaysLate(
+                            item
+                        )
+                    ) +
+                    ' hari lewat jatuh tempo' +
+                    '</span>';
+
+            }
+
 
             rows.push(
 
                 '<tr>' +
 
-                '<td>Pembayaran</td>' +
+                '<td>' +
+                '<strong>Pembayaran</strong>' +
+                '</td>' +
 
                 '<td>' +
-
                 escapeHtml(
                     item.name ||
                     item.tenantId ||
                     "—"
                 ) +
-
-                '</td>' +
-
-                '<td>' +
-
-                escapeHtml(
-                    item.period ||
-                    "—"
+                (
+                    item.id
+                        ? '<br><span class="small">' +
+                          escapeHtml(item.id) +
+                          '</span>'
+                        : ""
                 ) +
+                '</td>' +
 
+                '<td>' +
+                detail +
                 '</td>' +
 
                 '<td>' +
 
-                '<span class="badge badge-warn">' +
-                'VERIFIKASI' +
+                '<span class="badge ' +
+                badgeClass +
+                '">' +
+                escapeHtml(
+                    condition
+                ) +
                 '</span>' +
 
                 '</td>' +
 
                 '<td>' +
 
-                '<button class="btn btn-primary" onclick="openPanel(\'payments\')">' +
-                'Buka' +
-                '</button>' +
+                '<div class="actions">' +
+                actions +
+                '</div>' +
 
                 '</td>' +
 
@@ -6798,69 +7259,76 @@ function renderAttention(){
     );
 
 
-    (
-        dashboardData &&
-        dashboardData.maintenance
-            ? dashboardData.maintenance
-            : []
-    )
-    .filter(
-        function(item){
-
-            const status =
-                String(
-                    item && item.status ||
-                    "OPEN"
-                )
-                .trim()
-                .toUpperCase();
-
-            return (
-                status !== "SELESAI" &&
-                status !== "BATAL"
-            );
-
-        }
-    )
-    .forEach(
+    /*
+     * ----------------------------------------------------------
+     * MAINTENANCE
+     * ----------------------------------------------------------
+     */
+    maintenanceItems.forEach(
         function(item){
 
             rows.push(
 
                 '<tr>' +
 
-                '<td>Maintenance</td>' +
+                '<td>' +
+                '<strong>Maintenance</strong>' +
+                '</td>' +
 
                 '<td>' +
-
                 escapeHtml(
                     item.name ||
                     item.tenantId ||
                     "—"
                 ) +
-
+                (
+                    item.id
+                        ? '<br><span class="small">' +
+                          escapeHtml(item.id) +
+                          '</span>'
+                        : ""
+                ) +
                 '</td>' +
 
-                '<td>Kamar ' +
-
+                '<td>' +
+                'Kamar ' +
                 escapeHtml(
                     item.room ||
                     "—"
                 ) +
+                '<br><span class="small">' +
+                escapeHtml(
+                    item.problem ||
+                    "—"
+                ) +
+                '</span>' +
+                '</td>' +
+
+                '<td>' +
+
+                '<span class="badge badge-warn">' +
+                'TERKIRIM' +
+                '</span>' +
 
                 '</td>' +
 
                 '<td>' +
 
-                '<span class="badge badge-warn">TERKIRIM</span>' +
+                '<div class="actions">' +
 
-                '</td>' +
-
-                '<td>' +
-
-                '<button class="btn btn-primary" onclick="openPanel(\'maintenance\')">' +
-                'Buka' +
+                '<button class="btn btn-success" onclick="sendMaintenanceWhatsApp(\'' +
+                encodeURIComponent(item.id || "") +
+                '\')">' +
+                '💬 WA' +
                 '</button>' +
+
+                '<button class="btn btn-primary" onclick="finishMaintenance(\'' +
+                encodeURIComponent(item.id || "") +
+                '\')">' +
+                'Selesai' +
+                '</button>' +
+
+                '</div>' +
 
                 '</td>' +
 
@@ -6870,6 +7338,132 @@ function renderAttention(){
 
         }
     );
+
+
+    /*
+     * ----------------------------------------------------------
+     * LAUNDRY
+     * ----------------------------------------------------------
+     */
+    laundryItems.forEach(
+        function(item){
+
+            rows.push(
+
+                '<tr>' +
+
+                '<td>' +
+                '<strong>Laundry</strong>' +
+                '</td>' +
+
+                '<td>' +
+                escapeHtml(
+                    item.name ||
+                    item.tenantId ||
+                    "—"
+                ) +
+                (
+                    item.id
+                        ? '<br><span class="small">' +
+                          escapeHtml(item.id) +
+                          '</span>'
+                        : ""
+                ) +
+                '</td>' +
+
+                '<td>' +
+                'Kamar ' +
+                escapeHtml(
+                    item.room ||
+                    "—"
+                ) +
+                '<br><span class="small">' +
+                escapeHtml(
+                    item.service ||
+                    "—"
+                ) +
+                '</span>' +
+                '</td>' +
+
+                '<td>' +
+
+                '<span class="badge badge-info">' +
+                'TERKIRIM' +
+                '</span>' +
+
+                '</td>' +
+
+                '<td>' +
+
+                '<div class="actions">' +
+
+                '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\'' +
+                encodeURIComponent(item.id || "") +
+                '\')">' +
+                '💬 WA' +
+                '</button>' +
+
+                '<button class="btn btn-primary" onclick="completeLaundry(\'' +
+                encodeURIComponent(item.id || "") +
+                '\')">' +
+                'Selesai' +
+                '</button>' +
+
+                '</div>' +
+
+                '</td>' +
+
+                '</tr>'
+
+            );
+
+        }
+    );
+
+
+    /*
+     * ----------------------------------------------------------
+     * CAFE
+     * ----------------------------------------------------------
+     * Backend Cafe belum tersedia pada Master saat ini.
+     * Jangan membuat angka/order palsu.
+     */
+    rows.push(
+
+        '<tr>' +
+
+        '<td>' +
+        '<strong>Cafe</strong>' +
+        '</td>' +
+
+        '<td>' +
+        '—' +
+        '</td>' +
+
+        '<td>' +
+        'Order Cafe' +
+        '</td>' +
+
+        '<td>' +
+
+        '<span class="badge">' +
+        'BELUM TERHUBUNG' +
+        '</span>' +
+
+        '</td>' +
+
+        '<td>' +
+
+        '<span class="small">' +
+        'Backend Cafe belum tersedia' +
+        '</span>' +
+
+        '</td>' +
+
+        '</tr>'
+
+    );
+
 
     document
         .getElementById(
