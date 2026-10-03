@@ -2311,6 +2311,404 @@ button{
     }
 }
 
+
+/* =========================================================
+   FINANCE UI CLARITY V2
+   Visual-only overrides.
+   Tidak mengubah API, perhitungan, atau sumber data.
+   ========================================================= */
+
+#panel-finance{
+    --finance-border-strong:#c7d0dc;
+    --finance-border-soft:#e1e6ee;
+    --finance-income:#027a48;
+    --finance-income-bg:#f0fdf4;
+    --finance-expense:#b42318;
+    --finance-expense-bg:#fff5f5;
+    --finance-total:#17213a;
+    --finance-attention:#b54708;
+    --finance-attention-bg:#fffaf0;
+}
+
+/* ---------- Hierarchy / status ---------- */
+
+#panel-finance .finance-status-note{
+    margin:4px 0 14px;
+    padding:10px 13px;
+    background:#f8fafc;
+    border:1px solid var(--finance-border-soft);
+    border-left:4px solid #52658c;
+    border-radius:11px;
+    color:#475467;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* ---------- KPI cards ---------- */
+
+#panel-finance .finance-kpi-grid{
+    gap:10px;
+    margin-top:12px;
+}
+
+#panel-finance .finance-kpi{
+    border:1px solid var(--finance-border-strong);
+    border-radius:14px;
+    padding:15px 16px;
+    box-shadow:0 2px 8px rgba(15,23,42,.035);
+    background:#fff;
+}
+
+#panel-finance .finance-kpi:nth-child(1){
+    border-left:4px solid var(--finance-income);
+}
+
+#panel-finance .finance-kpi:nth-child(2){
+    border-left:4px solid var(--finance-expense);
+}
+
+#panel-finance .finance-kpi:nth-child(3),
+#panel-finance .finance-kpi:nth-child(4){
+    border-left:4px solid var(--finance-total);
+}
+
+#panel-finance .finance-kpi:nth-child(1) strong{
+    color:var(--finance-income);
+}
+
+#panel-finance .finance-kpi:nth-child(2) strong{
+    color:var(--finance-expense);
+}
+
+#panel-finance .finance-kpi:nth-child(3) strong,
+#panel-finance .finance-kpi:nth-child(4) strong{
+    color:var(--finance-total);
+}
+
+/* ---------- Secondary metrics ---------- */
+
+#panel-finance .finance-secondary-grid{
+    gap:10px;
+    margin-top:10px;
+}
+
+#panel-finance .finance-secondary{
+    border:1px solid var(--finance-border-soft);
+    border-radius:12px;
+    padding:12px 14px;
+    box-shadow:0 1px 5px rgba(15,23,42,.025);
+}
+
+#panel-finance .finance-secondary:nth-child(1) strong,
+#panel-finance .finance-secondary:nth-child(3) strong{
+    color:var(--finance-income);
+}
+
+#panel-finance .finance-secondary:nth-child(2) strong{
+    color:var(--finance-expense);
+}
+
+#panel-finance .finance-secondary:nth-child(4) strong{
+    color:var(--finance-total);
+}
+
+/* ---------- Boundaries for every finance panel ---------- */
+
+#panel-finance .finance-panel{
+    border:1px solid var(--finance-border-strong);
+    border-radius:14px;
+    box-shadow:0 2px 8px rgba(15,23,42,.035);
+    overflow:hidden;
+    background:#fff;
+}
+
+#panel-finance .finance-panel-head{
+    padding:13px 15px;
+    background:#fafbfc;
+    border-bottom:1px solid var(--finance-border-soft);
+}
+
+#panel-finance .finance-panel-head h3{
+    font-size:14px;
+}
+
+#panel-finance .finance-panel-body{
+    padding:13px 15px;
+}
+
+#panel-finance .finance-analysis-grid,
+#panel-finance .finance-panels{
+    gap:12px;
+    margin-top:12px;
+}
+
+/* ---------- Annual summary ---------- */
+
+#panel-finance .finance-annual-metrics{
+    gap:9px;
+}
+
+#panel-finance .finance-annual-metric{
+    border:1px solid var(--finance-border-soft);
+    border-radius:11px;
+    padding:11px 12px;
+}
+
+#panel-finance .finance-annual-metric:nth-child(1) strong,
+#panel-finance .finance-annual-metric:nth-child(6) strong{
+    color:var(--finance-income);
+}
+
+#panel-finance .finance-annual-metric:nth-child(2) strong{
+    color:var(--finance-expense);
+}
+
+#panel-finance .finance-annual-metric:nth-child(3) strong,
+#panel-finance .finance-annual-metric:nth-child(4) strong,
+#panel-finance .finance-annual-metric:nth-child(5) strong{
+    color:var(--finance-total);
+}
+
+/* ---------- Billing: make attention rows obvious ---------- */
+
+#panel-finance .finance-billing-summary{
+    gap:9px;
+    margin-bottom:11px;
+}
+
+#panel-finance .finance-billing-rate{
+    border:1px solid var(--finance-border-soft);
+    border-radius:11px;
+    padding:11px 12px;
+}
+
+#panel-finance .finance-billing-rate:nth-child(1) strong{
+    color:var(--finance-total);
+}
+
+#panel-finance .finance-billing-rate:nth-child(2){
+    background:var(--finance-expense-bg);
+    border-color:#f1b8b8;
+}
+
+#panel-finance .finance-billing-rate:nth-child(2) strong{
+    color:var(--finance-expense);
+}
+
+#panel-finance .finance-billing-table tbody tr:nth-child(2),
+#panel-finance .finance-billing-table tbody tr:nth-child(3),
+#panel-finance .finance-billing-table tbody tr:nth-child(4),
+#panel-finance .finance-billing-table tbody tr:nth-child(5),
+#panel-finance .finance-billing-table tbody tr:nth-child(6){
+    background:var(--finance-attention-bg);
+}
+
+#panel-finance .finance-billing-table tbody tr:nth-child(2) td:first-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(3) td:first-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(4) td:first-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(5) td:first-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(6) td:first-child{
+    color:var(--finance-expense);
+}
+
+#panel-finance .finance-billing-table tbody tr:nth-child(2) td:last-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(3) td:last-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(4) td:last-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(5) td:last-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(6) td:last-child{
+    color:var(--finance-expense);
+    font-weight:900;
+}
+
+#panel-finance .finance-billing-table tbody tr:nth-child(7) td:first-child,
+#panel-finance .finance-billing-table tbody tr:nth-child(7) td:last-child{
+    color:var(--finance-income);
+    font-weight:900;
+}
+
+/* ---------- Transaction tables ---------- */
+
+#panel-finance .finance-floor-table td:nth-child(2),
+#panel-finance .finance-room-table td:nth-child(4),
+#panel-finance .finance-month-table td:nth-child(2),
+#panel-finance .finance-cashflow-table td:nth-child(2){
+    color:var(--finance-income);
+    font-weight:900;
+}
+
+#panel-finance .finance-floor-table td:nth-child(3),
+#panel-finance .finance-room-table td:nth-child(5),
+#panel-finance .finance-month-table td:nth-child(3),
+#panel-finance .finance-cashflow-table td:nth-child(3){
+    color:var(--finance-expense);
+    font-weight:900;
+}
+
+#panel-finance .finance-floor-table td:nth-child(4),
+#panel-finance .finance-room-table td:nth-child(6),
+#panel-finance .finance-month-table td:nth-child(4),
+#panel-finance .finance-cashflow-table td:nth-child(4){
+    color:var(--finance-total);
+    font-weight:900;
+}
+
+#panel-finance .finance-billing-detail-table td:nth-child(4){
+    color:var(--finance-income);
+    font-weight:900;
+}
+
+#panel-finance .finance-billing-detail-table td:nth-child(5){
+    color:var(--finance-expense);
+    font-weight:900;
+}
+
+/* ---------- Cash flow summary ---------- */
+
+#panel-finance .finance-cashflow-summary{
+    gap:9px;
+    margin-bottom:11px;
+}
+
+#panel-finance .finance-cashflow-card{
+    border:1px solid var(--finance-border-soft);
+    border-radius:11px;
+    padding:11px 12px;
+}
+
+#panel-finance .finance-cashflow-card:nth-child(1) strong{
+    color:var(--finance-income);
+}
+
+#panel-finance .finance-cashflow-card:nth-child(2) strong{
+    color:var(--finance-expense);
+}
+
+#panel-finance .finance-cashflow-card:nth-child(3) strong{
+    color:var(--finance-total);
+}
+
+/* ---------- Expense breakdown ---------- */
+
+#panel-finance .finance-breakdown-label > span:last-child,
+#panel-finance .finance-breakdown-amount{
+    color:var(--finance-expense);
+    font-weight:900;
+}
+
+#panel-finance .finance-breakdown-track span{
+    background:var(--finance-expense);
+}
+
+/* ---------- Recent transactions ---------- */
+
+#panel-finance .finance-recent .data-table tbody tr:has(td:nth-child(2) .badge-ok) td:last-child{
+    color:var(--finance-income);
+    font-weight:900;
+}
+
+#panel-finance .finance-recent .data-table tbody tr:has(td:nth-child(2) .badge-danger) td:last-child{
+    color:var(--finance-expense);
+    font-weight:900;
+}
+
+/* ---------- Report / print table ---------- */
+
+#panel-finance .finance-report-table tr:not(.finance-report-total) td:last-child{
+    color:#344054;
+}
+
+#panel-finance .finance-report-income td:last-child{
+    color:var(--finance-income) !important;
+    font-weight:900;
+}
+
+#panel-finance .finance-report-expense td:last-child{
+    color:var(--finance-expense) !important;
+    font-weight:900;
+}
+
+#panel-finance .finance-report-total td:last-child{
+    color:var(--finance-total) !important;
+    font-weight:900;
+}
+
+/* Existing renderer uses "total" for totals.
+   These selectors also cover the current printed L/R layout. */
+#panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(1) td:last-child,
+#panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(2) td:last-child{
+    color:var(--finance-income);
+    font-weight:900;
+}
+
+#panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(4) td:last-child,
+#panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(5) td:last-child{
+    color:var(--finance-expense);
+    font-weight:900;
+}
+
+#panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(3) td:last-child,
+#panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(6) td:last-child,
+#panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(7) td:last-child{
+    color:var(--finance-total) !important;
+    font-weight:900;
+}
+
+#panel-finance .finance-report-sheet:nth-child(2) .finance-report-table tr:nth-child(1) td:last-child{
+    color:var(--finance-income);
+    font-weight:900;
+}
+
+#panel-finance .finance-report-sheet:nth-child(2) .finance-report-table tr:nth-child(2) td:last-child{
+    color:var(--finance-expense);
+    font-weight:900;
+}
+
+#panel-finance .finance-report-sheet:nth-child(2) .finance-report-table tr:nth-child(3) td:last-child{
+    color:var(--finance-total) !important;
+    font-weight:900;
+}
+
+/* ---------- More compact spacing without losing boundaries ---------- */
+
+#panel-finance .finance-collapsible{
+    margin-bottom:10px;
+}
+
+#panel-finance .finance-recent{
+    margin-top:12px;
+}
+
+#panel-finance .finance-section-toggle{
+    min-width:30px;
+    height:30px;
+    border-color:#cfd6e2;
+    background:#fff;
+}
+
+@media(max-width:900px){
+    #panel-finance .finance-kpi-grid{
+        gap:9px;
+    }
+
+    #panel-finance .finance-secondary-grid{
+        gap:9px;
+    }
+}
+
+@media(max-width:700px){
+    #panel-finance .finance-kpi{
+        padding:13px 14px;
+    }
+
+    #panel-finance .finance-panel-head{
+        padding:12px 13px;
+    }
+
+    #panel-finance .finance-panel-body{
+        padding:12px 13px;
+    }
+}
+
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
