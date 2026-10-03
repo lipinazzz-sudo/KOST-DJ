@@ -2313,187 +2313,461 @@ button{
 
 
 /* =========================================================
-   FINANCE UI CLARITY V2
-   Visual-only overrides.
-   Tidak mengubah API, perhitungan, atau sumber data.
+   FINANCE UI CLARITY V3 — NAVY / GOLD
+   Visual-only layer.
+   Tidak mengubah API, kalkulasi, atau sumber data.
    ========================================================= */
 
 #panel-finance{
-    --finance-border-strong:#c7d0dc;
-    --finance-border-soft:#e1e6ee;
+    --finance-navy:#17213a;
+    --finance-navy-2:#202b49;
+    --finance-gold:#c99a2e;
+    --finance-gold-soft:#f7edd2;
+
+    --finance-border:#d4dbe6;
+    --finance-border-soft:#e5e9f0;
+
     --finance-income:#027a48;
     --finance-income-bg:#f0fdf4;
+
     --finance-expense:#b42318;
     --finance-expense-bg:#fff5f5;
+
     --finance-total:#17213a;
+
     --finance-attention:#b54708;
     --finance-attention-bg:#fffaf0;
+
+    --finance-surface:#ffffff;
+    --finance-surface-soft:#f8fafc;
 }
 
-/* ---------- Hierarchy / status ---------- */
+/* =========================================================
+   1. MASTER HEADER
+   ========================================================= */
+
+#panel-finance > .section-title{
+    position:relative;
+    margin:0;
+    padding:16px 20px 15px;
+    background:linear-gradient(
+        135deg,
+        var(--finance-navy),
+        var(--finance-navy-2)
+    );
+    color:#f2c86b !important;
+    border:1px solid #10182b;
+    border-bottom:3px solid var(--finance-gold);
+    border-radius:15px 15px 0 0;
+    box-shadow:0 4px 12px rgba(15,23,42,.08);
+    letter-spacing:.01em;
+}
+
+#panel-finance > .section-title::after{
+    content:"KEUANGAN";
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    color:rgba(255,255,255,.34);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.14em;
+}
+
+#panel-finance > .section-subtitle{
+    margin:0 0 15px;
+    padding:10px 20px 12px;
+    background:#f8fafc;
+    color:#59657a;
+    border:1px solid var(--finance-border);
+    border-top:0;
+    border-radius:0 0 12px 12px;
+    line-height:1.55;
+}
+
+/* =========================================================
+   2. QUICK NAVIGATION
+   ========================================================= */
+
+#panel-finance .finance-nav{
+    position:sticky;
+    top:0;
+    z-index:15;
+
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    margin:12px 0 13px;
+    padding:8px;
+
+    background:rgba(255,255,255,.96);
+    border:1px solid var(--finance-border);
+    border-radius:13px;
+    box-shadow:
+        0 5px 16px rgba(15,23,42,.06);
+
+    backdrop-filter:blur(8px);
+}
+
+#panel-finance .finance-nav button{
+    min-height:34px;
+    padding:7px 11px;
+    border:1px solid #d8dee8;
+    border-radius:9px;
+    background:#fff;
+    color:#475467;
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+    transition:
+        background .16s ease,
+        color .16s ease,
+        border-color .16s ease,
+        transform .16s ease;
+}
+
+#panel-finance .finance-nav button:hover{
+    border-color:#b7c0cf;
+    transform:translateY(-1px);
+}
+
+#panel-finance .finance-nav button.active{
+    background:var(--finance-navy) !important;
+    color:#f2c86b !important;
+    border-color:var(--finance-navy) !important;
+}
+
+#panel-finance .finance-nav-divider{
+    width:1px;
+    height:24px;
+    margin:0 2px;
+    background:#d8dee8;
+}
+
+/* =========================================================
+   3. STATUS / CONTEXT BAR
+   ========================================================= */
 
 #panel-finance .finance-status-note{
-    margin:4px 0 14px;
+    margin:0 0 13px;
     padding:10px 13px;
     background:#f8fafc;
-    border:1px solid var(--finance-border-soft);
-    border-left:4px solid #52658c;
-    border-radius:11px;
-    color:#475467;
-    font-size:12px;
-    font-weight:700;
+    border:1px solid var(--finance-border);
+    border-left:4px solid var(--finance-gold);
+    border-radius:10px;
+    color:#526075;
+    font-size:11px;
+    font-weight:800;
 }
 
-/* ---------- KPI cards ---------- */
+/* =========================================================
+   4. KPI — PRIMARY VISUAL HIERARCHY
+   ========================================================= */
 
 #panel-finance .finance-kpi-grid{
+    display:grid;
     gap:10px;
-    margin-top:12px;
+    margin-top:0;
 }
 
 #panel-finance .finance-kpi{
-    border:1px solid var(--finance-border-strong);
-    border-radius:14px;
+    position:relative;
+    min-width:0;
+    background:var(--finance-surface);
+    border:1px solid var(--finance-border);
+    border-radius:13px;
     padding:15px 16px;
     box-shadow:0 2px 8px rgba(15,23,42,.035);
-    background:#fff;
 }
 
-#panel-finance .finance-kpi:nth-child(1){
-    border-left:4px solid var(--finance-income);
+#panel-finance .finance-kpi::before{
+    content:"";
+    position:absolute;
+    inset:0 auto 0 0;
+    width:4px;
+    border-radius:13px 0 0 13px;
+    background:var(--finance-navy);
 }
 
-#panel-finance .finance-kpi:nth-child(2){
-    border-left:4px solid var(--finance-expense);
+#panel-finance .finance-kpi:nth-child(1)::before{
+    background:var(--finance-income);
 }
 
-#panel-finance .finance-kpi:nth-child(3),
-#panel-finance .finance-kpi:nth-child(4){
-    border-left:4px solid var(--finance-total);
+#panel-finance .finance-kpi:nth-child(2)::before{
+    background:var(--finance-expense);
+}
+
+#panel-finance .finance-kpi:nth-child(3)::before,
+#panel-finance .finance-kpi:nth-child(4)::before{
+    background:var(--finance-navy);
 }
 
 #panel-finance .finance-kpi:nth-child(1) strong{
-    color:var(--finance-income);
+    color:var(--finance-income) !important;
 }
 
 #panel-finance .finance-kpi:nth-child(2) strong{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
 }
 
 #panel-finance .finance-kpi:nth-child(3) strong,
 #panel-finance .finance-kpi:nth-child(4) strong{
-    color:var(--finance-total);
+    color:var(--finance-total) !important;
 }
 
-/* ---------- Secondary metrics ---------- */
+/* Make Profit visually more important without oversized text. */
+#panel-finance .finance-kpi:nth-child(3){
+    border-color:#bcc6d5;
+    box-shadow:
+        0 3px 12px rgba(23,33,58,.07);
+}
+
+/* =========================================================
+   5. SECONDARY KPI
+   ========================================================= */
 
 #panel-finance .finance-secondary-grid{
-    gap:10px;
+    display:grid;
+    gap:9px;
     margin-top:10px;
 }
 
 #panel-finance .finance-secondary{
+    background:var(--finance-surface);
     border:1px solid var(--finance-border-soft);
-    border-radius:12px;
-    padding:12px 14px;
+    border-radius:11px;
+    padding:11px 13px;
     box-shadow:0 1px 5px rgba(15,23,42,.025);
 }
 
 #panel-finance .finance-secondary:nth-child(1) strong,
 #panel-finance .finance-secondary:nth-child(3) strong{
-    color:var(--finance-income);
+    color:var(--finance-income) !important;
 }
 
 #panel-finance .finance-secondary:nth-child(2) strong{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
 }
 
 #panel-finance .finance-secondary:nth-child(4) strong{
-    color:var(--finance-total);
+    color:var(--finance-total) !important;
 }
 
-/* ---------- Boundaries for every finance panel ---------- */
+/* =========================================================
+   6. PANELS — STRONG BOUNDARY + NAVY HEADER + GOLD ACCENT
+   ========================================================= */
 
 #panel-finance .finance-panel{
-    border:1px solid var(--finance-border-strong);
-    border-radius:14px;
-    box-shadow:0 2px 8px rgba(15,23,42,.035);
+    position:relative;
     overflow:hidden;
     background:#fff;
+    border:1px solid var(--finance-border);
+    border-radius:14px;
+    box-shadow:
+        0 3px 10px rgba(15,23,42,.04);
 }
 
 #panel-finance .finance-panel-head{
-    padding:13px 15px;
-    background:#fafbfc;
-    border-bottom:1px solid var(--finance-border-soft);
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    min-height:47px;
+    padding:11px 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--finance-navy),
+            var(--finance-navy-2)
+        ) !important;
+
+    color:#fff !important;
+
+    border-bottom:3px solid var(--finance-gold) !important;
 }
 
-#panel-finance .finance-panel-head h3{
-    font-size:14px;
+#panel-finance .finance-panel-head h3,
+#panel-finance .finance-panel-head .finance-section-title{
+    margin:0;
+    color:#f2c86b !important;
+    font-size:13px;
+    font-weight:900;
+}
+
+#panel-finance .finance-panel-head .small,
+#panel-finance .finance-panel-head > span{
+    margin-left:auto;
+    color:#dce2eb !important;
+    font-size:10px;
+    font-weight:700;
 }
 
 #panel-finance .finance-panel-body{
-    padding:13px 15px;
+    padding:13px 14px;
+    background:#fff;
 }
 
-#panel-finance .finance-analysis-grid,
-#panel-finance .finance-panels{
+/* =========================================================
+   7. PRIORITY PANELS
+   ========================================================= */
+
+/* Status Tagihan */
+#panel-finance #financeBillingSection{
+    border-color:#c8d0dc;
+    box-shadow:
+        0 4px 14px rgba(15,23,42,.055);
+}
+
+#panel-finance #financeBillingSection .finance-panel-head{
+    border-bottom-color:var(--finance-expense) !important;
+}
+
+#panel-finance #financeBillingSection .finance-panel-head h3{
+    color:#ffd978 !important;
+}
+
+/* Reconciliation gets a calmer navy/gold identity. */
+#panel-finance #financeReconciliationSection .finance-panel-head{
+    border-bottom-color:var(--finance-income) !important;
+}
+
+/* =========================================================
+   8. OPEN / COLLAPSED STATES
+   ========================================================= */
+
+#panel-finance .finance-collapsible.is-collapsed{
+    box-shadow:none;
+}
+
+#panel-finance .finance-collapsible.is-collapsed .finance-panel-head{
+    min-height:44px;
+}
+
+#panel-finance .finance-section-toggle{
+    flex:0 0 auto;
+    min-width:30px;
+    width:30px;
+    height:30px;
+    margin-left:auto;
+
+    border:1px solid var(--finance-gold) !important;
+    border-radius:8px;
+
+    background:#fff !important;
+    color:var(--finance-navy) !important;
+
+    font-weight:900;
+    font-size:15px;
+}
+
+/* =========================================================
+   9. OVERVIEW / ANALYSIS
+   ========================================================= */
+
+#panel-finance #financeOverviewSection{
     gap:12px;
     margin-top:12px;
 }
-
-/* ---------- Annual summary ---------- */
 
 #panel-finance .finance-annual-metrics{
     gap:9px;
 }
 
 #panel-finance .finance-annual-metric{
+    background:#fbfcfd;
     border:1px solid var(--finance-border-soft);
-    border-radius:11px;
-    padding:11px 12px;
+    border-radius:10px;
+    padding:10px 11px;
 }
 
 #panel-finance .finance-annual-metric:nth-child(1) strong,
 #panel-finance .finance-annual-metric:nth-child(6) strong{
-    color:var(--finance-income);
+    color:var(--finance-income) !important;
 }
 
 #panel-finance .finance-annual-metric:nth-child(2) strong{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
 }
 
 #panel-finance .finance-annual-metric:nth-child(3) strong,
 #panel-finance .finance-annual-metric:nth-child(4) strong,
 #panel-finance .finance-annual-metric:nth-child(5) strong{
-    color:var(--finance-total);
+    color:var(--finance-total) !important;
 }
 
-/* ---------- Billing: make attention rows obvious ---------- */
+/* =========================================================
+   10. BILLING ATTENTION
+   ========================================================= */
 
 #panel-finance .finance-billing-summary{
     gap:9px;
-    margin-bottom:11px;
+    margin-bottom:10px;
 }
 
 #panel-finance .finance-billing-rate{
+    background:#fbfcfd;
     border:1px solid var(--finance-border-soft);
-    border-radius:11px;
-    padding:11px 12px;
+    border-radius:10px;
+    padding:10px 11px;
 }
 
 #panel-finance .finance-billing-rate:nth-child(1) strong{
-    color:var(--finance-total);
+    color:var(--finance-total) !important;
 }
 
 #panel-finance .finance-billing-rate:nth-child(2){
     background:var(--finance-expense-bg);
-    border-color:#f1b8b8;
+    border-color:#efb9b9;
 }
 
 #panel-finance .finance-billing-rate:nth-child(2) strong{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
 }
+
+/* =========================================================
+   11. TABLE LANGUAGE
+   ========================================================= */
+
+#panel-finance .finance-floor-table td:nth-child(2),
+#panel-finance .finance-room-table td:nth-child(4),
+#panel-finance .finance-month-table td:nth-child(2),
+#panel-finance .finance-cashflow-table td:nth-child(2){
+    color:var(--finance-income) !important;
+    font-weight:900;
+}
+
+#panel-finance .finance-floor-table td:nth-child(3),
+#panel-finance .finance-room-table td:nth-child(5),
+#panel-finance .finance-month-table td:nth-child(3),
+#panel-finance .finance-cashflow-table td:nth-child(3){
+    color:var(--finance-expense) !important;
+    font-weight:900;
+}
+
+#panel-finance .finance-floor-table td:nth-child(4),
+#panel-finance .finance-room-table td:nth-child(6),
+#panel-finance .finance-month-table td:nth-child(4),
+#panel-finance .finance-cashflow-table td:nth-child(4){
+    color:var(--finance-total) !important;
+    font-weight:900;
+}
+
+#panel-finance .finance-billing-detail-table td:nth-child(4){
+    color:var(--finance-income) !important;
+    font-weight:900;
+}
+
+#panel-finance .finance-billing-detail-table td:nth-child(5){
+    color:var(--finance-expense) !important;
+    font-weight:900;
+}
+
+/* =========================================================
+   12. ALERT / ATTENTION STATUS
+   ========================================================= */
 
 #panel-finance .finance-billing-table tbody tr:nth-child(2),
 #panel-finance .finance-billing-table tbody tr:nth-child(3),
@@ -2508,7 +2782,8 @@ button{
 #panel-finance .finance-billing-table tbody tr:nth-child(4) td:first-child,
 #panel-finance .finance-billing-table tbody tr:nth-child(5) td:first-child,
 #panel-finance .finance-billing-table tbody tr:nth-child(6) td:first-child{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
+    font-weight:900;
 }
 
 #panel-finance .finance-billing-table tbody tr:nth-child(2) td:last-child,
@@ -2516,102 +2791,80 @@ button{
 #panel-finance .finance-billing-table tbody tr:nth-child(4) td:last-child,
 #panel-finance .finance-billing-table tbody tr:nth-child(5) td:last-child,
 #panel-finance .finance-billing-table tbody tr:nth-child(6) td:last-child{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
     font-weight:900;
 }
 
 #panel-finance .finance-billing-table tbody tr:nth-child(7) td:first-child,
 #panel-finance .finance-billing-table tbody tr:nth-child(7) td:last-child{
-    color:var(--finance-income);
+    color:var(--finance-income) !important;
     font-weight:900;
 }
 
-/* ---------- Transaction tables ---------- */
-
-#panel-finance .finance-floor-table td:nth-child(2),
-#panel-finance .finance-room-table td:nth-child(4),
-#panel-finance .finance-month-table td:nth-child(2),
-#panel-finance .finance-cashflow-table td:nth-child(2){
-    color:var(--finance-income);
-    font-weight:900;
-}
-
-#panel-finance .finance-floor-table td:nth-child(3),
-#panel-finance .finance-room-table td:nth-child(5),
-#panel-finance .finance-month-table td:nth-child(3),
-#panel-finance .finance-cashflow-table td:nth-child(3){
-    color:var(--finance-expense);
-    font-weight:900;
-}
-
-#panel-finance .finance-floor-table td:nth-child(4),
-#panel-finance .finance-room-table td:nth-child(6),
-#panel-finance .finance-month-table td:nth-child(4),
-#panel-finance .finance-cashflow-table td:nth-child(4){
-    color:var(--finance-total);
-    font-weight:900;
-}
-
-#panel-finance .finance-billing-detail-table td:nth-child(4){
-    color:var(--finance-income);
-    font-weight:900;
-}
-
-#panel-finance .finance-billing-detail-table td:nth-child(5){
-    color:var(--finance-expense);
-    font-weight:900;
-}
-
-/* ---------- Cash flow summary ---------- */
+/* =========================================================
+   13. CASH FLOW
+   ========================================================= */
 
 #panel-finance .finance-cashflow-summary{
     gap:9px;
-    margin-bottom:11px;
+    margin-bottom:10px;
 }
 
 #panel-finance .finance-cashflow-card{
+    background:#fbfcfd;
     border:1px solid var(--finance-border-soft);
-    border-radius:11px;
-    padding:11px 12px;
+    border-radius:10px;
+    padding:10px 11px;
 }
 
 #panel-finance .finance-cashflow-card:nth-child(1) strong{
-    color:var(--finance-income);
+    color:var(--finance-income) !important;
 }
 
 #panel-finance .finance-cashflow-card:nth-child(2) strong{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
 }
 
 #panel-finance .finance-cashflow-card:nth-child(3) strong{
-    color:var(--finance-total);
+    color:var(--finance-total) !important;
 }
 
-/* ---------- Expense breakdown ---------- */
+/* =========================================================
+   14. EXPENSE BREAKDOWN
+   ========================================================= */
 
 #panel-finance .finance-breakdown-label > span:last-child,
 #panel-finance .finance-breakdown-amount{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
     font-weight:900;
 }
 
 #panel-finance .finance-breakdown-track span{
-    background:var(--finance-expense);
+    background:var(--finance-expense) !important;
 }
 
-/* ---------- Recent transactions ---------- */
+/* =========================================================
+   15. REPORT
+   ========================================================= */
 
-#panel-finance .finance-recent .data-table tbody tr:has(td:nth-child(2) .badge-ok) td:last-child{
-    color:var(--finance-income);
-    font-weight:900;
+#panel-finance .finance-report-title{
+    background:
+        linear-gradient(
+            135deg,
+            var(--finance-navy),
+            var(--finance-navy-2)
+        ) !important;
+    border-bottom:3px solid var(--finance-gold) !important;
 }
 
-#panel-finance .finance-recent .data-table tbody tr:has(td:nth-child(2) .badge-danger) td:last-child{
-    color:var(--finance-expense);
-    font-weight:900;
+#panel-finance .finance-report-title h3{
+    color:#f2c86b !important;
 }
 
-/* ---------- Report / print table ---------- */
+#panel-finance .finance-report-title p,
+#panel-finance .finance-report-title .small{
+    color:#dce2eb !important;
+}
 
 #panel-finance .finance-report-table tr:not(.finance-report-total) td:last-child{
     color:#344054;
@@ -2632,17 +2885,15 @@ button{
     font-weight:900;
 }
 
-/* Existing renderer uses "total" for totals.
-   These selectors also cover the current printed L/R layout. */
 #panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(1) td:last-child,
 #panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(2) td:last-child{
-    color:var(--finance-income);
+    color:var(--finance-income) !important;
     font-weight:900;
 }
 
 #panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(4) td:last-child,
 #panel-finance .finance-report-sheet:first-child .finance-report-table tr:nth-child(5) td:last-child{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
     font-weight:900;
 }
 
@@ -2654,12 +2905,12 @@ button{
 }
 
 #panel-finance .finance-report-sheet:nth-child(2) .finance-report-table tr:nth-child(1) td:last-child{
-    color:var(--finance-income);
+    color:var(--finance-income) !important;
     font-weight:900;
 }
 
 #panel-finance .finance-report-sheet:nth-child(2) .finance-report-table tr:nth-child(2) td:last-child{
-    color:var(--finance-expense);
+    color:var(--finance-expense) !important;
     font-weight:900;
 }
 
@@ -2668,7 +2919,15 @@ button{
     font-weight:900;
 }
 
-/* ---------- More compact spacing without losing boundaries ---------- */
+/* =========================================================
+   16. TABLE + PANEL MICRO SPACING
+   ========================================================= */
+
+#panel-finance .finance-analysis-grid,
+#panel-finance .finance-panels{
+    gap:12px;
+    margin-top:12px;
+}
 
 #panel-finance .finance-collapsible{
     margin-bottom:10px;
@@ -2678,121 +2937,85 @@ button{
     margin-top:12px;
 }
 
-#panel-finance .finance-section-toggle{
-    min-width:30px;
-    height:30px;
-    border-color:#cfd6e2;
-    background:#fff;
+#panel-finance .finance-panel table{
+    border-collapse:separate;
+    border-spacing:0;
 }
 
-@media(max-width:900px){
-    #panel-finance .finance-kpi-grid{
-        gap:9px;
-    }
-
-    #panel-finance .finance-secondary-grid{
-        gap:9px;
-    }
-}
-
-@media(max-width:700px){
-    #panel-finance .finance-kpi{
-        padding:13px 14px;
-    }
-
-    #panel-finance .finance-panel-head{
-        padding:12px 13px;
-    }
-
-    #panel-finance .finance-panel-body{
-        padding:12px 13px;
-    }
-}
-    
-/* ---------- Navy + Gold theme ---------- */
-
-#panel-finance > .section-title{
-    margin-bottom:0;
-    padding:14px 18px;
-    background:#17213a;
-    color:#f2c86b;
-    border:1px solid #0f172a;
-    border-bottom:3px solid #c99a2e;
-    border-radius:14px 14px 0 0;
-    letter-spacing:.01em;
-}
-
-#panel-finance > .section-subtitle{
-    margin-top:0;
-    margin-bottom:15px;
-    padding:10px 18px 12px;
-    background:#f8fafc;
-    color:#475467;
-    border:1px solid #d9dee8;
-    border-top:0;
-    border-radius:0 0 12px 12px;
-}
-
-#panel-finance .finance-panel-head{
-    background:#17213a;
-    color:#fff;
-    border-bottom:3px solid #c99a2e;
-}
-
-#panel-finance .finance-panel-head h3,
-#panel-finance .finance-panel-head .finance-section-title{
-    color:#f2c86b;
-}
-
-#panel-finance .finance-panel-head .small,
-#panel-finance .finance-panel-head > span{
-    color:#e7eaf0;
-}
-
-#panel-finance .finance-section-toggle{
-    border:1px solid #c99a2e;
-    background:#fff;
-    color:#17213a;
+#panel-finance .finance-panel table th{
+    background:#f4f6f9;
+    color:#526075;
+    font-size:10px;
     font-weight:900;
 }
 
-#panel-finance .finance-nav{
-    border:1px solid #d7dde7;
-    box-shadow:0 2px 8px rgba(15,23,42,.035);
-}
+/* =========================================================
+   17. TOOLBAR
+   ========================================================= */
 
-#panel-finance .finance-nav button{
-    border-color:#d7dde7;
-}
-
-#panel-finance .finance-nav button.active{
-    background:#17213a;
-    color:#f2c86b;
-    border-color:#17213a;
-}
-
-#panel-finance .finance-status-note{
-    border-left-color:#c99a2e;
+#panel-finance .finance-toolbar{
+    padding:10px;
+    background:#fbfcfd;
+    border:1px solid var(--finance-border);
+    border-radius:12px;
+    box-shadow:0 1px 6px rgba(15,23,42,.025);
 }
 
 #panel-finance .finance-toolbar .btn-primary{
-    background:#17213a;
-    border-color:#17213a;
+    background:var(--finance-navy) !important;
+    border-color:var(--finance-navy) !important;
 }
 
 #panel-finance .finance-toolbar .btn-secondary{
-    border-color:#c99a2e;
-    color:#17213a;
+    border-color:var(--finance-gold) !important;
+    color:var(--finance-navy) !important;
+}
+
+/* =========================================================
+   18. RESPONSIVE
+   ========================================================= */
+
+@media(max-width:900px){
+
+    #panel-finance .finance-nav{
+        overflow-x:auto;
+        scrollbar-width:thin;
+    }
+
+    #panel-finance .finance-nav button{
+        flex:0 0 auto;
+    }
+
 }
 
 @media(max-width:700px){
+
     #panel-finance > .section-title{
         padding:13px 15px;
+    }
+
+    #panel-finance > .section-title::after{
+        display:none;
     }
 
     #panel-finance > .section-subtitle{
         padding:9px 15px 11px;
     }
+
+    #panel-finance .finance-panel-head{
+        min-height:44px;
+        padding:10px 12px;
+    }
+
+    #panel-finance .finance-panel-head .small,
+    #panel-finance .finance-panel-head > span{
+        display:none;
+    }
+
+    #panel-finance .finance-panel-body{
+        padding:11px 12px;
+    }
+
 }
 
 
