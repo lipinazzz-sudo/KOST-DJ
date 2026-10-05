@@ -1152,13 +1152,45 @@ async function load(){
                 );
 
 
+        const paidAmount =
+            Number(
+                data.billing.paidAmount ||
+                0
+            );
+
+        const totalAmount =
+            Number(
+                data.billing.total ||
+                0
+            );
+
+        const serverShortfall =
+            Number(
+                data.billing.shortfall
+            );
+
+        const shortfallAmount =
+            Number.isFinite(
+                serverShortfall
+            )
+                ? Math.max(
+                    0,
+                    serverShortfall
+                )
+                : Math.max(
+                    0,
+                    totalAmount -
+                    paidAmount
+                );
+
+
         document
             .getElementById(
                 "paidAmount"
             )
             .textContent =
                 money(
-                    data.billing.paidAmount
+                    paidAmount
                 );
 
 
@@ -1168,7 +1200,7 @@ async function load(){
             )
             .textContent =
                 money(
-                    data.billing.shortfall
+                    shortfallAmount
                 );
 
 
@@ -1227,7 +1259,9 @@ async function load(){
                 "amount"
             )
             .value =
-                data.billing.total;
+                shortfallAmount > 0
+                    ? shortfallAmount
+                    : totalAmount;
 
 
         if(
