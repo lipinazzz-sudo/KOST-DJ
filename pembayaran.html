@@ -164,6 +164,22 @@
 
 }
 
+
+.billing-total{border-left:4px solid #10182d}
+.billing-paid{border-left:4px solid #168548}
+.billing-outstanding{border-left:4px solid #b42318}
+.billing-fine{border-left:4px solid #c9974a}
+.billing-total strong{color:#10182d}
+.billing-paid strong{color:#168548}
+.billing-outstanding strong{color:#b42318}
+.billing-fine strong{color:#b54708}
+.billing-item small{
+    display:block;
+    margin-top:5px;
+    color:#7a8598;
+    font-size:11px;
+    line-height:1.45;
+}
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
@@ -324,86 +340,38 @@
 
 <div class="billing-grid">
 
+<div class="billing-item billing-total">
+<span>Total Tagihan</span>
+<strong id="total">—</strong>
+</div>
+
+<div class="billing-item billing-paid">
+<span>Sudah Dibayar</span>
+<strong id="paidAmount">—</strong>
+</div>
+
+<div class="billing-item billing-outstanding">
+<span>Kurang Bayar</span>
+<strong id="shortfall">—</strong>
+</div>
+
+<div class="billing-item billing-fine">
+<span>Denda</span>
+<strong id="fine">—</strong>
+<small id="fineHelp">Dihitung otomatis oleh sistem.</small>
+</div>
 
 <div class="billing-item">
-
-<span>
-    Periode
-</span>
-
-<strong id="periodLabel">
-    —
-</strong>
-
+<span>Jatuh Tempo</span>
+<strong id="dueDate">—</strong>
 </div>
-
 
 <div class="billing-item">
-
-<span>
-    Harga Sewa
-</span>
-
-<strong id="rent">
-    —
-</strong>
-
+<span>Pembayaran Terakhir</span>
+<strong id="lastPaymentDate">—</strong>
 </div>
 
-
-<div class="billing-item">
-
-<span>
-    Jatuh Tempo
-</span>
-
-<strong id="dueDate">
-    —
-</strong>
-
-</div>
-
-
-<div class="billing-item">
-
-<span>
-    Denda
-</span>
-
-<strong id="fine">
-    —
-</strong>
-
-</div>
-
-
-<div class="billing-item">
-
-<span>
-    Total
-</span>
-
-<strong id="total">
-    —
-</strong>
-
-</div>
-
-
-<div class="billing-item">
-
-<span>
-    Status
-</span>
-
-<strong id="status">
-    —
-</strong>
-
-</div>
-
-
-</div>
+</div></div>
 
 </div>
 
@@ -1139,16 +1107,6 @@ async function load(){
 
         document
             .getElementById(
-                "rent"
-            )
-            .textContent =
-                money(
-                    data.billing.amount
-                );
-
-
-        document
-            .getElementById(
                 "dueDate"
             )
             .textContent =
@@ -1167,6 +1125,18 @@ async function load(){
 
         document
             .getElementById(
+                "fineHelp"
+            )
+            .textContent =
+                Number(
+                    data.billing.fine || 0
+                ) > 0
+                    ? "Denda terhitung otomatis berdasarkan keterlambatan."
+                    : "Tidak ada denda pada tagihan ini.";
+
+
+        document
+            .getElementById(
                 "total"
             )
             .textContent =
@@ -1177,10 +1147,31 @@ async function load(){
 
         document
             .getElementById(
-                "status"
+                "paidAmount"
             )
             .textContent =
-                data.billing.status;
+                money(
+                    data.billing.paidAmount
+                );
+
+
+        document
+            .getElementById(
+                "shortfall"
+            )
+            .textContent =
+                money(
+                    data.billing.shortfall
+                );
+
+
+        document
+            .getElementById(
+                "lastPaymentDate"
+            )
+            .textContent =
+                data.billing.lastPaymentDate ||
+                "Belum ada";
 
 
         document
