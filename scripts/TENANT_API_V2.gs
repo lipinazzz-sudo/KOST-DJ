@@ -1055,18 +1055,6 @@ function djApiMasterRouterV5_(
               )
             ),
 
-          paidDate:
-            djApiParseDateV7_(
-              djApiValueV5_(
-                table.rows[i],
-                table.headers,
-                [
-                  'Tanggal_Pembayaran',
-                  'Tanggal_Bayar'
-                ]
-              )
-            ),
-
           fine:
             djApiNumberV5_(
               djApiValueV5_(
@@ -1134,52 +1122,19 @@ function djApiMasterRouterV5_(
     );
 
 
-  /*
-   * Denda Tenant mengikuti aturan pusat:
-   * - tanggal 2 relatif terhadap jatuh tempo tanggal 1 = Rp25.000
-   * - tanggal 5+ = total Rp50.000
-   *
-   * Untuk pembayaran parsial/belum lunas, referensi adalah hari ini.
-   * Untuk pembayaran yang sudah menutup sewa, referensi memakai
-   * tanggal pembayaran agar denda tidak berubah hanya karena
-   * Master membuka dashboard beberapa hari kemudian.
-   */
-  let fineReferenceDate =
-    new Date();
-
-  if (
-    payment &&
-    payment.paid >= actualRent &&
-    payment.paidDate
-  ) {
-    fineReferenceDate =
-      payment.paidDate;
-  }
-
   const displayedFine =
     firstBillingPeriod
       ? 0
-      : djApiCalculateTenantFineV1_(
-          fineReferenceDate,
-          due
+      : (
+          payment
+            ? payment.fine
+            : 0
         );
 
 
   const displayedTotal =
     actualRent +
     displayedFine;
-
-
-  const displayedShortfall =
-    Math.max(
-      0,
-      displayedTotal -
-      (
-        payment
-          ? payment.paid
-          : 0
-      )
-    );
 
 
   let displayedStatus =
@@ -1250,9 +1205,6 @@ function djApiMasterRouterV5_(
 
     total:
       displayedTotal,
-
-    shortfall:
-      displayedShortfall,
 
     status:
       displayedStatus,
@@ -6046,60 +5998,3 @@ function diagnosticApprovalEmailV2() {
   Logger.log(
     'DIAGNOSTIC EMAIL DJ FAMILY KOST'
   );
-
-/* ============================================================
- * TENANT BILLING — CURRENT LATE FEE
- * ============================================================
- * Aturan tetap:
- *   tanggal 2  = Rp25.000
- *   tanggal 5+ = Rp50.000 total
- *   setelah tanggal 5 tidak bertambah.
- * ============================================================
- */
-function djApiCalculateTenantFineV1_(
-  referenceDate,
-  dueDate
-) {
-
-  const reference =
-    djApiParseDateV7_(referenceDate) ||
-    new Date();
-
-  const due =
-    djApiParseDateV7_(dueDate);
-
-  if (!due) {
-    return 0;
-  }
-
-  const referenceDay =
-    new Date(
-      reference.getFullYear(),
-      reference.getMonth(),
-      reference.getDate()
-    );
-
-  const dueDay =
-    new Date(
-      due.getFullYear(),
-      due.getMonth(),
-      due.getDate()
-    );
-
-  const lateDays =
-    Math.floor(
-      (
-        referenceDay.getTime() -
-        dueDay.getTime()
-      ) /
-      86400000
-    );
-
-  if (lateDays < 1) {
-    return 0;
-  }
-
-  return lateDays >= 4
-    ? 50000
-    : 25000;
-}
