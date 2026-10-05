@@ -318,9 +318,25 @@ function djFinanceBuildDatasetV1_(
       : null;
 
 
+  const additionalChargeSheet =
+    ss.getSheetByName(
+      'Tagihan_Tambahan'
+    );
+
+  const additionalChargeTable =
+    additionalChargeSheet
+      ? djApiReadTableV5_(
+          additionalChargeSheet,
+          ['Tagihan_Tambahan_ID']
+        )
+      : null;
+
+
   const payments = [];
 
   const allPayments = [];
+
+  const additionalCharges = [];
 
 
   if (paymentTable) {
@@ -568,9 +584,146 @@ function djFinanceBuildDatasetV1_(
   }
 
 
-  const tenants = [];
+  if (
+    additionalChargeTable
+  ) {
+
+    additionalChargeTable.rows.forEach(
+      function(row) {
+
+        const status =
+          String(
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Status'
+              ]
+            ) || ''
+          ).trim().toUpperCase();
+
+        const verification =
+          String(
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Status_Verifikasi'
+              ]
+            ) || ''
+          ).trim().toUpperCase();
+
+        const amount =
+          djApiNumberV5_(
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Nominal_Dibayar'
+              ]
+            )
+          );
+
+        if (
+          status !== 'LUNAS' ||
+          verification !== 'TERVERIFIKASI' ||
+          amount <= 0
+        ) {
+          return;
+        }
+
+        additionalCharges.push({
+
+          id:
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Tagihan_Tambahan_ID'
+              ]
+            ),
+
+          tenantId:
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Tenant_ID'
+              ]
+            ),
+
+          name:
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Nama_Tenant'
+              ]
+            ),
+
+          room:
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'No_Kamar'
+              ]
+            ),
+
+          type:
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Jenis'
+              ]
+            ),
+
+          description:
+            djApiValueV5_(
+              row,
+              additionalChargeTable.headers,
+              [
+                'Deskripsi'
+              ]
+            ),
+
+          amount:
+            amount,
+
+          paymentDate:
+            djFinanceDateV1_(
+              djApiValueV5_(
+                row,
+                additionalChargeTable.headers,
+                [
+                  'Tanggal_Dibayar',
+                  'Tanggal_Pembayaran',
+                  'Tanggal_Verifikasi'
+                ]
+              )
+            ),
+
+          dueDate:
+            djFinanceDateV1_(
+              djApiValueV5_(
+                row,
+                additionalChargeTable.headers,
+                [
+                  'Jatuh_Tempo'
+                ]
+              )
+            )
+
+        });
+
+      }
+    );
+
+  }
 
 
+  const tenants = 
   if (tenantTable) {
 
     tenantTable.rows.forEach(
@@ -1045,7 +1198,10 @@ function djFinanceBuildDatasetV1_(
       contracts,
 
     rooms:
-      rooms
+      rooms,
+
+    additionalCharges:
+      additionalCharges
 
   };
 
@@ -1088,6 +1244,9 @@ function djFinanceComputeMonthSummaryV1_(
     0;
 
   let fineRevenue =
+    0;
+
+  let additionalChargeRevenue =
     0;
 
   let cashIn =
@@ -1227,6 +1386,93 @@ function djFinanceComputeMonthSummaryV1_(
 
     }
   );
+
+
+
+  dataset.additionalCharges
+    .forEach(
+      function(item) {
+
+        const paymentDate =
+          item.paymentDate;
+
+        if (
+          !paymentDate ||
+          !djFinanceDateInMonthV1_(
+            paymentDate,
+            year,
+            month
+          )
+        ) {
+          return;
+        }
+
+        const amount =
+          Number(
+            item.amount || 0
+          );
+
+        if (
+          amount <= 0
+        ) {
+          return;
+        }
+
+        revenue +=
+          amount;
+
+        additionalChargeRevenue +=
+          amount;
+
+        cashIn +=
+          amount;
+
+        revenueRows.push({
+
+          date:
+            paymentDate,
+
+          type:
+            'INCOME',
+
+          category:
+            'Tagihan Tambahan',
+
+          description:
+            (
+              item.name ||
+              item.tenantId ||
+              'Tenant'
+            ) +
+            (
+              item.room
+                ? ' · Kamar ' +
+                  item.room
+                : ''
+            ) +
+            ' · ' +
+            (
+              item.type ||
+              'Tagihan Tambahan'
+            ) +
+            (
+              item.description
+                ? ' · ' +
+                  item.description
+                : ''
+            ),
+
+          room:
+            item.room ||
+            '',
+
+          amount:
+            amount
+
+        });
+
+      }
+    );
 
 
   let maintenanceExpense =
@@ -1549,6 +1795,9 @@ function djFinanceComputeMonthSummaryV1_(
 
     fineRevenue:
       fineRevenue,
+
+    additionalChargeRevenue:
+      additionalChargeRevenue,
 
     cashIn:
       cashIn,
