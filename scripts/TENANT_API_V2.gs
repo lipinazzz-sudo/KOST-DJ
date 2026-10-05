@@ -13348,19 +13348,6 @@ function djApiAdditionalChargeProofByTenantV1_(
 }
 
 
-function djApiAdditionalChargeProofV1_(
-  chargeId
-) {
-
-  return djApiAdditionalChargeProofByTenantV1_(
-    '',
-    chargeId,
-    true
-  );
-
-}
-
-
 function djApiMasterAdditionalChargesV1_() {
 
   const ss =
