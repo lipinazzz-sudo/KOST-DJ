@@ -3653,10 +3653,6 @@ button{
 
                     </div>
 
-                    
-                        Pantau kondisi tagihan tenant. Email digunakan untuk reminder otomatis; WhatsApp digunakan untuk komunikasi manual.
-                    </p>
-
                     <div
                         id="paymentSummary"
                         class="payment-monitor-summary"
@@ -9581,7 +9577,25 @@ async function loadPayments(){
     renderPaymentMonitoringHint();
     renderPayments();
 
-    await loadAdditionalCharges();
+    try{
+
+        await loadAdditionalCharges();
+
+    }catch(error){
+
+        additionalChargeItems = [];
+
+        renderAdditionalCharges({
+
+            total: 0,
+            unpaid: 0,
+            paid: 0,
+            cancelled: 0,
+            nominal: 0
+
+        });
+
+    }
 
 }
 
