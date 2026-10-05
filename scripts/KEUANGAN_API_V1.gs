@@ -2831,8 +2831,59 @@ function djFinanceBuildReconciliationV1_(
     );
 
 
+  let verifiedAdditionalChargeCount =
+    0;
+
+  let verifiedAdditionalChargeAmount =
+    0;
+
+
+  (dataset.additionalCharges || [])
+    .forEach(
+      function(item) {
+
+        if (
+          !item.paymentDate ||
+          !djFinanceDateInMonthV1_(
+            item.paymentDate,
+            year,
+            month
+          )
+        ) {
+
+          return;
+
+        }
+
+        const amount =
+          Number(
+            item.amount || 0
+          );
+
+        if (
+          amount <= 0
+        ) {
+
+          return;
+
+        }
+
+        verifiedAdditionalChargeCount++;
+
+        verifiedAdditionalChargeAmount +=
+          amount;
+
+      }
+    );
+
+
+  const totalVerifiedIncome =
+    verifiedPaymentAmount +
+    verifiedAdditionalChargeAmount;
+
+
   const paymentDifference =
-    verifiedPaymentAmount -
+    totalVerifiedIncome -
     Number(
       recognizedRevenue ||
       0
@@ -2889,6 +2940,15 @@ function djFinanceBuildReconciliationV1_(
 
     verifiedPaymentAmount:
       verifiedPaymentAmount,
+
+    verifiedAdditionalChargeCount:
+      verifiedAdditionalChargeCount,
+
+    verifiedAdditionalChargeAmount:
+      verifiedAdditionalChargeAmount,
+
+    totalVerifiedIncome:
+      totalVerifiedIncome,
 
     recognizedRevenue:
       Number(
@@ -4409,6 +4469,44 @@ function djFinanceRoomAnalysisV1_(
     );
 
 
+  (dataset.additionalCharges || [])
+    .forEach(
+      function(item) {
+
+        const paymentDate =
+          item.paymentDate;
+
+        if (
+          !paymentDate ||
+          paymentDate.getFullYear() !==
+          Number(year)
+        ) {
+
+          return;
+
+        }
+
+        const floor =
+          getFloor(
+            item.room
+          );
+
+        if(!floor){
+
+          return;
+
+        }
+
+        floor.revenue +=
+          Number(
+            item.amount ||
+            0
+          );
+
+      }
+    );
+
+
   (dataset.maintenance || [])
     .forEach(
       function(item) {
@@ -4880,6 +4978,48 @@ function djFinanceFloorAnalysisV1_(
         floor.revenue +=
           Number(
             item.paid ||
+            0
+          );
+
+      }
+    );
+
+
+  (dataset.additionalCharges || [])
+    .forEach(
+      function(item) {
+
+        const paymentDate =
+          item.paymentDate;
+
+        if (
+          !paymentDate ||
+          paymentDate.getFullYear() !==
+          Number(year)
+        ) {
+
+          return;
+
+        }
+
+        const room =
+          String(
+            item.room ||
+            ''
+          ).trim();
+
+        if(
+          !room ||
+          !rooms[room]
+        ){
+
+          return;
+
+        }
+
+        rooms[room].revenue +=
+          Number(
+            item.amount ||
             0
           );
 
