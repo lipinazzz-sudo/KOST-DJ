@@ -106,13 +106,6 @@ const DJ39PAY2 = {
 
 
 
-  /* Backward-compatible alias for old settings/config code. */
-  DEFAULT_FINE_DAY3:
-
-    25000,
-
-
-
   DEFAULT_MAX_FINE:
 
     50000
@@ -1855,7 +1848,7 @@ function updatePaymentStatusDJ39() {
 
 
 
-        return row\.slice();
+        return row.slice();
 
 
 
@@ -2787,7 +2780,7 @@ function dj39pay2ReadTable_(
 
     const normalized =
 
-      row\.map(
+      row.map(
 
         function(value) {
 
@@ -3179,7 +3172,7 @@ function dj39pay2AppendObject_(
 
       1,
 
-      row\.length
+      row.length
 
     )
 
@@ -3623,7 +3616,7 @@ function dj39pay2CalculateFine_(
 
   dueDate,
 
-  dendaHari3,
+  dendaHari2,
 
   dendaHari5,
 
@@ -3688,13 +3681,6 @@ function dj39pay2CalculateFine_(
     );
 
 
-
-  /*
-   * Jadwal denda resmi:
-   * - Tanggal 2 relatif terhadap jatuh tempo tanggal 1 -> Rp25.000
-   * - Tanggal 5 dan seterusnya -> total Rp50.000
-   * - Tidak ada kenaikan setelah tanggal 5.
-   */
 
   if (
 
@@ -4346,7 +4332,7 @@ function dj39pay2CoerceDateMonth_(
 
     text.match(
 
-      /^(\d{1,2})[\\/-]\(\d{4})/
+      /^(\d{1,2})[\/-](\d{4})/
 
     );
 
@@ -4746,7 +4732,7 @@ function dj39pay2ToDate_(
 
   if (
 
-    /^\d{1,2}\\/\d{1,2}\\/\d{4}$/.test(
+    /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(
 
       text
 
