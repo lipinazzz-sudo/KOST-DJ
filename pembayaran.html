@@ -180,6 +180,9 @@
     font-size:11px;
     line-height:1.45;
 }
+
+.billing-status{border-left:4px solid #10182d}
+.billing-status strong{color:#10182d}
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
@@ -1165,13 +1168,38 @@ async function load(){
                 );
 
 
-        document
-            .getElementById(
-                "lastPaymentDate"
+        const statusEl =
+            document.getElementById(
+                "status"
+            );
+
+        statusEl.textContent =
+            data.billing.status || "BELUM BAYAR";
+
+        statusEl.style.color =
+            (
+                String(
+                    data.billing.status || ""
+                )
+                .toUpperCase()
+                .indexOf("LUNAS") >= 0
             )
-            .textContent =
-                data.billing.lastPaymentDate ||
-                "Belum ada";
+                ? "#168548"
+                :
+                (
+                    String(
+                        data.billing.status || ""
+                    )
+                    .toUpperCase()
+                    .indexOf("KURANG") >= 0 ||
+                    String(
+                        data.billing.status || ""
+                    )
+                    .toUpperCase()
+                    .indexOf("TERLAMBAT") >= 0
+                    )
+                    ? "#b42318"
+                    : "#10182d";
 
 
         document
