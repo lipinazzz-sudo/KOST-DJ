@@ -10717,6 +10717,43 @@ function paymentToday(){
 }
 
 
+function paymentDisplayDate(value){
+
+    const text =
+        String(
+            value || ""
+        ).trim();
+
+    if(!text){
+        return "—";
+    }
+
+    const date =
+        paymentDateValue(
+            text
+        );
+
+    if(!date){
+        return text;
+    }
+
+    return (
+        String(
+            date.getDate()
+        ).padStart(2,"0") +
+        "/" +
+        String(
+            date.getMonth() + 1
+        ).padStart(2,"0") +
+        "/" +
+        String(
+            date.getFullYear()
+        )
+    );
+
+}
+
+
 function paymentDaysLate(item){
 
     const due =
@@ -11262,12 +11299,23 @@ function renderPayments(){
         items.length
 
             ? (
-                '<table class="data-table" style="min-width:1120px;">' +
+                '<table class="data-table" style="min-width:1360px;">' +
+                '<colgroup>' +
+                '<col style="width:125px;">' +
+                '<col style="width:230px;">' +
+                '<col style="width:125px;">' +
+                '<col style="width:145px;">' +
+                '<col style="width:125px;">' +
+                '<col style="width:125px;">' +
+                '<col style="width:180px;">' +
+                '<col style="width:170px;">' +
+                '<col style="width:300px;">' +
+                '</colgroup>' +
                 '<thead><tr>' +
                 '<th>Payment</th>' +
                 '<th>Tenant</th>' +
                 '<th>Periode</th>' +
-                '<th>Jatuh Tempo</th>' +
+                '<th>Tanggal Jatuh Tempo</th>' +
                 '<th>Dibayar</th>' +
                 '<th>Total</th>' +
                 '<th>Kondisi</th>' +
@@ -11382,8 +11430,12 @@ function renderPayments(){
                         escapeHtml(item.period || "—") +
                         '</td>' +
 
-                        '<td>' +
-                        escapeHtml(item.dueDate || "—") +
+                        '<td style="white-space:nowrap;">' +
+                        escapeHtml(
+                            paymentDisplayDate(
+                                item.dueDate
+                            )
+                        ) +
                         '</td>' +
 
                         '<td>' +
