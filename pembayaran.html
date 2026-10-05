@@ -183,6 +183,119 @@
 
 .billing-status{border-left:4px solid #10182d}
 .billing-status strong{color:#10182d}
+
+.additional-charge-list{
+    display:grid;
+    gap:12px;
+    margin-top:14px;
+}
+
+.additional-charge-card{
+    background:#fff;
+    border:1px solid #e2e6ee;
+    border-radius:16px;
+    padding:16px;
+}
+
+.additional-charge-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.additional-charge-title{
+    font-size:16px;
+    font-weight:900;
+    color:#10182d;
+}
+
+.additional-charge-meta{
+    margin-top:4px;
+    color:#667085;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.additional-charge-amount{
+    font-size:20px;
+    font-weight:900;
+    color:#10182d;
+    white-space:nowrap;
+}
+
+.additional-charge-description{
+    margin-top:12px;
+    padding:12px;
+    border-radius:12px;
+    background:#f7f8fa;
+    color:#475467;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.additional-charge-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:14px;
+}
+
+.additional-charge-badge{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 9px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+}
+
+.additional-charge-badge.pending{
+    background:#fff7ed;
+    color:#b54708;
+}
+
+.additional-charge-badge.paid{
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.additional-charge-badge.rejected{
+    background:#fff1f2;
+    color:#b42318;
+}
+
+.additional-charge-badge.cancelled{
+    background:#eef2f6;
+    color:#475467;
+}
+
+#additionalChargePaymentModal{
+    position:fixed;
+    inset:0;
+    background:rgba(16,24,45,.58);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:10000;
+}
+
+#additionalChargePaymentModal.show{
+    display:flex;
+}
+
+.additional-charge-modal-box{
+    width:min(620px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 30px 80px rgba(16,24,45,.25);
+}
+
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
@@ -379,6 +492,32 @@
 <strong id="status">—</strong>
 </div>
 
+</div>
+
+</div>
+
+<div class="billing-card">
+
+<h3>
+    Tagihan Tambahan
+</h3>
+
+<p
+    class="lead"
+    style="font-size:13px;margin:0;"
+>
+    Tagihan di luar sewa bulanan, seperti tamu menginap, kerusakan, pelanggaran, atau biaya operasional lainnya.
+</p>
+
+<div
+    id="additionalChargesBox"
+    class="additional-charge-list"
+>
+    <div
+        style="padding:18px;text-align:center;color:#667085;"
+    >
+        Memuat tagihan tambahan...
+    </div>
 </div>
 
 </div>
@@ -593,6 +732,35 @@ untuk diverifikasi.
 </section>
 
 </main>
+
+<div id="additionalChargePaymentModal">
+
+    <div class="additional-charge-modal-box">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+
+            <h3 style="margin:0;">
+                Bayar Tagihan Tambahan
+            </h3>
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="closeAdditionalChargePaymentModal()"
+            >
+                Tutup
+            </button>
+
+        </div>
+
+        <div
+            id="additionalChargePaymentContent"
+            style="margin-top:16px;"
+        ></div>
+
+    </div>
+
+</div>
 
 
 <script>
@@ -1045,6 +1213,683 @@ proofFile.addEventListener(
 );
 
 
+let additionalProofData = null;
+
+
+function additionalChargeStatusClass(
+    status
+){
+
+    const normalized =
+        String(
+            status || ""
+        ).trim().toUpperCase();
+
+    if(
+        normalized ===
+        "LUNAS"
+    ){
+        return "paid";
+    }
+
+    if(
+        normalized ===
+        "DITOLAK"
+    ){
+        return "rejected";
+    }
+
+    if(
+        normalized ===
+        "DIBATALKAN"
+    ){
+        return "cancelled";
+    }
+
+    return "pending";
+
+}
+
+
+function formatAdditionalChargeDate(
+    value
+){
+
+    if(!value){
+        return "—";
+    }
+
+    const text =
+        String(
+            value
+        ).trim();
+
+    let match =
+        text.match(
+            /^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/
+        );
+
+    if(match){
+
+        return (
+            String(
+                Number(match[3])
+            ).padStart(2,"0") +
+            "/" +
+            String(
+                Number(match[2])
+            ).padStart(2,"0") +
+            "/" +
+            String(
+                Number(match[1])
+            )
+        );
+
+    }
+
+    const date =
+        new Date(text);
+
+    return isNaN(date.getTime())
+        ? text
+        : (
+            String(
+                date.getDate()
+            ).padStart(2,"0") +
+            "/" +
+            String(
+                date.getMonth() + 1
+            ).padStart(2,"0") +
+            "/" +
+            String(
+                date.getFullYear()
+            )
+        );
+
+}
+
+
+function renderAdditionalCharges(
+    data
+){
+
+    const box =
+        document.getElementById(
+            "additionalChargesBox"
+        );
+
+    if(!box){
+        return;
+    }
+
+    const items =
+        data &&
+        Array.isArray(
+            data.items
+        )
+            ? data.items
+            : [];
+
+    box.innerHTML =
+        items.length
+            ? items.map(
+                function(item){
+
+                    const status =
+                        String(
+                            item.status ||
+                            ""
+                        ).trim().toUpperCase();
+
+                    let actions = "";
+
+                    if(
+                        status ===
+                        "BELUM DIBAYAR" ||
+                        status ===
+                        "DITOLAK"
+                    ){
+
+                        actions =
+                            '<button type="button" class="btn btn-primary" onclick="openAdditionalChargePaymentModal(\'' +
+                            encodeURIComponent(
+                                item.id || ""
+                            ) +
+                            '\')">' +
+                            (
+                                status === "DITOLAK"
+                                    ? "Kirim Ulang Pembayaran"
+                                    : "Bayar Sekarang"
+                            ) +
+                            '</button>';
+
+                    }
+
+                    return (
+                        '<article class="additional-charge-card">' +
+
+                        '<div class="additional-charge-head">' +
+
+                        '<div>' +
+
+                        '<div class="additional-charge-title">' +
+                        escapeHtml(
+                            item.type ||
+                            "Tagihan Tambahan"
+                        ) +
+                        '</div>' +
+
+                        '<div class="additional-charge-meta">' +
+                        'ID ' +
+                        escapeHtml(
+                            item.id ||
+                            "—"
+                        ) +
+                        ' · Kamar ' +
+                        escapeHtml(
+                            item.room ||
+                            "—"
+                        ) +
+                        '</div>' +
+
+                        '</div>' +
+
+                        '<div>' +
+
+                        '<div class="additional-charge-amount">' +
+                        money(
+                            item.amount
+                        ) +
+                        '</div>' +
+
+                        '<span class="additional-charge-badge ' +
+                        additionalChargeStatusClass(
+                            item.status
+                        ) +
+                        '">' +
+                        escapeHtml(
+                            item.status ||
+                            "BELUM DIBAYAR"
+                        ) +
+                        '</span>' +
+
+                        '</div>' +
+
+                        '</div>' +
+
+                        '<div class="additional-charge-description">' +
+                        escapeHtml(
+                            item.description ||
+                            "—"
+                        ) +
+                        '<br><span style="color:#7a8598;">Jatuh tempo: ' +
+                        escapeHtml(
+                            formatAdditionalChargeDate(
+                                item.dueDate
+                            )
+                        ) +
+                        (
+                            Number(
+                                item.paidAmount ||
+                                0
+                            ) > 0
+                                ? ' · Dibayar: ' +
+                                  escapeHtml(
+                                      money(
+                                          item.paidAmount
+                                      )
+                                  )
+                                : ''
+                        ) +
+                        '</span>' +
+                        '</div>' +
+
+                        (
+                            item.status === "MENUNGGU VERIFIKASI"
+                                ? '<div class="small" style="margin-top:10px;color:#b54708;font-weight:800;">Pembayaran sudah dikirim dan sedang menunggu verifikasi Master.</div>'
+                                : ''
+                        ) +
+
+                        (
+                            item.status === "DITOLAK" &&
+                            item.note
+                                ? '<div class="small" style="margin-top:10px;color:#b42318;">' +
+                                  escapeHtml(
+                                      item.note
+                                  ) +
+                                  '</div>'
+                                : ''
+                        ) +
+
+                        (
+                            actions
+                                ? '<div class="additional-charge-actions">' +
+                                  actions +
+                                  '</div>'
+                                : ''
+                        ) +
+
+                        '</article>'
+                    );
+
+                }
+              ).join("")
+
+            : '<div style="padding:18px;text-align:center;color:#667085;border:1px dashed #d0d5dd;border-radius:14px;">Tidak ada tagihan tambahan.</div>';
+
+}
+
+
+function closeAdditionalChargePaymentModal(){
+
+    const modal =
+        document.getElementById(
+            "additionalChargePaymentModal"
+        );
+
+    if(modal){
+        modal.classList.remove(
+            "show"
+        );
+    }
+
+    additionalProofData =
+        null;
+
+}
+
+
+function openAdditionalChargePaymentModal(
+    encodedId
+){
+
+    const chargeId =
+        decodeURIComponent(
+            encodedId
+        );
+
+    const data =
+        window.__additionalChargesData || {
+            items:[]
+        };
+
+    const item =
+        data.items.find(
+            function(entry){
+
+                return (
+                    String(
+                        entry &&
+                        entry.id ||
+                        ""
+                    ).trim().toUpperCase()
+                    ===
+                    String(
+                        chargeId
+                    ).trim().toUpperCase()
+                );
+
+            }
+        );
+
+    if(!item){
+
+        alert(
+            "Tagihan tambahan tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    additionalProofData =
+        null;
+
+    const content =
+        document.getElementById(
+            "additionalChargePaymentContent"
+        );
+
+    content.innerHTML =
+        '<div class="field">' +
+        '<label>Tagihan</label>' +
+        '<input type="text" readonly value="' +
+        escapeHtml(
+            (
+                item.type ||
+                "Tagihan Tambahan"
+            ) +
+            " · " +
+            money(
+                item.amount
+            )
+        ) +
+        '">' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Tanggal Pembayaran</label>' +
+        '<input id="additionalPaymentDate" type="date" value="' +
+        todayISO() +
+        '">' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Nominal Dibayar</label>' +
+        '<input id="additionalPaymentAmount" type="number" min="' +
+        String(
+            Math.ceil(
+                Number(
+                    item.amount ||
+                    0
+                )
+            )
+        ) +
+        '" step="1" readonly value="' +
+        String(
+            Number(
+                item.amount ||
+                0
+            )
+        ) +
+        '">' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Metode</label>' +
+        '<select id="additionalPaymentMethod">' +
+        '<option value="">Pilih</option>' +
+        '<option value="Transfer Bank">Transfer Bank</option>' +
+        '<option value="QRIS">QRIS</option>' +
+        '<option value="Tunai">Tunai</option>' +
+        '</select>' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Foto Bukti Pembayaran</label>' +
+        '<input id="additionalProofFile" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">' +
+        '<div id="additionalProofPreview" class="preview" style="display:none;">' +
+        '<img id="additionalProofPreviewImage" alt="Preview bukti">' +
+        '<div id="additionalProofPreviewName" class="help"></div>' +
+        '</div>' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Keterangan</label>' +
+        '<textarea id="additionalPaymentNote"></textarea>' +
+        '</div>' +
+
+        '<div class="additional-charge-actions" style="justify-content:flex-end;">' +
+        '<button type="button" class="btn btn-secondary" onclick="closeAdditionalChargePaymentModal()">Batal</button>' +
+        '<button type="button" class="btn btn-primary" id="additionalPaymentSubmitButton" onclick="submitAdditionalChargePayment(\'' +
+        encodeURIComponent(
+            item.id || ""
+        ) +
+        '\')">Kirim Pembayaran</button>' +
+        '</div>';
+
+    const file =
+        document.getElementById(
+            "additionalProofFile"
+        );
+
+    if(file){
+
+        file.addEventListener(
+            "change",
+            async function(){
+
+                const selected =
+                    this.files &&
+                    this.files[0];
+
+                if(!selected){
+                    return;
+                }
+
+                if(
+                    !selected.type.startsWith(
+                        "image/"
+                    )
+                ){
+
+                    this.value = "";
+
+                    alert(
+                        "File harus berupa foto."
+                    );
+
+                    return;
+
+                }
+
+                try{
+
+                    const dataUrl =
+                        await compressImage(
+                            selected
+                        );
+
+                    const parts =
+                        dataUrl.split(
+                            "base64,"
+                        );
+
+                    additionalProofData = {
+
+                        base64:
+                            parts[1],
+
+                        mimeType:
+                            "image/jpeg",
+
+                        originalName:
+                            selected.name
+
+                    };
+
+                    document
+                        .getElementById(
+                            "additionalProofPreviewImage"
+                        )
+                        .src =
+                        dataUrl;
+
+                    document
+                        .getElementById(
+                            "additionalProofPreviewName"
+                        )
+                        .textContent =
+                            selected.name;
+
+                    document
+                        .getElementById(
+                            "additionalProofPreview"
+                        )
+                        .style.display =
+                            "block";
+
+                }catch(error){
+
+                    additionalProofData =
+                        null;
+
+                    this.value = "";
+
+                    alert(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+    document
+        .getElementById(
+            "additionalChargePaymentModal"
+        )
+        .classList.add(
+            "show"
+        );
+
+}
+
+
+async function submitAdditionalChargePayment(
+    encodedId
+){
+
+    const chargeId =
+        decodeURIComponent(
+            encodedId
+        );
+
+    const proof =
+        additionalProofData;
+
+    if(!proof){
+
+        alert(
+            "Foto bukti pembayaran wajib dipilih."
+        );
+
+        return;
+
+    }
+
+    const method =
+        document.getElementById(
+            "additionalPaymentMethod"
+        ).value;
+
+    if(!method){
+
+        alert(
+            "Metode pembayaran wajib dipilih."
+        );
+
+        return;
+
+    }
+
+    const button =
+        document.getElementById(
+            "additionalPaymentSubmitButton"
+        );
+
+    if(button){
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Mengirim...";
+
+    }
+
+    try{
+
+        const result =
+            await api({
+
+                action:
+                    "submitAdditionalChargePayment",
+
+                tenantId:
+                    session.tenantId,
+
+                sessionToken:
+                    session.sessionToken,
+
+                chargeId:
+                    chargeId,
+
+                paymentDate:
+                    document.getElementById(
+                        "additionalPaymentDate"
+                    ).value,
+
+                amount:
+                    Number(
+                        document.getElementById(
+                            "additionalPaymentAmount"
+                        ).value
+                    ),
+
+                method:
+                    method,
+
+                proofBase64:
+                    proof.base64,
+
+                proofMimeType:
+                    proof.mimeType,
+
+                proofOriginalName:
+                    proof.originalName,
+
+                note:
+                    document.getElementById(
+                        "additionalPaymentNote"
+                    ).value
+
+            });
+
+        alert(
+            result.message
+        );
+
+        closeAdditionalChargePaymentModal();
+
+        const dashboard =
+            await api({
+
+                action:
+                    "tenantDashboard",
+
+                tenantId:
+                    session.tenantId,
+
+                sessionToken:
+                    session.sessionToken
+
+            });
+
+        window.__additionalChargesData =
+            dashboard.additionalCharges || {
+                items:[]
+            };
+
+        renderAdditionalCharges(
+            window.__additionalChargesData
+        );
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }finally{
+
+        if(button){
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Kirim Pembayaran";
+
+        }
+
+    }
+
+}
+
+
 /**
  * ==========================================================
  * LOAD
@@ -1083,6 +1928,16 @@ async function load(){
             )
             .textContent =
                 data.tenant.tenantId;
+
+
+        window.__additionalChargesData =
+            data.additionalCharges || {
+                items:[]
+            };
+
+        renderAdditionalCharges(
+            window.__additionalChargesData
+        );
 
 
         document
