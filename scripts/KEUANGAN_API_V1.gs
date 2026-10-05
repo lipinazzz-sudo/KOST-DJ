@@ -723,7 +723,8 @@ function djFinanceBuildDatasetV1_(
   }
 
 
-  const tenants = 
+  const tenants = [];
+
   if (tenantTable) {
 
     tenantTable.rows.forEach(
