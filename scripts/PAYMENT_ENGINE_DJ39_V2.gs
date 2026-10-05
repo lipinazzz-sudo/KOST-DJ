@@ -94,13 +94,20 @@ const DJ39PAY2 = {
 
 
 
-  DEFAULT_FINE_DAY3:
+  DEFAULT_FINE_DAY2:
 
     25000,
 
 
 
   DEFAULT_FINE_DAY5:
+
+    25000,
+
+
+
+  /* Backward-compatible alias for old settings/config code. */
+  DEFAULT_FINE_DAY3:
 
     25000,
 
@@ -1558,15 +1565,15 @@ function updatePaymentStatusDJ39() {
 
 
 
-  const dendaHari3 =
+  const dendaHari2 =
 
     dj39pay2GetSettingNumber_(
 
       ss,
 
-      'Denda_Terlambat_Hari_Ke3',
+      'Denda_Terlambat_Hari_Ke2',
 
-      DJ39PAY2.DEFAULT_FINE_DAY3
+      DJ39PAY2.DEFAULT_FINE_DAY2
 
     );
 
@@ -2188,7 +2195,7 @@ function updatePaymentStatusDJ39() {
 
               effectiveDueDate,
 
-              dendaHari3,
+              dendaHari2,
 
               dendaHari5,
 
@@ -3682,9 +3689,16 @@ function dj39pay2CalculateFine_(
 
 
 
+  /*
+   * Jadwal denda resmi:
+   * - Tanggal 2 relatif terhadap jatuh tempo tanggal 1 -> Rp25.000
+   * - Tanggal 5 dan seterusnya -> total Rp50.000
+   * - Tidak ada kenaikan setelah tanggal 5.
+   */
+
   if (
 
-    lateDays < 2
+    lateDays < 1
 
   ) {
 
@@ -3700,7 +3714,7 @@ function dj39pay2CalculateFine_(
 
   let fine =
 
-    dendaHari3;
+    dendaHari2;
 
 
 
