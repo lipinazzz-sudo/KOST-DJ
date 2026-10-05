@@ -3631,11 +3631,29 @@ button{
                     class="panel"
                 >
 
-                    <h2 class="section-title">
-                        Pembayaran
-                    </h2>
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;">
 
-                    <p class="section-subtitle">
+                        <div>
+                            <h2 class="section-title" style="margin-bottom:6px;">
+                                Pembayaran
+                            </h2>
+
+                            <p class="section-subtitle" style="margin-bottom:0;">
+                                Pantau kondisi tagihan tenant. Email digunakan untuk reminder otomatis; WhatsApp digunakan untuk komunikasi manual.
+                            </p>
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            type="button"
+                            onclick="openAdditionalChargeModal()"
+                        >
+                            + Tagihan Tambahan
+                        </button>
+
+                    </div>
+
+                    
                         Pantau kondisi tagihan tenant. Email digunakan untuk reminder otomatis; WhatsApp digunakan untuk komunikasi manual.
                     </p>
 
@@ -3689,6 +3707,31 @@ button{
                         id="paymentsBox"
                         class="card table-wrap"
                     ></div>
+
+                    <div style="margin-top:18px;">
+
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+
+                            <div>
+                                <h3 style="margin:0;font-size:18px;">
+                                    Tagihan Tambahan
+                                </h3>
+
+                                <div class="small" style="margin-top:4px;">
+                                    Biaya di luar sewa bulanan seperti tamu menginap, pelanggaran merokok, kerusakan, kehilangan kunci, dan biaya operasional lain.
+                                </div>
+                            </div>
+
+                            <div id="additionalChargesSummary" class="small"></div>
+
+                        </div>
+
+                        <div
+                            id="additionalChargesBox"
+                            class="card table-wrap"
+                        ></div>
+
+                    </div>
 
                 </section>
 
@@ -4748,6 +4791,8 @@ let masterSession = null;
 let dashboardData = null;
 
 let paymentItems = [];
+
+let additionalChargeItems = [];
 
 let maintenanceItems = [];
 
@@ -9535,6 +9580,1049 @@ async function loadPayments(){
     renderPaymentSummary();
     renderPaymentMonitoringHint();
     renderPayments();
+
+    await loadAdditionalCharges();
+
+}
+
+
+/* =========================================================
+   TAGIHAN TAMBAHAN
+   ========================================================= */
+
+const ADDITIONAL_CHARGE_TYPES = [
+    "Tamu menginap",
+    "Pelanggaran merokok",
+    "Kunci / akses hilang",
+    "Kerusakan fasilitas",
+    "Biaya kebersihan tambahan",
+    "Late check-out",
+    "Penggunaan fasilitas tambahan",
+    "Penggantian barang",
+    "Lainnya"
+];
+
+
+function additionalChargeDateValue(value){
+
+    const text =
+        String(
+            value || ""
+        ).trim();
+
+    if(!text) return null;
+
+    let match =
+        text.match(
+            /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/
+        );
+
+    if(match){
+
+        const date =
+            new Date(
+                Number(match[3]),
+                Number(match[2]) - 1,
+                Number(match[1])
+            );
+
+        if(!isNaN(date.getTime())) return date;
+
+    }
+
+    match =
+        text.match(
+            /^(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})/
+        );
+
+    if(match){
+
+        const date =
+            new Date(
+                Number(match[1]),
+                Number(match[2]) - 1,
+                Number(match[3])
+            );
+
+        if(!isNaN(date.getTime())) return date;
+
+    }
+
+    const parsed =
+        new Date(text);
+
+    return isNaN(parsed.getTime())
+        ? null
+        : parsed;
+
+}
+
+
+function additionalChargeDateInputValue(value){
+
+    const date =
+        additionalChargeDateValue(
+            value
+        );
+
+    if(!date) return "";
+
+    return (
+        String(date.getFullYear()) +
+        "-" +
+        String(date.getMonth() + 1).padStart(2,"0") +
+        "-" +
+        String(date.getDate()).padStart(2,"0")
+    );
+
+}
+
+
+function additionalChargeStatusBadge(status){
+
+    const normalized =
+        String(
+            status || ""
+        ).trim().toUpperCase();
+
+    return normalized === "LUNAS"
+        ? "badge-ok"
+        : normalized === "DIBATALKAN"
+            ? "badge-danger"
+            : "badge-warn";
+
+}
+
+
+function additionalChargeFind(id){
+
+    const wanted =
+        String(
+            id || ""
+        ).trim().toUpperCase();
+
+    return additionalChargeItems.find(
+        function(item){
+
+            return (
+                String(
+                    item &&
+                    item.id ||
+                    ""
+                ).trim().toUpperCase()
+                ===
+                wanted
+            );
+
+        }
+    ) || null;
+
+}
+
+
+function loadAdditionalCharges(){
+
+    return api(
+        "masterAdditionalCharges"
+    )
+    .then(
+        function(data){
+
+            additionalChargeItems =
+                Array.isArray(
+                    data &&
+                    data.items
+                )
+                    ? data.items
+                    : [];
+
+            renderAdditionalCharges(
+                data &&
+                data.summary
+                    ? data.summary
+                    : null
+            );
+
+        }
+    );
+
+}
+
+
+function renderAdditionalCharges(summary){
+
+    const box =
+        document.getElementById(
+            "additionalChargesBox"
+        );
+
+    const summaryBox =
+        document.getElementById(
+            "additionalChargesSummary"
+        );
+
+    if(summaryBox){
+
+        summaryBox.textContent =
+            "Total " +
+            Number(summary && summary.total || 0) +
+            " · Belum dibayar " +
+            Number(summary && summary.unpaid || 0) +
+            " · Lunas " +
+            Number(summary && summary.paid || 0) +
+            " · Nominal " +
+            money(
+                summary && summary.nominal || 0
+            );
+
+    }
+
+    if(!box) return;
+
+    box.innerHTML =
+        additionalChargeItems.length
+
+            ? (
+                '<table class="data-table" style="min-width:1180px;">' +
+                '<thead><tr>' +
+                '<th>ID</th>' +
+                '<th>Tenant</th>' +
+                '<th>Jenis</th>' +
+                '<th>Deskripsi</th>' +
+                '<th>Nominal</th>' +
+                '<th>Jatuh Tempo</th>' +
+                '<th>Status</th>' +
+                '<th>Aksi</th>' +
+                '</tr></thead>' +
+                '<tbody>' +
+
+                additionalChargeItems.map(
+                    function(item){
+
+                        const status =
+                            String(
+                                item.status || ""
+                            ).trim().toUpperCase();
+
+                        let actions = "";
+
+                        if(
+                            status !== "LUNAS" &&
+                            status !== "DIBATALKAN"
+                        ){
+
+                            actions +=
+                                '<button class="btn btn-secondary" onclick="openAdditionalChargeModal(\'' +
+                                encodeURIComponent(item.id || "") +
+                                '\')">Edit</button>';
+
+                            actions +=
+                                '<button class="btn btn-danger" onclick="cancelAdditionalCharge(\'' +
+                                encodeURIComponent(item.id || "") +
+                                '\')">Batalkan</button>';
+
+                        }
+
+                        actions +=
+                            '<button class="btn btn-success" onclick="sendAdditionalChargeWhatsApp(\'' +
+                            encodeURIComponent(item.id || "") +
+                            '\')">💬 WA</button>';
+
+                        const tenant =
+                            tenantItems.find(
+                                function(row){
+
+                                    return (
+                                        String(
+                                            row &&
+                                            row.tenantId ||
+                                            ""
+                                        ).trim().toUpperCase()
+                                        ===
+                                        String(
+                                            item &&
+                                            item.tenantId ||
+                                            ""
+                                        ).trim().toUpperCase()
+                                    );
+
+                                }
+                            );
+
+                        if(
+                            tenant &&
+                            String(
+                                tenant.email ||
+                                ""
+                            ).trim()
+                        ){
+
+                            actions +=
+                                '<button class="btn btn-secondary" onclick="sendAdditionalChargeEmail(\'' +
+                                encodeURIComponent(item.id || "") +
+                                '\')">✉ Email</button>';
+
+                        }
+
+                        return (
+                            '<tr>' +
+
+                            '<td><strong>' +
+                            escapeHtml(item.id || "—") +
+                            '</strong></td>' +
+
+                            '<td>' +
+                            '<strong>' +
+                            escapeHtml(
+                                item.name ||
+                                item.tenantId ||
+                                "—"
+                            ) +
+                            '</strong>' +
+                            '<br><span class="small">' +
+                            escapeHtml(
+                                item.tenantId ||
+                                ""
+                            ) +
+                            ' · Kamar ' +
+                            escapeHtml(
+                                item.room ||
+                                "—"
+                            ) +
+                            '</span>' +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.type ||
+                                "Lainnya"
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.description ||
+                                "—"
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            money(item.amount) +
+                            '</td>' +
+
+                            '<td>' +
+                            escapeHtml(
+                                item.dueDate
+                                    ? new Date(
+                                        item.dueDate
+                                    ).toLocaleDateString(
+                                        "id-ID"
+                                    )
+                                    : "—"
+                            ) +
+                            '</td>' +
+
+                            '<td>' +
+                            '<span class="badge ' +
+                            additionalChargeStatusBadge(item.status) +
+                            '">' +
+                            escapeHtml(
+                                item.status ||
+                                "BELUM DIBAYAR"
+                            ) +
+                            '</span>' +
+                            '</td>' +
+
+                            '<td><div class="actions">' +
+                            actions +
+                            '</div></td>' +
+
+                            '</tr>'
+                        );
+
+                    }
+                ).join("") +
+
+                '</tbody></table>'
+            )
+
+            : '<div class="empty">Belum ada tagihan tambahan.</div>';
+
+}
+
+
+function openAdditionalChargeModal(encodedId){
+
+    const id =
+        encodedId
+            ? decodeURIComponent(encodedId)
+            : "";
+
+    const existing =
+        id
+            ? additionalChargeFind(id)
+            : null;
+
+    if(!tenantItems.length){
+
+        api("masterTenants")
+            .then(
+                function(data){
+
+                    tenantItems =
+                        Array.isArray(
+                            data &&
+                            data.items
+                        )
+                            ? data.items
+                            : [];
+
+                    openAdditionalChargeModal(
+                        encodedId
+                    );
+
+                }
+            )
+            .catch(
+                function(error){
+                    alert(error.message);
+                }
+            );
+
+        return;
+
+    }
+
+    const activeTenants =
+        tenantItems.filter(
+            function(item){
+
+                return (
+                    String(
+                        item &&
+                        item.status ||
+                        ""
+                    ).trim().toUpperCase()
+                    ===
+                    "AKTIF"
+                );
+
+            }
+        );
+
+    const sourceTenants =
+        activeTenants.length
+            ? activeTenants
+            : tenantItems;
+
+    const selectedTenant =
+        existing
+            ? tenantItems.find(
+                function(item){
+                    return (
+                        String(
+                            item &&
+                            item.tenantId ||
+                            ""
+                        ).trim().toUpperCase()
+                        ===
+                        String(
+                            existing.tenantId ||
+                            ""
+                        ).trim().toUpperCase()
+                    );
+                }
+            )
+            : sourceTenants[0] || null;
+
+    const tenantOptions =
+        sourceTenants
+            .map(
+                function(item){
+
+                    const selected =
+                        selectedTenant &&
+                        String(
+                            item.tenantId ||
+                            ""
+                        ).toUpperCase()
+                        ===
+                        String(
+                            selectedTenant.tenantId ||
+                            ""
+                        ).toUpperCase()
+                            ? " selected"
+                            : "";
+
+                    return (
+                        '<option value="' +
+                        escapeHtml(
+                            item.tenantId ||
+                            ""
+                        ) +
+                        '"' +
+                        selected +
+                        '>' +
+                        escapeHtml(
+                            item.name ||
+                            item.tenantId ||
+                            "Tenant"
+                        ) +
+                        ' · ' +
+                        escapeHtml(
+                            item.tenantId ||
+                            ""
+                        ) +
+                        ' · Kamar ' +
+                        escapeHtml(
+                            item.room ||
+                            "—"
+                        ) +
+                        '</option>'
+                    );
+
+                }
+            )
+            .join("");
+
+    openModal(
+        existing
+            ? "Edit Tagihan Tambahan"
+            : "Tagihan Tambahan",
+        '<form id="additionalChargeForm">' +
+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
+
+        '<div class="field">' +
+        '<label>Tenant</label>' +
+        '<select id="additionalChargeTenant" required>' +
+        tenantOptions +
+        '</select>' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Kamar</label>' +
+        '<input id="additionalChargeRoom" type="text" readonly value="' +
+        escapeHtml(
+            selectedTenant
+                ? selectedTenant.room || ""
+                : existing
+                    ? existing.room || ""
+                    : ""
+        ) +
+        '">' +
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Jenis</label>' +
+        '<select id="additionalChargeType" required>' +
+        ADDITIONAL_CHARGE_TYPES.map(
+            function(type){
+
+                const selected =
+                    existing &&
+                    String(
+                        existing.type ||
+                        ""
+                    ).trim()
+                    ===
+                    type
+                        ? " selected"
+                        : "";
+
+                return (
+                    '<option value="' +
+                    escapeHtml(type) +
+                    '"' +
+                    selected +
+                    '>' +
+                    escapeHtml(type) +
+                    '</option>'
+                );
+
+            }
+        ).join("") +
+        '</select>' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Deskripsi</label>' +
+        '<textarea id="additionalChargeDescription" rows="4" required placeholder="Contoh: 1 tamu tambahan menginap 2 malam">' +
+        escapeHtml(
+            existing &&
+            existing.description ||
+            ""
+        ) +
+        '</textarea>' +
+        '</div>' +
+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
+
+        '<div class="field">' +
+        '<label>Nominal</label>' +
+        '<input id="additionalChargeAmount" type="number" min="1" step="1000" required value="' +
+        escapeHtml(
+            existing &&
+            existing.amount ||
+            ""
+        ) +
+        '">' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Jatuh Tempo</label>' +
+        '<input id="additionalChargeDueDate" type="date" value="' +
+        escapeHtml(
+            existing
+                ? additionalChargeDateInputValue(existing.dueDate)
+                : ""
+        ) +
+        '">' +
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Bukti / Referensi URL <span class="small">(opsional)</span></label>' +
+        '<input id="additionalChargeProofUrl" type="url" placeholder="https://..." value="' +
+        escapeHtml(
+            existing &&
+            existing.proofUrl ||
+            ""
+        ) +
+        '">' +
+        '</div>' +
+
+        '<div class="field">' +
+        '<label>Catatan <span class="small">(opsional)</span></label>' +
+        '<textarea id="additionalChargeNote" rows="3">' +
+        escapeHtml(
+            existing &&
+            existing.note ||
+            ""
+        ) +
+        '</textarea>' +
+        '</div>' +
+
+        '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;">' +
+
+        '<button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>' +
+
+        '<button type="submit" class="btn btn-primary">' +
+        (
+            existing
+                ? "Simpan Perubahan"
+                : "Simpan Tagihan"
+        ) +
+        '</button>' +
+
+        '</div>' +
+
+        '</form>'
+    );
+
+    const tenantSelect =
+        document.getElementById(
+            "additionalChargeTenant"
+        );
+
+    const roomInput =
+        document.getElementById(
+            "additionalChargeRoom"
+        );
+
+    if(tenantSelect && roomInput){
+
+        tenantSelect.addEventListener(
+            "change",
+            function(){
+
+                const tenant =
+                    tenantItems.find(
+                        function(item){
+
+                            return (
+                                String(
+                                    item &&
+                                    item.tenantId ||
+                                    ""
+                                ).trim().toUpperCase()
+                                ===
+                                String(
+                                    tenantSelect.value ||
+                                    ""
+                                ).trim().toUpperCase()
+                            );
+
+                        }
+                    );
+
+                roomInput.value =
+                    tenant
+                        ? tenant.room || ""
+                        : "";
+
+            }
+        );
+
+    }
+
+    const form =
+        document.getElementById(
+            "additionalChargeForm"
+        );
+
+    if(!form) return;
+
+    form.addEventListener(
+        "submit",
+        async function(event){
+
+            event.preventDefault();
+
+            const payload = {
+
+                tenantId:
+                    tenantSelect
+                        ? tenantSelect.value
+                        : "",
+
+                type:
+                    document.getElementById(
+                        "additionalChargeType"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "additionalChargeDescription"
+                    ).value.trim(),
+
+                amount:
+                    Number(
+                        document.getElementById(
+                            "additionalChargeAmount"
+                        ).value
+                    ),
+
+                dueDate:
+                    document.getElementById(
+                        "additionalChargeDueDate"
+                    ).value,
+
+                proofUrl:
+                    document.getElementById(
+                        "additionalChargeProofUrl"
+                    ).value.trim(),
+
+                note:
+                    document.getElementById(
+                        "additionalChargeNote"
+                    ).value.trim()
+
+            };
+
+            const action =
+                existing
+                    ? "masterUpdateAdditionalCharge"
+                    : "masterCreateAdditionalCharge";
+
+            if(existing){
+                payload.chargeId = existing.id;
+            }
+
+            const submitButton =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
+
+            if(submitButton){
+
+                submitButton.disabled =
+                    true;
+
+                submitButton.textContent =
+                    "Menyimpan...";
+
+            }
+
+            try{
+
+                const result =
+                    await api(
+                        action,
+                        payload
+                    );
+
+                alert(
+                    result.message
+                );
+
+                closeModal();
+
+                await loadAdditionalCharges();
+
+            }catch(error){
+
+                alert(
+                    error.message
+                );
+
+            }finally{
+
+                if(submitButton){
+
+                    submitButton.disabled =
+                        false;
+
+                    submitButton.textContent =
+                        existing
+                            ? "Simpan Perubahan"
+                            : "Simpan Tagihan";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+async function cancelAdditionalCharge(encodedId){
+
+    const chargeId =
+        decodeURIComponent(
+            encodedId
+        );
+
+    const item =
+        additionalChargeFind(
+            chargeId
+        );
+
+    if(!item){
+
+        alert(
+            "Tagihan tambahan tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    const confirmed =
+        confirm(
+            "Batalkan " +
+            chargeId +
+            " untuk " +
+            (
+                item.name ||
+                item.tenantId
+            ) +
+            "? Data tidak dihapus, hanya status diubah menjadi DIBATALKAN."
+        );
+
+    if(!confirmed) return;
+
+    try{
+
+        const result =
+            await api(
+                "masterCancelAdditionalCharge",
+                {
+                    chargeId:
+                        chargeId
+                }
+            );
+
+        alert(
+            result.message
+        );
+
+        await loadAdditionalCharges();
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+function additionalChargeMessage(item){
+
+    return (
+        "Halo " +
+        (
+            item.name ||
+            "Tenant"
+        ) +
+        ",\n\n" +
+        "terdapat tagihan tambahan untuk Kamar " +
+        (
+            item.room ||
+            "—"
+        ) +
+        ".\n\n" +
+        "Jenis: " +
+        (
+            item.type ||
+            "Lainnya"
+        ) +
+        "\n" +
+        "Keterangan: " +
+        (
+            item.description ||
+            "—"
+        ) +
+        "\n" +
+        "Nominal: " +
+        money(item.amount) +
+        (
+            item.dueDate
+                ? "\nJatuh tempo: " +
+                  new Date(
+                      item.dueDate
+                  ).toLocaleDateString("id-ID")
+                : ""
+        ) +
+        "\n\n" +
+        "Silakan melakukan pembayaran melalui Portal Tenant DJ Family Kost."
+    );
+
+}
+
+
+function sendAdditionalChargeWhatsApp(encodedId){
+
+    const item =
+        additionalChargeFind(
+            decodeURIComponent(
+                encodedId
+            )
+        );
+
+    if(!item){
+
+        alert(
+            "Tagihan tambahan tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    const phone =
+        getTenantPhoneForWhatsApp(
+            item.tenantId
+        );
+
+    if(!phone){
+
+        alert(
+            "Nomor WhatsApp tenant tidak tersedia."
+        );
+
+        return;
+
+    }
+
+    window.open(
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        encodeURIComponent(
+            additionalChargeMessage(
+                item
+            )
+        ),
+        "_blank",
+        "noopener"
+    );
+
+}
+
+
+function sendAdditionalChargeEmail(encodedId){
+
+    const item =
+        additionalChargeFind(
+            decodeURIComponent(
+                encodedId
+            )
+        );
+
+    if(!item){
+
+        alert(
+            "Tagihan tambahan tidak ditemukan."
+        );
+
+        return;
+
+    }
+
+    const tenant =
+        tenantItems.find(
+            function(row){
+
+                return (
+                    String(
+                        row &&
+                        row.tenantId ||
+                        ""
+                    ).trim().toUpperCase()
+                    ===
+                    String(
+                        item.tenantId ||
+                        ""
+                    ).trim().toUpperCase()
+                );
+
+            }
+        );
+
+    const email =
+        tenant
+            ? String(
+                tenant.email ||
+                ""
+            ).trim()
+            : "";
+
+    if(!email){
+
+        alert(
+            "Email tenant tidak tersedia."
+        );
+
+        return;
+
+    }
+
+    window.location.href =
+        "mailto:" +
+        encodeURIComponent(email) +
+        "?subject=" +
+        encodeURIComponent(
+            "Tagihan Tambahan DJ Family Kost — " +
+            (
+                item.type ||
+                "Lainnya"
+            )
+        ) +
+        "&body=" +
+        encodeURIComponent(
+            additionalChargeMessage(
+                item
+            )
+        );
 
 }
 
