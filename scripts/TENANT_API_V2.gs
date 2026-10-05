@@ -1301,6 +1301,87 @@ if (
   }
 
 
+  /* ----------------------------------------------------------
+   * TAGIHAN TAMBAHAN
+   * ----------------------------------------------------------
+   */
+
+  if (
+    action === 'masteradditionalcharges'
+  ) {
+
+    return djApiJsonV5_({
+
+      ok: true,
+
+      data:
+        djApiMasterAdditionalChargesV1_()
+
+    });
+
+  }
+
+
+  if (
+    action === 'mastercreateadditionalcharge'
+  ) {
+
+    const result =
+      djApiCreateAdditionalChargeV1_(
+        body,
+        master.masterId
+      );
+
+
+    return djApiJsonV5_(
+      result.ok
+        ? { ok: true, data: result }
+        : { ok: false, error: result.error }
+    );
+
+  }
+
+
+  if (
+    action === 'masterupdateadditionalcharge'
+  ) {
+
+    const result =
+      djApiUpdateAdditionalChargeV1_(
+        body,
+        master.masterId
+      );
+
+
+    return djApiJsonV5_(
+      result.ok
+        ? { ok: true, data: result }
+        : { ok: false, error: result.error }
+    );
+
+  }
+
+
+  if (
+    action === 'mastercanceladditionalcharge'
+  ) {
+
+    const result =
+      djApiCancelAdditionalChargeV1_(
+        body.chargeId,
+        master.masterId
+      );
+
+
+    return djApiJsonV5_(
+      result.ok
+        ? { ok: true, data: result }
+        : { ok: false, error: result.error }
+    );
+
+  }
+
+
   if (
     action === 'masterverifypayment'
   ) {
@@ -11705,6 +11786,1033 @@ function djApiMasterPaymentsV5_() {
       )
 
   };
+
+}
+
+
+/* ============================================================
+ * TAGIHAN TAMBAHAN — MASTER
+ * ============================================================
+ */
+
+const DJ39_ADDITIONAL_CHARGE_SHEET =
+  'Tagihan_Tambahan';
+
+const DJ39_ADDITIONAL_CHARGE_HEADERS = [
+  'Tagihan_Tambahan_ID',
+  'Tenant_ID',
+  'No_Kamar',
+  'Nama_Tenant',
+  'Jenis',
+  'Deskripsi',
+  'Nominal',
+  'Tanggal_Dibuat',
+  'Jatuh_Tempo',
+  'Status',
+  'Bukti_URL',
+  'Dibuat_Oleh',
+  'Tanggal_Dibayar',
+  'Tanggal_Dibatalkan',
+  'Dibatalkan_Oleh',
+  'Catatan'
+];
+
+
+function djApiEnsureAdditionalChargeSheetV1_(
+  ss
+) {
+
+  let sheet =
+    ss.getSheetByName(
+      DJ39_ADDITIONAL_CHARGE_SHEET
+    );
+
+
+  if (
+    !sheet
+  ) {
+
+    sheet =
+      ss.insertSheet(
+        DJ39_ADDITIONAL_CHARGE_SHEET
+      );
+
+    sheet
+      .getRange(
+        1,
+        1,
+        1,
+        DJ39_ADDITIONAL_CHARGE_HEADERS.length
+      )
+      .setValues(
+        [
+          DJ39_ADDITIONAL_CHARGE_HEADERS
+        ]
+      );
+
+    return sheet;
+
+  }
+
+
+  const table =
+    djApiReadTableV5_(
+      sheet,
+      [
+        'Tagihan_Tambahan_ID'
+      ]
+    );
+
+
+  if (
+    !table
+  ) {
+
+    sheet
+      .getRange(
+        1,
+        1,
+        1,
+        DJ39_ADDITIONAL_CHARGE_HEADERS.length
+      )
+      .setValues(
+        [
+          DJ39_ADDITIONAL_CHARGE_HEADERS
+        ]
+      );
+
+  } else {
+
+    djApiEnsureFieldsV5_(
+      sheet,
+      table.headerRow,
+      table.headers,
+      DJ39_ADDITIONAL_CHARGE_HEADERS
+    );
+
+  }
+
+
+  return sheet;
+
+}
+
+
+function djApiGetAdditionalChargeTenantV1_(
+  ss,
+  tenantId
+) {
+
+  const table =
+    djApiReadSafeV5_(
+      ss,
+      'Tenant',
+      [
+        'Tenant_ID'
+      ]
+    );
+
+
+  if (
+    !table
+  ) {
+
+    return null;
+
+  }
+
+
+  for (
+    let i = 0;
+    i < table.rows.length;
+    i++
+  ) {
+
+    const id =
+      String(
+        djApiValueV5_(
+          table.rows[i],
+          table.headers,
+          [
+            'Tenant_ID'
+          ]
+        ) || ''
+      )
+      .trim()
+      .toUpperCase();
+
+
+    if (
+      id !==
+      String(
+        tenantId || ''
+      )
+      .trim()
+      .toUpperCase()
+    ) {
+
+      continue;
+
+    }
+
+
+    return {
+
+      tenantId:
+        id,
+
+      name:
+        djApiValueV5_(
+          table.rows[i],
+          table.headers,
+          [
+            'Nama_Lengkap',
+            'Nama_Tenant'
+          ]
+        ) || '',
+
+      room:
+        djApiValueV5_(
+          table.rows[i],
+          table.headers,
+          [
+            'No_Kamar'
+          ]
+        ) || '',
+
+      email:
+        djApiValueV5_(
+          table.rows[i],
+          table.headers,
+          [
+            'Email'
+          ]
+        ) || '',
+
+      phone:
+        djApiValueV5_(
+          table.rows[i],
+          table.headers,
+          [
+            'No_HP'
+          ]
+        ) || ''
+
+    };
+
+  }
+
+
+  return null;
+
+}
+
+
+function djApiNextAdditionalChargeIdV1_(
+  sheet
+) {
+
+  const table =
+    djApiReadTableV5_(
+      sheet,
+      [
+        'Tagihan_Tambahan_ID'
+      ]
+    );
+
+
+  let max =
+    0;
+
+
+  if (
+    table
+  ) {
+
+    table.rows.forEach(
+      function(row) {
+
+        const id =
+          String(
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Tagihan_Tambahan_ID'
+              ]
+            ) || ''
+          )
+          .trim()
+          .toUpperCase();
+
+
+        const match =
+          id.match(
+            /^TAM-(\d+)$/
+          );
+
+
+        if (
+          match
+        ) {
+
+          max =
+            Math.max(
+              max,
+              Number(
+                match[1]
+              )
+            );
+
+        }
+
+      }
+    );
+
+  }
+
+
+  return 'TAM-' +
+    String(
+      max + 1
+    ).padStart(
+      4,
+      '0'
+    );
+
+}
+
+
+function djApiBuildAdditionalChargesV1_(
+  table
+) {
+
+  if (!table) return [];
+
+  return table.rows
+    .map(
+      function(row) {
+
+        const id =
+          String(
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Tagihan_Tambahan_ID'
+              ]
+            ) || ''
+          ).trim();
+
+
+        const tenantId =
+          String(
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Tenant_ID'
+              ]
+            ) || ''
+          ).trim();
+
+
+        if (!id && !tenantId) return null;
+
+
+        return {
+
+          id:
+            id,
+
+          tenantId:
+            tenantId,
+
+          room:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'No_Kamar'
+              ]
+            ) || '',
+
+          name:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Nama_Tenant'
+              ]
+            ) || '',
+
+          type:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Jenis'
+              ]
+            ) || 'Lainnya',
+
+          description:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Deskripsi'
+              ]
+            ) || '',
+
+          amount:
+            djApiNumberV5_(
+              djApiValueV5_(
+                row,
+                table.headers,
+                [
+                  'Nominal'
+                ]
+              )
+            ),
+
+          createdAt:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Tanggal_Dibuat'
+              ]
+            ) || '',
+
+          dueDate:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Jatuh_Tempo'
+              ]
+            ) || '',
+
+          status:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Status'
+              ]
+            ) || 'BELUM DIBAYAR',
+
+          proofUrl:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Bukti_URL'
+              ]
+            ) || '',
+
+          createdBy:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Dibuat_Oleh'
+              ]
+            ) || '',
+
+          paidDate:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Tanggal_Dibayar'
+              ]
+            ) || '',
+
+          cancelledDate:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Tanggal_Dibatalkan'
+              ]
+            ) || '',
+
+          cancelledBy:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Dibatalkan_Oleh'
+              ]
+            ) || '',
+
+          note:
+            djApiValueV5_(
+              row,
+              table.headers,
+              [
+                'Catatan'
+              ]
+            ) || ''
+
+        };
+
+      }
+    )
+    .filter(Boolean);
+
+}
+
+
+function djApiMasterAdditionalChargesV1_() {
+
+  const ss =
+    SpreadsheetApp
+      .getActiveSpreadsheet();
+
+  const sheet =
+    djApiEnsureAdditionalChargeSheetV1_(
+      ss
+    );
+
+  const table =
+    djApiReadTableV5_(
+      sheet,
+      [
+        'Tagihan_Tambahan_ID'
+      ]
+    );
+
+  const items =
+    djApiBuildAdditionalChargesV1_(
+      table
+    );
+
+  return {
+
+    items:
+      items,
+
+    summary: {
+
+      total:
+        items.length,
+
+      unpaid:
+        items.filter(
+          function(item) {
+            return (
+              String(
+                item.status || ''
+              ).toUpperCase() ===
+              'BELUM DIBAYAR'
+            );
+          }
+        ).length,
+
+      paid:
+        items.filter(
+          function(item) {
+            return (
+              String(
+                item.status || ''
+              ).toUpperCase() ===
+              'LUNAS'
+            );
+          }
+        ).length,
+
+      cancelled:
+        items.filter(
+          function(item) {
+            return (
+              String(
+                item.status || ''
+              ).toUpperCase() ===
+              'DIBATALKAN'
+            );
+          }
+        ).length,
+
+      nominal:
+        items.reduce(
+          function(sum,item) {
+            return (
+              sum +
+              Number(
+                item.amount || 0
+              )
+            );
+          },
+          0
+        )
+
+    }
+
+  };
+
+}
+
+
+function djApiCreateAdditionalChargeV1_(
+  body,
+  masterId
+) {
+
+  const ss =
+    SpreadsheetApp
+      .getActiveSpreadsheet();
+
+  const lock =
+    LockService.getDocumentLock();
+
+  lock.waitLock(30000);
+
+  try {
+
+    const tenantId =
+      String(
+        body.tenantId || ''
+      ).trim().toUpperCase();
+
+    const type =
+      String(
+        body.type || ''
+      ).trim();
+
+    const description =
+      String(
+        body.description || ''
+      ).trim();
+
+    const amount =
+      djApiNumberV5_(
+        body.amount
+      );
+
+    if (!tenantId) return { ok:false, error:'Tenant wajib dipilih.' };
+    if (!type) return { ok:false, error:'Jenis tagihan wajib dipilih.' };
+    if (!description) return { ok:false, error:'Deskripsi tagihan wajib diisi.' };
+    if (amount <= 0) return { ok:false, error:'Nominal tagihan harus lebih dari Rp0.' };
+
+    const tenant =
+      djApiGetAdditionalChargeTenantV1_(
+        ss,
+        tenantId
+      );
+
+    if (!tenant) return { ok:false, error:'Tenant tidak ditemukan.' };
+
+    const dueDate =
+      body.dueDate
+        ? djApiParseDateV7_(body.dueDate)
+        : null;
+
+    if (body.dueDate && !dueDate) {
+      return { ok:false, error:'Tanggal jatuh tempo tidak valid.' };
+    }
+
+    const sheet =
+      djApiEnsureAdditionalChargeSheetV1_(
+        ss
+      );
+
+    const table =
+      djApiReadTableV5_(
+        sheet,
+        [
+          'Tagihan_Tambahan_ID'
+        ]
+      );
+
+    const chargeId =
+      djApiNextAdditionalChargeIdV1_(
+        sheet
+      );
+
+    const data = {
+
+      Tagihan_Tambahan_ID:
+        chargeId,
+
+      Tenant_ID:
+        tenant.tenantId,
+
+      No_Kamar:
+        tenant.room,
+
+      Nama_Tenant:
+        tenant.name,
+
+      Jenis:
+        type,
+
+      Deskripsi:
+        description,
+
+      Nominal:
+        amount,
+
+      Tanggal_Dibuat:
+        new Date(),
+
+      Jatuh_Tempo:
+        dueDate || '',
+
+      Status:
+        'BELUM DIBAYAR',
+
+      Bukti_URL:
+        String(
+          body.proofUrl || ''
+        ).trim(),
+
+      Dibuat_Oleh:
+        String(
+          masterId || ''
+        ).trim(),
+
+      Tanggal_Dibayar:
+        '',
+
+      Tanggal_Dibatalkan:
+        '',
+
+      Dibatalkan_Oleh:
+        '',
+
+      Catatan:
+        String(
+          body.note || ''
+        ).trim()
+
+    };
+
+    djApiAppendRowV5_(
+      sheet,
+      table.headers,
+      data
+    );
+
+    SpreadsheetApp.flush();
+
+    return {
+      ok:true,
+      chargeId:chargeId,
+      message:'Tagihan tambahan berhasil dibuat.'
+    };
+
+  } finally {
+
+    lock.releaseLock();
+
+  }
+
+}
+
+
+function djApiFindAdditionalChargeRowV1_(
+  sheet,
+  chargeId
+) {
+
+  const table =
+    djApiReadTableV5_(
+      sheet,
+      [
+        'Tagihan_Tambahan_ID'
+      ]
+    );
+
+  if (!table) {
+    return { table:null, rowNumber:-1 };
+  }
+
+  const col =
+    djApiFindColumnV5_(
+      table.headers,
+      [
+        'Tagihan_Tambahan_ID'
+      ]
+    );
+
+  const target =
+    String(
+      chargeId || ''
+    ).trim().toUpperCase();
+
+  for (
+    let i = 0;
+    i < table.rows.length;
+    i++
+  ) {
+
+    if (
+      String(
+        table.rows[i][col] || ''
+      ).trim().toUpperCase() ===
+      target
+    ) {
+
+      return {
+        table:table,
+        rowNumber:
+          table.headerRow + 1 + i
+      };
+
+    }
+
+  }
+
+  return {
+    table:table,
+    rowNumber:-1
+  };
+
+}
+
+
+function djApiUpdateAdditionalChargeV1_(
+  body,
+  masterId
+) {
+
+  const ss =
+    SpreadsheetApp
+      .getActiveSpreadsheet();
+
+  const lock =
+    LockService.getDocumentLock();
+
+  lock.waitLock(30000);
+
+  try {
+
+    const chargeId =
+      String(
+        body.chargeId || ''
+      ).trim();
+
+    if (!chargeId) {
+      return { ok:false, error:'ID tagihan tambahan tidak ditemukan.' };
+    }
+
+    const sheet =
+      djApiEnsureAdditionalChargeSheetV1_(
+        ss
+      );
+
+    const found =
+      djApiFindAdditionalChargeRowV1_(
+        sheet,
+        chargeId
+      );
+
+    if (found.rowNumber < 0) {
+      return { ok:false, error:'Tagihan tambahan tidak ditemukan.' };
+    }
+
+    const rowIndex =
+      found.rowNumber -
+      found.table.headerRow -
+      1;
+
+    const status =
+      String(
+        djApiValueV5_(
+          found.table.rows[rowIndex],
+          found.table.headers,
+          ['Status']
+        ) || ''
+      ).trim().toUpperCase();
+
+    if (status === 'LUNAS' || status === 'DIBATALKAN') {
+      return {
+        ok:false,
+        error:'Tagihan dengan status ' + status + ' tidak dapat diedit.'
+      };
+    }
+
+    const tenantId =
+      String(
+        body.tenantId || ''
+      ).trim().toUpperCase();
+
+    const type =
+      String(
+        body.type || ''
+      ).trim();
+
+    const description =
+      String(
+        body.description || ''
+      ).trim();
+
+    const amount =
+      djApiNumberV5_(
+        body.amount
+      );
+
+    if (!tenantId || !type || !description || amount <= 0) {
+      return {
+        ok:false,
+        error:'Tenant, jenis, deskripsi, dan nominal wajib diisi.'
+      };
+    }
+
+    const tenant =
+      djApiGetAdditionalChargeTenantV1_(
+        ss,
+        tenantId
+      );
+
+    if (!tenant) {
+      return { ok:false, error:'Tenant tidak ditemukan.' };
+    }
+
+    const dueDate =
+      body.dueDate
+        ? djApiParseDateV7_(body.dueDate)
+        : null;
+
+    if (body.dueDate && !dueDate) {
+      return { ok:false, error:'Tanggal jatuh tempo tidak valid.' };
+    }
+
+    djApiUpdateRowV5_(
+      sheet,
+      found.rowNumber,
+      found.table.headers,
+      {
+        Tenant_ID:
+          tenant.tenantId,
+        No_Kamar:
+          tenant.room,
+        Nama_Tenant:
+          tenant.name,
+        Jenis:
+          type,
+        Deskripsi:
+          description,
+        Nominal:
+          amount,
+        Jatuh_Tempo:
+          dueDate || '',
+        Bukti_URL:
+          String(
+            body.proofUrl || ''
+          ).trim(),
+        Catatan:
+          String(
+            body.note || ''
+          ).trim()
+      }
+    );
+
+    SpreadsheetApp.flush();
+
+    return {
+      ok:true,
+      message:'Tagihan tambahan berhasil diperbarui.'
+    };
+
+  } finally {
+
+    lock.releaseLock();
+
+  }
+
+}
+
+
+function djApiCancelAdditionalChargeV1_(
+  chargeId,
+  masterId
+) {
+
+  const ss =
+    SpreadsheetApp
+      .getActiveSpreadsheet();
+
+  const lock =
+    LockService.getDocumentLock();
+
+  lock.waitLock(30000);
+
+  try {
+
+    const sheet =
+      djApiEnsureAdditionalChargeSheetV1_(
+        ss
+      );
+
+    const found =
+      djApiFindAdditionalChargeRowV1_(
+        sheet,
+        chargeId
+      );
+
+    if (found.rowNumber < 0) {
+      return { ok:false, error:'Tagihan tambahan tidak ditemukan.' };
+    }
+
+    const rowIndex =
+      found.rowNumber -
+      found.table.headerRow -
+      1;
+
+    const status =
+      String(
+        djApiValueV5_(
+          found.table.rows[rowIndex],
+          found.table.headers,
+          ['Status']
+        ) || ''
+      ).trim().toUpperCase();
+
+    if (status === 'LUNAS') {
+      return {
+        ok:false,
+        error:'Tagihan yang sudah LUNAS tidak dapat dibatalkan.'
+      };
+    }
+
+    if (status === 'DIBATALKAN') {
+      return {
+        ok:true,
+        message:'Tagihan sudah berstatus DIBATALKAN.'
+      };
+    }
+
+    djApiUpdateRowV5_(
+      sheet,
+      found.rowNumber,
+      found.table.headers,
+      {
+        Status:
+          'DIBATALKAN',
+        Tanggal_Dibatalkan:
+          new Date(),
+        Dibatalkan_Oleh:
+          String(
+            masterId || ''
+          ).trim()
+      }
+    );
+
+    SpreadsheetApp.flush();
+
+    return {
+      ok:true,
+      message:'Tagihan tambahan dibatalkan.'
+    };
+
+  } finally {
+
+    lock.releaseLock();
+
+  }
 
 }
 
