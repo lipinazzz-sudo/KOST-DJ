@@ -4486,18 +4486,22 @@ function djFinanceRoomAnalysisV1_(
 
         }
 
-        const floor =
-          getFloor(
-            item.room
-          );
+        const room =
+          String(
+            item.room ||
+            ''
+          ).trim();
 
-        if(!floor){
+        if(
+          !room ||
+          !rooms[room]
+        ){
 
           return;
 
         }
 
-        floor.revenue +=
+        rooms[room].revenue +=
           Number(
             item.amount ||
             0
@@ -4505,7 +4509,6 @@ function djFinanceRoomAnalysisV1_(
 
       }
     );
-
 
   (dataset.maintenance || [])
     .forEach(
@@ -5002,22 +5005,18 @@ function djFinanceFloorAnalysisV1_(
 
         }
 
-        const room =
-          String(
-            item.room ||
-            ''
-          ).trim();
+        const floor =
+          getFloor(
+            item.room
+          );
 
-        if(
-          !room ||
-          !rooms[room]
-        ){
+        if(!floor){
 
           return;
 
         }
 
-        rooms[room].revenue +=
+        floor.revenue +=
           Number(
             item.amount ||
             0
@@ -5025,7 +5024,6 @@ function djFinanceFloorAnalysisV1_(
 
       }
     );
-
 
   (dataset.maintenance || [])
     .forEach(
