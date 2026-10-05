@@ -1902,7 +1902,7 @@ function auditPaymentLifecycleDJ39V2() {
 
 
 
-            const dendaHari3 =
+            const dendaHari2 =
 
               typeof dj39pay2GetSettingNumber_ ===
 
@@ -1914,7 +1914,7 @@ function auditPaymentLifecycleDJ39V2() {
 
                     ss,
 
-                    'Denda_Terlambat_Hari_Ke3',
+                    'Denda_Terlambat_Hari_Ke2',
 
                     25000
 
@@ -2014,7 +2014,7 @@ function auditPaymentLifecycleDJ39V2() {
 
 
 
-                dendaHari3,
+                dendaHari2,
 
 
 
