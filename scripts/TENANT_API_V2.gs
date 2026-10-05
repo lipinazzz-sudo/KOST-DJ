@@ -4212,7 +4212,7 @@ function djApiFindBillingV5_(
   const billingReferenceDate =
     payment &&
     payment.paidDate
-      ? djApiToDateV5_(
+      ? djApiParseDateV7_(
           payment.paidDate
         )
       : now;
@@ -4231,11 +4231,15 @@ function djApiFindBillingV5_(
         0,
         Math.floor(
           (
-            djApiStartOfDayV5_(
-              billingReferenceDate
+            new Date(
+              billingReferenceDate.getFullYear(),
+              billingReferenceDate.getMonth(),
+              billingReferenceDate.getDate()
             ).getTime() -
-            djApiStartOfDayV5_(
-              due
+            new Date(
+              due.getFullYear(),
+              due.getMonth(),
+              due.getDate()
             ).getTime()
           ) /
           86400000
