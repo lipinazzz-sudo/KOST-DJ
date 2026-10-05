@@ -9804,6 +9804,7 @@ function renderAdditionalCharges(summary){
                 '<th>Jenis</th>' +
                 '<th>Deskripsi</th>' +
                 '<th>Nominal</th>' +
+                '<th>Dibayar</th>' +
                 '<th>Jatuh Tempo</th>' +
                 '<th>Status</th>' +
                 '<th>Aksi</th>' +
@@ -9834,6 +9835,36 @@ function renderAdditionalCharges(summary){
                                 '<button class="btn btn-danger" onclick="cancelAdditionalCharge(\'' +
                                 encodeURIComponent(item.id || "") +
                                 '\')">Batalkan</button>';
+
+                        }
+
+                        if(
+                            status === "MENUNGGU VERIFIKASI"
+                        ){
+
+                            actions +=
+                                '<button class="btn btn-secondary" onclick="viewAdditionalChargeProof(\'' +
+                                encodeURIComponent(item.id || "") +
+                                '\')">Bukti</button>';
+
+                            actions +=
+                                '<button class="btn btn-success" onclick="verifyAdditionalCharge(\'' +
+                                encodeURIComponent(item.id || "") +
+                                '\',\'approve\')">Setujui</button>';
+
+                            actions +=
+                                '<button class="btn btn-danger" onclick="verifyAdditionalCharge(\'' +
+                                encodeURIComponent(item.id || "") +
+                                '\',\'reject\')">Tolak</button>';
+
+                        }else if(
+                            item.proofUrl
+                        ){
+
+                            actions +=
+                                '<button class="btn btn-secondary" onclick="viewAdditionalChargeProof(\'' +
+                                encodeURIComponent(item.id || "") +
+                                '\')">Bukti</button>';
 
                         }
 
@@ -9922,6 +9953,14 @@ function renderAdditionalCharges(summary){
 
                             '<td>' +
                             money(item.amount) +
+                            '</td>' +
+
+                            '<td>' +
+                            money(item.paidAmount) +
+                            '</td>' +
+
+                            '<td>' +
+                            money(item.paidAmount) +
                             '</td>' +
 
                             '<td>' +
@@ -10457,6 +10496,126 @@ async function cancelAdditionalCharge(encodedId){
         );
 
         await loadAdditionalCharges();
+
+    }catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+async function viewAdditionalChargeProof(encodedId){
+
+    const chargeId =
+        decodeURIComponent(
+            encodedId
+        );
+
+    openModal(
+        "Bukti Pembayaran Tagihan Tambahan",
+        '<div class="loading">Memuat bukti...</div>'
+    );
+
+    try{
+
+        const result =
+            await api(
+                "masterAdditionalChargeProof",
+                {
+                    chargeId:
+                        chargeId
+                }
+            );
+
+        renderOpenedMedia(
+            result,
+            "Bukti Pembayaran Tagihan Tambahan"
+        );
+
+    }catch(error){
+
+        modalBody.innerHTML =
+            '<div class="empty" style="color:#b42318;">' +
+            escapeHtml(
+                error.message
+            ) +
+            '</div>';
+
+    }
+
+}
+
+
+async function verifyAdditionalCharge(
+    encodedId,
+    decision
+){
+
+    const chargeId =
+        decodeURIComponent(
+            encodedId
+        );
+
+    const approve =
+        decision ===
+        "approve";
+
+    const reason =
+        prompt(
+            approve
+                ? "Catatan verifikasi (opsional):"
+                : "Alasan penolakan:",
+            ""
+        );
+
+    if(
+        reason ===
+        null
+    ){
+        return;
+    }
+
+    if(
+        !approve &&
+        !reason.trim()
+    ){
+
+        alert(
+            "Alasan penolakan wajib diisi."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const result =
+            await api(
+                "masterVerifyAdditionalCharge",
+                {
+                    chargeId:
+                        chargeId,
+
+                    decision:
+                        decision,
+
+                    reason:
+                        reason
+                }
+            );
+
+        alert(
+            result.message
+        );
+
+        await loadAdditionalCharges();
+
+        await loadFinance();
 
     }catch(error){
 
@@ -16230,7 +16389,7 @@ function renderFinance(){
             [
                 "Pendapatan",
                 financeMoney(summary.revenue),
-                "Sewa + denda yang terverifikasi",
+                "Sewa + denda + tagihan tambahan yang terverifikasi",
                 ""
             ],
             [
@@ -17956,6 +18115,14 @@ function renderFinanceReport(
                     financeMoney(
                         summary &&
                         summary.fineRevenue
+                    )
+                ],
+
+                [
+                    "Pendapatan Tagihan Tambahan",
+                    financeMoney(
+                        summary &&
+                        summary.additionalChargeRevenue
                     )
                 ],
 
