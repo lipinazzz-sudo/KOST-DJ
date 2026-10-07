@@ -429,7 +429,7 @@ async function initIndex() {
                 'is-kosong';
 
               item.href =
-                './pendaftaran.html?room=' +
+                '/pendaftaran?room=' +
                 encodeURIComponent(
                   room.no_kamar
                 );
@@ -856,7 +856,7 @@ function initLogin() {
           params.get(
             'redirect'
           ) ||
-          './portal.html';
+          '/portal';
 
 
       } catch (error) {
@@ -909,7 +909,7 @@ function requireLogin() {
 
 
     location.href =
-      './login.html?redirect=' +
+      '/login?redirect=' +
       encodeURIComponent(
         page
       );
@@ -938,7 +938,7 @@ function logout() {
 
 
   location.href =
-    './login.html';
+    '/login';
 
 }
 
@@ -2118,7 +2118,7 @@ document.addEventListener(
 
       if (
         page ===
-        'pendaftaran.html'
+        'pendaftaran.html' || page === 'pendaftaran'
       ) {
 
         await initRegistration();
@@ -2142,7 +2142,7 @@ document.addEventListener(
 
       if (
         page ===
-        'login.html'
+        'login.html' || page === 'login'
       ) {
 
         initLogin();
@@ -2154,7 +2154,7 @@ document.addEventListener(
 
       if (
         page ===
-        'portal.html'
+        'portal.html' || page === 'portal'
       ) {
 
         await initPortal();
@@ -2166,7 +2166,7 @@ document.addEventListener(
 
       if (
         page ===
-        'pembayaran.html'
+        'pembayaran.html' || page === 'pembayaran'
       ) {
 
         await initPayment();
@@ -2178,7 +2178,7 @@ document.addEventListener(
 
       if (
         page ===
-        'maintenance.html'
+        'maintenance.html' || page === 'maintenance'
       ) {
 
         await initMaintenance();
@@ -2190,7 +2190,7 @@ document.addEventListener(
 
       if (
         page ===
-        'checkinout.html'
+        'checkinout.html' || page === 'checkinout'
       ) {
 
         await initCheckInOut();
@@ -2202,9 +2202,9 @@ document.addEventListener(
 
       if (
         page ===
-        'cafe.html' ||
+        'cafe.html' || page === 'cafe' ||
         page ===
-        'laundry.html'
+        'laundry.html' || page === 'laundry'
       ) {
 
         if (
