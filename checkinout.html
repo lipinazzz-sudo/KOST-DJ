@@ -527,11 +527,11 @@ h1{
   <link rel="stylesheet" href="mobile-ui.css?v=20260929-mobile-v1">
 </head>
 <body>
-<header class="nav"><div class="nav-inner"><a class="brand" href="portal.html"><span class="brand-mark"></span>DJ FAMILY KOST · TENANT</a><nav class="nav-links"><a href="portal.html">Dashboard</a><a href="pembayaran.html">Pembayaran</a><a href="maintenance.html">Maintenance</a><a href="checkinout.html">Check-in/out</a><a href="cafe.html">Cafe</a><a href="laundry.html">Laundry</a><a href="#" id="logoutTop">Keluar</a></nav></div></header>
+<header class="nav"><div class="nav-inner"><a class="brand" href="/portal"><span class="brand-mark"></span>DJ FAMILY KOST · TENANT</a><nav class="nav-links"><a href="/portal">Dashboard</a><a href="/pembayaran">Pembayaran</a><a href="/maintenance">Maintenance</a><a href="/checkinout">Check-in/out</a><a href="/cafe">Cafe</a><a href="/laundry">Laundry</a><a href="#" id="logoutTop">Keluar</a></nav></div></header>
 
 <section class="section">
 <div class="container">
-<a class="back" href="portal.html">← Kembali ke Portal</a>
+<a class="back" href="/portal">← Kembali ke Portal</a>
 <div class="eyebrow">TENANT PORTAL</div>
 <h1>Check-in / Check-out</h1>
 <p class="lead">Serah-terima kamar dilakukan dengan dua formulir yang berbeda. Identitas tenant dan nomor kamar diambil otomatis dari akun yang sedang login.</p>
@@ -2139,7 +2139,7 @@ async function submitCheckIn(event){
     setTimeout(
       ()=>{
         window.location.href =
-          "portal.html";
+          "/portal";
       },
       5000
     );
@@ -2544,7 +2544,7 @@ function init(){
 
   if(!tenantSession){
     location.href =
-      "login.html";
+      "/login";
     return;
   }
 
@@ -2650,7 +2650,7 @@ function init(){
       sessionStorage.clear();
 
       location.href =
-        "login.html";
+        "/login";
     }
   );
 
