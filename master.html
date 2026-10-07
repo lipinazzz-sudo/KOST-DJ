@@ -3128,6 +3128,139 @@ button{
         .cio-pending-row{background:#fffaf3}
         @media (max-width:900px){.cio-pending-list{grid-template-columns:1fr}}
         @media (max-width:560px){.cio-summary-grid{grid-template-columns:1fr}.cio-header .btn{width:100%}}
+
+        /* =====================================================
+           FINANCE COMPACT CONTROL CENTER
+           ===================================================== */
+
+        #panel-finance .finance-nav{
+            gap:8px;
+            margin:10px 0 12px;
+        }
+
+        #panel-finance .finance-nav button{
+            min-height:32px;
+            padding:6px 10px;
+            border-radius:9px;
+            font-size:10px;
+        }
+
+        #panel-finance .finance-status-note{
+            padding:8px 10px;
+            border-radius:9px;
+            font-size:11px;
+        }
+
+        #panel-finance .finance-kpi-grid{
+            gap:10px;
+            margin-top:10px;
+        }
+
+        #panel-finance .finance-kpi{
+            padding:12px 13px;
+            border-radius:12px;
+        }
+
+        #panel-finance .finance-kpi strong{
+            margin-top:5px;
+            font-size:22px;
+        }
+
+        #panel-finance .finance-kpi small{
+            margin-top:5px;
+            font-size:10px;
+        }
+
+        #panel-finance .finance-secondary-grid{
+            gap:8px;
+            margin-top:8px;
+        }
+
+        #panel-finance .finance-secondary{
+            padding:10px 11px;
+            border-radius:11px;
+        }
+
+        #panel-finance .finance-secondary span{
+            font-size:10px;
+        }
+
+        #panel-finance .finance-secondary strong{
+            margin-top:4px;
+            font-size:16px;
+        }
+
+        #panel-finance .finance-panel-head{
+            padding:11px 13px;
+            gap:9px;
+        }
+
+        #panel-finance .finance-panel-head h3{
+            font-size:14px;
+        }
+
+        #panel-finance .finance-panel-body{
+            padding:12px 13px;
+        }
+
+        #panel-finance .finance-toolbar{
+            grid-template-columns:190px 190px minmax(200px,1fr) 150px;
+            gap:8px;
+            margin:12px 0;
+        }
+
+        #panel-finance .finance-toolbar .btn{
+            min-height:40px;
+        }
+
+        #panel-finance .finance-collapsible{
+            margin-bottom:10px;
+        }
+
+        #panel-finance .finance-analytics-shell.is-collapsed{
+            margin-bottom:10px;
+        }
+
+        #panel-finance .finance-analytics-body{
+            padding:0 12px 12px;
+        }
+
+        #panel-finance .finance-analytics-shell.is-collapsed > .finance-analytics-body{
+            display:none;
+        }
+
+        #panel-finance .finance-analytics-body > [id]{
+            margin-top:10px !important;
+        }
+
+        @media (max-width:900px){
+            #panel-finance .finance-toolbar{
+                grid-template-columns:repeat(2,minmax(0,1fr));
+            }
+
+            #panel-finance .finance-kpi-grid{
+                grid-template-columns:repeat(2,minmax(0,1fr));
+            }
+        }
+
+        @media (max-width:560px){
+            #panel-finance .finance-toolbar{
+                grid-template-columns:1fr;
+            }
+
+            #panel-finance .finance-kpi-grid{
+                grid-template-columns:1fr;
+            }
+
+            #panel-finance .finance-secondary-grid{
+                grid-template-columns:repeat(2,minmax(0,1fr));
+            }
+
+            #panel-finance .finance-analytics-body{
+                padding:0 8px 8px;
+            }
+        }
+
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
@@ -4320,7 +4453,7 @@ button{
                         aria-label="Navigasi Keuangan"
                     >
 
-                        <button type="button" data-finance-target="financeOverviewSection">
+                        <button type="button" data-finance-target="financeKpiGrid">
                             Ringkasan
                         </button>
 
@@ -4328,12 +4461,12 @@ button{
                             Tagihan
                         </button>
 
-                        <button type="button" data-finance-target="financeRoomSection">
-                            Kamar
-                        </button>
-
                         <button type="button" data-finance-target="financeCashFlowSection">
                             Arus Kas
+                        </button>
+
+                        <button type="button" data-finance-target="financeAnalyticsSection">
+                            Analitik
                         </button>
 
                         <button type="button" data-finance-target="financeAuditSection">
@@ -4342,24 +4475,6 @@ button{
 
                         <button type="button" data-finance-target="financeReportSection">
                             Laporan
-                        </button>
-
-                        <button type="button" data-finance-target="financePerformanceSection">
-                            Performa
-                        </button>
-
-                        <button type="button" data-finance-target="financeBreakdownSection">
-                            Pengeluaran
-                        </button>
-
-                        <div class="finance-nav-divider"></div>
-
-                        <button type="button" onclick="financeSetAllSections(true)">
-                            Buka Semua
-                        </button>
-
-                        <button type="button" onclick="financeSetAllSections(false)">
-                            Tutup Semua
                         </button>
 
                     </div>
@@ -4383,7 +4498,7 @@ button{
 
                     <div
                         id="financeBillingSection"
-                        class="finance-panel finance-collapsible"
+                        class="finance-panel finance-collapsible is-collapsed"
                         style="margin-top:16px;"
                     >
 
@@ -4404,7 +4519,7 @@ button{
                                 type="button"
                                 class="finance-section-toggle"
                                 data-finance-toggle="financeBillingSection"
-                                aria-expanded="true"
+                                aria-expanded="false"
                                 title="Tutup bagian"
                             >
                                 −
@@ -4458,6 +4573,38 @@ button{
 
                     </div>
 
+
+                    <div
+                        id="financeAnalyticsSection"
+                        class="finance-panel finance-collapsible finance-analytics-shell is-collapsed"
+                        style="margin-top:12px;"
+                    >
+
+                        <div class="finance-panel-head">
+
+                            <h3 class="finance-section-title">
+                                Analitik
+                            </h3>
+
+                            <span class="small">
+                                Tahunan · Lantai · Kamar · Performa · Pendapatan · Pengeluaran
+                            </span>
+
+                            <button
+                                type="button"
+                                class="finance-section-toggle"
+                                data-finance-toggle="financeAnalyticsSection"
+                                aria-expanded="false"
+                                title="Buka bagian"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="finance-analytics-body"
+                        >
 
                     <div
                         id="financeOverviewSection"
@@ -4777,6 +4924,12 @@ button{
                         </div>
 
                     </div>
+
+
+                        </div>
+
+                    </div>
+
 
                     <div
                         id="financeRecentSection"
@@ -20699,11 +20852,13 @@ function financeSetAllSections(
     [
         "financeBillingSection",
         "financeReconciliationSection",
+        "financeAnalyticsSection",
         "financeRoomSection",
         "financeCashFlowSection",
         "financeAuditSection",
         "financeReportSection",
         "financePerformanceSection",
+        "financeIncomeBreakdownSection",
         "financeBreakdownSection",
         "financeRecentSection"
     ]
