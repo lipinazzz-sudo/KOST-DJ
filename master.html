@@ -8173,12 +8173,34 @@ function cioIssue(item){
            condition.indexOf("masalah")>=0;
 }
 
+function cioResolveTenantKey(item){
+    const tenantId=cioText(item && item.tenantId).toUpperCase();
+
+    if(tenantId && checkInOutTenantMap[tenantId]){
+        return tenantId;
+    }
+
+    const itemRoom=cioText(item && item.room);
+    const itemName=cioText(item && item.name).toLowerCase();
+
+    const matchedId=Object.keys(checkInOutTenantMap).find(function(key){
+        const tenant=checkInOutTenantMap[key] || {};
+        return (
+            itemRoom &&
+            cioText(tenant.room)===itemRoom &&
+            itemName &&
+            cioText(tenant.name).toLowerCase()===itemName
+        );
+    });
+
+    return matchedId || "";
+}
+
 function cioOperationalItems(){
     return (Array.isArray(checkInOutItems)?checkInOutItems:[])
         .filter(function(item){
             if(!cioValidItem(item)) return false;
-            const tenantId=cioText(item && item.tenantId).toUpperCase();
-            return !!checkInOutTenantMap[tenantId];
+            return !!cioResolveTenantKey(item);
         });
 }
 
@@ -8187,8 +8209,9 @@ function cioPendingTenants(){
     const latestByTenant={};
 
     currentItems.forEach(function(item){
-        const tenantId=cioText(item && item.tenantId).toUpperCase();
+        const tenantId=cioResolveTenantKey(item);
         const date=cioDate(item && item.date);
+        if(!tenantId) return;
         const current=latestByTenant[tenantId];
         if(!current || (!cioDate(current.date) && date) || (date && cioDate(current.date) && date.getTime()>cioDate(current.date).getTime())){
             latestByTenant[tenantId]=item;
