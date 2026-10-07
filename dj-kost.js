@@ -486,19 +486,9 @@ async function initIndex() {
 
                 </span>
 
-                <div class="room-price">
+                <div class="room-price room-price-contact">
 
-                  ${
-                    Number(
-                      room.harga_bulan
-                    ) > 0
-
-                      ? djRupiah(
-                          room.harga_bulan
-                        )
-
-                      : 'Belum dibuka'
-                  }
+                  Tanya harga via WhatsApp
 
                 </div>
               `;
