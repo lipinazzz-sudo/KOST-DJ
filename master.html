@@ -3100,6 +3100,8 @@ button{
         .cio-pending-item>div{display:flex;flex-direction:column;gap:3px}.cio-pending-item>div:last-child{text-align:right}
         .cio-pending-item span{font-size:12px;color:#667085}
         .cio-pending-empty{padding:13px 15px;border:1px solid #abefc6;border-radius:14px;background:#ecfdf3;color:#027a48;font-size:13px}
+        .cio-badge-pending{background:#fff4e5;color:#b54708}
+        .cio-pending-row{background:#fffaf3}
         @media (max-width:900px){.cio-pending-list{grid-template-columns:1fr}}
         @media (max-width:560px){.cio-summary-grid{grid-template-columns:1fr}.cio-header .btn{width:100%}}
 </style>
@@ -8278,6 +8280,34 @@ function cioFiltered(){
         });
 }
 
+function cioPendingFiltered(){
+    const search=checkInOutSearch.trim().toLowerCase();
+
+    if(
+        checkInOutFilter!=="ALL"
+    ){
+        return [];
+    }
+
+    return cioPendingTenants()
+        .filter(function(tenant){
+            if(!search) return true;
+
+            return [
+                tenant && tenant.tenantId,
+                tenant && tenant.name,
+                tenant && tenant.room,
+                tenant && tenant.phone,
+                "BELUM CHECK-IN"
+            ]
+            .map(function(v){
+                return cioText(v).toLowerCase();
+            })
+            .join(" ")
+            .indexOf(search)>=0;
+        });
+}
+
 function renderCheckInOutFilters(){
     const filters=[["ALL","Semua"],["CHECK-IN","Check-in"],["CHECK-OUT","Check-out"],["ISSUE","Ada Masalah"]];
     const box=document.getElementById("cioFilters");
@@ -8330,12 +8360,15 @@ function renderCheckInOut(){
     }
 
     const items=cioFiltered();
+    const pendingItems=cioPendingFiltered();
 
     renderCheckInOutPending();
 
-    if(!items.length){
+    if(!items.length && !pendingItems.length){
         box.innerHTML='<div class="empty">'+
-            (checkInOutItems.length ? "Tidak ada data yang sesuai filter." : "Belum ada data Check-in / Check-out.")+
+            (checkInOutItems.length || cioPendingTenants().length
+                ? "Tidak ada data yang sesuai filter."
+                : "Belum ada data Check-in / Check-out.")+
             '</div>';
         return;
     }
@@ -8358,6 +8391,18 @@ function renderCheckInOut(){
                     (item&&item.damageDetail?'<div class="cio-problem-text">'+escapeHtml(item.damageDetail)+'</div>':'')+'</td>'+
                 '<td><button class="btn btn-secondary cio-detail-button" type="button" onclick="openCheckInOutDetail(\''+
                     encodeURIComponent(cioText(item&&item.id))+'\')">Detail</button></td>'+
+                '</tr>';
+        }).join("")+
+        pendingItems.map(function(tenant){
+            return '<tr class="cio-pending-row">'+
+                '<td><strong>'+escapeHtml(cioText(tenant&&tenant.room,"—"))+'</strong></td>'+
+                '<td><strong>'+escapeHtml(cioText(tenant&&tenant.name,"—"))+
+                    '</strong><div class="small">'+escapeHtml(cioText(tenant&&tenant.tenantId,""))+'</div></td>'+
+                '<td><span class="cio-badge cio-badge-pending">MENUNGGU CHECK-IN</span></td>'+
+                '<td>—</td>'+
+                '<td>Belum ada transaksi</td>'+
+                '<td><span class="cio-ok">Belum Check-in</span></td>'+
+                '<td><span class="small">Tenant aktif</span></td>'+
                 '</tr>';
         }).join("")+
         '</tbody></table>';
