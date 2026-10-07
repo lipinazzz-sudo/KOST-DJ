@@ -3091,6 +3091,16 @@ button{
         .cio-detail-alert{background:#fef3f2;border:1px solid #fecdca;color:#b42318}.cio-detail-ok{background:#ecfdf3;border:1px solid #abefc6;color:#027a48}
         .cio-media-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
         @media (max-width:900px){.cio-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cio-detail-grid{grid-template-columns:1fr}}
+        .cio-pending-box{margin:14px 0 16px;border:1px solid #e4e7ec;border-radius:14px;background:#fff;overflow:hidden}
+        .cio-pending-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 15px;background:#f8fafc;border-bottom:1px solid #eaecf0}
+        .cio-pending-head>div{display:flex;flex-direction:column;gap:3px}.cio-pending-head span{font-size:12px;color:#667085}
+        .cio-pending-count{min-width:30px;height:30px;border-radius:999px;background:#fff4e5;color:#b54708;display:inline-flex;align-items:center;justify-content:center}
+        .cio-pending-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+        .cio-pending-item{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 15px;border-bottom:1px solid #eaecf0}
+        .cio-pending-item>div{display:flex;flex-direction:column;gap:3px}.cio-pending-item>div:last-child{text-align:right}
+        .cio-pending-item span{font-size:12px;color:#667085}
+        .cio-pending-empty{padding:13px 15px;border:1px solid #abefc6;border-radius:14px;background:#ecfdf3;color:#027a48;font-size:13px}
+        @media (max-width:900px){.cio-pending-list{grid-template-columns:1fr}}
         @media (max-width:560px){.cio-summary-grid{grid-template-columns:1fr}.cio-header .btn{width:100%}}
 </style>
 
@@ -3683,6 +3693,11 @@ button{
                     <div id="cioSummaryGrid" class="cio-summary-grid">
                         <div class="loading">Memuat ringkasan...</div>
                     </div>
+
+                    <div
+                        id="cioPendingBox"
+                        class="cio-pending-box"
+                    ></div>
 
                     <div id="cioFilters" class="filters"></div>
 
@@ -4914,6 +4929,7 @@ let financeMonth = 1;
 let checkInOutItems = [];
 let checkInOutFilter = "ALL";
 let checkInOutSearch = "";
+let checkInOutTenantMap = {};
 
 
 /* ============================================================
@@ -8135,7 +8151,17 @@ function cioToday(value){
 
 function cioProcess(value){
     const text=cioText(value).toUpperCase().replace(/_/g,"-");
-    return text.indexOf("OUT")>=0 ? "CHECK-OUT" : "CHECK-IN";
+    if(text==="CHECK-OUT" || text==="CHECK OUT" || text==="CHECKOUT" || text.indexOf("CHECK-OUT")>=0) return "CHECK-OUT";
+    if(text==="CHECK-IN" || text==="CHECK IN" || text==="CHECKIN" || text.indexOf("CHECK-IN")>=0) return "CHECK-IN";
+    return "";
+}
+
+function cioValidItem(item){
+    const id=cioText(item && item.id).toUpperCase();
+    const room=cioText(item && item.room);
+    const name=cioText(item && item.name);
+    const process=cioProcess(item && item.process);
+    return /^CIO-\d+$/.test(id) && !!room && !!name && !!process;
 }
 
 function cioIssue(item){
@@ -8147,9 +8173,69 @@ function cioIssue(item){
            condition.indexOf("masalah")>=0;
 }
 
+function cioOperationalItems(){
+    return (Array.isArray(checkInOutItems)?checkInOutItems:[])
+        .filter(function(item){
+            if(!cioValidItem(item)) return false;
+            const tenantId=cioText(item && item.tenantId).toUpperCase();
+            return !!checkInOutTenantMap[tenantId];
+        });
+}
+
+function cioPendingTenants(){
+    const currentItems=cioOperationalItems();
+    const latestByTenant={};
+
+    currentItems.forEach(function(item){
+        const tenantId=cioText(item && item.tenantId).toUpperCase();
+        const date=cioDate(item && item.date);
+        const current=latestByTenant[tenantId];
+        if(!current || (!cioDate(current.date) && date) || (date && cioDate(current.date) && date.getTime()>cioDate(current.date).getTime())){
+            latestByTenant[tenantId]=item;
+        }
+    });
+
+    return Object.keys(checkInOutTenantMap)
+        .map(function(tenantId){ return checkInOutTenantMap[tenantId]; })
+        .filter(function(tenant){
+            if(cioText(tenant && tenant.status).toUpperCase()!=="AKTIF") return false;
+            const latest=latestByTenant[cioText(tenant && tenant.tenantId).toUpperCase()];
+            return !latest || cioProcess(latest.process)==="CHECK-OUT";
+        })
+        .sort(function(a,b){
+            return String(a.room||"").localeCompare(String(b.room||""),undefined,{numeric:true});
+        });
+}
+
+function renderCheckInOutPending(){
+    const box=document.getElementById("cioPendingBox");
+    if(!box) return;
+    const pending=cioPendingTenants();
+
+    if(!pending.length){
+        box.innerHTML='<div class="cio-pending-empty">Semua tenant aktif sudah memiliki Check-in tercatat.</div>';
+        return;
+    }
+
+    box.innerHTML=
+        '<div class="cio-pending-head"><div><strong>Tenant Aktif — Belum Check-in</strong>'+
+        '<span>Tenant di data Tenant tetapi belum memiliki Check-in aktif.</span></div>'+
+        '<strong class="cio-pending-count">'+pending.length+'</strong></div>'+
+        '<div class="cio-pending-list">'+
+        pending.map(function(tenant){
+            return '<div class="cio-pending-item">'+
+                '<div><strong>'+escapeHtml(cioText(tenant.name,"Tenant"))+'</strong>'+
+                '<span>'+escapeHtml(cioText(tenant.tenantId,"—"))+'</span></div>'+
+                '<div><strong>Kamar '+escapeHtml(cioText(tenant.room,"—"))+'</strong>'+
+                '<span>'+escapeHtml(cioText(tenant.phone,""))+'</span></div>'+
+                '</div>';
+        }).join("")+
+        '</div>';
+}
+
 function cioFiltered(){
     const search=checkInOutSearch.trim().toLowerCase();
-    return (Array.isArray(checkInOutItems)?checkInOutItems:[])
+    return cioOperationalItems()
         .filter(function(item){
             const process=cioProcess(item && item.process);
             if(checkInOutFilter==="CHECK-IN" && process!=="CHECK-IN") return false;
@@ -8196,13 +8282,15 @@ function renderCheckInOut(){
     const summary=document.getElementById("cioSummaryGrid");
     if(!box) return;
 
-    const checkIn=checkInOutItems.filter(function(item){
+    const operational=cioOperationalItems();
+
+    const checkIn=operational.filter(function(item){
         return cioProcess(item&&item.process)==="CHECK-IN" && cioToday(item&&item.date);
     }).length;
-    const checkOut=checkInOutItems.filter(function(item){
+    const checkOut=operational.filter(function(item){
         return cioProcess(item&&item.process)==="CHECK-OUT" && cioToday(item&&item.date);
     }).length;
-    const issues=checkInOutItems.filter(cioIssue).length;
+    const issues=operational.filter(cioIssue).length;
     const occupied=Number(dashboardData&&dashboardData.summary&&dashboardData.summary.occupied||0);
 
     if(summary){
@@ -8219,6 +8307,9 @@ function renderCheckInOut(){
     }
 
     const items=cioFiltered();
+
+    renderCheckInOutPending();
+
     if(!items.length){
         box.innerHTML='<div class="empty">'+
             (checkInOutItems.length ? "Tidak ada data yang sesuai filter." : "Belum ada data Check-in / Check-out.")+
@@ -8253,8 +8344,32 @@ async function loadCheckInOut(){
     const box=document.getElementById("checkInOutBox");
     if(box) box.innerHTML='<div class="loading">Memuat data Check-in / Check-out...</div>';
     try{
-        const data=await api("masterCheckInOut");
-        checkInOutItems=data&&Array.isArray(data.items)?data.items:[];
+        const results=await Promise.all([
+            api("masterCheckInOut"),
+            api("masterTenants")
+        ]);
+
+        const checkInOutData=results[0];
+        const tenantsData=results[1];
+
+        checkInOutItems=
+            checkInOutData && Array.isArray(checkInOutData.items)
+                ? checkInOutData.items
+                : [];
+
+        const tenants=
+            tenantsData && Array.isArray(tenantsData.items)
+                ? tenantsData.items
+                : [];
+
+        checkInOutTenantMap={};
+
+        tenants.forEach(function(tenant){
+            const tenantId=cioText(tenant && tenant.tenantId).toUpperCase();
+            if(!tenantId) return;
+            checkInOutTenantMap[tenantId]=tenant;
+        });
+
         renderCheckInOutFilters();
         renderCheckInOut();
     }catch(error){
