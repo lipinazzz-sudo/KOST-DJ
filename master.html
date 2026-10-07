@@ -12619,6 +12619,28 @@ async function viewPaymentProof(
 }
 
 
+async function financeVerifyPayment(
+    encoded,
+    decision
+){
+
+    await verifyPayment(
+        encoded,
+        decision
+    );
+
+    if(
+        currentMasterPanel ===
+        "finance"
+    ){
+
+        await loadFinance();
+
+    }
+
+}
+
+
 async function verifyPayment(
     encoded,
     decision
@@ -16959,6 +16981,38 @@ async function loadFinance(){
             );
 
 
+        try{
+
+            const paymentData =
+                await api(
+                    "masterPayments"
+                );
+
+            paymentItems =
+                Array.isArray(
+                    paymentData &&
+                    paymentData.items
+                )
+                    ? paymentData.items
+                    : [];
+
+        }catch(error){
+
+            /*
+             * Finance tetap dapat ditampilkan bila feed
+             * pembayaran sedang gagal. Rincian pembayaran
+             * hanya ditandai belum tersedia.
+             */
+            paymentItems =
+                Array.isArray(
+                    paymentItems
+                )
+                    ? paymentItems
+                    : [];
+
+        }
+
+
         renderFinance();
 
 
@@ -17260,6 +17314,352 @@ function renderFinance(){
 }
 
 
+
+function financeFindBillingPayment(
+    billingItem,
+    summary
+){
+
+    const period =
+        String(
+            summary &&
+            summary.label ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const tenantId =
+        String(
+            billingItem &&
+            billingItem.tenantId ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const room =
+        String(
+            billingItem &&
+            billingItem.room ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const name =
+        String(
+            billingItem &&
+            billingItem.name ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const rows =
+        Array.isArray(
+            paymentItems
+        )
+            ? paymentItems.filter(
+                function(item){
+
+                    const itemPeriod =
+                        String(
+                            item &&
+                            item.period ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase();
+
+                    if(
+                        period &&
+                        itemPeriod &&
+                        itemPeriod !== period
+                    ){
+
+                        return false;
+
+                    }
+
+                    const itemTenantId =
+                        String(
+                            item &&
+                            item.tenantId ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase();
+
+                    if(
+                        tenantId &&
+                        itemTenantId
+                    ){
+
+                        return (
+                            itemTenantId ===
+                            tenantId
+                        );
+
+                    }
+
+                    const itemRoom =
+                        String(
+                            item &&
+                            item.room ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase();
+
+                    const itemName =
+                        String(
+                            item &&
+                            item.name ||
+                            ""
+                        )
+                        .trim()
+                        .toUpperCase();
+
+                    return (
+                        room &&
+                        itemRoom &&
+                        room === itemRoom &&
+                        (
+                            !name ||
+                            !itemName ||
+                            name === itemName
+                        )
+                    );
+
+                }
+              )
+            : [];
+
+    if(!rows.length){
+
+        return null;
+
+    }
+
+    rows.sort(
+        function(a,b){
+
+            function rank(item){
+
+                const verification =
+                    String(
+                        item &&
+                        item.verification ||
+                        ""
+                    )
+                    .trim()
+                    .toUpperCase();
+
+                if(
+                    verification ===
+                    "TERVERIFIKASI"
+                ){
+
+                    return 3;
+
+                }
+
+                if(
+                    verification ===
+                    "MENUNGGU VERIFIKASI"
+                ){
+
+                    return 2;
+
+                }
+
+                if(
+                    verification ===
+                    "DITOLAK"
+                ){
+
+                    return 1;
+
+                }
+
+                return 0;
+
+            }
+
+            const rankDifference =
+                rank(b) -
+                rank(a);
+
+            if(
+                rankDifference !==
+                0
+            ){
+
+                return rankDifference;
+
+            }
+
+            const dateValue =
+                function(item){
+
+                    const raw =
+                        item &&
+                        (
+                            item.verifiedDate ||
+                            item.paidDate ||
+                            item.date ||
+                            ""
+                        );
+
+                    const date =
+                        new Date(
+                            raw
+                        );
+
+                    return isNaN(
+                        date.getTime()
+                    )
+                        ? 0
+                        : date.getTime();
+
+                };
+
+            return (
+                dateValue(b) -
+                dateValue(a)
+            );
+
+        }
+    );
+
+    return rows[0];
+
+}
+
+
+async function financeOpenPayment(
+    encodedPaymentId,
+    encodedTenantId,
+    encodedPeriod
+){
+
+    const paymentId =
+        decodeURIComponent(
+            encodedPaymentId ||
+            ""
+        );
+
+    const tenantId =
+        decodeURIComponent(
+            encodedTenantId ||
+            ""
+        );
+
+    const period =
+        decodeURIComponent(
+            encodedPeriod ||
+            ""
+        );
+
+    paymentFilter =
+        "ALL";
+
+    paymentPeriodFilter =
+        period ||
+        paymentPeriodFilter;
+
+    paymentSearch =
+        paymentId ||
+        tenantId ||
+        "";
+
+    await openPanel(
+        "payments"
+    );
+
+    const input =
+        document.getElementById(
+            "paymentSearch"
+        );
+
+    if(input){
+
+        input.value =
+            paymentSearch;
+
+    }
+
+    renderPaymentFilters();
+    renderPaymentPeriodFilter();
+    renderPaymentSummary();
+    renderPaymentMonitoringHint();
+    renderPayments();
+
+}
+
+
+function financeVerificationBadge(
+    payment
+){
+
+    const verification =
+        String(
+            payment &&
+            payment.verification ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    if(
+        verification ===
+        "TERVERIFIKASI"
+    ){
+
+        return (
+            '<span class="badge badge-ok">' +
+            'TERVERIFIKASI' +
+            '</span>'
+        );
+
+    }
+
+    if(
+        verification ===
+        "DITOLAK"
+    ){
+
+        return (
+            '<span class="badge badge-danger">' +
+            'DITOLAK' +
+            '</span>'
+        );
+
+    }
+
+    if(
+        verification ===
+        "MENUNGGU VERIFIKASI"
+    ){
+
+        return (
+            '<span class="badge badge-warn">' +
+            'MENUNGGU VERIFIKASI' +
+            '</span>'
+        );
+
+    }
+
+    return (
+        '<span class="badge badge-warn">' +
+        'BELUM ADA PEMBAYARAN' +
+        '</span>'
+    );
+
+}
+
+
 function renderFinanceBilling(
     billing
 ){
@@ -17450,8 +17850,10 @@ function renderFinanceBilling(
                 '<th>Kamar / Tenant</th>' +
                 '<th>Status</th>' +
                 '<th>Tagihan</th>' +
-                '<th>Dibayar</th>' +
+                '<th>Pembayaran</th>' +
+                '<th>Verifikasi</th>' +
                 '<th>Sisa</th>' +
+                '<th>Aksi</th>' +
                 '</tr>' +
 
                 '</thead>' +
@@ -17481,6 +17883,128 @@ function renderFinanceBilling(
                                 );
 
 
+                            const summary =
+                                financeSelectedSummary() ||
+                                {};
+
+                            const payment =
+                                financeFindBillingPayment(
+                                    item,
+                                    summary
+                                );
+
+                            const paymentConditionLabel =
+                                payment
+                                    ? paymentCondition(
+                                        payment
+                                      )
+                                    : "BELUM ADA PEMBAYARAN";
+
+                            const paymentPaid =
+                                payment
+                                    ? Number(
+                                        payment.paid ||
+                                        0
+                                      )
+                                    : paid;
+
+                            const paymentOutstanding =
+                                payment
+                                    ? Math.max(
+                                        0,
+                                        Number(
+                                            payment.total ||
+                                            expected ||
+                                            0
+                                        ) -
+                                        paymentPaid
+                                      )
+                                    : outstanding;
+
+                            let paymentActions =
+                                "";
+
+                            if(payment){
+
+                                paymentActions +=
+                                    '<button class="btn btn-secondary" onclick="financeOpenPayment(\'' +
+                                    encodeURIComponent(
+                                        payment.id ||
+                                        ""
+                                    ) +
+                                    '\',\'' +
+                                    encodeURIComponent(
+                                        item.tenantId ||
+                                        payment.tenantId ||
+                                        ""
+                                    ) +
+                                    '\',\'' +
+                                    encodeURIComponent(
+                                        summary.label ||
+                                        ""
+                                    ) +
+                                    '\')">Buka Pembayaran</button>';
+
+                                if(
+                                    payment.proofUrl ||
+                                    payment.proofFileId ||
+                                    payment.fileId
+                                ){
+
+                                    paymentActions +=
+                                        '<button class="btn btn-secondary" onclick="viewPaymentProof(\'' +
+                                        encodeURIComponent(
+                                            payment.id ||
+                                            ""
+                                        ) +
+                                        '\')">Bukti</button>';
+
+                                }
+
+                                if(
+                                    String(
+                                        payment.verification ||
+                                        ""
+                                    )
+                                    .trim()
+                                    .toUpperCase() ===
+                                    "MENUNGGU VERIFIKASI"
+                                ){
+
+                                    paymentActions +=
+                                        '<button class="btn btn-success" onclick="financeVerifyPayment(\'' +
+                                        encodeURIComponent(
+                                            payment.id ||
+                                            ""
+                                        ) +
+                                        '\',\'approve\')">Setujui</button>' +
+
+                                        '<button class="btn btn-danger" onclick="financeVerifyPayment(\'' +
+                                        encodeURIComponent(
+                                            payment.id ||
+                                            ""
+                                        ) +
+                                        '\',\'reject\')">Tolak</button>';
+
+                                }
+
+                            }else{
+
+                                paymentActions =
+                                    '<button class="btn btn-secondary" onclick="financeOpenPayment(\'\',\'' +
+                                    encodeURIComponent(
+                                        item.tenantId ||
+                                        ""
+                                    ) +
+                                    '\',\'' +
+                                    encodeURIComponent(
+                                        summary.label ||
+                                        ""
+                                    ) +
+                                    '\')">Cari Pembayaran</button>';
+
+                            }
+
                             return (
 
                                 '<tr>' +
@@ -17501,6 +18025,14 @@ function renderFinanceBilling(
                                     item.name ||
                                     item.tenantId ||
                                     '—'
+                                ) +
+                                (
+                                    item.tenantId
+                                        ? ' · ' +
+                                          escapeHtml(
+                                            item.tenantId
+                                          )
+                                        : ''
                                 ) +
                                 ' · Jatuh tempo ' +
                                 escapeHtml(
@@ -17539,21 +18071,52 @@ function renderFinanceBilling(
                                 '</td>' +
 
                                 '<td>' +
+                                '<strong>' +
                                 escapeHtml(
-                                    financeMoney(
-                                        paid
-                                    )
+                                    payment
+                                        ? financeMoney(
+                                            paymentPaid
+                                          )
+                                        : 'Belum ada'
+                                ) +
+                                '</strong>' +
+                                (
+                                    payment
+                                        ? '<div class="small">' +
+                                          escapeHtml(
+                                            payment.id ||
+                                            "Payment"
+                                          ) +
+                                          '</div>' +
+                                          '<div class="small">' +
+                                          escapeHtml(
+                                            paymentConditionLabel
+                                          ) +
+                                          '</div>'
+                                        : ''
+                                ) +
+                                '</td>' +
+
+                                '<td>' +
+                                financeVerificationBadge(
+                                    payment
                                 ) +
                                 '</td>' +
 
                                 '<td>' +
                                 escapeHtml(
-                                    outstanding > 0
+                                    paymentOutstanding > 0
                                         ? financeMoney(
-                                            outstanding
+                                            paymentOutstanding
                                           )
                                         : 'Rp0'
                                 ) +
+                                '</td>' +
+
+                                '<td>' +
+                                '<div class="actions" style="gap:6px;flex-wrap:wrap;">' +
+                                paymentActions +
+                                '</div>' +
                                 '</td>' +
 
                                 '</tr>'
