@@ -2130,7 +2130,7 @@ document.addEventListener(
 
       if (
         page ===
-        'kunjungan.html'
+        'kunjungan.html' || page === 'kunjungan'
       ) {
 
         await initVisit();
