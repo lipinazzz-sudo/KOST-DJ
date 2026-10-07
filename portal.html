@@ -555,7 +555,7 @@
 
         <a
             class="brand"
-            href="portal.html"
+            href="/portal"
         >
             <span class="brand-mark"></span>
             DJ FAMILY KOST · TENANT
@@ -564,27 +564,27 @@
 
         <nav class="nav-links">
 
-            <a href="portal.html">
+            <a href="/portal">
                 Dashboard
             </a>
 
-            <a href="pembayaran.html">
+            <a href="/pembayaran">
                 Pembayaran
             </a>
 
-            <a href="./maintenance.html?v=20260926-maintenance-route-fix-01">
+            <a href="/maintenance?v=20260926-maintenance-route-fix-01">
                 Maintenance
             </a>
 
-            <a href="checkinout.html">
+            <a href="/checkinout">
                 Check-in/out
             </a>
 
-            <a href="cafe.html">
+            <a href="/cafe">
                 Cafe
             </a>
 
-            <a href="laundry.html">
+            <a href="/laundry">
                 Laundry
             </a>
 
@@ -928,7 +928,7 @@
 
                 <div class="tenant-services-grid">
 
-                    <a class="tenant-service-btn is-primary" href="pembayaran.html">
+                    <a class="tenant-service-btn is-primary" href="/pembayaran">
                         <span class="tenant-service-icon">Rp</span>
                         <span class="tenant-service-text">
                             <strong>Pembayaran</strong>
@@ -937,7 +937,7 @@
                         <span class="tenant-service-arrow">→</span>
                     </a>
 
-                    <a class="tenant-service-btn" href="./maintenance.html?v=20260926-maintenance-route-fix-01">
+                    <a class="tenant-service-btn" href="/maintenance?v=20260926-maintenance-route-fix-01">
                         <span class="tenant-service-icon">M</span>
                         <span class="tenant-service-text">
                             <strong>Maintenance</strong>
@@ -946,7 +946,7 @@
                         <span class="tenant-service-arrow">→</span>
                     </a>
 
-                    <a class="tenant-service-btn" href="checkinout.html">
+                    <a class="tenant-service-btn" href="/checkinout">
                         <span class="tenant-service-icon">↔</span>
                         <span class="tenant-service-text">
                             <strong>Check-in / Check-out</strong>
@@ -955,7 +955,7 @@
                         <span class="tenant-service-arrow">→</span>
                     </a>
 
-                    <a class="tenant-service-btn" href="cafe.html">
+                    <a class="tenant-service-btn" href="/cafe">
                         <span class="tenant-service-icon">C</span>
                         <span class="tenant-service-text">
                             <strong>Cafe</strong>
@@ -964,7 +964,7 @@
                         <span class="tenant-service-arrow">→</span>
                     </a>
 
-                    <a class="tenant-service-btn" href="laundry.html">
+                    <a class="tenant-service-btn" href="/laundry">
                         <span class="tenant-service-icon">L</span>
                         <span class="tenant-service-text">
                             <strong>Laundry</strong>
@@ -2039,7 +2039,7 @@ async function submitTenantRevisionForm(event){
         tenantRevisionSession();
 
     if(!session || !activeTenantRevisionField){
-        window.location.href = "login.html";
+        window.location.href = "/login";
         return;
     }
 
@@ -2294,7 +2294,7 @@ async function loadPortal(){
     if(!session){
 
         window.location.href =
-            "login.html";
+            "/login";
 
         return;
 
@@ -2356,7 +2356,7 @@ async function loadPortal(){
                 );
 
                 window.location.href =
-                    "login.html";
+                    "/login";
 
                 return;
 
@@ -2608,7 +2608,7 @@ document
             if(!session){
 
                 window.location.href =
-                    "login.html";
+                    "/login";
 
                 return;
 
@@ -2923,7 +2923,7 @@ document
 
 
             window.location.href =
-                "login.html";
+                "/login";
 
         }
     );
