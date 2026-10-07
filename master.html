@@ -3057,6 +3057,41 @@ button{
     background:#fffdf7;
 }
 
+
+        /* =====================================================
+           MASTER CHECK-IN / CHECK-OUT
+           ===================================================== */
+
+        .cio-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+        .cio-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+        .cio-summary-card{border:1px solid rgba(16,24,40,.10);border-radius:14px;background:#fff;padding:16px;min-height:92px;display:flex;flex-direction:column;justify-content:center;gap:7px}
+        .cio-summary-card span{font-size:12px;color:#667085;font-weight:600}
+        .cio-summary-card strong{font-size:26px;line-height:1;color:#101828}
+        .cio-summary-alert{border-color:#fecdca;background:#fff7f5}.cio-summary-alert strong{color:#b42318}
+        .cio-toolbar{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:14px 0 16px}
+        .cio-toolbar .field{flex:1 1 320px;margin:0}
+        .cio-toolbar-note{flex:1 1 280px;min-height:48px;padding:11px 13px;border:1px solid #e4e7ec;border-radius:12px;background:#f8fafc;color:#667085;display:flex;flex-direction:column;justify-content:center;gap:3px;font-size:12px}
+        .cio-toolbar-note strong{color:#344054;font-size:13px}
+        .cio-table{width:100%;border-collapse:collapse;min-width:900px}
+        .cio-table th,.cio-table td{padding:12px 11px;border-bottom:1px solid #eaecf0;text-align:left;vertical-align:top}
+        .cio-table th{background:#f8fafc;color:#475467;font-size:12px;font-weight:700}
+        .cio-table td{font-size:13px;color:#344054}
+        .cio-detail-button{white-space:nowrap}.cio-badge{display:inline-flex;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
+        .cio-badge-in{background:#ecfdf3;color:#027a48}.cio-badge-out{background:#eff8ff;color:#175cd3}
+        .cio-issue{display:inline-flex;border-radius:999px;padding:5px 9px;background:#fef3f2;color:#b42318;font-size:11px;font-weight:700}
+        .cio-ok{display:inline-flex;border-radius:999px;padding:5px 9px;background:#ecfdf3;color:#027a48;font-size:11px;font-weight:700}
+        .cio-problem-text{max-width:220px;margin-top:6px;color:#b42318;font-size:12px;line-height:1.45}
+        .cio-detail-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px;margin-bottom:14px;border-radius:12px;background:#f8fafc;border:1px solid #eaecf0}
+        .cio-detail-header>div{display:flex;flex-direction:column;gap:4px}
+        .cio-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+        .cio-detail-item{border:1px solid #eaecf0;border-radius:10px;padding:11px 12px;background:#fff;min-width:0}
+        .cio-detail-item span{display:block;margin-bottom:5px;color:#667085;font-size:11px;font-weight:600}
+        .cio-detail-item strong{display:block;color:#101828;font-size:13px;line-height:1.45;word-break:break-word}
+        .cio-detail-alert,.cio-detail-ok{margin-top:14px;border-radius:10px;padding:11px 12px;display:flex;flex-direction:column;gap:3px;font-size:12px}
+        .cio-detail-alert{background:#fef3f2;border:1px solid #fecdca;color:#b42318}.cio-detail-ok{background:#ecfdf3;border:1px solid #abefc6;color:#027a48}
+        .cio-media-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+        @media (max-width:900px){.cio-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cio-detail-grid{grid-template-columns:1fr}}
+        @media (max-width:560px){.cio-summary-grid{grid-template-columns:1fr}.cio-header .btn{width:100%}}
 </style>
 
 <link rel="stylesheet" href="form-ux.css?v=20260928-formux-v1">
@@ -3270,6 +3305,12 @@ button{
                     data-panel="tenants"
                 >
                     Tenant
+                </button>
+
+                <button
+                    data-panel="checkinout"
+                >
+                    Check-in / Check-out
                 </button>
 
                 <button
@@ -3621,6 +3662,46 @@ button{
 
                 </section>
 
+
+                <!-- ==========================================
+                     CHECK-IN / CHECK-OUT
+                     ========================================== -->
+                <section id="panel-checkinout" class="panel">
+
+                    <div class="cio-header">
+                        <div>
+                            <h2 class="section-title">Check-in / Check-out</h2>
+                            <p class="section-subtitle">
+                                Pantau serah-terima kamar dari data yang diisi tenant. Panel ini hanya untuk monitoring Master.
+                            </p>
+                        </div>
+                        <button id="refreshCheckInOutButton" class="btn btn-secondary" type="button" onclick="loadCheckInOut()">
+                            Refresh
+                        </button>
+                    </div>
+
+                    <div id="cioSummaryGrid" class="cio-summary-grid">
+                        <div class="loading">Memuat ringkasan...</div>
+                    </div>
+
+                    <div id="cioFilters" class="filters"></div>
+
+                    <div class="cio-toolbar">
+                        <div class="field">
+                            <label for="checkInOutSearch">Cari Tenant / ID / Kamar</label>
+                            <input id="checkInOutSearch" type="text" autocomplete="off" placeholder="Contoh: Bima / CIO-001 / 203">
+                        </div>
+                        <div class="cio-toolbar-note">
+                            <strong>Perlu Cek</strong>
+                            <span>Kerusakan/kehilangan atau detail masalah akan ditandai.</span>
+                        </div>
+                    </div>
+
+                    <div id="checkInOutBox" class="card table-wrap">
+                        <div class="loading">Memuat data Check-in / Check-out...</div>
+                    </div>
+
+                </section>
 
                 <!-- ==========================================
                      PEMBAYARAN
@@ -4830,6 +4911,10 @@ let financeYear = 2027;
 
 let financeMonth = 1;
 
+let checkInOutItems = [];
+let checkInOutFilter = "ALL";
+let checkInOutSearch = "";
+
 
 /* ============================================================
    AUTO SYNC MASTER
@@ -5722,6 +5807,13 @@ async function loadPanel(
     ){
 
         await loadTenants();
+
+    }else if(
+        panelName ===
+        "checkinout"
+    ){
+
+        await loadCheckInOut();
 
     }else if(
         panelName ===
@@ -8006,6 +8098,229 @@ function openMediaCategory(
     );
 
 }
+
+
+/* ============================================================
+   CHECK-IN / CHECK-OUT
+   ============================================================ */
+
+function cioText(value,fallback=""){
+    const text=String(value==null?"":value).trim();
+    return text||fallback;
+}
+
+function cioDate(value){
+    if(value==null || value==="") return null;
+    const date=value instanceof Date ? value : new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function cioDateText(value){
+    const date=cioDate(value);
+    if(!date) return "—";
+    return new Intl.DateTimeFormat("id-ID",{
+        day:"2-digit",month:"2-digit",year:"numeric",
+        hour:"2-digit",minute:"2-digit"
+    }).format(date);
+}
+
+function cioToday(value){
+    const date=cioDate(value);
+    if(!date) return false;
+    const now=new Date();
+    return date.getFullYear()===now.getFullYear() &&
+           date.getMonth()===now.getMonth() &&
+           date.getDate()===now.getDate();
+}
+
+function cioProcess(value){
+    const text=cioText(value).toUpperCase().replace(/_/g,"-");
+    return text.indexOf("OUT")>=0 ? "CHECK-OUT" : "CHECK-IN";
+}
+
+function cioIssue(item){
+    const damage=cioText(item && item.damage).toUpperCase();
+    const detail=cioText(item && item.damageDetail);
+    const condition=cioText(item && item.condition).toLowerCase();
+    return damage==="YA" || damage==="YES" || damage==="TRUE" ||
+           !!detail || condition.indexOf("rusak")>=0 ||
+           condition.indexOf("masalah")>=0;
+}
+
+function cioFiltered(){
+    const search=checkInOutSearch.trim().toLowerCase();
+    return (Array.isArray(checkInOutItems)?checkInOutItems:[])
+        .filter(function(item){
+            const process=cioProcess(item && item.process);
+            if(checkInOutFilter==="CHECK-IN" && process!=="CHECK-IN") return false;
+            if(checkInOutFilter==="CHECK-OUT" && process!=="CHECK-OUT") return false;
+            if(checkInOutFilter==="ISSUE" && !cioIssue(item)) return false;
+            if(!search) return true;
+            return [
+                item && item.id,item && item.room,item && item.name,
+                item && item.phone,item && item.process,
+                item && item.condition,item && item.damageDetail
+            ].map(function(v){return cioText(v).toLowerCase();})
+             .join(" ").indexOf(search)>=0;
+        })
+        .sort(function(a,b){
+            const aa=cioDate(a && a.date), bb=cioDate(b && b.date);
+            return (bb?bb.getTime():0)-(aa?aa.getTime():0);
+        });
+}
+
+function renderCheckInOutFilters(){
+    const filters=[["ALL","Semua"],["CHECK-IN","Check-in"],["CHECK-OUT","Check-out"],["ISSUE","Ada Masalah"]];
+    const box=document.getElementById("cioFilters");
+    if(!box) return;
+    box.innerHTML=filters.map(function(item){
+        return '<button class="filter '+(checkInOutFilter===item[0]?"active":"")+
+            '" onclick="setCheckInOutFilter(\''+encodeURIComponent(item[0])+'\')">'+
+            escapeHtml(item[1])+'</button>';
+    }).join("");
+}
+
+function setCheckInOutFilter(encoded){
+    checkInOutFilter=decodeURIComponent(encoded);
+    renderCheckInOutFilters();
+    renderCheckInOut();
+}
+
+function cioDetailField(label,value){
+    return '<div class="cio-detail-item"><span>'+escapeHtml(label)+
+        '</span><strong>'+escapeHtml(cioText(value,"—"))+'</strong></div>';
+}
+
+function renderCheckInOut(){
+    const box=document.getElementById("checkInOutBox");
+    const summary=document.getElementById("cioSummaryGrid");
+    if(!box) return;
+
+    const checkIn=checkInOutItems.filter(function(item){
+        return cioProcess(item&&item.process)==="CHECK-IN" && cioToday(item&&item.date);
+    }).length;
+    const checkOut=checkInOutItems.filter(function(item){
+        return cioProcess(item&&item.process)==="CHECK-OUT" && cioToday(item&&item.date);
+    }).length;
+    const issues=checkInOutItems.filter(cioIssue).length;
+    const occupied=Number(dashboardData&&dashboardData.summary&&dashboardData.summary.occupied||0);
+
+    if(summary){
+        summary.innerHTML=[
+            ["Kamar Terisi",occupied,""],
+            ["Check-in Hari Ini",checkIn,""],
+            ["Check-out Hari Ini",checkOut,""],
+            ["Perlu Cek",issues,"cio-summary-alert"]
+        ].map(function(item){
+            return '<div class="cio-summary-card '+item[2]+'"><span>'+
+                escapeHtml(item[0])+'</span><strong>'+escapeHtml(item[1])+
+                '</strong></div>';
+        }).join("");
+    }
+
+    const items=cioFiltered();
+    if(!items.length){
+        box.innerHTML='<div class="empty">'+
+            (checkInOutItems.length ? "Tidak ada data yang sesuai filter." : "Belum ada data Check-in / Check-out.")+
+            '</div>';
+        return;
+    }
+
+    box.innerHTML='<table class="cio-table"><thead><tr>'+
+        '<th>Kamar</th><th>Tenant</th><th>Proses</th><th>Tanggal</th>'+
+        '<th>Kondisi</th><th>Masalah</th><th>Aksi</th></tr></thead><tbody>'+
+        items.map(function(item){
+            const process=cioProcess(item&&item.process);
+            const issue=cioIssue(item);
+            return '<tr>'+
+                '<td><strong>'+escapeHtml(cioText(item&&item.room,"—"))+'</strong></td>'+
+                '<td><strong>'+escapeHtml(cioText(item&&item.name,"—"))+
+                    '</strong><div class="small">'+escapeHtml(cioText(item&&item.id,""))+'</div></td>'+
+                '<td><span class="cio-badge '+(process==="CHECK-OUT"?"cio-badge-out":"cio-badge-in")+
+                    '">'+process+'</span></td>'+
+                '<td>'+escapeHtml(cioDateText(item&&item.date))+'</td>'+
+                '<td>'+escapeHtml(cioText(item&&item.condition,"—"))+'</td>'+
+                '<td>'+(issue?'<span class="cio-issue">Perlu Cek</span>':'<span class="cio-ok">Normal</span>')+
+                    (item&&item.damageDetail?'<div class="cio-problem-text">'+escapeHtml(item.damageDetail)+'</div>':'')+'</td>'+
+                '<td><button class="btn btn-secondary cio-detail-button" type="button" onclick="openCheckInOutDetail(\''+
+                    encodeURIComponent(cioText(item&&item.id))+'\')">Detail</button></td>'+
+                '</tr>';
+        }).join("")+
+        '</tbody></table>';
+}
+
+async function loadCheckInOut(){
+    const box=document.getElementById("checkInOutBox");
+    if(box) box.innerHTML='<div class="loading">Memuat data Check-in / Check-out...</div>';
+    try{
+        const data=await api("masterCheckInOut");
+        checkInOutItems=data&&Array.isArray(data.items)?data.items:[];
+        renderCheckInOutFilters();
+        renderCheckInOut();
+    }catch(error){
+        if(box) box.innerHTML='<div class="empty" style="color:#b42318;">'+escapeHtml(error.message)+'</div>';
+    }
+}
+
+function openCheckInOutDetail(encodedId){
+    const id=decodeURIComponent(encodedId);
+    const item=checkInOutItems.find(function(row){return cioText(row&&row.id)===id;});
+    if(!item){ alert("Data Check-in / Check-out tidak ditemukan."); return; }
+
+    const process=cioProcess(item.process);
+    const issue=cioIssue(item);
+    const buttons=[];
+
+    if(cioText(item.conditionPhotoUrl)){
+        buttons.push('<button class="btn btn-secondary" type="button" onclick="openCheckInOutMedia(\''+
+            encodeURIComponent(item.conditionPhotoUrl)+'\',\'Foto Kondisi\')">Foto Kondisi</button>');
+    }
+    if(cioText(item.meterPhotoUrl)){
+        buttons.push('<button class="btn btn-secondary" type="button" onclick="openCheckInOutMedia(\''+
+            encodeURIComponent(item.meterPhotoUrl)+'\',\'Foto Meter Listrik\')">Foto Meter Listrik</button>');
+    }
+
+    openModal(
+        "Check-in / Check-out — Kamar "+cioText(item.room,"—"),
+        '<div class="cio-detail-header"><div><strong>'+
+        escapeHtml(cioText(item.name,"Tenant"))+'</strong><span class="small">'+
+        escapeHtml(cioText(item.id,"—"))+'</span></div><span class="cio-badge '+
+        (process==="CHECK-OUT"?"cio-badge-out":"cio-badge-in")+'">'+process+'</span></div>'+
+        '<div class="cio-detail-grid">'+
+        cioDetailField("Tenant",item.name)+
+        cioDetailField("Kamar",item.room)+
+        cioDetailField("Proses",process)+
+        cioDetailField("Tanggal",cioDateText(item.date))+
+        cioDetailField("No. HP",item.phone)+
+        cioDetailField("Kondisi Kamar",item.condition)+
+        cioDetailField("Kerusakan / Kehilangan",item.damage||"Tidak ada")+
+        cioDetailField("Detail Masalah",item.damageDetail||"—")+
+        cioDetailField("Pengurangan Deposit",money(item.deduction))+
+        '</div>'+
+        (issue?'<div class="cio-detail-alert"><strong>Perlu Tindak Lanjut</strong><span>Periksa kondisi kamar dan masalah yang dilaporkan.</span></div>':
+               '<div class="cio-detail-ok">Tidak ada masalah yang ditandai.</div>')+
+        (buttons.length?'<div class="cio-media-actions">'+buttons.join("")+'</div>':
+               '<div class="small" style="margin-top:14px;">Tidak ada foto pada laporan ini.</div>')+
+        '<div class="actions" style="margin-top:16px;"><button class="btn btn-secondary" type="button" onclick="closeModal()">Tutup</button></div>'
+    );
+}
+
+async function openCheckInOutMedia(encodedUrl,encodedTitle){
+    const url=decodeURIComponent(encodedUrl);
+    const title=decodeURIComponent(encodedTitle);
+    openModal(title,'<div class="loading">Memuat media...</div>');
+    try{
+        const result=await api("masterMediaOpen",{fileId:"",url:url});
+        renderOpenedMedia(result,title);
+    }catch(error){
+        modalBody.innerHTML='<div class="empty" style="color:#b42318;">'+escapeHtml(error.message)+'</div>';
+    }
+}
+
+document.getElementById("checkInOutSearch")?.addEventListener("input",function(){
+    checkInOutSearch=this.value||"";
+    renderCheckInOut();
+});
 
 
 /* ============================================================
