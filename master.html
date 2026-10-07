@@ -7701,6 +7701,10 @@ function renderAttention(){
 
                 '<div class="actions">' +
 
+                '<button class="btn btn-secondary" onclick="openPanel(\'registrations\')">' +
+                'Buka Pendaftaran' +
+                '</button>' +
+
                 '<button class="btn btn-success" onclick="approveRegistration(\'' +
                 encodeURIComponent(item.id || "") +
                 '\',\'' +
@@ -7775,6 +7779,16 @@ function renderAttention(){
 
 
             let actions =
+                '<button class="btn btn-secondary" onclick="financeOpenPayment(\'' +
+                encodeURIComponent(item.id || "") +
+                '\',\'' +
+                encodeURIComponent(item.tenantId || "") +
+                '\',\'' +
+                encodeURIComponent(item.period || "") +
+                '\')">' +
+                'Buka Pembayaran' +
+                '</button>' +
+
                 '<button class="btn btn-secondary" onclick="viewPaymentProof(\'' +
                 encodeURIComponent(item.id || "") +
                 '\')">' +
@@ -7992,6 +8006,10 @@ function renderAttention(){
 
                 '<div class="actions">' +
 
+                '<button class="btn btn-secondary" onclick="openPanel(\'maintenance\')">' +
+                'Buka Maintenance' +
+                '</button>' +
+
                 '<button class="btn btn-success" onclick="sendMaintenanceWhatsApp(\'' +
                 encodeURIComponent(item.id || "") +
                 '\')">' +
@@ -8073,6 +8091,10 @@ function renderAttention(){
 
                 '<div class="actions">' +
 
+                '<button class="btn btn-secondary" onclick="openPanel(\'laundry\')">' +
+                'Buka Laundry' +
+                '</button>' +
+
                 '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\'' +
                 encodeURIComponent(item.id || "") +
                 '\')">' +
@@ -8094,50 +8116,6 @@ function renderAttention(){
             );
 
         }
-    );
-
-
-    /*
-     * ----------------------------------------------------------
-     * CAFE
-     * ----------------------------------------------------------
-     * Backend Cafe belum tersedia pada Master saat ini.
-     * Jangan membuat angka/order palsu.
-     */
-    rows.push(
-
-        '<tr>' +
-
-        '<td>' +
-        '<strong>Cafe</strong>' +
-        '</td>' +
-
-        '<td>' +
-        '—' +
-        '</td>' +
-
-        '<td>' +
-        'Order Cafe' +
-        '</td>' +
-
-        '<td>' +
-
-        '<span class="badge">' +
-        'BELUM TERHUBUNG' +
-        '</span>' +
-
-        '</td>' +
-
-        '<td>' +
-
-        '<span class="small">' +
-        'Backend Cafe belum tersedia' +
-        '</span>' +
-
-        '</td>' +
-
-        '</tr>'
-
     );
 
 
