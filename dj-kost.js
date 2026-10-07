@@ -624,13 +624,34 @@ async function fillRoomSelect(
     rooms.forEach(
       function(room) {
 
+        const roomNumber =
+          String(
+            room.no_kamar ??
+            room.No_Kamar ??
+            room.noKamar ??
+            room.number ??
+            room.room ??
+            room.Room_ID ??
+            ''
+          ).trim();
+
+        const roomStatus =
+          String(
+            room.status ??
+            room.Status ??
+            room.Status_Kamar ??
+            room.status_kamar ??
+            'KOSONG'
+          ).trim().toUpperCase();
+
         /*
          * Hanya kamar KOSONG
          * yang bisa dipilih.
          */
 
         if (
-          room.status !==
+          !roomNumber ||
+          roomStatus !==
           'KOSONG'
         ) {
 
@@ -646,20 +667,13 @@ async function fillRoomSelect(
 
 
         option.value =
-          String(
-            room.no_kamar
-          );
+          roomNumber;
 
 
         option.textContent =
-          String(
-            room.no_kamar
-          ) +
+          roomNumber +
           ' — ' +
-          djRupiah(
-            room.harga_bulan
-          ) +
-          '/bulan';
+          'Tanya harga via WhatsApp';
 
 
         select.appendChild(
