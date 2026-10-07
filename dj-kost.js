@@ -490,6 +490,16 @@ async function initIndex() {
 
                   Tanya harga via WhatsApp
 
+
+
+
+
+
+
+
+
+
+
                 </div>
               `;
 
