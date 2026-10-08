@@ -9662,7 +9662,7 @@ function djApiActivationInfoV1_(
     aturanVersi:
       'ATURAN-2026-V1',
     perjanjianVersi:
-      'PERJANJIAN-SEWA-2026-V1.0',
+      'PERJANJIAN-SEWA-2026-V2.1',
     status:
       'MENUNGGU AKTIVASI AKUN'
   };
@@ -9746,7 +9746,7 @@ function djApiSubmitActivationV1_(
       ).trim();
 
     const expectedAgreementVersion =
-      'PERJANJIAN-SEWA-2026-V1.0';
+      'PERJANJIAN-SEWA-2026-V2.1';
 
     if (!agreeRead) {
       throw new Error(
