@@ -13978,6 +13978,9 @@ async function loadLaundry(){
                           encodedId +
                           '\')">Terima Pesanan</button>'
                 ) +
+                '<button class="btn btn-primary" onclick="openLaundryCompletionNotice(\\'' +
+                encodedId +
+                '\\')">📩 Kabari Tenant</button>' +
                 '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\'' +
                 encodedId +
                 '\')">💬 Kirim WA</button>' +
@@ -14034,6 +14037,237 @@ function sendLaundryWhatsApp(encoded){
         "_blank",
         "noopener,noreferrer"
     );
+
+}
+
+
+async function openLaundryCompletionNotice(encoded){
+
+    const id =
+        decodeURIComponent(encoded);
+
+    const item =
+        laundryItems.find(function(row){
+            return String(row.id) === String(id);
+        });
+
+    if(!item){
+        alert("Order laundry tidak ditemukan.");
+        return;
+    }
+
+    let tenantPhone =
+        getTenantPhoneForWhatsApp(item.tenantId);
+
+    if(!tenantPhone){
+
+        try{
+
+            const tenantData =
+                await api("masterTenants");
+
+            tenantItems =
+                Array.isArray(tenantData && tenantData.items)
+                    ? tenantData.items
+                    : [];
+
+            tenantPhone =
+                getTenantPhoneForWhatsApp(item.tenantId);
+
+        }catch(error){
+
+            alert(
+                "Nomor WhatsApp tenant gagal dimuat: " +
+                (error.message || "Kesalahan tidak diketahui.")
+            );
+
+            return;
+
+        }
+
+    }
+
+    if(!tenantPhone){
+
+        alert(
+            "Nomor WhatsApp untuk tenant " +
+            (item.name || item.tenantId || "") +
+            " belum tersedia di data Tenant. Perbarui nomor tenant terlebih dahulu."
+        );
+
+        return;
+
+    }
+
+    const ownContact =
+        normalizeWhatsAppNumber(GENERAL_WHATSAPP_WA);
+
+    const ownContactDisplay =
+        ownContact
+            ? (
+                ownContact.indexOf("62") === 0
+                    ? "0" + ownContact.substring(2)
+                    : ownContact
+              )
+            : "Belum dikonfigurasi";
+
+    const safeId =
+        escapeHtml(item.id);
+
+    const safeName =
+        escapeHtml(item.name || item.tenantId || "Tenant");
+
+    const safeRoom =
+        escapeHtml(item.room || "—");
+
+    const safeService =
+        escapeHtml(item.service || "Cuci + Setrika");
+
+    openModal(
+        "Pemberitahuan Laundry Selesai",
+        '<form id="laundryCompletionNoticeForm" style="display:grid;gap:14px;">' +
+
+          '<div class="detail-box">' +
+            '<strong>DJ Laundry · ' + safeId + '</strong>' +
+            '<div>Tenant: ' + safeName + '</div>' +
+            '<div>Kamar: ' + safeRoom + '</div>' +
+            '<div>Layanan: ' + safeService + '</div>' +
+            '<div>Tarif: <strong>Rp8.000/kg</strong></div>' +
+          '</div>' +
+
+          '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">' +
+            '<label style="display:grid;gap:6px;font-weight:700;">' +
+              'Berat cucian (kg)' +
+              '<input id="laundryNoticeKg" type="number" inputmode="decimal" min="0.1" step="0.1" required placeholder="Contoh: 4.3" style="width:100%;min-height:44px;padding:10px 12px;border:1px solid #d0d5dd;border-radius:10px;font:inherit;">' +
+            '</label>' +
+            '<label style="display:grid;gap:6px;font-weight:700;">' +
+              'Jumlah pakaian (pcs)' +
+              '<input id="laundryNoticePcs" type="number" inputmode="numeric" min="1" step="1" required placeholder="Contoh: 23" style="width:100%;min-height:44px;padding:10px 12px;border:1px solid #d0d5dd;border-radius:10px;font:inherit;">' +
+            '</label>' +
+          '</div>' +
+
+          '<div style="padding:15px;border-radius:12px;background:#f8fafc;border:1px solid #e4e7ec;">' +
+            '<div style="font-size:13px;color:#667085;">Total biaya otomatis</div>' +
+            '<strong id="laundryNoticeTotal" style="display:block;margin-top:5px;font-size:26px;color:#101828;">Rp0</strong>' +
+            '<div style="font-size:12px;color:#667085;margin-top:5px;">Berat × Rp8.000/kg. Jumlah pcs hanya dicantumkan di pesan.</div>' +
+          '</div>' +
+
+          '<div style="font-size:13px;color:#475467;">' +
+            'Tujuan WhatsApp tenant: <strong>' + escapeHtml(tenantPhone) + '</strong><br>' +
+            'Kontak DJ Family Kost: <strong>' + escapeHtml(ownContactDisplay) + '</strong>' +
+          '</div>' +
+
+          '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">' +
+            '<button id="cancelLaundryNotice" type="button" class="btn btn-secondary">Batal</button>' +
+            '<button type="submit" class="btn btn-primary">Buka WhatsApp Tenant</button>' +
+          '</div>' +
+
+        '</form>'
+    );
+
+    const form =
+        document.getElementById("laundryCompletionNoticeForm");
+
+    const kgInput =
+        document.getElementById("laundryNoticeKg");
+
+    const pcsInput =
+        document.getElementById("laundryNoticePcs");
+
+    const totalOutput =
+        document.getElementById("laundryNoticeTotal");
+
+    function getKg(){
+        return Number(kgInput.value || 0);
+    }
+
+    function updateTotal(){
+        const kg = getKg();
+        totalOutput.textContent =
+            kg > 0 && Number.isFinite(kg)
+                ? money(Math.round(kg * 8000))
+                : "Rp0";
+    }
+
+    kgInput.addEventListener("input",updateTotal);
+
+    document
+        .getElementById("cancelLaundryNotice")
+        .addEventListener("click",closeModal);
+
+    form.addEventListener("submit",function(event){
+
+        event.preventDefault();
+
+        if(!form.reportValidity()){
+            return;
+        }
+
+        const kg =
+            getKg();
+
+        const pcs =
+            Number(pcsInput.value || 0);
+
+        if(
+            !Number.isFinite(kg) ||
+            kg <= 0 ||
+            !Number.isInteger(pcs) ||
+            pcs < 1
+        ){
+            alert("Masukkan berat kg dan jumlah pcs yang valid.");
+            return;
+        }
+
+        const total =
+            Math.round(kg * 8000);
+
+        const kgDisplay =
+            kg.toLocaleString("en-US",{
+                maximumFractionDigits:1
+            });
+
+        const message = [
+            "🧺 DJ LAUNDRY",
+            "PEMBERITAHUAN LAUNDRY SELESAI",
+            "",
+            "Halo " + String(item.name || "Tenant") + ",",
+            "Kami informasikan bahwa laundry Anda sudah selesai dan siap diambil.",
+            "",
+            "No. Pesanan : " + String(item.id || "—"),
+            "Nama        : " + String(item.name || item.tenantId || "—"),
+            "No. Kamar   : " + String(item.room || "—"),
+            "Layanan     : " + String(item.service || "Cuci + Setrika"),
+            "Berat       : " + kgDisplay + " kg",
+            "Jumlah      : " + pcs + " pcs",
+            "Harga/kg    : Rp8.000",
+            "Total Biaya : " + money(total),
+            "",
+            "Informasi / konfirmasi:",
+            "DJ Family Kost",
+            "WhatsApp: " + ownContactDisplay,
+            "",
+            "Terima kasih telah menggunakan layanan DJ Laundry.",
+            "DJ LAUNDRY · DJ FAMILY KOST"
+        ];
+
+        const url =
+            "https://wa.me/" +
+            tenantPhone +
+            "?text=" +
+            encodeURIComponent(message.join("\\n"));
+
+        window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+        closeModal();
+
+    });
+
+    kgInput.focus();
 
 }
 
