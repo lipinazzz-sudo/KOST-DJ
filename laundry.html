@@ -105,6 +105,24 @@
       cursor:pointer;
     }
 
+    .laundry-service.is-unavailable{
+      background:#f8fafc;
+      border-color:#e4e7ec;
+    }
+
+    .laundry-service.is-unavailable h2,
+    .laundry-service.is-unavailable .laundry-service-price,
+    .laundry-service.is-unavailable .laundry-service-description{
+      color:#667085;
+    }
+
+    .laundry-service button:disabled{
+      background:#e4e7ec;
+      color:#667085;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
     .laundry-form-card{
       display:none;
       margin-top:24px;
@@ -348,14 +366,14 @@
       aria-label="Pilihan layanan laundry"
     >
 
-      <article class="laundry-service">
+      <article class="laundry-service is-unavailable" aria-disabled="true">
 
         <h2>
           Cuci
         </h2>
 
         <div class="laundry-service-price">
-          Harga per kg — belum ditentukan
+          Belum tersedia
         </div>
 
         <div class="laundry-service-description">
@@ -364,22 +382,24 @@
 
         <button
           type="button"
-          data-service="Cuci"
+          disabled
+          aria-disabled="true"
+          title="Layanan ini belum tersedia"
         >
-          Pilih
+          Belum tersedia
         </button>
 
       </article>
 
 
-      <article class="laundry-service">
+      <article class="laundry-service laundry-service-active">
 
         <h2>
           Cuci + Setrika
         </h2>
 
         <div class="laundry-service-price">
-          Harga per kg — belum ditentukan
+          Rp8.000 / kg
         </div>
 
         <div class="laundry-service-description">
@@ -390,20 +410,20 @@
           type="button"
           data-service="Cuci + Setrika"
         >
-          Pilih
+          Pilih Layanan
         </button>
 
       </article>
 
 
-      <article class="laundry-service">
+      <article class="laundry-service is-unavailable" aria-disabled="true">
 
         <h2>
           Setrika
         </h2>
 
         <div class="laundry-service-price">
-          Harga per kg — belum ditentukan
+          Belum tersedia
         </div>
 
         <div class="laundry-service-description">
@@ -412,9 +432,11 @@
 
         <button
           type="button"
-          data-service="Setrika"
+          disabled
+          aria-disabled="true"
+          title="Layanan ini belum tersedia"
         >
-          Pilih
+          Belum tersedia
         </button>
 
       </article>

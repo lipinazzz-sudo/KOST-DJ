@@ -1749,6 +1749,31 @@ if (
 
 
 if (
+  action === 'masteracceptlaundry'
+) {
+
+  const result =
+    djApiMasterAcceptLaundryV1_(
+      body.laundryId,
+      master.masterId
+    );
+
+  return djApiJsonV5_(
+    result.ok
+      ? {
+          ok: true,
+          data: result
+        }
+      : {
+          ok: false,
+          error: result.error
+        }
+  );
+
+}
+
+
+if (
   action === 'mastercompletelaundry'
 ) {
 

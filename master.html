@@ -13856,6 +13856,7 @@ function buildLaundryWhatsAppMessage(item){
         "Kamar         : " + String(item.room || "—"),
         "Tenant        : " + String(item.name || item.tenantId || "—"),
         "Layanan       : " + String(item.service || "—"),
+        "Tarif/kg      : " + (Number(item.pricePerKg || 0) > 0 ? money(item.pricePerKg) + "/kg" : "—"),
         "Pickup        : " + String(item.pickupLocation || "—"),
         (
             item.note
@@ -13912,6 +13913,7 @@ async function loadLaundry(){
         '<th>Tenant</th>' +
         '<th>Kamar</th>' +
         '<th>Layanan</th>' +
+        '<th>Harga/kg</th>' +
         '<th>Pickup</th>' +
         '<th>Status</th>' +
         '<th>Aksi</th>' +
@@ -13919,6 +13921,17 @@ async function loadLaundry(){
         '<tbody>' +
 
         laundryItems.map(function(item){
+
+            const status =
+                String(item.status || "TERKIRIM")
+                .trim()
+                .toUpperCase();
+
+            const pricePerKg =
+                Number(item.pricePerKg || 0);
+
+            const encodedId =
+                encodeURIComponent(item.id);
 
             return (
                 '<tr>' +
@@ -13935,6 +13948,13 @@ async function loadLaundry(){
                 escapeHtml(item.service || "—") +
                 '</td>' +
                 '<td>' +
+                (
+                    pricePerKg > 0
+                        ? escapeHtml(money(pricePerKg) + "/kg")
+                        : "—"
+                ) +
+                '</td>' +
+                '<td>' +
                 escapeHtml(item.pickupLocation || "—") +
                 (
                     item.note
@@ -13944,14 +13964,25 @@ async function loadLaundry(){
                         : ""
                 ) +
                 '</td>' +
-                '<td><span class="badge badge-warn">TERKIRIM</span></td>' +
+                '<td><span class="badge ' +
+                (status === "DITERIMA" ? "badge-ok" : "badge-warn") +
+                '">' +
+                escapeHtml(status) +
+                '</span></td>' +
                 '<td>' +
                 '<div class="actions">' +
+                (
+                    status === "DITERIMA"
+                        ? '<span class="badge badge-ok">✓ Diterima</span>'
+                        : '<button class="btn btn-primary" onclick="acceptLaundry(\'' +
+                          encodedId +
+                          '\')">Terima Pesanan</button>'
+                ) +
                 '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\'' +
-                encodeURIComponent(item.id) +
+                encodedId +
                 '\')">💬 Kirim WA</button>' +
                 '<button class="btn btn-primary" onclick="completeLaundry(\'' +
-                encodeURIComponent(item.id) +
+                encodedId +
                 '\')">Selesai</button>' +
                 '</div>' +
                 '</td>' +
@@ -14172,6 +14203,43 @@ function sendLaundryBatchWhatsApp(){
         "_blank",
         "noopener,noreferrer"
     );
+
+}
+
+
+async function acceptLaundry(encoded){
+
+    const id =
+        decodeURIComponent(encoded);
+
+    if(
+        !confirm(
+            "Terima pesanan laundry " +
+            id +
+            "?"
+        )
+    ){
+        return;
+    }
+
+    try{
+
+        await api(
+            "masterAcceptLaundry",
+            {
+                laundryId:id
+            }
+        );
+
+        await loadLaundry();
+        await loadHistory();
+        await loadDashboard();
+
+    }catch(error){
+
+        alert(error.message);
+
+    }
 
 }
 

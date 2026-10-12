@@ -143,22 +143,14 @@ const DJ_LAUNDRY_HISTORY_V1_ = {
 
 
   SERVICES: [
-
-
-
     'Cuci',
-
-
-
     'Cuci + Setrika',
-
-
-
     'Setrika'
+  ],
 
+  ACTIVE_SERVICE: 'Cuci + Setrika',
 
-
-  ]
+  PRICE_PER_KG: 8000
 
 
 
@@ -739,17 +731,8 @@ function djApiSubmitLaundryOrderV1_(
 
 
     if (
-
-      DJ_LAUNDRY_HISTORY_V1_
-
-        .SERVICES
-
-        .indexOf(
-
-          service
-
-        ) < 0
-
+      service !==
+      DJ_LAUNDRY_HISTORY_V1_.ACTIVE_SERVICE
     ) {
 
 
@@ -766,7 +749,7 @@ function djApiSubmitLaundryOrderV1_(
 
         error:
 
-          'Layanan laundry tidak valid.'
+          'Saat ini hanya layanan Cuci + Setrika yang tersedia.'
 
 
 
@@ -976,7 +959,7 @@ function djApiSubmitLaundryOrderV1_(
 
         Harga_Per_KG:
 
-          '',
+          DJ_LAUNDRY_HISTORY_V1_.PRICE_PER_KG,
 
 
 
@@ -1458,6 +1441,148 @@ function djApiMasterLaundryV1_() {
 
 
 
+
+
+/* ============================================================
+
+ * MASTER ACCEPT LAUNDRY
+
+ * ============================================================
+
+ */
+
+function djApiMasterAcceptLaundryV1_(
+  laundryId,
+  masterId
+) {
+
+  laundryId = String(laundryId || '').trim();
+  masterId = String(masterId || '').trim().toUpperCase();
+
+  if (!laundryId) {
+    return {
+      ok: false,
+      error: 'Laundry ID wajib diisi.'
+    };
+  }
+
+  if (!masterId) {
+    return {
+      ok: false,
+      error: 'Session Master tidak valid.'
+    };
+  }
+
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(30000);
+
+  try {
+    const sheet = djLaundryGetSheetV1_();
+    const table = djApiReadTableV5_(sheet, ['Laundry_ID']);
+
+    if (!table) {
+      return {
+        ok: false,
+        error: 'Struktur Sheet Laundry tidak dapat dibaca.'
+      };
+    }
+
+    const rowNumber = djApiFindRowV5_(
+      table,
+      ['Laundry_ID'],
+      laundryId
+    );
+
+    if (rowNumber < 0) {
+      return {
+        ok: false,
+        error: 'Laundry ID tidak ditemukan.'
+      };
+    }
+
+    const rowIndex = rowNumber - table.headerRow - 1;
+    const currentStatus = String(
+      djApiValueV5_(
+        table.rows[rowIndex],
+        table.headers,
+        ['Status']
+      ) || 'TERKIRIM'
+    ).trim().toUpperCase();
+
+    if (currentStatus === 'SELESAI') {
+      return {
+        ok: false,
+        error: 'Pesanan sudah selesai dan tidak dapat diterima lagi.'
+      };
+    }
+
+    if (currentStatus === 'DITERIMA') {
+      return {
+        ok: true,
+        laundryId: laundryId,
+        status: 'DITERIMA',
+        message: 'Pesanan laundry ini sudah diterima oleh Master.'
+      };
+    }
+
+    const now = new Date();
+
+    djApiUpdateRowV5_(
+      sheet,
+      rowNumber,
+      table.headers,
+      {
+        Status: 'DITERIMA',
+        Last_Sync: now
+      }
+    );
+
+    const tenantName = djApiValueV5_(
+      table.rows[rowIndex],
+      table.headers,
+      ['Nama_Tenant']
+    );
+
+    const room = djApiValueV5_(
+      table.rows[rowIndex],
+      table.headers,
+      ['No_Kamar']
+    );
+
+    const service = djApiValueV5_(
+      table.rows[rowIndex],
+      table.headers,
+      ['Layanan']
+    );
+
+    try {
+      djApiLogV5_(
+        SpreadsheetApp.getActiveSpreadsheet(),
+        'LAUNDRY_DITERIMA',
+        'Order ' + laundryId +
+        ' diterima Master. Kamar ' + room +
+        ' · ' + tenantName +
+        ' · ' + service +
+        ' · Tarif Rp' +
+        Number(DJ_LAUNDRY_HISTORY_V1_.PRICE_PER_KG).toLocaleString('id-ID') +
+        '/kg. Diterima oleh ' + masterId + '.'
+      );
+    } catch (logError) {}
+
+    SpreadsheetApp.flush();
+
+    return {
+      ok: true,
+      laundryId: laundryId,
+      status: 'DITERIMA',
+      message: 'Pesanan laundry berhasil diterima oleh Master.'
+    };
+
+  } finally {
+    lock.releaseLock();
+  }
+
+}
 
 
 /* ============================================================
