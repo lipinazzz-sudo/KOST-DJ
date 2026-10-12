@@ -13978,9 +13978,9 @@ async function loadLaundry(){
                           encodedId +
                           '\')">Terima Pesanan</button>'
                 ) +
-                '<button class="btn btn-primary" onclick="openLaundryCompletionNotice(\\'' +
+                '<button class="btn btn-primary" onclick="openLaundryCompletionNotice(\'' +
                 encodedId +
-                '\\')">📩 Kabari Tenant</button>' +
+                '\')">📩 Kabari Tenant</button>' +
                 '<button class="btn btn-success" onclick="sendLaundryWhatsApp(\'' +
                 encodedId +
                 '\')">💬 Kirim WA</button>' +
@@ -14255,7 +14255,7 @@ async function openLaundryCompletionNotice(encoded){
             "https://wa.me/" +
             tenantPhone +
             "?text=" +
-            encodeURIComponent(message.join("\\n"));
+            encodeURIComponent(message.join("\n"));
 
         window.open(
             url,
