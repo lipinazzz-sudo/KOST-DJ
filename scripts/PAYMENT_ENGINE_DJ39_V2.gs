@@ -1558,46 +1558,21 @@ function updatePaymentStatusDJ39() {
 
 
 
+  /*
+   * Kebijakan denda resmi DJ Family Kost:
+   * tanggal 1 = Rp0; tanggal 2-4 = Rp25.000;
+   * tanggal 5+ = Rp50.000.
+   * Nominal ditetapkan di konfigurasi kode agar nilai Pengaturan lama
+   * tidak mengubah kebijakan ini secara tidak sengaja.
+   */
   const dendaHari2 =
-
-    dj39pay2GetSettingNumber_(
-
-      ss,
-
-      'Denda_Terlambat_Hari_Ke2',
-
-      DJ39PAY2.DEFAULT_FINE_DAY2
-
-    );
-
-
+    DJ39PAY2.DEFAULT_FINE_DAY2;
 
   const dendaHari5 =
-
-    dj39pay2GetSettingNumber_(
-
-      ss,
-
-      'Denda_Terlambat_Hari_Ke5',
-
-      DJ39PAY2.DEFAULT_FINE_DAY5
-
-    );
-
-
+    DJ39PAY2.DEFAULT_FINE_DAY5;
 
   const maxDenda =
-
-    dj39pay2GetSettingNumber_(
-
-      ss,
-
-      'Maks_Denda_Keterlambatan',
-
-      DJ39PAY2.DEFAULT_MAX_FINE
-
-    );
-
+    DJ39PAY2.DEFAULT_MAX_FINE;
 
 
   const paymentIdCol =

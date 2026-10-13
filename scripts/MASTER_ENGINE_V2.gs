@@ -3205,8 +3205,36 @@ function daysAfterDueDJFK_(
 
 function fineDJFK_(
   date,
-  due
+  due,
+  contractStartDate
 ) {
+
+  const parsedDue =
+    parseDateDJFK_(
+      due
+    );
+
+  const contractStart =
+    parseDateDJFK_(
+      contractStartDate
+    );
+
+  /*
+   * Billing pertama pada bulan mulai kontrak tetap bebas denda.
+   */
+  if (
+    contractStart &&
+    parsedDue &&
+    contractStart.getFullYear() ===
+      parsedDue.getFullYear() &&
+    contractStart.getMonth() ===
+      parsedDue.getMonth()
+  ) {
+
+    return 0;
+
+  }
+
 
   const days =
     daysAfterDueDJFK_(
@@ -3216,7 +3244,7 @@ function fineDJFK_(
 
 
   if (
-    days <= 1
+    days <= 0
   ) {
 
     return 0;
@@ -3224,6 +3252,11 @@ function fineDJFK_(
   }
 
 
+  /*
+   * Jatuh tempo tanggal 1:
+   * tanggal 2-4 (1-3 hari lewat jatuh tempo) = Rp25.000.
+   * tanggal 5+ (4 hari atau lebih) = Rp50.000.
+   */
   if (
     days <= 3
   ) {
@@ -3270,7 +3303,7 @@ function paymentStatusDJFK_(
     daysAfterDueDJFK_(
       new Date(),
       due
-    ) > 1;
+    ) > 0;
 
 
   if (
@@ -3877,7 +3910,8 @@ function paymentDJFK_(
   const fine =
     fineDJFK_(
       date,
-      due
+      due,
+      contract ? contract.Tanggal_Mulai : ''
     );
 
 
@@ -6315,7 +6349,8 @@ function syncPaymentFormDJFK_(
   const fine =
     fineDJFK_(
       date,
-      due
+      due,
+      contract ? contract.Tanggal_Mulai : ''
     );
 
 
@@ -7082,26 +7117,11 @@ function recalculatePaymentsDJFK_() {
 
 
         const fine =
-          paymentDate
-
-            ? fineDJFK_(
-                paymentDate,
-                due
-              )
-
-            : daysAfterDueDJFK_(
-                new Date(),
-                due
-              ) > 1
-
-              ? daysAfterDueDJFK_(
-                  new Date(),
-                  due
-                ) <= 3
-                  ? DJFK.FINE_DAY_3
-                  : DJFK.FINE_DAY_5
-
-              : 0;
+          fineDJFK_(
+            paymentDate || new Date(),
+            due,
+            contract ? contract.Tanggal_Mulai : ''
+          );
 
 
         const paidValue =
